@@ -1,4 +1,11 @@
-# Astro Starter Kit: Blog
+# Blogs
+
+*Inspired by [Machine learning Mastery](https://machinelearningmastery.com/), [lil'blog](https://lilianweng.github.io/), [shape-of-code](https://shape-of-code.com/)*
+
+*Powered by [Astro](https://astro.build/) similar to [Docusaurus](https://docusaurus.io/) or [Mkdocs](https://www.mkdocs.org/) but with more features.*
+
+
+## Setup
 
 ```sh
 npm create astro@latest -- --template blog
