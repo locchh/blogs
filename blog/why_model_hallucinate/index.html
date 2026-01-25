@@ -33,6 +33,18 @@ a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astr
 </li>
 </ul>
 <h2 id="my-thoughts">My Thoughts</h2>
+<h3 id="cross-lingual-bias">Cross-lingual bias</h3>
+<ul>
+<li>
+<p>There is a bias in training data between English and other languages (<em>This bias is hard to recognize and remove because it requires language experts to validate, which is time-consuming, so I think this process is not widely applied when creating training data for models</em>), meaning even when we mention the same concept, the model may generate slightly different responses in different languages. Sometimes, just changing some characters, the order of words, or punctuation can lead to different meanings.</p>
+</li>
+<li>
+<p>The reason for this can be the dependencies of meaning. <a href="https://www.oxfordlearnersdictionaries.com/definition/english/agnostic_1?q=agnostic">When you explain a word in English, you actually use other English words to explain it</a>. These words were invented in countries like the US, America, etc., and have cultural and historical backgrounds. So when you translate them to other languages, the meaning may be different.</p>
+</li>
+<li>
+<p>So these biases existed but rarely people know about them. They lead to inconsistent knowledge representation, which can cause hallucinations.</p>
+</li>
+</ul>
 <h3 id="post-training-effects-create-personality-traits">Post-training effects create personality traits:</h3>
 <ul>
 <li>
