@@ -37,6 +37,8 @@ heroImage: ''
 
 - So these biases existed but rarely people know about them. They lead to inconsistent knowledge representation, which can cause hallucinations.
 
+This thinking is consolidated from [Benchmarking Concept-Spilling Across Languages in LLMs](https://arxiv.org/abs/2601.12549).
+
 ### Post-training effects create personality traits:
 
 - At the pretraining stage, we create an ["untamed monster"](https://huyenchip.com/2023/05/02/rlhf.html) by making it learn statistical patterns from internet data (trillions of tokens). Data includes clickbait, misinformation,etc. Models learn to complete text without understanding truth vs falsehood.
