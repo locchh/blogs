@@ -29,6 +29,14 @@ heroImage: ''
 
 ## My Thoughts
 
+### Cross-lingual bias
+
+- There is a bias in training data between English and other languages (*This bias is hard to recognize and remove because it requires language experts to validate, which is time-consuming, so I think this process is not widely applied when creating training data for models*), meaning even when we mention the same concept, the model may generate slightly different responses in different languages. Sometimes, just changing some characters, the order of words, or punctuation can lead to different meanings.
+
+- The reason for this can be the dependencies of meaning. [When you explain a word in English, you actually use other English words to explain it](https://www.oxfordlearnersdictionaries.com/definition/english/agnostic_1?q=agnostic). These words were invented in countries like the US, America, etc., and have cultural and historical backgrounds. So when you translate them to other languages, the meaning may be different.
+
+- So these biases existed but rarely people know about them. They lead to inconsistent knowledge representation, which can cause hallucinations.
+
 ### Post-training effects create personality traits:
 
 - At the pretraining stage, we create an ["untamed monster"](https://huyenchip.com/2023/05/02/rlhf.html) by making it learn statistical patterns from internet data (trillions of tokens). Data includes clickbait, misinformation,etc. Models learn to complete text without understanding truth vs falsehood.
