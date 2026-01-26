@@ -59,10 +59,26 @@ a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astr
 </li>
 </ul>
 <p>These thoughts are consolidated from <a href="https://arxiv.org/pdf/2601.10467">AI Sycophancy: How Users Flag and Respond</a>. (<em>They published this paper on arXiv on Jan 20, 2026. I had similar thoughts independently and wrote them down, then wondered if anyone else in the world was thinking like me - that’s when I found this paper</em>)</p>
-<h3 id="hallucination-accumulation-in-long-term-collaboration">Hallucination Accumulation in Long-Term Collaboration:</h3>
+<h3 id="hallucination-accumulation-in-long-term-task">Hallucination Accumulation in Long-Term Task:</h3>
+<h4 id="come-from-the-model-itself">Come from the model itself</h4>
+<p>Sometimes, models are too confident about their answers, especially when performing long-term tasks without human-in-the-loop (HITL) feedback or using tools to verify intermediate results, even when they have the ability to do so. For models with reasoning ability, it’s hard to track the reasoning process (<em>They think too much, sometimes overthinking and too fast</em>), so it’s difficult to know if the model is reasoning correctly or not. Especially in long-term tasks, models can fall into incorrect hypotheses or misconceptions and generate many hallucinations.</p>
+<p>There are solutions to reduce the hallucination coming from the model itself, for example <a href="https://docs.z.ai/guides/capabilities/thinking-mode">GLM provides thinking abilities to models</a> by adjusting the thinking behavior of models via special tokens and training data:</p>
 <ul>
 <li>
-<p>User provides unsure/misinformation → “Naive well-kind expert” accepts it as truth.</p>
+<p><strong>Interleaved thinking</strong>: Allowing GLM to think between tool calls and after receiving tool results. This enables more complex, step-by-step reasoning: interpreting each tool output before deciding what to do next, chaining multiple tool calls with reasoning steps, and making finer-grained decisions based on intermediate results.</p>
+</li>
+<li>
+<p><strong>Preserved thinking</strong>: The model can retain reasoning content from previous assistant turns in the context. This helps preserve reasoning continuity and conversation integrity, improves model performance, and increases cache hit rates—saving tokens in real tasks.</p>
+</li>
+<li>
+<p><strong>Turn-level thinking</strong>: Is a capability that lets you control reasoning computation on a per-turn basis: within the same session, each request can independently choose to enable or disable thinking</p>
+</li>
+</ul>
+<h4 id="come-from-the-collaboration-between-user-and-model">Come from the collaboration between user and model</h4>
+<p>The hallucination can also come from the collaboration between user and model:</p>
+<ul>
+<li>
+<p>User provides unsure/misinformation (<em>This is an agnostic behavior of users - if they know the information is false, they won’t provide it, but they don’t know that they don’t know</em>) → “Naive well-kind expert” accepts it as truth.</p>
 </li>
 <li>
 <p>Model incorporates this false information into its context/reasoning.</p>
