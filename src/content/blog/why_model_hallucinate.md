@@ -1,7 +1,3 @@
- 
-
- 
-
 ---
 title: 'Why model hallucinate?'
 description: 'Some explaination about why model hallucinate'
