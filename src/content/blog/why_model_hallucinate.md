@@ -54,7 +54,7 @@ These thoughts are consolidated from [AI Sycophancy: How Users Flag and Respond]
 
 Sometimes, models are too confident about their answers, especially when performing long-term tasks without human-in-the-loop (HITL) feedback or using tools to verify intermediate results, even when they have the ability to do so. For models with reasoning ability, it's hard to track the reasoning process (*They think too much, sometimes overthinking and too fast*), so it's difficult to know if the model is reasoning correctly or not. Especially in long-term tasks, models can fall into incorrect hypotheses or misconceptions and generate many hallucinations. 
 
-There are solutions to reduce the hallucination coming from the model itself, for example [GLM provides thinking abilities to models](https://docs.z.ai/guides/capabilities/thinking-mode) by adjusting the thinking behavior of models via special tokens and training data:
+There are solutions to reduce the hallucination coming from the model itself, for example [GLM provides thinking abilities to models](https://docs.z.ai/guides/capabilities/thinking-mode) by adjusting the thinking behavior of models via special tokens, training process and engineering techniques behind:
 
 - **Interleaved thinking**: Allowing GLM to think between tool calls and after receiving tool results. This enables more complex, step-by-step reasoning: interpreting each tool output before deciding what to do next, chaining multiple tool calls with reasoning steps, and making finer-grained decisions based on intermediate results.
 
