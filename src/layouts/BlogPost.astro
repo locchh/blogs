@@ -82,5 +82,19 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			</article>
 		</main>
 		<Footer />
+		<script>
+			import mermaid from 'mermaid';
+			mermaid.initialize({ startOnLoad: false, theme: 'default' });
+
+			document.querySelectorAll('pre > code.language-mermaid').forEach((block) => {
+				const pre = block.parentElement!;
+				const container = document.createElement('div');
+				container.classList.add('mermaid');
+				container.textContent = block.textContent ?? '';
+				pre.replaceWith(container);
+			});
+
+			await mermaid.run();
+		</script>
 	</body>
 </html>
