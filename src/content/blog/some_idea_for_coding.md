@@ -1,7 +1,7 @@
 ---
 title: 'Some thoughts about coding'
 description: 'Some thoughts about coding in the era of AI'
-pubDate: 'Feb 05 2026'
+pubDate: 'Feb 09 2026'
 heroImage: ''
 ---
 
@@ -20,6 +20,16 @@ But imagination, learning, and creativity still require humans. I mean, you can 
 ## Some Levels
 
 *Coding now becomes more about understanding, designing, and solving problems.*
+
+### Effort Levels
+
+There are differences between making AI work on long-term tasks versus regular chatting. For example:
+
+- **ChatGPT or Claude.ai** can help with regular chatting, online searching, and synthesizing information. However, this is still short-term focused.
+
+- **Deep research mode** may provide more advanced abilities like planning, researching, using tools (read/write to offload and reload context to files), and formatting data into documents or reports following templates.
+
+I think there's something that controls AI's effort level, making it plan more, use tools more, generate more tokens, and do more reflection. This might be the system prompt or something else.
 
 ### Human-AI Collaboration Levels
 
@@ -48,13 +58,13 @@ There are several levels in software development. Here's the progression from hi
 
 - Below is relationship between software development levels and human-AI collaboration levels:
 
-| Development Level | Manual | Semi-Autonomous | Autonomous |
-|-------------------|--------|-----------------|------------|
-| **Solution Architecture** | • Stakeholder interviews<br>• Business requirements<br>• Strategic decisions | • AI suggests tech stacks<br>• Human reviews & decides<br>• AI creates diagrams | ❌ Not feasible |
-| **System Design** | • Draw system diagrams<br>• Define APIs<br>• Design DB schemas<br>• Plan data flow | • AI proposes components<br>• Human adjusts & validates<br>• AI generates diagrams | • Limited: Generate basic system design with human validation required |
-| **Detailed/Low-Level Design** | • Create class diagrams<br>• Define interfaces<br>• Write method signatures<br>• Design algorithms | • AI generates class designs<br>• Human reviews & refines<br>• AI suggests algorithms | • Generate class structures<br>• Suggest algorithms<br>• Create interfaces |
-| **Code Implementation** | • Write code from scratch<br>• Implement logic<br>• Manual debugging<br>• Write tests | • AI generates code<br>• Human reviews & edits<br>• AI suggests improvements<br>• Pair coding | • Full feature generation<br>• Complete implementation<br>• Test writing<br>• Auto bug fixes |
-| **Unit/Module Level** | • Write functions<br>• Manual unit tests<br>• Debug issues<br>• Code review | • AI generates functions<br>• Human reviews & tests<br>• AI helps debug | • Auto unit test generation<br>• Code formatting<br>• Linting<br>• Style checks<br>• Auto-fix bugs |
+| # | Development Level | Human (Manual) | Human + AI (Semi-Autonomous) | AI (Autonomous) | Platforms & Tools |
+|---|-------------------|----------------|------------------------------|-----------------|-------------------|
+| 1 | **Solution Architecture** | • Stakeholder interviews<br>• Gather business requirements<br>• Make strategic & budget decisions<br>• Evaluate vendor/build vs buy | • AI suggests tech stacks & trade-offs<br>• AI drafts architecture diagrams<br>• Human reviews & makes final decisions | ❌ Not feasible | Miro, Lucidchart, Confluence, PowerPoint, Google Slides |
+| 2 | **System Design** | • Define NFRs (scalability, security)<br>• Design cross-service communication<br>• Plan data flow & integration points | • AI proposes component diagrams & API contracts<br>• AI generates DB schema drafts<br>• Human validates & adjusts | • Generate basic diagrams from descriptions (requires human validation) | Draw.io, PlantUML, Swagger/OpenAPI, dbdiagram.io, Excalidraw |
+| 3 | **Detailed/Low-Level Design** | • Define module boundaries<br>• Choose design patterns<br>• Review & approve designs | • AI generates class diagrams & interfaces<br>• AI suggests algorithms & data structures<br>• Human refines & approves | • Generate class structures<br>• Generate interface definitions<br>• Suggest algorithm implementations | PlantUML, Mermaid, UMLet, IDE built-in tools |
+| 4 | **Code Implementation** | • Define acceptance criteria<br>• Review PRs & approve merges<br>• Handle complex business logic | • AI generates feature code<br>• AI suggests improvements & refactors<br>• Human reviews, edits & pair-codes | • Full boilerplate generation<br>• CRUD implementation<br>• Write integration tests<br>• Auto bug fixes for known patterns | Windsurf, Cursor, GitHub Copilot, VS Code, JetBrains IDEs, Git |
+| 5 | **Unit/Module Level** | • Verify test coverage<br>• Review generated tests<br>• Debug edge cases | • AI generates functions<br>• AI helps debug with context<br>• Human validates correctness | • Auto unit test generation<br>• Code formatting & linting<br>• Style enforcement<br>• Auto-fix simple bugs | Jest, Pytest, ESLint, Prettier, SonarQube, pre-commit hooks |
 
 - Example of a coding flow:
 
@@ -72,7 +82,6 @@ There are several levels in software development. Here's the progression from hi
                                                             +--------------------+
                                                             |  Smoke Test        |
                                                             |  Unit Test         |
-                                                            |  Integration Test  |
                                                             +--------------------+
                                                                         |
                                                                         v
@@ -81,10 +90,43 @@ There are several levels in software development. Here's the progression from hi
                                                                 +--------------+
 ```
 
-### Analogy between coding engineering and mechanical engineering
+## Analogy between coding engineering and mechanical engineering
 
-- In mechanical industry, we also have many already-to-use components (e.g. bolts, screws, gears, valves, pipes, etc.) they are designed, tested and they put into a catalog so the engineer can select them directly without designing from scratch (meaning they abstract the complexity of designing and testing).
+I am a mechanical engineer by education and have worked in the industry for many years. Based on my experience, coding engineering is very similar to mechanical engineering in many ways.
 
+- In the mechanical industry, we also have many **ready-to-use components** (e.g., bolts, screws, gears, valves, pipes, etc.) that are designed, tested, and put into a catalog so engineers can select them directly without designing from scratch. This abstracts the complexity of designing and testing. Similarly, in coding, we have many **libraries, frameworks, and packages** that we can use directly without designing from scratch.
+
+- **Mechanism diagrams** show how components interact and move together, defining kinematic relationships and motion paths → Similar to **system architecture diagrams** or **flowcharts** that show how different modules/services interact and data flows through the system.
+
+- **Assembly drawings** show how multiple parts fit together to create a complete product, with overall dimensions and part relationships → Similar to **system design documents** or **integration diagrams** that show how different code modules, APIs, and services connect to form the complete application.
+
+- **Detailed drawings / Part drawings** provide complete specifications for individual components (dimensions, tolerances, materials, surface finish) → Similar to **detailed module documentation**, **API specifications**, or **class/function definitions** that define exactly how each code component works.
+
+- **Manufacturing drawings / Fabrication drawings** provide production-specific information (machining operations, tooling, sequence) → Similar to **deployment documentation**, **build configurations**, or **CI/CD pipelines** that specify how to actually produce/build the software.
+
+We also perform **machining and assembly processes** (cutting, shaping, joining parts together), just like we do **coding and merging/pushing to the repository** (writing code, integrating components, version control).
+
+**Additional parallels:**
+- **Testing and quality control** (dimensional inspection, material testing) ↔ **Unit tests, integration tests, code review**
+- **Tolerances and specifications** (±0.01mm precision) ↔ **Performance requirements, error handling, edge cases**
+- **Bill of Materials (BOM)** ↔ **Dependencies list** (package.json, requirements.txt)
+- **Prototyping** ↔ **MVP / Proof of concept**
+- **Maintenance manuals** ↔ **Documentation and README files**
+
+Here's a comparison table:
+
+| **Mechanical Engineering** | **Software Engineering** | **Purpose** |
+|---------------------------|-------------------------|-------------|
+| **Ready-to-use components** (bolts, gears, valves) | **Libraries & frameworks** (npm, pip packages) | Pre-designed components to avoid reinventing the wheel |
+| **Mechanism diagrams** | **Architecture diagrams / Flowcharts** | Show how components interact and work together |
+| **Assembly drawings** | **System design / Integration diagrams** | Show how parts/modules connect into complete system |
+| **Detailed/Part drawings** | **API specs / Module documentation** | Complete specifications for individual components |
+| **Manufacturing drawings** | **Deployment docs / CI/CD pipelines** | Instructions for actually building/producing the product |
+| **Machining** | **Coding / Programming** | Creating individual components |
+| **Assembly** | **Merging / Integration** | Combining components into final system |
+| **Bill of Materials (BOM)** | **Dependencies list** (package.json) | List of all required components |
+| **Testing & QC** | **Unit/Integration tests** | Verify components meet specifications |
+| **Maintenance manuals** | **Documentation / README** | Usage and troubleshooting instructions |
 
 ## Tips
 
@@ -92,25 +134,50 @@ There are several levels in software development. Here's the progression from hi
 
 ### For high-level Tips
 
-- Keep learning
+- **Keep learning**, you learn fast and efficiently than AI (*That why you still got the job*). Use AI fully event more costly than human and without responsibility or accountability.
 
-- Preproduce a codebase
+- **Do reverse engineering** on existing codebase, explore the codebase, understand the design, the architecture, the patterns, the conventions, etc. Try to:
 
-- Migrate a codebase
+    - Make a comprehensive documentation
 
-- Build a fake product
+    - Preproduce a codebase, you can do the managing, orchestrating, reviewing, etc and let AI implement the code.
 
+    - Or use AS-IS knowledge to migrate a codebase into new technology, new architecture, new language, etc.
+
+- **Break down your work** into smaller, manageable, testable, isolated and independent pieces.
+
+    - scope by environment (dev, staging, production)
+    
+    - scope by code online repository vs local repository
+    
+    - scope by branches (main/master, develop, and support branches like feature/*, hotfix/*, release/*) [Refer to](https://nvie.com/posts/a-successful-git-branching-model/)
+    
+    - scope by features, modules, components, etc. [Refer to](https://github.blog/developer-skills/github/write-better-commits-build-better-projects/) or [This](https://github.com/git-guides/git-commit). Commit is a most important unit in coding with variant sizes from small bug fix to large feature implementation. From single line change to entire codebase. One more convenient thing is that, when you **make commit by commit**, you can easily see what file, what line is changed, added, or removed in the UI.
+
+    #### Three Golden Rules for Better Commits:
+    
+    - Structure Your Narrative: Plan your story first, then reorder commits to match logical flow using `git rebase -i`
+    
+    - Make Commits Small & Atomic: Each commit should do one thing and work independently if rolled back
+    
+    - Explain the Context: Explain what you're doing, why it's needed, why this approach was chosen, and how it was implemented
+
+- Always use tools to support (AI can not handle a large process, you will get pay a lot)
+    
+    - Run linter, formatter, type checker when developing
+    
+    - Run SonarQube on release branches
 
 ### For detailed implementation Tips
 
-- Thinking first
+- Thinking first, as mentioned above, before coding brainstorm with ai to make a narrative commit structure. and try to make atomic commits.
 
-- Control the high-level
+- You can not read all AI generated code anymore. So instead go to the detailed implementation level, you must control something higher like a TODO list or a detailed design of module, sub-packages, etc. Use tools like [Plannotator](https://plannotator.ai/) or [BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD) to help you with this.
 
-- Setup local development environment
+- Setup already-to-code local development environment. It make you aware of the code and the system structure.
 
-- Break down your work into smaller, manageable pieces (tasks, PRs, commits, etc.)
+- Don't forget practice manual coding skills its like make your brain do physical exercise. You still need to know how to code without AI.
 
-- Looping
+- Looping is a powerful technique to improve AI output quality and reduce errors. if you write a function or module, let create the test for it first, then you can let AI implement it. After that, you can run the linter, the formatter, the type checker, and the test to see if it passes.
 
-- 
+
