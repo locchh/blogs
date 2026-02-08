@@ -71,37 +71,37 @@ There are several levels in software development. Here's the progression from hi
 - Example of a coding flow:
 
 ```
-        ┌─────────────────┐
-        │ From Feature/CR │
-        └─────────────────┘
-                ↓
-        ┌─────────────────┐
-        │ Think about     │
-        │ workflow        │
-        └─────────────────┘
-                ↓
-        ┌─────────────────┐
-        │ Define data     │
-        │ models          │
-        └─────────────────┘
-                ↓
-        ┌─────────────────┐
-        │ Design code     │
-        │ components      │
-        └─────────────────┘
-                ↓
-        ┌─────────────────┐
-        │   Implement     │
-        └─────────────────┘
-                ↓
-        ┌─────────────────┐
-        │ Do Smoke Test   │
-        │ & Unit Test     │
-        └─────────────────┘
-                ↓
-        ┌─────────────────┐
-        │   Code Review   │
-        └─────────────────┘
+                        ┌─────────────────┐
+                        │ From Feature/CR │
+                        └─────────────────┘
+                                ↓
+                        ┌─────────────────┐
+                        │ Think about     │
+                        │ workflow        │
+                        └─────────────────┘
+                                ↓
+                        ┌─────────────────┐
+                        │ Define data     │
+                        │ models          │
+                        └─────────────────┘
+                                ↓
+                        ┌─────────────────┐
+                        │ Design code     │
+                        │ components      │
+                        └─────────────────┘
+                                ↓
+                        ┌─────────────────┐
+                        │   Implement     │
+                        └─────────────────┘
+                                ↓
+                        ┌─────────────────┐
+                        │ Do Smoke Test   │
+                        │ & Unit Test     │
+                        └─────────────────┘
+                                ↓
+                        ┌─────────────────┐
+                        │   Code Review   │
+                        └─────────────────┘
 ```
 
 ## Analogy between 💻 coding engineering and 🔧 mechanical engineering
