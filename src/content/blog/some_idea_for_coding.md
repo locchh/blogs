@@ -5,6 +5,8 @@ pubDate: 'Feb 09 2026'
 heroImage: ''
 ---
 
+As a mechanical engineer turned developer, I've been reflecting on how AI is reshaping the way we write software. This post shares my observations on what has changed, what still requires human judgment, and practical tips for working effectively alongside AI tools.
+
 ## Some Highlights
 
 *Mastering code implementation does not automatically mean you can design architecture better.*
@@ -76,30 +78,13 @@ flowchart LR
     F --> G[Code Review]
 ```
 
-## Analogy between coding engineering and mechanical engineering
+## Analogy between 💻 coding engineering and 🔧 mechanical engineering
 
 I am a mechanical engineer by education and have worked in the industry for many years. Based on my experience, coding engineering is very similar to mechanical engineering in many ways.
 
-- In the mechanical industry, we also have many **ready-to-use components** (e.g., bolts, screws, gears, valves, pipes, etc.) that are designed, tested, and put into a catalog so engineers can select them directly without designing from scratch. This abstracts the complexity of designing and testing. Similarly, in coding, we have many **libraries, frameworks, and packages** that we can use directly without designing from scratch.
+In the mechanical industry, we have many **ready-to-use components** (bolts, screws, gears, valves, etc.) that are designed, tested, and put into a catalog so engineers can select them directly without designing from scratch. Similarly, in coding, we have **libraries, frameworks, and packages** that we can use directly. Both fields share the same pattern: abstract complexity, document everything, assemble components, test the result.
 
-- **Mechanism diagrams** show how components interact and move together, defining kinematic relationships and motion paths → Similar to **system architecture diagrams** or **flowcharts** that show how different modules/services interact and data flows through the system.
-
-- **Assembly drawings** show how multiple parts fit together to create a complete product, with overall dimensions and part relationships → Similar to **system design documents** or **integration diagrams** that show how different code modules, APIs, and services connect to form the complete application.
-
-- **Detailed drawings / Part drawings** provide complete specifications for individual components (dimensions, tolerances, materials, surface finish) → Similar to **detailed module documentation**, **API specifications**, or **class/function definitions** that define exactly how each code component works.
-
-- **Manufacturing drawings / Fabrication drawings** provide production-specific information (machining operations, tooling, sequence) → Similar to **deployment documentation**, **build configurations**, or **CI/CD pipelines** that specify how to actually produce/build the software.
-
-We also perform **machining and assembly processes** (cutting, shaping, joining parts together), just like we do **coding and merging/pushing to the repository** (writing code, integrating components, version control).
-
-**Additional parallels:**
-- **Testing and quality control** (dimensional inspection, material testing) ↔ **Unit tests, integration tests, code review**
-- **Tolerances and specifications** (±0.01mm precision) ↔ **Performance requirements, error handling, edge cases**
-- **Bill of Materials (BOM)** ↔ **Dependencies list** (package.json, requirements.txt)
-- **Prototyping** ↔ **MVP / Proof of concept**
-- **Maintenance manuals** ↔ **Documentation and README files**
-
-Here's a comparison table:
+Here's how the two fields compare:
 
 | **Mechanical Engineering** | **Software Engineering** | **Purpose** |
 |---------------------------|-------------------------|-------------|
@@ -166,4 +151,6 @@ Here's a comparison table:
 
 - Looping is a powerful technique to improve AI output quality and reduce errors. If you write a function or module, create the test for it first, then let AI implement it. After that, you can run the linter, the formatter, the type checker, and the test to see if it passes.
 
+## Final Thoughts
 
+AI has changed *how* we code, but not *what* makes a good engineer. The fundamentals remain the same: understand the problem, design a clear solution, break it into manageable pieces, and verify the result. AI accelerates the implementation, but the thinking, designing, and decision-making are still ours. Stay curious, keep learning, and use AI as a powerful tool — not a replacement for your judgment.
