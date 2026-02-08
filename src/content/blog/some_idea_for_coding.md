@@ -147,9 +147,9 @@ Here's how the two fields compare:
     
     - scope by code online repository vs local repository
     
-    - scope by branches (main/master, develop, and support branches like feature/*, hotfix/*, release/*) [Refer to](https://nvie.com/posts/a-successful-git-branching-model/)
+    - scope by branches (main/master, develop, and support branches like feature/*, hotfix/*, release/*) [Refer to: A Successful Git Branching Model](https://nvie.com/posts/a-successful-git-branching-model/)
     
-    - scope by features, modules, components, etc. [Refer to](https://github.blog/developer-skills/github/write-better-commits-build-better-projects/) or [This](https://github.com/git-guides/git-commit). A commit is the most important unit in coding, with varying sizes from a small bug fix to a large feature implementation — from a single-line change to an entire codebase. One more convenient thing is that, when you **work commit by commit**, you can easily see what file and what line was changed, added, or removed in the UI.
+    - scope by features, modules, components, etc. [Refer to: Write Better Commits, Build Better Projects](https://github.blog/developer-skills/github/write-better-commits-build-better-projects/) or [Git Commit Guidelines](https://github.com/git-guides/git-commit). A commit is the most important unit in coding, with varying sizes from a small bug fix to a large feature implementation — from a single-line change to an entire codebase. One more convenient thing is that, when you **work commit by commit**, you can easily see what file and what line was changed, added, or removed in the UI.
 
     #### Three Golden Rules for Better Commits:
     
