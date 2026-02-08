@@ -70,12 +70,38 @@ There are several levels in software development. Here's the progression from hi
 
 - Example of a coding flow:
 
-```mermaid
-flowchart LR
-    A[Feature/CR] --> B[Workflow] --> C[Data Models] --> D[Code Components]
-    D --> E[Implement]
-    E --> F[Smoke Test & Unit Test]
-    F --> G[Code Review]
+```
+        ┌─────────────────┐
+        │ From Feature/CR │
+        └─────────────────┘
+                ↓
+        ┌─────────────────┐
+        │ Think about     │
+        │ workflow        │
+        └─────────────────┘
+                ↓
+        ┌─────────────────┐
+        │ Define data     │
+        │ models          │
+        └─────────────────┘
+                ↓
+        ┌─────────────────┐
+        │ Design code     │
+        │ components      │
+        └─────────────────┘
+                ↓
+        ┌─────────────────┐
+        │   Implement     │
+        └─────────────────┘
+                ↓
+        ┌─────────────────┐
+        │ Do Smoke Test   │
+        │ & Unit Test     │
+        └─────────────────┘
+                ↓
+        ┌─────────────────┐
+        │   Code Review   │
+        └─────────────────┘
 ```
 
 ## Analogy between 💻 coding engineering and 🔧 mechanical engineering
