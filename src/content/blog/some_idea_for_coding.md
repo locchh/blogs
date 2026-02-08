@@ -13,9 +13,9 @@ In recent years, with the rise of AI coding tools (e.g., [Windsurf](https://wind
 
 While writing, reviewing, and debugging have become more efficient with the help of these tools, designing (architecture, system design, etc.) and orchestrating (setting up local environments, CI/CD, deployment, etc.) still require human judgment.
 
-AI can handle massive workloads and process a lot of data instantly. For example, I think AI companies like OpenAI or Anthropic can now base on your conversation history to customize a system prompt for the model when you start a new session. Some AI platforms or tools can collect your data and customize the settings for your specific needs, or suggest you things to maximize their profit, and they can even use your data to improve their model.
+AI can handle massive workloads and process a lot of data instantly. For example, I think AI companies like OpenAI or Anthropic can now base their models on your conversation history to customize a system prompt when you start a new session. Some AI platforms or tools can collect your data and customize the settings for your specific needs, or suggest things to maximize their profit, and they can even use your data to improve their models.
 
-But imagination, learning, and creativity still require humans. I mean, you can teach AI anything, but you need large resources (data, computation, time, etc.) to do that. Learning with fewer resources is still a challenge for AI (due to current model architectures and training methods). I think in the future, maybe they will do some tricks with their product more when they release new model versions like [Claude 5](https://claude5.com/), maybe they will equip that model with special, new technology knowledge needed in labor environment but less accessible to the public. (That seems not fair to humans). But anyway, we learn faster and at less cost.
+But imagination, learning, and creativity still require humans. I mean, you can teach AI anything, but you need large resources (data, computation, time, etc.) to do that. Learning with fewer resources is still a challenge for AI (due to current model architectures and training methods). I think in the future, they may do more tricks with their products when they release new model versions like [Claude 5](https://claude5.com/), perhaps equipping those models with special, new technology knowledge needed in the workplace but less accessible to the public. (That doesn't seem fair to humans.) But anyway, we learn faster and at less cost.
 
 ## Some Levels
 
@@ -33,7 +33,7 @@ I think there's something that controls AI's effort level, making it plan more, 
 
 ### Human-AI Collaboration Levels
 
-First, I classify there are 3 concepts we need to understand:
+First, there are 3 concepts we need to understand:
 - **Work**: A chain or group of tasks
 - **Task**: A specific job to be done
 - **Participation**: Who participates in the task: human, AI, or both
@@ -68,26 +68,12 @@ There are several levels in software development. Here's the progression from hi
 
 - Example of a coding flow:
 
-```ascii
-+--------------+      +-----------+      +-------------+      +-----------------+
-| Feature/CR   | ---> | Workflow  | ---> | Data Models | ---> | Code Components |
-+--------------+      +-----------+      +-------------+      +-----------------+
-                                                                        |
-                                                                        v
-                                                                +--------------+
-                                                                |  Implement   |
-                                                                +--------------+
-                                                                        |
-                                                                        v
-                                                            +--------------------+
-                                                            |  Smoke Test        |
-                                                            |  Unit Test         |
-                                                            +--------------------+
-                                                                        |
-                                                                        v
-                                                                +--------------+
-                                                                | Code Review  |
-                                                                +--------------+
+```mermaid
+flowchart LR
+    A[Feature/CR] --> B[Workflow] --> C[Data Models] --> D[Code Components]
+    D --> E[Implement]
+    E --> F[Smoke Test & Unit Test]
+    F --> G[Code Review]
 ```
 
 ## Analogy between coding engineering and mechanical engineering
@@ -130,17 +116,17 @@ Here's a comparison table:
 
 ## Tips
 
-*So stay calm, we need to aware that, between Us, AI and the Code, there are alot if things for humans to do. (e.g designing, orchestrating, reviewing, etc.)*
+*So stay calm — we need to be aware that, between us, AI, and the code, there are a lot of things for humans to do (e.g., designing, orchestrating, reviewing, etc.).*
 
 ### For high-level Tips
 
-- **Keep learning**, you learn fast and efficiently than AI (*That why you still got the job*). Use AI fully event more costly than human and without responsibility or accountability.
+- **Keep learning** — you learn faster and more efficiently than AI (*that's why you still have the job*). Use AI fully, even if it's more costly than a human and comes without responsibility or accountability.
 
 - **Do reverse engineering** on existing codebase, explore the codebase, understand the design, the architecture, the patterns, the conventions, etc. Try to:
 
     - Make a comprehensive documentation
 
-    - Preproduce a codebase, you can do the managing, orchestrating, reviewing, etc and let AI implement the code.
+    - Reproduce a codebase — you can do the managing, orchestrating, reviewing, etc., and let AI implement the code.
 
     - Or use AS-IS knowledge to migrate a codebase into new technology, new architecture, new language, etc.
 
@@ -152,7 +138,7 @@ Here's a comparison table:
     
     - scope by branches (main/master, develop, and support branches like feature/*, hotfix/*, release/*) [Refer to](https://nvie.com/posts/a-successful-git-branching-model/)
     
-    - scope by features, modules, components, etc. [Refer to](https://github.blog/developer-skills/github/write-better-commits-build-better-projects/) or [This](https://github.com/git-guides/git-commit). Commit is a most important unit in coding with variant sizes from small bug fix to large feature implementation. From single line change to entire codebase. One more convenient thing is that, when you **make commit by commit**, you can easily see what file, what line is changed, added, or removed in the UI.
+    - scope by features, modules, components, etc. [Refer to](https://github.blog/developer-skills/github/write-better-commits-build-better-projects/) or [This](https://github.com/git-guides/git-commit). A commit is the most important unit in coding, with varying sizes from a small bug fix to a large feature implementation — from a single-line change to an entire codebase. One more convenient thing is that, when you **work commit by commit**, you can easily see what file and what line was changed, added, or removed in the UI.
 
     #### Three Golden Rules for Better Commits:
     
@@ -162,7 +148,7 @@ Here's a comparison table:
     
     - Explain the Context: Explain what you're doing, why it's needed, why this approach was chosen, and how it was implemented
 
-- Always use tools to support (AI can not handle a large process, you will get pay a lot)
+- Always use tools to support your work (AI cannot handle a large process alone — you will have to pay a lot)
     
     - Run linter, formatter, type checker when developing
     
@@ -170,14 +156,14 @@ Here's a comparison table:
 
 ### For detailed implementation Tips
 
-- Thinking first, as mentioned above, before coding brainstorm with ai to make a narrative commit structure. and try to make atomic commits.
+- Think first — as mentioned above, before coding, brainstorm with AI to create a narrative commit structure and try to make atomic commits.
 
-- You can not read all AI generated code anymore. So instead go to the detailed implementation level, you must control something higher like a TODO list or a detailed design of module, sub-packages, etc. Use tools like [Plannotator](https://plannotator.ai/) or [BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD) to help you with this.
+- You cannot read all AI-generated code anymore. So instead of going to the detailed implementation level, you must control something higher — like a TODO list or a detailed design of modules, sub-packages, etc. Use tools like [Plannotator](https://plannotator.ai/) or [BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD) to help you with this.
 
-- Setup already-to-code local development environment. It make you aware of the code and the system structure.
+- Set up a ready-to-code local development environment. It makes you aware of the code and the system structure.
 
-- Don't forget practice manual coding skills its like make your brain do physical exercise. You still need to know how to code without AI.
+- Don't forget to practice manual coding skills — it's like making your brain do physical exercise. You still need to know how to code without AI.
 
-- Looping is a powerful technique to improve AI output quality and reduce errors. if you write a function or module, let create the test for it first, then you can let AI implement it. After that, you can run the linter, the formatter, the type checker, and the test to see if it passes.
+- Looping is a powerful technique to improve AI output quality and reduce errors. If you write a function or module, create the test for it first, then let AI implement it. After that, you can run the linter, the formatter, the type checker, and the test to see if it passes.
 
 
