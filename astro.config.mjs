@@ -10,4 +10,10 @@ export default defineConfig({
 	base: '/blogs',
 	output: 'static',
 	integrations: [mdx(), sitemap()],
+	markdown: {
+		syntaxHighlight: {
+			type: 'shiki',
+			excludeLangs: ['mermaid'],
+		},
+	},
 });
