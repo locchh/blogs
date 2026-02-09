@@ -5,7 +5,7 @@ pubDate: 'Feb 09 2026'
 heroImage: ''
 ---
 
-As a mechanical engineer turned developer, I've been reflecting on how AI is reshaping the way we write software. This post shares my observations on what has changed, what still requires human judgment, and practical tips for working effectively alongside AI tools.
+I have been looking for the growth of AI in coding and how it affects the way we work. Here are some thoughts.
 
 ## Some Highlights
 
@@ -23,6 +23,58 @@ But imagination, learning, and creativity still require humans. I mean, you can 
 
 *Coding now becomes more about understanding, designing, and solving problems.*
 
+### Code Levels
+
+Code exists at different levels of abstraction, from individual statements to entire systems. Understanding these levels helps you think about where to focus your attention and how to leverage AI effectively.
+
+#### 1. Expression / Statement
+The smallest unit of code that performs a single action or evaluation.
+- **Examples**: `x + y`, `return result`, `if (condition) { ... }`
+- **AI capability**: Excellent — AI can generate, optimize, and debug expressions with high accuracy
+- **Human focus**: Ensure correctness, readability, and intent
+
+#### 2. Function / Method
+A reusable block of code that performs a specific task.
+- **Examples**: `calculateTotal()`, `fetchUserData()`, `validateInput()`
+- **AI capability**: Very strong — AI can suggest implementations, refactor, and write tests
+- **Human focus**: Define clear contracts, handle edge cases, ensure single responsibility
+
+#### 3. Class / Struct
+A blueprint for creating objects that encapsulate data and behavior.
+- **Examples**: `User`, `Order`, `PaymentProcessor`
+- **AI capability**: Strong — AI can generate class structures, suggest patterns, but needs guidance on design
+- **Human focus**: Design relationships, choose patterns, ensure cohesion and low coupling
+
+#### 4. Module
+A collection of related functions, classes, and resources organized together.
+- **Examples**: `auth.js`, `database.py`, `utils.ts`
+- **AI capability**: Moderate — AI can help structure modules but needs clear requirements
+- **Human focus**: Define module boundaries, manage dependencies, ensure reusability
+
+#### 5. Sub-package, Name-space package
+Logical groupings of related modules that provide organization and prevent naming conflicts.
+- **Examples**: `auth.oauth`, `database.queries`, `api.controllers`
+- **AI capability**: Moderate — AI can suggest organization but needs architectural vision
+- **Human focus**: Design hierarchy, manage scope, ensure discoverability
+
+#### 6. Package
+A complete unit of distribution that can be installed and used as a dependency.
+- **Examples**: `express`, `react`, `numpy`
+- **AI capability**: Limited — AI can help implement but not design package structure
+- **Human focus**: Define public API, manage versioning, handle backward compatibility
+
+#### 7. Application
+A complete, deployable software product that solves a specific problem.
+- **Examples**: Web app, mobile app, CLI tool, microservice
+- **AI capability**: Collaborative — AI can implement features but needs human guidance on architecture
+- **Human focus**: Product requirements, user experience, system integration, deployment
+
+#### 8. System
+A collection of applications and infrastructure working together to solve complex business problems.
+- **Examples**: E-commerce platform, social network, enterprise ERP
+- **AI capability**: Advisory — AI can suggest patterns but cannot replace human architectural thinking
+- **Human focus**: Business requirements, scalability, reliability, security, cost optimization
+
 ### Effort Levels
 
 There are differences between making AI work on long-term tasks versus regular chatting. For example:
@@ -33,7 +85,7 @@ There are differences between making AI work on long-term tasks versus regular c
 
 I think there's something that controls AI's effort level, making it plan more, use tools more, generate more tokens, and do more reflection. This might be the system prompt or something else.
 
-### Human-AI Collaboration Levels
+### Collaboration Levels
 
 First, there are 3 concepts we need to understand:
 - **Work**: A chain or group of tasks
@@ -48,7 +100,7 @@ Based on these concepts, there are 3 main levels of human-AI collaboration:
 
 3. **Manual**: Humans have full control over the AI system.
 
-### Software Development Levels
+### Development Levels
 
 There are several levels in software development. Here's the progression from highest to lowest:
 
@@ -124,6 +176,71 @@ Here's how the two fields compare:
 | **Bill of Materials (BOM)** | **Dependencies list** (package.json) | List of all required components |
 | **Testing & QC** | **Unit/Integration tests** | Verify components meet specifications |
 | **Maintenance manuals** | **Documentation / README** | Usage and troubleshooting instructions |
+
+## Isolated Work Items
+
+Breaking down work into isolated, independent items is one of the most important practices in software development. Each level below represents a boundary where you can scope, manage, and control your work independently.
+
+### Work Item Levels
+
+#### 1. Environment
+The runtime context where your code lives. Isolating by environment prevents unintended side effects across stages.
+- **Examples**: dev, staging, production
+- **Key practice**: Never test directly in production. Use environment-specific configurations and feature flags.
+- **Tools**: Docker, Kubernetes, `.env` files, Terraform
+
+#### 2. Repository
+The boundary of a codebase. Each repository is an independent unit of code ownership, versioning, and CI/CD.
+- **Examples**: monorepo vs multi-repo, local vs remote (GitHub, GitLab, Bitbucket)
+- **Key practice**: Keep repositories focused — one repo per service or domain. Sync local and remote frequently.
+- **Tools**: Git, GitHub, GitLab, Bitbucket
+
+#### 3. Branch
+A parallel line of development within a repository. Branches isolate features, fixes, and releases from each other.
+- **Examples**: `main`, `develop`, `feature/*`, `hotfix/*`, `release/*` — [Refer to: A Successful Git Branching Model](https://nvie.com/posts/a-successful-git-branching-model/)
+- **Key practice**: Keep branches short-lived. Merge frequently. Use pull requests for review.
+- **Tools**: Git, GitHub PRs, GitLab MRs
+
+#### 4. Commit
+The most important unit of work in coding. A commit captures a single, atomic change that can be reviewed, reverted, or cherry-picked independently.
+- **Examples**: a bug fix, a new function, a config change, a refactor
+- **Key practice**: Make commits small and atomic — each commit should do one thing and work independently if rolled back. [Refer to: Write Better Commits, Build Better Projects](https://github.blog/developer-skills/github/write-better-commits-build-better-projects/)
+- **Tools**: Git, `git rebase -i`, conventional commits
+
+#### 5. File Change (Diff / Hunk)
+Below the commit level — individual file modifications within a commit. This is where you see exactly what lines were added, removed, or modified.
+- **Examples**: a modified function, an added import, a changed config value
+- **Key practice**: Review diffs carefully. Each hunk should be intentional and related to the commit's purpose. Avoid mixing unrelated changes in the same file change.
+- **Tools**: `git diff`, PR review UI, IDE diff viewers
+
+#### 6. Code Unit
+The smallest isolatable piece of work — a single function, class, or module that can be implemented and tested independently.
+- **Examples**: a utility function, a React component, a database query, a test case
+- **Key practice**: Write the test first, then implement. Run linter, formatter, and type checker after each change. This maps directly to the [Code Levels](#code-levels) described above.
+- **Tools**: Jest, Pytest, ESLint, Prettier, SonarQube
+
+### How It All Fits Together
+
+```
+                ┌──────────────────────────────────────────────┐
+                │ Environment (dev / staging / production)     │
+                │  ┌────────────────────────────────────────┐  │
+                │  │ Repository (local / remote)            │  │
+                │  │  ┌──────────────────────────────────┐  │  │
+                │  │  │ Branch (feature / hotfix / main) │  │  │
+                │  │  │  ┌────────────────────────────┐  │  │  │
+                │  │  │  │ Commit (atomic change)     │  │  │  │
+                │  │  │  │  ┌──────────────────────┐  │  │  │  │
+                │  │  │  │  │ File Change (diff)   │  │  │  │  │
+                │  │  │  │  │  ┌────────────────┐  │  │  │  │  │
+                │  │  │  │  │  │ Code Unit      │  │  │  │  │  │
+                │  │  │  │  │  └────────────────┘  │  │  │  │  │
+                │  │  │  │  └──────────────────────┘  │  │  │  │
+                │  │  │  └────────────────────────────┘  │  │  │
+                │  │  └──────────────────────────────────┘  │  │
+                │  └────────────────────────────────────────┘  │
+                └──────────────────────────────────────────────┘
+```
 
 ## Tips
 
