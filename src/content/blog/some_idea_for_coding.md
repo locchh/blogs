@@ -177,6 +177,62 @@ Here's how the two fields compare:
 | **Testing & QC** | **Unit/Integration tests** | Verify components meet specifications |
 | **Maintenance manuals** | **Documentation / README** | Usage and troubleshooting instructions |
 
+## Tools for the Full Design Spectrum
+
+*In mechanical engineering, you don't machine a part without a drawing, you don't make a drawing without a design review, and you don't start design without requirements. The same discipline should apply to software.*
+
+The analogy above raises a practical question: **do we actually have tools that enforce this discipline across the full software design spectrum?** The answer is yes — and three tools in particular map remarkably well to the mechanical engineering workflow.
+
+### The Three Tools
+
+| Tool | What It Does | Mechanical Engineering Analogy |
+|------|-------------|-------------------------------|
+| [**BMAD Method**](https://docs.bmad-method.org/) | Full pipeline with 26+ specialized AI agents: Analyst → PM → Architect → Scrum Master → Developer. Covers ideation, PRD, architecture, stories, and implementation. | The **entire engineering department** — from concept design through manufacturing instructions |
+| [**Spec Kit**](https://github.github.com/spec-kit/) | Spec-driven development: Constitution → Specify → Plan → Tasks → Implementation. Specifications are executable — they *generate* code, not just guide it. | The **drawing standards & BOM system** — specs are the single source of truth, everything traces back to them |
+| [**Plannotator**](https://plannotator.ai/) | Visual annotation & review of AI-generated plans. Inline commenting, team sharing, diff review — all running locally with no external service. | The **drawing review & approval process** — red-lining, annotations, ECN sign-offs |
+
+### Mapping Tools to Development Levels
+
+Here's how these three tools cover each development level — with their mechanical engineering equivalents:
+
+| Development Level | Mechanical Equivalent | BMAD Method | Spec Kit | Plannotator |
+|---|---|---|---|---|
+| **Solution Architecture** | Mechanism diagram | Analyst + PM agents create project brief & PRD | Constitution (immutable high-level principles) | Review & annotate architecture plans |
+| **System Design** | Assembly drawing | Architect agent designs system architecture | Specify (full spec / PRD as source of truth) | Team review of system design |
+| **Detailed/Low-Level Design** | Part / Detail drawing | Scrum Master creates hyper-detailed development stories | Plan (technical plan with precise definitions) | Annotate specific design decisions |
+| **Code Implementation** | Machining | Developer agent implements each story | Tasks (small, testable, reviewable units) | Code review via `/plannotator-review` |
+| **Unit/Module Level** | QC / Inspection | Tests & validation against acceptance criteria | Task verification against spec | Diff review with inline annotations |
+
+### My Opinion: They're Complementary, Not Competing
+
+These three tools are not alternatives — they solve different problems in the same pipeline, just like different roles in a mechanical engineering workshop:
+
+- **BMAD** = the **process & people**. It defines *who* does *what*, in *what order* — like having a design engineer, a manufacturing engineer, and a QC inspector each with defined responsibilities. Its 26 specialized agents act as expert collaborators guiding you through structured phases using progressive disclosure and strategic questioning.
+
+- **Spec Kit** = the **drawing system & standards**. Specs are executable, not just reference documents. This is the software equivalent of a modern CAD model that directly drives the CNC machine — the spec *is* the source of truth, and code *serves* the spec, not the other way around. Its workflow (Constitution → Specify → Plan → Tasks) ensures nothing gets built without a traceable requirement.
+
+- **Plannotator** = the **review & approval workflow**. In mechanical engineering, every drawing goes through a review cycle: annotations, red-lines, sign-offs. Plannotator brings this exact process to AI-generated plans — you can select specific text, mark it for deletion, add comments, or suggest replacements. It fills the critical gap that terminal-based plan approval cannot.
+
+The parallel to mechanical engineering is almost exact:
+
+```
+Mechanical Engineering          Software (with these tools)
+─────────────────────           ───────────────────────────
+Requirements gathering    →     BMAD Analyst + PM agents
+↓                               ↓
+Concept design            →     BMAD Architect + Spec Kit Constitution
+↓                               ↓
+Detail drawings           →     Spec Kit Specify + Plan
+↓                               ↓
+Drawing review & approval →     Plannotator (annotate, review, approve)
+↓                               ↓
+Manufacturing             →     BMAD Developer agent + Spec Kit Tasks
+↓                               ↓
+QC & Inspection           →     Tests + Plannotator diff review
+```
+
+The key insight: **in both mechanical and software engineering, the cost of fixing a mistake increases exponentially the later you catch it.** A requirement error caught in the drawing review is cheap. The same error caught after manufacturing (or after deployment) is catastrophic. These tools enforce early validation at every level — just like a proper engineering drawing review process.
+
 ## Isolated Work Items
 
 Breaking down work into isolated, independent items is one of the most important practices in software development. Each level below represents a boundary where you can scope, manage, and control your work independently.
@@ -286,7 +342,7 @@ The smallest isolatable piece of work — a single function, class, or module th
 
 - Think first — as mentioned above, before coding, brainstorm with AI to create a narrative commit structure and try to make atomic commits.
 
-- You cannot read all AI-generated code anymore. So instead of going to the detailed implementation level, you must control something higher — like a TODO list or a detailed design of modules, sub-packages, etc. Use tools like [Plannotator](https://plannotator.ai/) or [BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD) to help you with this.
+- You cannot read all AI-generated code anymore. So instead of going to the detailed implementation level, you must control something higher — like a TODO list or a detailed design of modules, sub-packages, etc. Use tools like [BMAD Method](https://docs.bmad-method.org/) (structured agent-driven pipeline), [Spec Kit](https://github.github.com/spec-kit/) (spec-driven development), or [Plannotator](https://plannotator.ai/) (visual plan review) to help you with this. See [Tools for the Full Design Spectrum](#tools-for-the-full-design-spectrum) above for how these map to each development level.
 
 - Set up a ready-to-code local development environment. It makes you aware of the code and the system structure.
 
@@ -297,3 +353,5 @@ The smallest isolatable piece of work — a single function, class, or module th
 ## Final Thoughts
 
 AI has changed *how* we code, but not *what* makes a good engineer. The fundamentals remain the same: understand the problem, design a clear solution, break it into manageable pieces, and verify the result. AI accelerates the implementation, but the thinking, designing, and decision-making are still ours. Stay curious, keep learning, and use AI as a powerful tool — not a replacement for your judgment.
+
+*So, my aiming is to answer the question what are you designing, not what are you coding anymore.*
