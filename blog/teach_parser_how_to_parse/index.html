@@ -1,0 +1,240 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg"><link rel="icon" href="/blogs/favicon.ico"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.0"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/teach_parser_how_to_parse/"><!-- Primary Meta Tags --><title>Teaching a Parser to Learn from Its Mistakes</title><meta name="title" content="Teaching a Parser to Learn from Its Mistakes"><meta name="description" content="How we added learned quality scoring and guided backtracking to any ANTLR4 grammar — without touching a single grammar rule."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/teach_parser_how_to_parse/"><meta property="og:title" content="Teaching a Parser to Learn from Its Mistakes"><meta property="og:description" content="How we added learned quality scoring and guided backtracking to any ANTLR4 grammar — without touching a single grammar rule."><meta property="og:image" content="https://locchh.github.io/blogs/_astro/blog-placeholder-1.Bx0Zcyzv.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/teach_parser_how_to_parse/"><meta property="twitter:title" content="Teaching a Parser to Learn from Its Mistakes"><meta property="twitter:description" content="How we added learned quality scoring and guided backtracking to any ANTLR4 grammar — without touching a single grammar rule."><meta property="twitter:image" content="https://locchh.github.io/blogs/_astro/blog-placeholder-1.Bx0Zcyzv.jpg"><link rel="stylesheet" href="/blogs/_astro/about.DIRfBi8G.css">
+<style>main[data-astro-cid-bvzihdzo]{width:calc(100% - 2em);max-width:100%;margin:0}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:720px;max-width:calc(100% - 2em);margin:auto;padding:1em;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}
+a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/blogs/" data-astro-cid-3ef6ksr2>Locch&#39;s Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/blogs/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blogs/blog/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/blogs/about/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo>  </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2026-03-07T00:00:00.000Z"> Mar 7, 2026 </time>  </div> <h1 data-astro-cid-bvzihdzo>Teaching a Parser to Learn from Its Mistakes</h1> <hr data-astro-cid-bvzihdzo> </div>  <h1 id="teaching-a-parser-to-learn-from-its-mistakes">Teaching a Parser to Learn from Its Mistakes</h1>
+<p>Parsers are deterministic. Given the same input, they always make the same decisions — and when a grammar is ambiguous, they always pick the same alternative, right or wrong. What if we could teach a parser to <em>prefer</em> better alternatives, or at least recover from bad ones?</p>
+<p>That is the question behind <strong>antlr-adaptive</strong>: a small library that wraps any ANTLR4-generated parser with learned quality scoring and guided backtracking.</p>
+<hr>
+<h2 id="the-problem">The Problem</h2>
+<p>ANTLR4 is one of the most widely used parser generators. It takes a grammar file and produces a lexer and parser in your target language. At the core of every generated parser is a method called <code>adaptivePredict</code> — the single point where all grammar ambiguities are resolved. ANTLR computes the best alternative using its ATN (Augmented Transition Network) and returns it. The parser follows it. End of story.</p>
+<p>The trouble is that “best” means <em>syntactically consistent with the grammar</em>, not <em>closest to what the user meant</em>. For broken or near-broken inputs, ANTLR’s choice can cascade into a chain of errors that makes recovery harder than it needs to be.</p>
+<p>Classic error recovery strategies (panic mode, phrase-level recovery) are built into ANTLR’s runtime. They work well for many cases. But they are grammar-specific, manually tuned, and blind to the history of what has worked before.</p>
+<p><strong>Can we do better by learning from examples?</strong></p>
+<hr>
+<h2 id="the-idea">The Idea</h2>
+<p>ANTLR resolves ambiguities at <em>decision points</em>. Each decision has a small number of alternatives (typically 2–22 for real grammars). At every decision, the parser is in a specific state: it knows which tokens are coming next and which rule invoked this decision.</p>
+<p>That state is learnable.</p>
+<p>We represent it as a fixed-length feature vector:</p>
+<ul>
+<li><strong>One-hot decision index</strong> — which of the grammar’s decisions are we at?</li>
+<li><strong>One-hot lookahead tokens</strong> — what are the next 1, 2, 3 tokens?</li>
+<li><strong>Invoking state mod 64</strong> — a coarse encoding of calling context.</li>
+</ul>
+<p>For the SQLite grammar (263 decisions), this gives a 694-dimensional vector. Then we apply a simple <strong>perceptron</strong>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>weight[decision][alt] · features  →  quality score</span></span></code></pre>
+<p>After each parse:</p>
+<ul>
+<li>If it succeeded: reward <code>+1.0</code> — reinforce every decision made.</li>
+<li>If it failed: reward <code>-n_errors / total_tokens</code> — penalise every decision made.</li>
+</ul>
+<p>Over many examples, weights for decisions that lead to clean parses grow positive; weights for decisions that lead to errors shrink.</p>
+<p>The key insight: <strong>we never override the parser during a parse</strong>. Overriding <code>adaptivePredict</code> mid-parse breaks the ATN state machine — one wrong turn and every subsequent decision is operating on a corrupted state. Instead, we <em>observe only</em>, then use the learned weights to evaluate or reorder alternatives in separate re-parse attempts.</p>
+<hr>
+<h2 id="three-parsers">Three Parsers</h2>
+<h3 id="qualityparser--learn-by-watching">QualityParser — learn by watching</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span> input text</span></span>
+<span class="line"><span>     │</span></span>
+<span class="line"><span>     ▼</span></span>
+<span class="line"><span> ┌─────────────────────────────────────────┐</span></span>
+<span class="line"><span> │  ANTLR parse  (ObservingATNSimulator)   │</span></span>
+<span class="line"><span> │                                         │</span></span>
+<span class="line"><span> │  adaptivePredict called N times         │</span></span>
+<span class="line"><span> │  → always returns ANTLR's choice        │</span></span>
+<span class="line"><span> │  → records (decision, alt, features)    │</span></span>
+<span class="line"><span> └───────────────────┬─────────────────────┘</span></span>
+<span class="line"><span>                     │ trace</span></span>
+<span class="line"><span>                     ▼</span></span>
+<span class="line"><span>             ┌───────────────┐</span></span>
+<span class="line"><span>             │  any errors?  │</span></span>
+<span class="line"><span>             └───┬───────────┘</span></span>
+<span class="line"><span>          yes │         │ no</span></span>
+<span class="line"><span>              ▼         ▼</span></span>
+<span class="line"><span>         reward =    reward = +1.0</span></span>
+<span class="line"><span>      -errors/tokens</span></span>
+<span class="line"><span>              │         │</span></span>
+<span class="line"><span>              └────┬────┘</span></span>
+<span class="line"><span>                   ▼</span></span>
+<span class="line"><span>         ┌──────────────────┐</span></span>
+<span class="line"><span>         │  WeightStore     │</span></span>
+<span class="line"><span>         │  update weights  │  w += lr * reward * features</span></span>
+<span class="line"><span>         │  (perceptron)    │</span></span>
+<span class="line"><span>         └──────────────────┘</span></span>
+<span class="line"><span>                   │</span></span>
+<span class="line"><span>                   ▼</span></span>
+<span class="line"><span>            quality score</span></span>
+<span class="line"><span>         (mean w·f over trace)</span></span></code></pre>
+<p><code>QualityParser</code> subclasses ANTLR’s simulator with an <code>ObservingATNSimulator</code> that records every <code>(decision, alt, features)</code> tuple without changing the result. After each parse it updates the weight store with the perceptron rule.</p>
+<p>After training, it can assign a <strong>quality score</strong> to any parse: the mean <code>weight[decision][alt] · features</code> over all decisions in the trace. Valid inputs consistently score higher than broken ones.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">qp </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> QualityParser(SQLiteLexer, SQLiteParser, </span><span style="color:#FFAB70">store</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">store)</span></span>
+<span class="line"><span style="color:#E1E4E8">qp.train(corpus, </span><span style="color:#FFAB70">epochs</span><span style="color:#F97583">=</span><span style="color:#79B8FF">10</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> qp.parse(</span><span style="color:#9ECBFF">"SELECT * FROM users;"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(result.score)   </span><span style="color:#6A737D"># e.g. +10.3</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> qp.parse(</span><span style="color:#9ECBFF">"SELECT FROM;"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(result.score)   </span><span style="color:#6A737D"># e.g. +8.1</span></span></code></pre>
+<p>This is useful for <strong>ranking multiple parse candidates</strong>, detecting suspicious inputs, or as a signal in a larger pipeline.</p>
+<h3 id="beamparser--model-guided-re-parse">BeamParser — model-guided re-parse</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span> input text</span></span>
+<span class="line"><span>     │</span></span>
+<span class="line"><span>     ▼</span></span>
+<span class="line"><span> ┌──────────────────┐</span></span>
+<span class="line"><span> │  baseline parse  │──── trace ────► scan decisions:</span></span>
+<span class="line"><span> └──────────────────┘                 model prefers alt X</span></span>
+<span class="line"><span>         │ errors?                    over ANTLR's alt Y?</span></span>
+<span class="line"><span>         │ no → return                       │</span></span>
+<span class="line"><span>         │ yes                               ▼</span></span>
+<span class="line"><span>         │                    ┌──────────────────────────┐</span></span>
+<span class="line"><span>         │                    │  top-K suspect decisions  │</span></span>
+<span class="line"><span>         │                    │  sorted by margin score   │</span></span>
+<span class="line"><span>         │                    └────────────┬─────────────┘</span></span>
+<span class="line"><span>         │                                 │</span></span>
+<span class="line"><span>         │              ┌──────────────────┼──────────────────┐</span></span>
+<span class="line"><span>         │              ▼                  ▼                  ▼</span></span>
+<span class="line"><span>         │         beam 1             beam 2   ...       beam K</span></span>
+<span class="line"><span>         │    force dec=D alt=X   force dec=E alt=X</span></span>
+<span class="line"><span>         │         │                    │</span></span>
+<span class="line"><span>         └─────────┴────────────────────┘</span></span>
+<span class="line"><span>                         │ all results</span></span>
+<span class="line"><span>                         ▼</span></span>
+<span class="line"><span>                 ┌───────────────┐</span></span>
+<span class="line"><span>                 │  pick best    │  fewest errors → highest score</span></span>
+<span class="line"><span>                 └───────────────┘</span></span></code></pre>
+<p>Once the weight store is trained, <code>BeamParser</code> uses it to <em>actively improve</em> parse results on broken inputs.</p>
+<p>Algorithm:</p>
+<ol>
+<li>Run baseline (ANTLR’s normal parse), record trace.</li>
+<li>For each decision in the trace, check if the model prefers a different alternative (margin > 0).</li>
+<li>Collect the top-K such decisions, sorted by confidence margin.</li>
+<li>Re-parse with each override forced.</li>
+<li>Return the result with fewest errors (tie-broken by score).</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">bp </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> BeamParser(SQLiteLexer, SQLiteParser, store, </span><span style="color:#FFAB70">beam_width</span><span style="color:#F97583">=</span><span style="color:#79B8FF">4</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> bp.parse(</span><span style="color:#9ECBFF">"SELECT id name FROM users;"</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p><code>BeamParser</code> is fast (at most <code>beam_width + 1</code> parses) and targets the decisions the model is <em>most confident about</em>. It works best when the training corpus is representative of the input distribution.</p>
+<h3 id="retryparser--exhaustive-backtracking-without-training">RetryParser — exhaustive backtracking without training</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span> input text</span></span>
+<span class="line"><span>     │</span></span>
+<span class="line"><span>     ▼</span></span>
+<span class="line"><span> ┌──────────────────┐</span></span>
+<span class="line"><span> │  baseline parse  │──── trace ──► frontier = baseline</span></span>
+<span class="line"><span> └──────────────────┘</span></span>
+<span class="line"><span>         │ errors?</span></span>
+<span class="line"><span>         │ no → return</span></span>
+<span class="line"><span>         │ yes</span></span>
+<span class="line"><span>         ▼</span></span>
+<span class="line"><span> ┌─────────────────────────────────────────────────┐</span></span>
+<span class="line"><span> │  scan frontier trace from the END               │</span></span>
+<span class="line"><span> │                                                 │</span></span>
+<span class="line"><span> │  dec[N]  dec[N-1]  ...  dec[1]  dec[0]         │</span></span>
+<span class="line"><span> │    ▲                                            │</span></span>
+<span class="line"><span> │    └── find first decision with untried alt     │</span></span>
+<span class="line"><span> └───────────────────┬─────────────────────────────┘</span></span>
+<span class="line"><span>                     │ override = {dec: next_alt}</span></span>
+<span class="line"><span>                     ▼</span></span>
+<span class="line"><span>             ┌───────────────┐</span></span>
+<span class="line"><span>             │  re-parse     │</span></span>
+<span class="line"><span>             └───────┬───────┘</span></span>
+<span class="line"><span>                     │</span></span>
+<span class="line"><span>          ┌──────────┴──────────┐</span></span>
+<span class="line"><span>          ▼                     ▼</span></span>
+<span class="line"><span>   is_better_than(best)?   tokens >= frontier?</span></span>
+<span class="line"><span>     → update best            → advance frontier</span></span>
+<span class="line"><span>          │                     │</span></span>
+<span class="line"><span>          └──────────┬──────────┘</span></span>
+<span class="line"><span>                     │</span></span>
+<span class="line"><span>             clean? → return</span></span>
+<span class="line"><span>             max_retries? → return best</span></span>
+<span class="line"><span>             else → repeat</span></span></code></pre>
+<p><code>RetryParser</code> does not need a weight store at all. It treats the parse trace as a search space and backtracks through it:</p>
+<ol>
+<li>Baseline parse → record trace.</li>
+<li>Scan the trace <strong>from the end</strong> (deepest decisions first) for a decision with an untried alternative.</li>
+<li>Re-parse with that decision forced.</li>
+<li>Track the “frontier” — the attempt that consumed the most tokens.</li>
+<li>Repeat from step 2 using the frontier’s trace. Stop when clean or <code>max_retries</code> reached.</li>
+</ol>
+<p>Scanning from the end is the key detail. The early decisions in a parse (e.g., which statement type) have many downstream dependencies. Trying alternatives there first cascades into many failures. Starting from the end targets local decisions that are more likely to be independently fixable.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">rp </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> RetryParser(SQLiteLexer, SQLiteParser, </span><span style="color:#FFAB70">max_retries</span><span style="color:#F97583">=</span><span style="color:#79B8FF">20</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> rp.parse(</span><span style="color:#9ECBFF">"SELECT * FROM t WHERE id = AND name = 'x';"</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>If weights are available, they are used to order the candidate alternatives — reducing the number of retries needed.</p>
+<hr>
+<h2 id="how-each-parser-compares">How Each Parser Compares</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>QualityParser</th><th>BeamParser</th><th>RetryParser</th></tr></thead><tbody><tr><td>Training required</td><td>yes (self-trains)</td><td>yes (pre-trained)</td><td>no</td></tr><tr><td>Max re-parses</td><td>1</td><td><code>beam_width</code></td><td><code>max_retries</code></td></tr><tr><td>Modifies parse</td><td>never</td><td>forced overrides</td><td>forced overrides</td></tr><tr><td>Best for</td><td>scoring / ranking</td><td>fast guided repair</td><td>no-training repair</td></tr><tr><td>Limitation</td><td>scores only; doesn’t fix</td><td>needs representative training data</td><td>exponential search space</td></tr></tbody></table>
+<p>On the SQLite grammar with 8 genuinely broken queries (missing table names, missing WHERE clause bodies, etc.), none of the parsers produce zero errors — because no valid alternative combination in the grammar can parse <code>SELECT FROM;</code>. What improves is <strong>how gracefully</strong> the parser fails: more tokens consumed, fewer cascading errors, better partial structure.</p>
+<p>The quality score separation after 10 epochs on 31 mixed queries:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>avg score  valid=+10.34  broken=+8.12  sep=+2.22</span></span></code></pre>
+<p>The model reliably distinguishes clean parses from broken ones within a few epochs, without any manually written rules.</p>
+<hr>
+<h2 id="grammar-agnostic-by-design">Grammar-Agnostic by Design</h2>
+<p>Nothing in the library is SQLite-specific. The three parsers accept any ANTLR4-generated lexer and parser class:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> antlr_adaptive </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> RetryParser</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> MyLexer </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> MyLexer</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> MyParser </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> MyParser</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">rp </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> RetryParser(MyLexer, MyParser, </span><span style="color:#FFAB70">start_rule</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"compilationUnit"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> rp.parse(source_code)</span></span></code></pre>
+<p>The only grammar-specific constant is <code>N_DECISIONS</code> in <code>_features.py</code>, which should be set to slightly above <code>len(parser.atn.decisionToState)</code> for your grammar. The SQLite value (270, covering 263 actual decisions) is the default; it works as-is for any grammar with fewer decisions.</p>
+<p>This means you can apply the same approach to SQL dialects, programming languages, configuration formats, or domain-specific languages — any grammar where ANTLR4 can generate a Python parser.</p>
+<hr>
+<h2 id="testing">Testing</h2>
+<p>The test suite covers all three parsers against the SQLite grammar:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> pytest</span><span style="color:#9ECBFF"> tests/</span><span style="color:#79B8FF"> -v</span></span></code></pre>
+<p>Key checks:</p>
+<ul>
+<li>Valid SQL parses clean (<code>result.ok == True</code>) across all three parsers.</li>
+<li>Broken SQL returns a <code>ParseResult</code> (no crash; graceful degradation).</li>
+<li><code>QualityParser</code> score separation: valid average > broken average after 3 training epochs.</li>
+<li><code>WeightStore</code> save/load roundtrip preserves exact weight values.</li>
+<li><code>ParseResult.is_better_than</code> ranking: fewer errors > more tokens consumed > higher score.</li>
+</ul>
+<p>19 tests, all passing in under 0.2 seconds.</p>
+<hr>
+<h2 id="more">More</h2>
+<p>Source code, examples, and grammar files:
+<strong><a href="https://github.com/locchh/antlr-adaptive">github.com/locchh/antlr-adaptive</a></strong></p>
+<p>The SQLite demo runs all three parsers end-to-end:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> python</span><span style="color:#9ECBFF"> examples/sqlite_demo.py</span><span style="color:#9ECBFF"> all</span></span></code></pre>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2026 Locch. All rights reserved.
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.8GwDTuIh.js"></script> </body> </html>
