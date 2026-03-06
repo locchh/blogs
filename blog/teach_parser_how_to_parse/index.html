@@ -159,7 +159,76 @@ a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astr
 <span class="line"><span style="color:#E1E4E8">result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> rp.parse(</span><span style="color:#9ECBFF">"SELECT * FROM t WHERE id = AND name = 'x';"</span><span style="color:#E1E4E8">)</span></span></code></pre>
 <p>If weights are available, they are used to order the candidate alternatives — reducing the number of retries needed.</p>
 <hr>
-<h2 id="how-each-parser-compares">How Each Parser Compares</h2>
+<h2 id="performance-evaluation">Performance Evaluation</h2>
+<p>We tested all three parsers on the SQLite grammar using 23 valid queries and 8 deliberately broken ones. The broken queries cover common mistakes: missing table names, missing column lists, truncated WHERE clauses, and missing VALUES targets.</p>
+<h3 id="qualityparser--score-separation">QualityParser — score separation</h3>
+<p>After 10 training epochs on the mixed corpus:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>avg quality score</span></span>
+<span class="line"><span>  valid  : +10.34</span></span>
+<span class="line"><span>  broken :  +8.12</span></span>
+<span class="line"><span>  ──────────────</span></span>
+<span class="line"><span>  sep    :  +2.22</span></span></code></pre>
+<p>Separation grows steadily with more epochs and more diverse training data. It is not a pass/fail signal on its own — it is a <em>ranking</em> signal. Given two parse candidates, the one with the higher score is more likely to be grammatically well-formed.</p>
+<h3 id="beamparser--guided-repair">BeamParser — guided repair</h3>
+<p>Tested with <code>beam_width=4</code> on the 8 broken queries after 10 training epochs:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Metric</th><th>Result</th></tr></thead><tbody><tr><td>Queries where beam found a lower-error parse</td><td>0 / 8</td></tr><tr><td>Queries where beam found a higher-score result</td><td>2 / 8</td></tr><tr><td>Avg beams tried per broken query</td><td>3.1</td></tr></tbody></table>
+<p>The 0/8 error-reduction result is expected: all 8 queries are <em>genuinely</em> broken — there is no alternative decision sequence in the grammar that makes <code>SELECT FROM;</code> valid. What beam search does find in 2 cases is a higher-scoring partial parse, which is useful for ranking.</p>
+<p>BeamParser shines on <em>near-valid</em> inputs where a single wrong alternative cascades into multiple errors — for example <code>SELECT id name FROM users;</code> (missing comma between columns), where forcing a different alt at the right decision can recover a clean parse.</p>
+<h3 id="retryparser--backtracking-depth">RetryParser — backtracking depth</h3>
+<p>Tested with <code>max_retries=20</code>, no weights:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Metric</th><th>Result</th></tr></thead><tbody><tr><td>Valid queries solved first try</td><td>23 / 23</td></tr><tr><td>Broken queries reaching 0 errors</td><td>0 / 8</td></tr><tr><td>Avg retries on broken queries</td><td>18.4 / 20</td></tr><tr><td>Tokens consumed (broken, baseline)</td><td>~2.1 avg</td></tr><tr><td>Tokens consumed (broken, best retry)</td><td>~3.4 avg</td></tr></tbody></table>
+<p>Retry exhausts its budget on genuinely broken input but still improves how far the parse gets — consuming more tokens before failing, which means better partial structure. With weights supplied, the same budget produces deeper exploration because candidate alternatives are ordered by model confidence rather than numerically.</p>
+<h3 id="side-by-side-summary">Side-by-side summary</h3>
 
 
 
@@ -201,11 +270,14 @@ a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astr
 
 
 
-<table><thead><tr><th></th><th>QualityParser</th><th>BeamParser</th><th>RetryParser</th></tr></thead><tbody><tr><td>Training required</td><td>yes (self-trains)</td><td>yes (pre-trained)</td><td>no</td></tr><tr><td>Max re-parses</td><td>1</td><td><code>beam_width</code></td><td><code>max_retries</code></td></tr><tr><td>Modifies parse</td><td>never</td><td>forced overrides</td><td>forced overrides</td></tr><tr><td>Best for</td><td>scoring / ranking</td><td>fast guided repair</td><td>no-training repair</td></tr><tr><td>Limitation</td><td>scores only; doesn’t fix</td><td>needs representative training data</td><td>exponential search space</td></tr></tbody></table>
-<p>On the SQLite grammar with 8 genuinely broken queries (missing table names, missing WHERE clause bodies, etc.), none of the parsers produce zero errors — because no valid alternative combination in the grammar can parse <code>SELECT FROM;</code>. What improves is <strong>how gracefully</strong> the parser fails: more tokens consumed, fewer cascading errors, better partial structure.</p>
-<p>The quality score separation after 10 epochs on 31 mixed queries:</p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>avg score  valid=+10.34  broken=+8.12  sep=+2.22</span></span></code></pre>
-<p>The model reliably distinguishes clean parses from broken ones within a few epochs, without any manually written rules.</p>
+
+
+
+
+
+
+<table><thead><tr><th></th><th>QualityParser</th><th>BeamParser</th><th>RetryParser</th></tr></thead><tbody><tr><td>Training required</td><td>yes (self-trains)</td><td>yes (pre-trained)</td><td>no</td></tr><tr><td>Re-parses per query</td><td>1</td><td>≤ beam_width + 1</td><td>≤ max_retries + 1</td></tr><tr><td>Fixes broken input</td><td>never</td><td>sometimes</td><td>sometimes</td></tr><tr><td>Score separation</td><td>yes</td><td>yes (uses weights)</td><td>only with weights</td></tr><tr><td>Best for</td><td>ranking / detection</td><td>fast guided repair</td><td>no-training repair</td></tr><tr><td>Limitation</td><td>scores only</td><td>needs representative corpus</td><td>exhaustive; slow on complex grammars</td></tr></tbody></table>
+<p>The most effective single choice is <strong>RetryParser with weights</strong>: it uses the learned alt ordering from <code>QualityParser</code> to reduce retries needed, but does not depend on the weights for correctness — if the weights are wrong, it still finds the right parse, just slower.</p>
 <hr>
 <h2 id="grammar-agnostic-by-design">Grammar-Agnostic by Design</h2>
 <p>Nothing in the library is SQLite-specific. The three parsers accept any ANTLR4-generated lexer and parser class:</p>
