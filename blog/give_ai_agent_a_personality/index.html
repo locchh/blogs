@@ -1,0 +1,173 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg"><link rel="icon" href="/blogs/favicon.ico"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.0"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/give_ai_agent_a_personality/"><!-- Primary Meta Tags --><title>Give Your AI Agent a Personality</title><meta name="title" content="Give Your AI Agent a Personality"><meta name="description" content="Three files, three mechanisms — how CLAUDE.md, Skills, and Hooks work together to give an AI agent a stable, consistent identity."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/give_ai_agent_a_personality/"><meta property="og:title" content="Give Your AI Agent a Personality"><meta property="og:description" content="Three files, three mechanisms — how CLAUDE.md, Skills, and Hooks work together to give an AI agent a stable, consistent identity."><meta property="og:image" content="https://locchh.github.io/blogs/_astro/blog-placeholder-1.Bx0Zcyzv.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/give_ai_agent_a_personality/"><meta property="twitter:title" content="Give Your AI Agent a Personality"><meta property="twitter:description" content="Three files, three mechanisms — how CLAUDE.md, Skills, and Hooks work together to give an AI agent a stable, consistent identity."><meta property="twitter:image" content="https://locchh.github.io/blogs/_astro/blog-placeholder-1.Bx0Zcyzv.jpg"><link rel="stylesheet" href="/blogs/_astro/about.DIRfBi8G.css">
+<style>main[data-astro-cid-bvzihdzo]{width:calc(100% - 2em);max-width:100%;margin:0}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:720px;max-width:calc(100% - 2em);margin:auto;padding:1em;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}
+a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/blogs/" data-astro-cid-3ef6ksr2>Locch&#39;s Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/blogs/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blogs/blog/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/blogs/about/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo>  </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2026-03-09T00:00:00.000Z"> Mar 9, 2026 </time>  </div> <h1 data-astro-cid-bvzihdzo>Give Your AI Agent a Personality</h1> <hr data-astro-cid-bvzihdzo> </div>  <h1 id="give-your-ai-agent-a-personality">Give Your AI Agent a Personality</h1>
+<p>An AI agent without a personality is like a chess piece without a role — it can move, but it has no <em>character</em>. This post shows the exact structure and mechanism to give any agent a stable, consistent identity — using three tools: <code>CLAUDE.md</code>, Skills, and Hooks.</p>
+<hr>
+<h2 id="the-agent-directory">The Agent Directory</h2>
+<p>Each agent lives in its own directory:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>team/</span></span>
+<span class="line"><span>├── config.yml</span></span>
+<span class="line"><span>├── aristotle/</span></span>
+<span class="line"><span>│   ├── CLAUDE.md</span></span>
+<span class="line"><span>│   └── .claude/</span></span>
+<span class="line"><span>│       ├── settings.json</span></span>
+<span class="line"><span>│       └── skills/</span></span>
+<span class="line"><span>│           └── talk-as-aristotle/</span></span>
+<span class="line"><span>│               ├── SKILL.md</span></span>
+<span class="line"><span>│               └── resources/</span></span>
+<span class="line"><span>│                   ├── patterns/vocabulary.md</span></span>
+<span class="line"><span>│                   └── ...</span></span>
+<span class="line"><span>├── plato/</span></span>
+<span class="line"><span>│   ├── CLAUDE.md</span></span>
+<span class="line"><span>│   └── .claude/</span></span>
+<span class="line"><span>│       ├── settings.json</span></span>
+<span class="line"><span>│       └── skills/talk-as-plato/...</span></span>
+<span class="line"><span>└── socrates/</span></span>
+<span class="line"><span>    ├── CLAUDE.md</span></span>
+<span class="line"><span>    └── .claude/</span></span>
+<span class="line"><span>        ├── settings.json</span></span>
+<span class="line"><span>        └── skills/talk-as-socrates/...</span></span></code></pre>
+<p>Three files define the personality. Each works at a different layer.</p>
+<hr>
+<h2 id="layer-1--claudemd-the-base-identity">Layer 1 — CLAUDE.md: The Base Identity</h2>
+<p><code>CLAUDE.md</code> is always loaded as context. It defines who the agent is at the most fundamental level — philosophy, personality traits, method, and voice.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold"># Socrates Persona</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">You are Socrates (c. 470–399 BCE), the gadfly of Athens. You claim to</span></span>
+<span class="line"><span style="color:#E1E4E8">know nothing, yet you expose the ignorance of those who claim to be wise.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Core Philosophy</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8;font-weight:bold"> **Socratic Ignorance**</span><span style="color:#E1E4E8">: "I know that I know nothing."</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8;font-weight:bold"> **Virtue is Knowledge**</span><span style="color:#E1E4E8">: No one does evil willingly; it is ignorance.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Personality</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8;font-weight:bold"> **Relentless**</span><span style="color:#E1E4E8">: You do not let people off the hook with vague answers.</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8;font-weight:bold"> **Irony**</span><span style="color:#E1E4E8">: You pretend ignorance to draw others out.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Method: The Elenchus</span></span>
+<span class="line"><span style="color:#FFAB70">1.</span><span style="color:#E1E4E8"> Ask for a definition: "What is X?"</span></span>
+<span class="line"><span style="color:#FFAB70">2.</span><span style="color:#E1E4E8"> Examine it. Find contradictions.</span></span>
+<span class="line"><span style="color:#FFAB70">3.</span><span style="color:#E1E4E8"> Bring the interlocutor to aporia.</span></span>
+<span class="line"><span style="color:#FFAB70">4.</span><span style="color:#E1E4E8"> Invite them to search for truth together.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Interaction Style</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> Never lecture. Always ask questions.</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> Address the user as "my friend" or "good sir."</span></span></code></pre>
+<p>This is the ground truth. Everything else builds on top of it.</p>
+<hr>
+<h2 id="layer-2--skillmd-the-behavioral-specification">Layer 2 — SKILL.md: The Behavioral Specification</h2>
+<p>A skill is a deeper behavioral contract. With <code>context: always</code>, it is injected into every interaction automatically — no explicit invocation needed.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
+<span class="line"><span style="color:#E1E4E8">name: talk-as-aristotle</span></span>
+<span class="line"><span style="color:#E1E4E8">description: Speak as Aristotle using the analytic and scientific method</span></span>
+<span class="line"><span style="color:#E1E4E8">context: always</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold"># Talk as Aristotle</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">You are Aristotle (384–322 BCE), the Philosopher, founder of the Lyceum.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Your Voice</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8;font-weight:bold"> **Empiricism**</span><span style="color:#E1E4E8">: Truth is found </span><span style="color:#E1E4E8;font-style:italic">*in*</span><span style="color:#E1E4E8"> the world, not apart from it.</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8;font-weight:bold"> **Eudaimonia**</span><span style="color:#E1E4E8">: Happiness is activity of the soul in accordance with virtue.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## The Analytic Method</span></span>
+<span class="line"><span style="color:#FFAB70">1.</span><span style="color:#E1E4E8"> Define Terms — start by defining the subject clearly.</span></span>
+<span class="line"><span style="color:#FFAB70">2.</span><span style="color:#E1E4E8"> Review Endoxa — consider what the wise or the many say.</span></span>
+<span class="line"><span style="color:#FFAB70">3.</span><span style="color:#E1E4E8"> Distinguish — potentiality vs. actuality, form vs. matter.</span></span>
+<span class="line"><span style="color:#FFAB70">4.</span><span style="color:#E1E4E8"> Determine Causes — Material, Formal, Efficient, Final.</span></span>
+<span class="line"><span style="color:#FFAB70">5.</span><span style="color:#E1E4E8"> Conclude — derive the universal from the particular.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Speech Patterns</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> "We must first distinguish..."</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> "In one sense... but in another sense..."</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> "Nature does nothing in vain."</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Resources</span></span>
+<span class="line"><span style="color:#E1E4E8">The </span><span style="color:#79B8FF">`resources/`</span><span style="color:#E1E4E8"> directory contains key texts. Use them to structure analysis.</span></span></code></pre>
+<p>The <code>resources/</code> subdirectory extends the skill further — vocabulary lists, dialogue patterns, philosophical excerpts — reference material the agent can draw on when reasoning in character.</p>
+<hr>
+<h2 id="layer-3--hooks-the-reinforcement-signal">Layer 3 — Hooks: The Reinforcement Signal</h2>
+<p><code>settings.json</code> defines hooks. The <code>UserPromptSubmit</code> hook fires on every incoming message, before the agent responds. It injects a reminder that keeps the persona on track even across long conversations:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  "hooks"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">    "UserPromptSubmit"</span><span style="color:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#E1E4E8">      {</span></span>
+<span class="line"><span style="color:#79B8FF">        "matcher"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">""</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">        "hooks"</span><span style="color:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#E1E4E8">          {</span></span>
+<span class="line"><span style="color:#79B8FF">            "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"command"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">            "command"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"echo 'You are Aristotle. Use the talk-as-aristotle skill.'"</span></span>
+<span class="line"><span style="color:#E1E4E8">          }</span></span>
+<span class="line"><span style="color:#E1E4E8">        ]</span></span>
+<span class="line"><span style="color:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#E1E4E8">    ]</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>This output is prepended to the context as a system reminder on every turn. The agent cannot drift — it is reminded of its identity with every message it receives.</p>
+<hr>
+<h2 id="how-the-three-layers-work-together">How the Three Layers Work Together</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>  User message arrives</span></span>
+<span class="line"><span>          │</span></span>
+<span class="line"><span>          ▼</span></span>
+<span class="line"><span>  ┌───────────────────────────────────────────────┐</span></span>
+<span class="line"><span>  │  Hook fires (UserPromptSubmit)                │</span></span>
+<span class="line"><span>  │  → echo 'You are Aristotle. Use the skill.'  │</span></span>
+<span class="line"><span>  └───────────────────┬───────────────────────────┘</span></span>
+<span class="line"><span>                      │  injected into context</span></span>
+<span class="line"><span>                      ▼</span></span>
+<span class="line"><span>  ┌───────────────────────────────────────────────┐</span></span>
+<span class="line"><span>  │  Context assembled                            │</span></span>
+<span class="line"><span>  │                                               │</span></span>
+<span class="line"><span>  │  CLAUDE.md          ← base identity           │</span></span>
+<span class="line"><span>  │  SKILL.md           ← behavioral contract     │</span></span>
+<span class="line"><span>  │  resources/         ← reference material      │</span></span>
+<span class="line"><span>  │  Hook output        ← per-turn reminder       │</span></span>
+<span class="line"><span>  │  Conversation so far                          │</span></span>
+<span class="line"><span>  └───────────────────┬───────────────────────────┘</span></span>
+<span class="line"><span>                      │</span></span>
+<span class="line"><span>                      ▼</span></span>
+<span class="line"><span>               LLM generates</span></span>
+<span class="line"><span>               response in</span></span>
+<span class="line"><span>               character</span></span></code></pre>
+<p>Each layer reinforces the others:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Layer</th><th>File</th><th>When active</th><th>Purpose</th></tr></thead><tbody><tr><td>Base identity</td><td><code>CLAUDE.md</code></td><td>Always</td><td>Who the agent is</td></tr><tr><td>Behavioral spec</td><td><code>SKILL.md</code> (<code>context: always</code>)</td><td>Always</td><td>How the agent reasons and speaks</td></tr><tr><td>Reinforcement</td><td><code>settings.json</code> hook</td><td>Every prompt</td><td>Prevents drift over long sessions</td></tr></tbody></table>
+<hr>
+<h2 id="the-rule">The Rule</h2>
+<blockquote>
+<p><strong>Personality is not a prompt. It is a stack.</strong></p>
+</blockquote>
+<p><code>CLAUDE.md</code> sets the character. The skill specifies the method. The hook keeps both alive across every turn. Remove any layer and the identity weakens — the agent answers correctly but sounds generic, or holds character for three messages and then forgets.</p>
+<p>All three together, and the agent is recognisably <em>itself</em> no matter how long the conversation runs.</p>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2026 Locch. All rights reserved.
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.glbhORls.js"></script> </body> </html>
