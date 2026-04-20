@@ -55,20 +55,327 @@
 <span class="line"><span style="color:#FFAB70">4.</span><span style="color:#E1E4E8"> Remember that if you were given a specific git commit, it may not be checked out and local code states may be different.</span></span></code></pre>
 <h2 id="2-spec-driven-development">2. Spec-driven development</h2>
 <h3 id="speckit">Speckit</h3>
-<h3 id="custom-workflows">Custom workflows</h3>
-<h3 id="sdd--mkdocs">SDD + Mkdocs</h3>
-<h3 id="isolate-your-work">Isolate your work</h3>
+<p>I studied some famous SDD frameworks like <a href="https://github.com/bmad-code-org/BMAD-METHOD">BMAD</a> or <a href="https://github.com/gsd-build/get-shit-done">GSD</a> but they seem too overkill for my current needs. I think in the future, developers will shift from writing code to design, so I love keeping the design in my head and making it grow up gradually by brainstorming with AI instead of delegating the entire work to AI. <a href="https://github.com/github/spec-kit/blob/main/spec-driven.md">Speckit</a> is good enough for me. I will take care of the design and after having the codebase in my mental model, I will harness the power of AI to generate the code. SpecKit is quite flexible; it can accept a simple sentence about feature description or a full PRD document, and anything missing can be clarified when implementing the feature. That makes it more convenient because I don’t need to write a PRD for my personal projects. Here is a structure of a PRD:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span># PRD: [Feature Name]</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## User Stories</span></span>
+<span class="line"><span>*Who the feature is for and what problem it solves*</span></span>
+<span class="line"><span>- As a [user type], I want [action] so that [benefit]</span></span>
+<span class="line"><span>- As a [user type], I want [action] so that [benefit]</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## Functional Requirements</span></span>
+<span class="line"><span>*What the feature should do*</span></span>
+<span class="line"><span>- [FR-1] Requirement description</span></span>
+<span class="line"><span>- [FR-2] Requirement description</span></span>
+<span class="line"><span>- [FR-3] Requirement description</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## Success Criteria</span></span>
+<span class="line"><span>*How to measure if the feature is working correctly*</span></span>
+<span class="line"><span>- [ ] Criteria 1</span></span>
+<span class="line"><span>- [ ] Criteria 2</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## Acceptance Criteria</span></span>
+<span class="line"><span>*Specific conditions that must be met for the feature to be considered complete*</span></span>
+<span class="line"><span>- [ ] Given [condition], when [action], then [expected outcome]</span></span>
+<span class="line"><span>- [ ] Given [condition], when [action], then [expected outcome]</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## User Personas</span></span>
+<span class="line"><span>*Who will use the feature*</span></span>
+<span class="line"><span>- [Persona 1]: Description and goals</span></span>
+<span class="line"><span>- [Persona 2]: Description and goals</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## Use Cases</span></span>
+<span class="line"><span>*Scenarios of how users interact with the feature*</span></span>
+<span class="line"><span>- [Use case 1]: Description</span></span>
+<span class="line"><span>- [Use case 2]: Description</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## Technical Constraints</span></span>
+<span class="line"><span>*Technology limitations or requirements*</span></span>
+<span class="line"><span>- Technology stack requirements</span></span>
+<span class="line"><span>- Performance requirements</span></span>
+<span class="line"><span>- Security requirements</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## UI/UX Specifications</span></span>
+<span class="line"><span>*Wireframes, mockups, or design descriptions*</span></span>
+<span class="line"><span>- [ ] Wireframes or design references</span></span>
+<span class="line"><span>- [ ] User flow description</span></span>
+<span class="line"><span>- [ ] Key interaction patterns</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## Success Metrics</span></span>
+<span class="line"><span>*KPIs to track after launch*</span></span>
+<span class="line"><span>- Metric 1: Description and target</span></span>
+<span class="line"><span>- Metric 2: Description and target</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## Dependencies</span></span>
+<span class="line"><span>*Other features or systems this feature relies on*</span></span>
+<span class="line"><span>- Features or systems this depends on</span></span>
+<span class="line"><span>- External APIs or services needed</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## Risks and Mitigation</span></span>
+<span class="line"><span>*Potential issues and how to address them*</span></span>
+<span class="line"><span>- [Risk 1]: Mitigation strategy</span></span>
+<span class="line"><span>- [Risk 2]: Mitigation strategy</span></span></code></pre>
+<p>Here is my personal practice of using SDD in greenfield projects:</p>
+<pre><code class="language-mermaid">graph TD
+    subgraph InitialSetup[Initial Setup]
+        Start([Start]) --> MentalModel[Create a mental model about project]
+        MentalModel --> Codebase[Setup a codebase structure]
+        Codebase --> Timeline[Define a timeline for development broken down into phases]
+        Timeline --> Constitution["/speckit.constitution - Define the project constitution"]
+    end
+
+    Constitution --> Specify
+
+    subgraph DevLoop[Development Loop]
+        Specify["/speckit.specify - Create feature specifications"]
+        Specify --> ClarifyDec{Need clarification}
+        ClarifyDec -->|Yes| Clarify["/speckit.clarify - Identify gaps and resolve ambiguities"]
+        Clarify --> Plan
+        ClarifyDec -->|No| Plan["/speckit.plan - Create implementation plans"]
+        Plan --> ChecklistDec{Validate requirements}
+        ChecklistDec -->|Yes| Checklist["/speckit.checklist - Validate requirements quality"]
+        Checklist --> Tasks
+        ChecklistDec -->|No| Tasks["/speckit.tasks - Generate actionable tasks"]
+        Tasks --> AnalyzeDec{Cross-artifact analysis}
+        AnalyzeDec -->|Yes| Analyze["/speckit.analyze - Perform consistency analysis"]
+        Analyze --> Implement
+        AnalyzeDec -->|No| Implement["/speckit.implement - Execute task breakdown"]
+        Implement --> NextFeature{More features}
+        NextFeature -->|Yes| Specify
+    end
+
+    NextFeature -->|No| End([End])
+
+    Constitution -.->|Can update later| Constitution
+</code></pre>
+<h3 id="other-variations-of-sdd">Other variations of SDD</h3>
+<p>Another variation I found focuses on formalization, traceability, and TDD:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SDD ≈ Layered formalization + Traceability + TDD</span></span></code></pre>
+<p>The project layout reflects the layers directly:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>project/</span></span>
+<span class="line"><span>├── research/                       ← exploration notes, tradeoff studies</span></span>
+<span class="line"><span>├── specs/</span></span>
+<span class="line"><span>│   ├── MVP.md                      ← product spec (the what)</span></span>
+<span class="line"><span>│   ├── tasks/</span></span>
+<span class="line"><span>│   │   ├── M1-T1.md                ← one file per atomic task</span></span>
+<span class="line"><span>│   │   ├── M1-T2.md</span></span>
+<span class="line"><span>│   │   └── M{N}-T{N}.md</span></span>
+<span class="line"><span>│   └── reports/</span></span>
+<span class="line"><span>│       ├── milestone-1-report.md   ← one per milestone</span></span>
+<span class="line"><span>│       └── milestone-N-report.md</span></span>
+<span class="line"><span>├── plan/</span></span>
+<span class="line"><span>│   ├── architecture/               ← design docs (the how)</span></span>
+<span class="line"><span>│   │   ├── high-level.md</span></span>
+<span class="line"><span>│   │   └── {subsystem}.md</span></span>
+<span class="line"><span>│   └── implementation/             ← execution plan (the when)</span></span>
+<span class="line"><span>│       ├── phase-1-tasks.md</span></span>
+<span class="line"><span>│       └── phase-N-tasks.md</span></span>
+<span class="line"><span>├── src/                            ← scaffold first, patched per task</span></span>
+<span class="line"><span>└── tests/                          ← grows per task, one file per module</span></span></code></pre>
+<p>And the flow between them:</p>
+<pre><code class="language-mermaid">graph LR
+    R[research/] --> S[specs/MVP.md]
+    S --> P[plan/]
+    P --> SC[src/ scaffold]
+    SC --> TS[specs/tasks/]
+    TS --> T[tests/]
+    T --> MR[specs/reports/]
+    MR --> TS
+</code></pre>
+<p>The top row is written once upfront. The bottom row is the per-task loop: each task gets its own <code>specs/tasks/M{N}-T{N}.md</code>, tests are written against the scaffold, and the loop closes with a <code>specs/reports/milestone-N-report.md</code> that feeds the next milestone. Every task spec cites the architecture section it implements, so you can always walk the chain in reverse, from a line of code back to the research finding that justified it.</p>
+<p><strong>Layer 1 — <code>research/</code></strong></p>
+<p>A dump of exploration notes: existing tools, technical tradeoffs, competitive landscape. The output is an honest audit of what already exists and what gaps remain. This is the justification for everything downstream.</p>
+<p><strong>Layer 2 — <code>specs/</code> (the <em>what</em>)</strong></p>
+<p>The product spec (<code>MVP.md</code>) formalizes the research into user-facing behavior, success criteria, and data schema. It exists to be disagreed with — if the spec is wrong, you fix it here, not later.</p>
+<p><strong>Layer 3 — <code>plan/architecture/</code> (the <em>how</em>)</strong></p>
+<p>The architecture docs translate the product spec into component responsibilities, data flow, and module boundaries. Each architecture doc becomes the reference target that task specs will cite by section number.</p>
+<p><strong>Layer 4 — <code>plan/implementation/</code> (the <em>when</em>)</strong></p>
+<p>The execution plan slices the architecture into deliverables. The hierarchy is strict: <strong>Phase → Milestone → Task</strong>. A phase is a strategic chunk (“MVP”, “Queue + Permissions”). A milestone is a 1-to-2-day delivery checkpoint. A task is an atomic unit of 30 min to 3 hours. The same ID — <code>M3.T1</code> — threads through the phase plan, its own <code>specs/tasks/M3-T1.md</code>, the commit message, the test file, and the milestone report. You can grep any ID and see every artifact it touches.</p>
+<p><strong>Layer 5 — <code>src/</code> scaffold</strong></p>
+<p>Once all four layers above are settled, the whole code scaffold lands in one commit — not stubs, but working skeletons that realize the architecture in code. The scaffold is a draft, not a proof; it will be verified piece by piece in the task loop.</p>
+<p><strong>Layer 6 — Per-task loop (this is where TDD lives)</strong></p>
+<p>For each task you write <code>specs/tasks/M{N}-T{N}.md</code>, which includes a “Gaps in Existing Code” section — a deliberate diff between what the architecture says and what the scaffold actually does. Then tests come first, following classic TDD: <em>red → green → refactor</em>. Tests fail against whatever is wrong in the scaffold, you patch only what failed, commit. The commit message records the verdict — “Gaps fixed: none” means the scaffold was right on that piece; a list means TDD caught real drift.</p>
+<p><strong>Layer 7 — <code>specs/reports/milestone-N-report.md</code></strong></p>
+<p>Closes each milestone. Documents which tasks passed, what gaps were found, and where reality deviated from the architecture — and why. The next milestone reads this before starting.</p>
+<div align="center">
+<pre><code class="language-mermaid">graph TD
+    R[research/] --> S[specs/ MVP.md]
+    S --> A[plan/architecture/]
+    A --> P[plan/implementation/]
+    P --> Sc[src/ scaffold]
+    Sc --> TL["per-task: spec → test → fix"]
+    TL --> MR[specs/reports/milestone-N]
+    MR --> TL
+</code></pre>
+</div>
+<p>The spirit is not “upfront design for its own sake” — it is that <strong>every line of code must have a paper trail back to a research finding</strong>. Nothing lives in the codebase that you can’t justify, layer by layer, up to the original problem. The payoff is that six months later, you can pick any commit, read its task spec, follow the cross-references up, and understand the full reason the code exists. The cost is the discipline of refusing to code ahead of the paper trail.</p>
+<p>Another simpler variation — strips the ceremony down to two phases: a constitutional phase and a feature phase.</p>
+<p><strong>Constitutional phase (once, at project start)</strong></p>
+<p>Create three files in <code>specs/</code>:</p>
+<ul>
+<li><strong><code>mission.md</code></strong> — The project’s <em>why</em>: purpose, audience, and definition of success. Written once, rarely changed.</li>
+<li><strong><code>tech-stack.md</code></strong> — Technology choices with rationale. Documents the full stack, environment variables, and what you explicitly chose <em>not</em> to use.</li>
+<li><strong><code>roadmap.md</code></strong> — A flat ordered list of phases, each a shippable slice small enough to complete in a single session.</li>
+</ul>
+<p><strong>Feature phase (repeated for each feature)</strong></p>
+<p>For each feature, create a dated directory (e.g., <code>specs/2026-04-20-feature-name/</code>) with three files:</p>
+<ul>
+<li><strong><code>plan.md</code></strong> — Numbered task groups, ordered from setup to verification. Each task is actionable and sequenceable.</li>
+<li><strong><code>requirements.md</code></strong> — Scope (in and out), key architectural decisions, and assumptions.</li>
+<li><strong><code>validation.md</code></strong> — The definition of done: a concrete checklist of criteria that must all pass before the feature is considered complete.</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>specs/</span></span>
+<span class="line"><span>├── mission.md</span></span>
+<span class="line"><span>├── tech-stack.md</span></span>
+<span class="line"><span>├── roadmap.md</span></span>
+<span class="line"><span>└── 2026-04-20-feature-name/</span></span>
+<span class="line"><span>    ├── plan.md</span></span>
+<span class="line"><span>    ├── requirements.md</span></span>
+<span class="line"><span>    └── validation.md</span></span></code></pre>
+<pre><code class="language-mermaid">graph LR
+    subgraph Constitution[Constitutional Phase]
+        M[mission.md] --> TS[tech-stack.md]
+        TS --> R[roadmap.md]
+    end
+
+    subgraph Feature[Feature Phase - repeat per feature]
+        P[plan.md] --> Req[requirements.md]
+        Req --> V[validation.md]
+    end
+
+    Constitution --> Feature
+    V -->|next feature| Feature
+</code></pre>
+<p>The difference from the layered approach above is pragmatism: no architecture docs, no per-task spec files, no milestone reports. The spec is lean enough to write in under an hour per feature, yet rigorous enough that both you and your AI agent share a contract before any code is written. The agent reads the spec, asks clarifying questions, implements against <code>plan.md</code>, and validates against <code>validation.md</code>.</p>
+<p>If you already have an existing codebase and the task is to add a new feature, you don’t need the full constitutional setup. A single <code>plan.md</code> is enough — structured around this workflow:</p>
+<div align="center">
+<pre><code class="language-mermaid">graph TD
+    CR[Feature/CR] --> Understand[How things work]
+    Understand --> DataModels[Data models]
+    DataModels --> Components[Code components]
+    Components --> Implement[Implement]
+    Implement --> Test["Unit + smoke test"]
+    Test --> Review[Review]
+</code></pre>
+</div>
+<p>The <code>plan.md</code> maps directly to these steps: start with a reading pass of the relevant code, note the data shapes involved, list the components to add or modify, drive implementation with tests, then hand off for review. No upfront architecture docs needed — the existing codebase is already the architecture.</p>
+<h3 id="sdd-️-mkdocs">SDD ❤️ Mkdocs</h3>
+<p>Most projects go through the same lifecycle, though not every project needs every artifact:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Project</span></span>
+<span class="line"><span>├── 1. Idea</span></span>
+<span class="line"><span>├── 2. Requirements</span></span>
+<span class="line"><span>│   ├── Clear requirements</span></span>
+<span class="line"><span>│   └── Hidden requirements (surface during implementation)</span></span>
+<span class="line"><span>├── 3. Solution Architecture + Tech Stack</span></span>
+<span class="line"><span>│   ├── High-level design</span></span>
+<span class="line"><span>│   └── Technology decisions</span></span>
+<span class="line"><span>├── 4. System Design</span></span>
+<span class="line"><span>│   ├── Architecture diagram</span></span>
+<span class="line"><span>│   ├── Sequence diagram</span></span>
+<span class="line"><span>│   ├── ERD</span></span>
+<span class="line"><span>│   ├── Data flow diagram</span></span>
+<span class="line"><span>│   └── Data store</span></span>
+<span class="line"><span>├── 5. Specs</span></span>
+<span class="line"><span>│   └── How to implement</span></span>
+<span class="line"><span>├── 6. Implementation</span></span>
+<span class="line"><span>├── 7. Testing</span></span>
+<span class="line"><span>├── 8. Deployment</span></span>
+<span class="line"><span>└── 9. Maintenance</span></span></code></pre>
+<p>So I think in a modern codebase, we should have not only <code>src</code> and <code>tests</code> (containing test suites) but also <code>specs</code> to document how to implement features, and <code>docs</code> to capture the artifacts from steps 1–4.</p>
+<p>And <a href="https://www.mkdocs.org/">Mkdocs</a> is a great tool to help render those document into human friendly format. By install mkdocs as a tool <code>uv tool install mkdocs</code>  (simpler like speckit <code>uv tool install specify-cli --from git+https://github.com/github/spec-kit.git</code>) or <code>uv add mkdocs</code> and add some helpful extensions like <code>mkdocs-material</code> to make the documentation more beautiful.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="toml"><code><span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">project</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">optional-dependencies</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">docs = [</span></span>
+<span class="line"><span style="color:#9ECBFF">    "mkdocs>=1.6.0"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">    "mkdocs-material>=9.0.0"</span><span style="color:#E1E4E8">,               </span><span style="color:#6A737D"># beautiful theme + search</span></span>
+<span class="line"><span style="color:#9ECBFF">    "mkdocs-awesome-pages-plugin>=2.0.0"</span><span style="color:#E1E4E8">,   </span><span style="color:#6A737D"># control nav order via .pages files</span></span>
+<span class="line"><span style="color:#9ECBFF">    "mkdocs-llmstxt>=0.1.0"</span><span style="color:#E1E4E8">,               </span><span style="color:#6A737D"># generates llms.txt for AI consumption</span></span>
+<span class="line"><span style="color:#9ECBFF">    "mkdocs-kroki-plugin>=0.8.0"</span><span style="color:#E1E4E8">,          </span><span style="color:#6A737D"># renders PlantUML, Mermaid, and more</span></span>
+<span class="line"><span style="color:#E1E4E8">]</span></span></code></pre>
+<p>The key idea is to keep everything as <strong>plain text in version control</strong>. Wherever you would normally reach for a binary format, replace it with its text equivalent:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Instead of</th><th>Use</th></tr></thead><tbody><tr><td>Excel spreadsheet</td><td>Markdown table</td></tr><tr><td>PNG / JPG diagram</td><td>PlantUML or Mermaid</td></tr><tr><td>Word document</td><td>Markdown file</td></tr></tbody></table>
+<p>This gives you a single source of truth that is human-readable in any editor, renderable by MkDocs into a hosted site for your team, and — thanks to <code>mkdocs-llmstxt</code> — also consumable by AI agents as an <code>llms.txt</code> file. The whole <code>docs/</code> folder becomes living documentation: versioned alongside the code, searchable, and never out of sync.</p>
+<h3 id="the-art-of-writing-code">The art of writing code</h3>
+<p>Writing code is like writing a story — each commit message should carry semantic meaning and narrate what you were doing. Read the git graph six months later and you should be able to follow the plot: what was built, in what order, and why. That discipline makes a codebase maintainable not just for others, but for your future self.</p>
+<p>I built <a href="https://github.com/locchh/commit-explorer">commit-explorer</a> (CEX) for exactly this reason. GitHub doesn’t show a commit timeline graph, and cloning a repo just to run <code>git log --graph</code> is wasteful. CEX lets you explore any repository’s commit history — graph, diffs, branch comparisons — directly from the terminal without a full clone, using shallow fetching under the hood.</p>
+<p>The other craft is controlling how your code <em>grows</em>. Code change moves through several layers of isolation, and each boundary is a checkpoint:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>┌────────────────────────────────────────────────────────────────────────┐</span></span>
+<span class="line"><span>│  6. Environment      ← local → staging → production                    │</span></span>
+<span class="line"><span>│  ┌──────────────────────────────────────────────────────────────────┐  │</span></span>
+<span class="line"><span>│  │  5. Repository     ← local vs. remote                            │  │</span></span>
+<span class="line"><span>│  │  ┌────────────────────────────────────────────────────────────┐  │  │</span></span>
+<span class="line"><span>│  │  │  4. Branch       ← isolated line of work                   │  │  │</span></span>
+<span class="line"><span>│  │  │  ┌──────────────────────────────────────────────────────┐  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  3. Commit     ← atomic unit of change               │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  ┌────────────────────────────────────────────────┐  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  │  2. Staged   ← deliberate selection            │  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  │  ┌──────────────────────────────────────────┐  │  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  │  │  1. Unstaged  ← scratch pad              │  │  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  │  └──────────────────────────────────────────┘  │  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  └────────────────────────────────────────────────┘  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  └──────────────────────────────────────────────────────┘  │  │  │</span></span>
+<span class="line"><span>│  │  └────────────────────────────────────────────────────────────┘  │  │</span></span>
+<span class="line"><span>│  └──────────────────────────────────────────────────────────────────┘  │</span></span>
+<span class="line"><span>└────────────────────────────────────────────────────────────────────────┘</span></span></code></pre>
+<p>By controlling each layer deliberately — what you stage, what you commit, when you push — your code can never ship without going through every checkpoint first: tested locally, merged to a shared branch, validated on staging, then released to production.</p>
+<p>Another art is how to control development via branches. <a href="https://nvie.com/posts/a-successful-git-branching-model/">A Successful Git Branching Model</a> was written in 2010 and is still one of the most referenced pieces on the topic — a sign that the fundamentals haven’t changed much. It defines a strategy built around two permanent branches and three supporting types:</p>
+<p><strong>Permanent branches</strong></p>
+<ul>
+<li><code>main</code> — always production-ready; every merge is a release</li>
+<li><code>develop</code> — the integration branch where finished features accumulate</li>
+</ul>
+<p><strong>Supporting branches</strong></p>
+<ul>
+<li><code>feature/*</code> — branches off <code>develop</code>, merges back to <code>develop</code> when done</li>
+<li><code>release/*</code> — branches off <code>develop</code> when a release is being prepared; merges into both <code>main</code> and <code>develop</code></li>
+<li><code>hotfix/*</code> — branches off <code>main</code> for emergency production fixes; merges into both <code>main</code> and <code>develop</code></li>
+</ul>
+<pre><code class="language-mermaid">graph LR
+    Feature -->|merge| Develop
+    Develop -->|branch| Release
+    Release -->|merge| Main
+    Release -->|merge| Develop
+    Main -->|branch| Hotfix
+    Hotfix -->|merge| Main
+    Hotfix -->|merge| Develop
+</code></pre>
 <h2 id="3-the-lifecycles">3. The lifecycles</h2>
-<h3 id="sdlc-software-development-life-cycle">SDLC (Software Development Life Cycle)</h3>
-<h3 id="smlc-software-migration-life-cycle">SMLC (Software Migration Life Cycle)</h3>
+<p>SDLC (Software Development Life Cycle)</p>
+<p>SMLC (Software Migration Life Cycle)</p>
 <p><a href="https://cognition.ai/blog/how-devin-is-modernizing-cobol-at-fortune-500-companies">https://cognition.ai/blog/how-devin-is-modernizing-cobol-at-fortune-500-companies</a></p>
 <p><a href="https://claude.com/blog/how-ai-helps-break-cost-barrier-cobol-modernization">https://claude.com/blog/how-ai-helps-break-cost-barrier-cobol-modernization</a></p>
 <p><a href="https://corestory.ai/">https://corestory.ai/</a></p>
-<h2 id="4-self-improvement">4. Self-improvement</h2>
+<h2 id="4-how-to-improve-your-ai">4. How to improve your AI</h2>
+<h3 id="improve-via-iteration">Improve via iteration</h3>
+<h3 id="improve-via-memory">Improve via memory</h3>
+<p><a href="https://github.com/thedotmack/claude-mem">https://github.com/thedotmack/claude-mem</a></p>
+<p><a href="https://github.com/mem0ai/mem0">https://github.com/mem0ai/mem0</a></p>
+<p><a href="https://github.com/topoteretes/cognee">https://github.com/topoteretes/cognee</a></p>
+<h3 id="improve-via-feedback-loop">Improve via feedback loop</h3>
 <h2 id="5-conclusions">5. Conclusions</h2>
 <p>Some people say AI can replace developers, designers, testers, etc. Indeed, AI-assisted tools like <a href="https://code.claude.com/docs/en/overview">Claude Code</a> impact the human labor force in software development. But the reality is different. Tech giants like Google or Amazon, after firing thousands of employees, are rehiring them back in an effect called “Boomerang Hiring.” The core reason is that the code generated by AI lacks “Business Context” and “Domain Knowledge.” Also, the code is more complex and becomes a burden for senior developers to review and maintain, decreasing the productivity of the remaining team members.</p>
 <p>I remember that “Your code is your understanding of the problem you’re exploring. So it’s only when you have your code in your head that you really understand the problem.” — <a href="https://paulgraham.com/head.html">Paul Graham</a>. So coding is just a part of the process; it is not software development itself.</p>
 <p>There is a paradox here, called “<a href="https://en.wikipedia.org/wiki/Jevons_paradox">Jevons Paradox</a>.” The core idea is that increased efficiency in using a resource can lead to increased overall consumption of that resource, rather than decreased consumption. This means that if making software becomes easier, the demand for software development will increase, leading to more software being built.</p>
 <p>Coding faster makes coding less fun. We thought if AI could handle the code, we would have more time for other things, but that’s not true. I still spend the entire day at my desk, reviewing thousands of lines of code, testing more, and debugging more. The workload increases, and the pressure to deliver more features faster also increases.</p>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
 &copy; 2026 Locch. All rights reserved.
-<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.SdMJQM3r.js"></script> </body> </html>
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.BNMu-4qc.js"></script> </body> </html>
