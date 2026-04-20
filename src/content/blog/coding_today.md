@@ -452,21 +452,56 @@ graph LR
 
 ## 3. The lifecycles
 
-SDLC (Software Development Life Cycle)
+We quite often hear about SDLC (Software Development Life Cycle). Which including the following stages:
 
-SMLC (Software Migration Life Cycle)
+- Planning
+- Analysis
+- Design
+- Implementation
+- Testing
+- Deployment
+- Maintenance
 
-https://cognition.ai/blog/how-devin-is-modernizing-cobol-at-fortune-500-companies
+But i think, anything have their own lifecycles. For example a feature branch have its own lifecycle. After merged to main, it will be deleted. A application, a service or a company also have their own lifecycles. So if you start a greenfield project, you should think about how to maintain it in the long run.
 
-https://claude.com/blog/how-ai-helps-break-cost-barrier-cobol-modernization
+In recent years, modernizing legacy systems (brownfield projects) has become urgent. The [average age of the remaining COBOL developers is 58.3](https://softwaremodernizationservices.com/mainframe-modernization/) — a ticking clock, especially given that COBOL still handles an estimated 95% of US ATM transactions. AI companies like Anthropic and Cognition.ai have achieved real results here: [How Devin Is Modernizing COBOL at Fortune 500 Companies](https://cognition.ai/blog/how-devin-is-modernizing-cobol-at-fortune-500-companies) reports a 73% cost reduction on a 25,000-line automotive migration and Itaú Unibanco finishing 5–6x faster with zero production errors. [How AI helps break the cost barrier](https://claude.com/blog/how-ai-helps-break-cost-barrier-cobol-modernization) makes a similar case: AI collapses the discovery cost that historically made modernization economically infeasible.
 
-https://corestory.ai/
+What stands out to me most is [Corestory.ai](https://corestory.ai/) — they essentially apply the same **SDD philosophy from Section 2 to brownfield systems**. Instead of writing specs first and then code (greenfield), they read legacy code and generate the specs *from* it: natural-language requirements linked to a knowledge graph of dependencies, workflows, and business logic. Their own framing is that "most context engineering solutions treat context as disposable — rebuilt per session, per tool, or per person," whereas their model builds a **persistent, durable understanding** that survives team turnover. Concretely, they can ingest 100,000+ lines of COBOL in minutes, and a joint study with Microsoft showed AI coding agents become [51% more accurate when grounded in these structured specifications](https://siliconangle.com/2025/10/28/corestory-raises-32m-help-companies-modernize-legacy-code-ai/). That is the missing piece for AI modernization: the knowledge graph is what lets every subsequent migration decision trace back to the original business intent.
+
+Some people think modernization works like putting a cow into a machine and getting sausage back 🤣. It doesn't. Migration requires strategy, and the strategy must protect the AS-IS system at every step.
+
+I think of this as the **SMLC (Software Migration Life Cycle)** — a distinct lifecycle from SDLC, because the constraints are fundamentally different: you are not building from scratch, you are moving a live system without stopping it.
+
+```
+1. Discovery           ← map the existing system: call chains, data flows, business rules
+2. Risk Assessment     ← identify high-coupling modules, hidden dependencies, critical paths
+3. Strategy (7 Rs)     ← for each component, pick one: rehost, replatform, refactor,
+                         relocate, repurchase, retire, or retain
+4. Incremental         ← migrate one bounded slice at a time (Strangler Fig pattern),
+   Migration             validate against AS-IS behavior before moving to the next
+5. Parallel Validation ← run old and new side-by-side; compare input/output until they match
+6. Cutover             ← switch traffic to the new system, monitor closely
+7. Decommission        ← retire the legacy system only after the new one is stable
+```
+
+Two industry patterns sit underneath this lifecycle:
+
+- **The [Strangler Fig pattern](https://martinfowler.com/bliki/StranglerFigApplication.html)** (Martin Fowler, named after the rainforest fig that grows around a host tree until the host is gone). You wrap the legacy system with a facade that routes each request either to the old code or the new one. Slice by slice, the new implementation takes over, and the legacy system can be retired when nothing routes to it anymore. This is how you avoid the catastrophic "big bang" rewrite.
+- **The [7 Rs framework](https://www.ibm.com/think/insights/7-rs-cloud-migration)** (originally 5 Rs from Gartner, expanded by AWS). Not every component deserves the same treatment: some you rehost (lift-and-shift), some you refactor, some you retire entirely, some you retain on the old platform because migration isn't worth the cost. The 7 Rs force an honest per-component decision instead of a blanket "rewrite everything."
+
+The key insight from Devin's work is that AI unblocks specific phases, not the whole lifecycle. Devin's three challenges are revealing: (1) COBOL uses memory-position data sharing so fields have no semantic names, (2) there's almost no public COBOL for LLMs to learn from, and (3) COBOL can't run on Linux so the agent can't iterate with a test loop. Their solution is to attack discovery with a tool like DeepWiki that maps the whole codebase *before* any code changes, and to restrict automation to batch workloads (30–50% of migrations) where the feedback loop can be reconstructed by comparing input/output pairs. Transactional workloads still need humans.
+
+The meta-lesson: most migrations fail in steps 1–3, not in step 4. Skipping discovery means you discover the hidden dependencies mid-migration, when the cost of finding them is highest. The modernization is only as good as your understanding of what you are modernizing — which is exactly why "put a cow in, get sausage out" doesn't work.
 
 
 
 ## 4. How to improve your AI
 
 ### Improve via iteration
+
+https://app.devin.ai/review
+
+https://code.claude.com/docs/en/code-review
 
 ### Improve via memory
 
