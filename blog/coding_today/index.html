@@ -360,13 +360,41 @@
     Hotfix -->|merge| Develop
 </code></pre>
 <h2 id="3-the-lifecycles">3. The lifecycles</h2>
-<p>SDLC (Software Development Life Cycle)</p>
-<p>SMLC (Software Migration Life Cycle)</p>
-<p><a href="https://cognition.ai/blog/how-devin-is-modernizing-cobol-at-fortune-500-companies">https://cognition.ai/blog/how-devin-is-modernizing-cobol-at-fortune-500-companies</a></p>
-<p><a href="https://claude.com/blog/how-ai-helps-break-cost-barrier-cobol-modernization">https://claude.com/blog/how-ai-helps-break-cost-barrier-cobol-modernization</a></p>
-<p><a href="https://corestory.ai/">https://corestory.ai/</a></p>
+<p>We quite often hear about SDLC (Software Development Life Cycle). Which including the following stages:</p>
+<ul>
+<li>Planning</li>
+<li>Analysis</li>
+<li>Design</li>
+<li>Implementation</li>
+<li>Testing</li>
+<li>Deployment</li>
+<li>Maintenance</li>
+</ul>
+<p>But i think, anything have their own lifecycles. For example a feature branch have its own lifecycle. After merged to main, it will be deleted. A application, a service or a company also have their own lifecycles. So if you start a greenfield project, you should think about how to maintain it in the long run.</p>
+<p>In recent years, modernizing legacy systems (brownfield projects) has become urgent. The <a href="https://softwaremodernizationservices.com/mainframe-modernization/">average age of the remaining COBOL developers is 58.3</a> — a ticking clock, especially given that COBOL still handles an estimated 95% of US ATM transactions. AI companies like Anthropic and Cognition.ai have achieved real results here: <a href="https://cognition.ai/blog/how-devin-is-modernizing-cobol-at-fortune-500-companies">How Devin Is Modernizing COBOL at Fortune 500 Companies</a> reports a 73% cost reduction on a 25,000-line automotive migration and Itaú Unibanco finishing 5–6x faster with zero production errors. <a href="https://claude.com/blog/how-ai-helps-break-cost-barrier-cobol-modernization">How AI helps break the cost barrier</a> makes a similar case: AI collapses the discovery cost that historically made modernization economically infeasible.</p>
+<p>What stands out to me most is <a href="https://corestory.ai/">Corestory.ai</a> — they essentially apply the same <strong>SDD philosophy from Section 2 to brownfield systems</strong>. Instead of writing specs first and then code (greenfield), they read legacy code and generate the specs <em>from</em> it: natural-language requirements linked to a knowledge graph of dependencies, workflows, and business logic. Their own framing is that “most context engineering solutions treat context as disposable — rebuilt per session, per tool, or per person,” whereas their model builds a <strong>persistent, durable understanding</strong> that survives team turnover. Concretely, they can ingest 100,000+ lines of COBOL in minutes, and a joint study with Microsoft showed AI coding agents become <a href="https://siliconangle.com/2025/10/28/corestory-raises-32m-help-companies-modernize-legacy-code-ai/">51% more accurate when grounded in these structured specifications</a>. That is the missing piece for AI modernization: the knowledge graph is what lets every subsequent migration decision trace back to the original business intent.</p>
+<p>Some people think modernization works like putting a cow into a machine and getting sausage back 🤣. It doesn’t. Migration requires strategy, and the strategy must protect the AS-IS system at every step.</p>
+<p>I think of this as the <strong>SMLC (Software Migration Life Cycle)</strong> — a distinct lifecycle from SDLC, because the constraints are fundamentally different: you are not building from scratch, you are moving a live system without stopping it.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>1. Discovery           ← map the existing system: call chains, data flows, business rules</span></span>
+<span class="line"><span>2. Risk Assessment     ← identify high-coupling modules, hidden dependencies, critical paths</span></span>
+<span class="line"><span>3. Strategy (7 Rs)     ← for each component, pick one: rehost, replatform, refactor,</span></span>
+<span class="line"><span>                         relocate, repurchase, retire, or retain</span></span>
+<span class="line"><span>4. Incremental         ← migrate one bounded slice at a time (Strangler Fig pattern),</span></span>
+<span class="line"><span>   Migration             validate against AS-IS behavior before moving to the next</span></span>
+<span class="line"><span>5. Parallel Validation ← run old and new side-by-side; compare input/output until they match</span></span>
+<span class="line"><span>6. Cutover             ← switch traffic to the new system, monitor closely</span></span>
+<span class="line"><span>7. Decommission        ← retire the legacy system only after the new one is stable</span></span></code></pre>
+<p>Two industry patterns sit underneath this lifecycle:</p>
+<ul>
+<li><strong>The <a href="https://martinfowler.com/bliki/StranglerFigApplication.html">Strangler Fig pattern</a></strong> (Martin Fowler, named after the rainforest fig that grows around a host tree until the host is gone). You wrap the legacy system with a facade that routes each request either to the old code or the new one. Slice by slice, the new implementation takes over, and the legacy system can be retired when nothing routes to it anymore. This is how you avoid the catastrophic “big bang” rewrite.</li>
+<li><strong>The <a href="https://www.ibm.com/think/insights/7-rs-cloud-migration">7 Rs framework</a></strong> (originally 5 Rs from Gartner, expanded by AWS). Not every component deserves the same treatment: some you rehost (lift-and-shift), some you refactor, some you retire entirely, some you retain on the old platform because migration isn’t worth the cost. The 7 Rs force an honest per-component decision instead of a blanket “rewrite everything.”</li>
+</ul>
+<p>The key insight from Devin’s work is that AI unblocks specific phases, not the whole lifecycle. Devin’s three challenges are revealing: (1) COBOL uses memory-position data sharing so fields have no semantic names, (2) there’s almost no public COBOL for LLMs to learn from, and (3) COBOL can’t run on Linux so the agent can’t iterate with a test loop. Their solution is to attack discovery with a tool like DeepWiki that maps the whole codebase <em>before</em> any code changes, and to restrict automation to batch workloads (30–50% of migrations) where the feedback loop can be reconstructed by comparing input/output pairs. Transactional workloads still need humans.</p>
+<p>The meta-lesson: most migrations fail in steps 1–3, not in step 4. Skipping discovery means you discover the hidden dependencies mid-migration, when the cost of finding them is highest. The modernization is only as good as your understanding of what you are modernizing — which is exactly why “put a cow in, get sausage out” doesn’t work.</p>
 <h2 id="4-how-to-improve-your-ai">4. How to improve your AI</h2>
 <h3 id="improve-via-iteration">Improve via iteration</h3>
+<p><a href="https://app.devin.ai/review">https://app.devin.ai/review</a></p>
+<p><a href="https://code.claude.com/docs/en/code-review">https://code.claude.com/docs/en/code-review</a></p>
 <h3 id="improve-via-memory">Improve via memory</h3>
 <p><a href="https://github.com/thedotmack/claude-mem">https://github.com/thedotmack/claude-mem</a></p>
 <p><a href="https://github.com/mem0ai/mem0">https://github.com/mem0ai/mem0</a></p>
