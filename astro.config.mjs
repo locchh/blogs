@@ -16,4 +16,9 @@ export default defineConfig({
 			excludeLangs: ['mermaid'],
 		},
 	},
+	vite: {
+		optimizeDeps: {
+			include: ['mermaid'],
+		},
+	},
 });
