@@ -14,19 +14,36 @@ tags: ["coding", "reflection", "2026"]
 
 Here are some useful git commands for daily development:
 
-`git add`: Stage changes for commit
+- `git add`: Stage changes for commit
 
-`git log`: Review commit history
+- `git log`: Review commit history
+  - `git log` - show commit history of current branch
+  - `git log --oneline` - compact view
+  - `git log main..feature` - commits in feature but not in main
+  - `git log --graph --all` - visual branch graph
 
-`git commit`: Record staged changes
+- `git commit`: Record staged changes
 
-`git diff`: Show differences between working directory, index, and commits
+- `git diff`: Show differences between working directory, index, and commits
+  - `git diff` - see unstaged changes (working vs staging)
+  - `git diff --staged` - see staged changes (staging vs last commit)
+  - `git diff main feature` - compare two branches
+  - `git diff origin/main` - compare with remote branch
+  - `git diff file.txt` - see changes of a specific file
 
-`git reset`: Reset the current HEAD to a specified state
+- `git reset`: Reset the current HEAD to a specified state
+  - `git reset file.txt` - unstage a file
+  - `git reset --soft HEAD~1` - undo last commit but keep changes staged
+  - `git reset --hard HEAD~1` - undo last commit and discard changes
+  - `git reset --hard origin/main` - reset local branch to match remote
 
-`git fetch`: Download objects and refs from another repository
+- `git fetch`: Download objects and refs from another repository
 
-`git rebase`: Reapply commits on top of another base tip
+- `git rebase`: Reapply commits on top of another base tip
+  - `git rebase main` - rebase current branch onto main
+  - `git rebase -i HEAD~3` - interactive rebase for last 3 commits
+  - `git rebase --continue` - continue after resolving conflicts
+  - `git rebase --abort` - abort rebase and return to original state
 
 ### Custom slash commands
 
@@ -499,20 +516,197 @@ The meta-lesson: most migrations fail in steps 1–3, not in step 4. Skipping di
 
 ### Improve via iteration
 
-https://app.devin.ai/review
+In 2022, when ChatGPT first launched, there were some techniques that could help improve the output, like "few-shot learning" or "chain-of-thought prompting", etc. People talked about how to prompt better, what bad prompts look like, and how to avoid hallucination with tips like repeating the question, challenging the output, and asking for evidence. In my personal experience, we cannot get a perfect output in the first try, no matter how good the prompt is. We need to continue interacting with the AI, tuning the output, and iterating until we get the desired result. There are a lot of people who seem weird when talking to a machine, and I think that is normal. Before ChatGPT, we didn't have any effective way to talk with machines in natural language, and this had been the case for hundreds of years.
 
-https://code.claude.com/docs/en/code-review
+Today, in 2026, things have gone to a next level. AI agents with the power of LLMs and the ability to execute can handle complex tasks end-to-end. Prompts can be shorter but the output still has good quality because the agent can reason and autonomously perform necessary steps to make requirements clear and collect more context to understand the problem better. But it doesn't mean we don't need interaction anymore. The interaction just shifts—instead of interacting with humans, the agent now interacts with the environment (e.g., web, file system, database, etc.) to complete tasks.
 
-### Improve via memory
+For example, if we want to review a PR from branch `feature` to `main`, simply get changes in that PR and review them is not enough. Here is structure of a PR/MR:
 
-https://github.com/thedotmack/claude-mem
+```
+pr/mr (continue updating)
+└── File changes
+|   └── per file change (the accumulation of commits)
+|       ├── File header
+|       └── Hunks
+|           └── Per hunk
+|               ├── Hunk header
+|               └── Hunk body
+└── Chain of commits
+└── Metadata
+|   ├── Title
+|   ├── Description
+|   ├── Status
+|   └── Reviewers
+└── Conversation
+```
 
-https://github.com/mem0ai/mem0
+But the context for reviewing a PR/MR seem like more complex than just the changes. Instead it include many layers
 
-https://github.com/topoteretes/cognee
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    PR/MR Review Context                     │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+                    ┌───────────────────┐
+                    │   Layer 1         │
+                    │   What changed    │
+                    │   (git diff)      │
+                    └───────────────────┘
+                              │
+                              ▼
+                    ┌───────────────────┐
+                    │   Layer 2         │
+                    │   Why changed     │
+                    │   (git log)       │
+                    └───────────────────┘
+                              │
+                              ▼
+                    ┌───────────────────┐
+                    │   Layer 3         │
+                    │   How it fits     │
+                    │   to codebase     │
+                    └───────────────────┘
+                              │
+              ┌───────────────┼───────────────┐
+              │               │               │
+              ▼               ▼               ▼
+        ┌──────────┐   ┌──────────┐   ┌──────────┐
+        │ Intent   │   │Architect │   │Edge cases│
+        └──────────┘   └──────────┘   └──────────┘
+        ┌──────────┐   ┌──────────┐   ┌──────────┐
+        │Error han │   │Security  │   │Perform.  │
+        └──────────┘   └──────────┘   └──────────┘
+        ┌──────────┐   ┌──────────┐   ┌──────────┐
+        │Testabil. │   │Transpar. │   │Readabil. │
+        └──────────┘   └──────────┘   └──────────┘
+              │
+              ▼
+        ┌──────────┐
+        │Consisten │
+        └──────────┘
+              │
+              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    Layer 4: Business Context                │
+├─────────────────────────────────────────────────────────────┤
+│  • PR description                                           │
+│  • Linked issues, tickets                                   │
+│  • Business requirements, Business value                    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+Some highlight agent-based review tools: [Devin Review](https://docs.devin.ai/work-with-devin/devin-review) and [Claude Code Review](https://code.claude.com/docs/en/code-review). Here is what an agent-based review process looks like under the hood:
+
+1. **Clone the repository** — large codebases require smart cloning strategies to stay fast:
+   - **Shallow clone** (`--depth 1`) — only the latest commit, no full history; smallest download
+   - **Sparse checkout** — download only the directories or files touched by the PR
+   - **Git LFS** — handle large binary assets separately from the main repo
+   - **Cached clone** — reuse a previously cloned copy and fetch only the delta
+   - **Incremental update** (`git fetch`) — avoid re-cloning entirely if a warm copy already exists on the runner
+
+2. **Fetch the PR** — pull the branch, the diff against the base, the commit chain, and PR metadata (title, description, linked issues). This is the raw material for the review.
+
+3. **Read review configuration** — before touching code, read `REVIEW.md`, `AGENTS.md`, `CLAUDE.md`, or any project-level convention files. These act as standing instructions: project-specific rules that take precedence over generic heuristics.
+
+4. **Map the codebase structure** — a targeted orientation pass with `grep`, `find`, and `ls` to understand the repository layout: where modules live, how they relate, where tests are, what the dependency graph looks like. The goal is not to read everything — it is to build enough of a mental model to understand the *role* of each changed file.
+
+5. **Read key files in depth** — focused reads of the changed files, their callers and callees, the tests that should cover them, and any schema or config files they touch. This is where the agent shifts from knowing the *what* to understanding the *why*.
+
+6. **Run tests (if available)** — execute the test suite, or at minimum the tests covering the changed modules. A pre-existing failure is worth flagging; a new failure after applying the PR branch is a direct regression signal.
+
+7. **Generate the review** — synthesize everything into structured feedback: confirmed bugs, unhandled edge cases, security issues, architectural concerns, and readability notes. A good agent distinguishes *blocking* issues (must fix before merge) from *advisory* observations (worth noting, not a merge gate).
+
+<div align="center">
+
+```mermaid
+graph LR
+    A[Clone Repo] --> B[Fetch PR]
+    B --> C[Read Config Files]
+    C --> D[Map Codebase]
+    D --> E[Read Key Files]
+    E --> F[Run Tests]
+    F --> G[Generate Review]
+```
+
+</div>
+
+### Improve via memory (also reduce cost)
+
+Every new session starts cold. The agent has no recollection of what it learned last time — the architecture you walked it through, the bug you fixed together, the convention you agreed on. So it re-reads the same files, re-greps for the same symbols, and re-asks the same clarifying questions. That is both friction for you and a direct token cost: the context window fills up with rediscovery instead of progress.
+
+Persistent memory closes this gap. Instead of treating each session as a fresh slate, the agent writes durable notes — decisions, gotchas, mental models — and reads them back on the next run. Three tools take meaningfully different approaches to the same problem.
+
+**[claude-mem](https://github.com/thedotmack/claude-mem) — lifecycle hooks + progressive disclosure**
+
+Built specifically for Claude Code. It wires into Claude's lifecycle hooks (`SessionStart`, `UserPromptSubmit`, `PostToolUse`, `Stop`, `SessionEnd`) and passively observes tool usage, compressing what it sees into semantic summaries stored in SQLite with Chroma vector embeddings. The defining idea is **progressive disclosure**: retrieval happens in three layers — a compact index first (~50–100 tokens), then chronological context, then full details only when the agent actually needs them (~500–1,000 tokens). You pay for detail only when detail is needed, which keeps the running token cost low across sessions.
+
+**[mem0](https://github.com/mem0ai/mem0) — universal memory layer, multi-signal retrieval**
+
+A general-purpose memory SDK, not tied to any one agent. It organizes memory across three levels — **user** (long-term preferences), **session** (in-conversation context), and **agent state** (current operational data) — and retrieves with a blend of semantic search, BM25 keyword matching, and entity linking. The v3 algorithm uses single-pass ADD-only extraction: memories accumulate, nothing is overwritten, and agent-confirmed actions get the same priority as user-provided facts. The strength is generality — if you are building your own agent, mem0 gives you a memory plane without dictating an architecture.
+
+**[cognee](https://github.com/topoteretes/cognee) — knowledge graphs instead of vectors alone**
+
+Where mem0 treats memory as a set of retrievable facts, cognee treats it as a **knowledge graph**. It combines vector search, graph databases, and cognitive-science-inspired memory models, exposing four operations: `remember`, `recall`, `forget`, `improve`. Retrieval uses auto-routing — the engine picks vector-based or graph-based search depending on the query shape. The differentiator is relationship intelligence: a vector store can find "similar invoices"; cognee can reconstruct the timeline of an interaction, map resolution patterns, and detect contradictions that only surface when you see the edges, not just the nodes. Better suited when your memory has heavy structure — entities, timelines, cause/effect chains.
+
+| Tool | Storage | Best for | Tied to |
+|---|---|---|---|
+| claude-mem | SQLite + Chroma | Continuity across Claude Code sessions | Claude Code (hook-based) |
+| mem0 | Vector + BM25 + entities | General agents, preference tracking | Any LLM |
+| cognee | Vector + Graph DB | Relationship-heavy, structured knowledge | Any LLM |
+
+<div align="center">
+
+```mermaid
+graph LR
+    S1[Session 1] -->|observe + summarize| M[(Memory)]
+    M -->|retrieve relevant context| S2[Session 2]
+    S2 -->|observe + summarize| M
+    M -->|retrieve relevant context| S3[Session N]
+```
+
+</div>
+
+The cost story is the interesting part. Without memory, an agent spends tokens every session *re-discovering* what it already knew — reading the same files, running the same `grep`s, asking you to re-explain the same constraints. With memory, that discovery cost is paid once and cached. On a large codebase this is not a small optimization: the "exploration tax" of a fresh session can easily run into the hundreds of thousands of tokens before the agent does anything useful. A good memory layer turns that into a lookup, and progressive disclosure means you only inflate the context when the task genuinely needs the detail.
+
+The limitation worth naming: memory is only useful if it stays truthful. A stale note ("the auth module lives in `src/auth`") that was true three months ago but false today is worse than no memory at all — the agent confidently acts on wrong information. Each tool addresses this differently (cognee has an `improve` operation, mem0 v3 uses ADD-only extraction to avoid overwrite conflicts, claude-mem re-derives summaries from live tool usage), but the general rule stands: **trust but verify**. Memory should prime the agent's context, not replace its reading of the current code.
+
+A different philosophy worth studying is Andrej Karpathy's [LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f). Instead of an opaque vector store, the memory is a folder of plain markdown files the LLM maintains on your behalf — an `index.md` catalog, entity pages with cross-references, and a `log.md` of everything that has been ingested or queried. The core idea is "**compile knowledge once at ingest time, query the compiled wiki forever**": ingestion is where the work happens, not retrieval. Three workflows keep it alive — *ingest* (read a source, extract key points, update relevant pages), *query* (search the wiki and synthesize an answer with citations; valuable answers become new pages), and *lint* (periodic health checks for contradictions, stale claims, and orphan pages). The split of responsibility is the interesting part: the human curates and directs, the LLM handles the tedious bookkeeping. Compared to the three tools above, the tradeoff is transparency for automation — you can read and edit the wiki directly, at the cost of it being a more deliberate, human-in-the-loop system.
 
 ### Improve via feedback loop
 
+Another way to improve an agent is through feedback loops — mechanisms that let it learn from its own execution and get better over time. Early research pointed the way here. **[ReAct](https://arxiv.org/abs/2210.03629)** (2022) introduced a "reasoning + acting" paradigm where the LLM interleaves thoughts ("I need to search for X") with actions (calling a search tool) and observations, creating a tight loop that grounds reasoning in real-world results. **[CodeAct](https://arxiv.org/abs/2303.04917)** (2023) took this further by treating code execution itself as the tool — the agent writes and runs Python code to solve problems, getting immediate feedback from execution errors or outputs. The insight is that code is a precise, executable specification: if the agent writes code that doesn't run or produces the wrong answer, it knows immediately and can iterate. Compared to opaque tool calls, code execution gives the agent a sandbox where it can experiment, test hypotheses, and refine its approach through actual execution rather than speculation.
+
+A loop I've been thinking about lately is narrower but more practical: **incident resolution as a learning loop**. Building an agent that solves *any* problem perfectly is unrealistic, but scoping it down to one platform or one application makes it tractable — the universe of possible issues is finite, and patterns repeat. The mechanism works like this:
+
+1. **Ingest** — a new issue or request arrives.
+2. **Lookup** — check the knowledge base for similar past cases.
+3. **Hit** — if a match exists, return the cached resolution (saves time and tokens, no execution needed).
+4. **Miss** — if no match, execute: diagnose, attempt a fix, observe the outcome. This step can run fully autonomous (the agent handles it end-to-end) or as **Human-in-the-Loop (HITL)** collaboration, where the human brings business/domain knowledge and the agent brings parallel execution and pattern recall.
+5. **Persist** — once resolved, write the *resolution*, the *outcome*, and the *execution trace* back to the knowledge base. The trace matters as much as the answer: it captures *how* the problem was solved, not just *what* the answer was.
+6. **Return** the result to the user.
+
+<div align="center">
+
+```mermaid
+graph TD
+    I[New issue] --> K{Similar in KB?}
+    K -->|Hit| R[Return cached resolution]
+    K -->|Miss| E[Execute: autonomous or HITL]
+    E --> D{Resolved?}
+    D -->|No| E
+    D -->|Yes| P[Persist resolution + trace to KB]
+    P --> R
+    R --> U[Return to user]
+```
+
+</div>
+
+The interesting arc is what happens over time. Early on, humans are **in the loop** — they own the hard calls, and every resolution they make becomes a training example for the knowledge base. As the KB grows, the agent starts imitating past human decisions on similar issues, and the human role shifts from *in the loop* to **on the loop** — monitoring outcomes, correcting drift, but no longer executing every case. The business knowledge that used to live only in a human's head has been transferred into the KB, where the agent can reference it.
+
+This pattern recurs under several names: **case-based reasoning** (retrieve past cases, adapt them), **learn from the past** (every execution is a training example), **self-improvement** (today's resolution lowers tomorrow's cost), **continuous learning** (the system improves as it runs), and **knowledge transfer** (tacit human expertise made explicit and durable). The common thread is that every resolved issue is not just a ticket closed — it is an asset deposited into the KB that makes the next resolution cheaper.
+
+The caveats mirror the memory section: the KB is only as good as its freshness and correctness. A wrong past resolution stored as a template becomes a persistent bug, confidently re-applied. So the loop needs an explicit lint step — periodic review of what the KB contains, pruning what has gone stale, and validating that high-confidence matches still reflect the current system.
 
 
 ## 5. Conclusions
