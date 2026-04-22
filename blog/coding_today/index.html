@@ -4,13 +4,54 @@
 <h2 id="1-some-helpful-commands">1. Some helpful commands</h2>
 <h3 id="git-commands">Git commands</h3>
 <p>Here are some useful git commands for daily development:</p>
+<ul>
+<li>
 <p><code>git add</code>: Stage changes for commit</p>
+</li>
+<li>
 <p><code>git log</code>: Review commit history</p>
+<ul>
+<li><code>git log</code> - show commit history of current branch</li>
+<li><code>git log --oneline</code> - compact view</li>
+<li><code>git log main..feature</code> - commits in feature but not in main</li>
+<li><code>git log --graph --all</code> - visual branch graph</li>
+</ul>
+</li>
+<li>
 <p><code>git commit</code>: Record staged changes</p>
+</li>
+<li>
 <p><code>git diff</code>: Show differences between working directory, index, and commits</p>
+<ul>
+<li><code>git diff</code> - see unstaged changes (working vs staging)</li>
+<li><code>git diff --staged</code> - see staged changes (staging vs last commit)</li>
+<li><code>git diff main feature</code> - compare two branches</li>
+<li><code>git diff origin/main</code> - compare with remote branch</li>
+<li><code>git diff file.txt</code> - see changes of a specific file</li>
+</ul>
+</li>
+<li>
 <p><code>git reset</code>: Reset the current HEAD to a specified state</p>
+<ul>
+<li><code>git reset file.txt</code> - unstage a file</li>
+<li><code>git reset --soft HEAD~1</code> - undo last commit but keep changes staged</li>
+<li><code>git reset --hard HEAD~1</code> - undo last commit and discard changes</li>
+<li><code>git reset --hard origin/main</code> - reset local branch to match remote</li>
+</ul>
+</li>
+<li>
 <p><code>git fetch</code>: Download objects and refs from another repository</p>
+</li>
+<li>
 <p><code>git rebase</code>: Reapply commits on top of another base tip</p>
+<ul>
+<li><code>git rebase main</code> - rebase current branch onto main</li>
+<li><code>git rebase -i HEAD~3</code> - interactive rebase for last 3 commits</li>
+<li><code>git rebase --continue</code> - continue after resolving conflicts</li>
+<li><code>git rebase --abort</code> - abort rebase and return to original state</li>
+</ul>
+</li>
+</ul>
 <h3 id="custom-slash-commands">Custom slash commands</h3>
 <p>I also have some custom slash commands (workflows) for AI to help me with repetitive tasks:</p>
 <p><code>/make-commit-message</code></p>
@@ -393,17 +434,197 @@
 <p>The meta-lesson: most migrations fail in steps 1–3, not in step 4. Skipping discovery means you discover the hidden dependencies mid-migration, when the cost of finding them is highest. The modernization is only as good as your understanding of what you are modernizing — which is exactly why “put a cow in, get sausage out” doesn’t work.</p>
 <h2 id="4-how-to-improve-your-ai">4. How to improve your AI</h2>
 <h3 id="improve-via-iteration">Improve via iteration</h3>
-<p><a href="https://app.devin.ai/review">https://app.devin.ai/review</a></p>
-<p><a href="https://code.claude.com/docs/en/code-review">https://code.claude.com/docs/en/code-review</a></p>
-<h3 id="improve-via-memory">Improve via memory</h3>
-<p><a href="https://github.com/thedotmack/claude-mem">https://github.com/thedotmack/claude-mem</a></p>
-<p><a href="https://github.com/mem0ai/mem0">https://github.com/mem0ai/mem0</a></p>
-<p><a href="https://github.com/topoteretes/cognee">https://github.com/topoteretes/cognee</a></p>
+<p>In 2022, when ChatGPT first launched, there were some techniques that could help improve the output, like “few-shot learning” or “chain-of-thought prompting”, etc. People talked about how to prompt better, what bad prompts look like, and how to avoid hallucination with tips like repeating the question, challenging the output, and asking for evidence. In my personal experience, we cannot get a perfect output in the first try, no matter how good the prompt is. We need to continue interacting with the AI, tuning the output, and iterating until we get the desired result. There are a lot of people who seem weird when talking to a machine, and I think that is normal. Before ChatGPT, we didn’t have any effective way to talk with machines in natural language, and this had been the case for hundreds of years.</p>
+<p>Today, in 2026, things have gone to a next level. AI agents with the power of LLMs and the ability to execute can handle complex tasks end-to-end. Prompts can be shorter but the output still has good quality because the agent can reason and autonomously perform necessary steps to make requirements clear and collect more context to understand the problem better. But it doesn’t mean we don’t need interaction anymore. The interaction just shifts—instead of interacting with humans, the agent now interacts with the environment (e.g., web, file system, database, etc.) to complete tasks.</p>
+<p>For example, if we want to review a PR from branch <code>feature</code> to <code>main</code>, simply get changes in that PR and review them is not enough. Here is structure of a PR/MR:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>pr/mr (continue updating)</span></span>
+<span class="line"><span>└── File changes</span></span>
+<span class="line"><span>|   └── per file change (the accumulation of commits)</span></span>
+<span class="line"><span>|       ├── File header</span></span>
+<span class="line"><span>|       └── Hunks</span></span>
+<span class="line"><span>|           └── Per hunk</span></span>
+<span class="line"><span>|               ├── Hunk header</span></span>
+<span class="line"><span>|               └── Hunk body</span></span>
+<span class="line"><span>└── Chain of commits</span></span>
+<span class="line"><span>└── Metadata</span></span>
+<span class="line"><span>|   ├── Title</span></span>
+<span class="line"><span>|   ├── Description</span></span>
+<span class="line"><span>|   ├── Status</span></span>
+<span class="line"><span>|   └── Reviewers</span></span>
+<span class="line"><span>└── Conversation</span></span></code></pre>
+<p>But the context for reviewing a PR/MR seem like more complex than just the changes. Instead it include many layers</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>┌─────────────────────────────────────────────────────────────┐</span></span>
+<span class="line"><span>│                    PR/MR Review Context                     │</span></span>
+<span class="line"><span>└─────────────────────────────────────────────────────────────┘</span></span>
+<span class="line"><span>                              │</span></span>
+<span class="line"><span>                              ▼</span></span>
+<span class="line"><span>                    ┌───────────────────┐</span></span>
+<span class="line"><span>                    │   Layer 1         │</span></span>
+<span class="line"><span>                    │   What changed    │</span></span>
+<span class="line"><span>                    │   (git diff)      │</span></span>
+<span class="line"><span>                    └───────────────────┘</span></span>
+<span class="line"><span>                              │</span></span>
+<span class="line"><span>                              ▼</span></span>
+<span class="line"><span>                    ┌───────────────────┐</span></span>
+<span class="line"><span>                    │   Layer 2         │</span></span>
+<span class="line"><span>                    │   Why changed     │</span></span>
+<span class="line"><span>                    │   (git log)       │</span></span>
+<span class="line"><span>                    └───────────────────┘</span></span>
+<span class="line"><span>                              │</span></span>
+<span class="line"><span>                              ▼</span></span>
+<span class="line"><span>                    ┌───────────────────┐</span></span>
+<span class="line"><span>                    │   Layer 3         │</span></span>
+<span class="line"><span>                    │   How it fits     │</span></span>
+<span class="line"><span>                    │   to codebase     │</span></span>
+<span class="line"><span>                    └───────────────────┘</span></span>
+<span class="line"><span>                              │</span></span>
+<span class="line"><span>              ┌───────────────┼───────────────┐</span></span>
+<span class="line"><span>              │               │               │</span></span>
+<span class="line"><span>              ▼               ▼               ▼</span></span>
+<span class="line"><span>        ┌──────────┐   ┌──────────┐   ┌──────────┐</span></span>
+<span class="line"><span>        │ Intent   │   │Architect │   │Edge cases│</span></span>
+<span class="line"><span>        └──────────┘   └──────────┘   └──────────┘</span></span>
+<span class="line"><span>        ┌──────────┐   ┌──────────┐   ┌──────────┐</span></span>
+<span class="line"><span>        │Error han │   │Security  │   │Perform.  │</span></span>
+<span class="line"><span>        └──────────┘   └──────────┘   └──────────┘</span></span>
+<span class="line"><span>        ┌──────────┐   ┌──────────┐   ┌──────────┐</span></span>
+<span class="line"><span>        │Testabil. │   │Transpar. │   │Readabil. │</span></span>
+<span class="line"><span>        └──────────┘   └──────────┘   └──────────┘</span></span>
+<span class="line"><span>              │</span></span>
+<span class="line"><span>              ▼</span></span>
+<span class="line"><span>        ┌──────────┐</span></span>
+<span class="line"><span>        │Consisten │</span></span>
+<span class="line"><span>        └──────────┘</span></span>
+<span class="line"><span>              │</span></span>
+<span class="line"><span>              ▼</span></span>
+<span class="line"><span>┌─────────────────────────────────────────────────────────────┐</span></span>
+<span class="line"><span>│                    Layer 4: Business Context                │</span></span>
+<span class="line"><span>├─────────────────────────────────────────────────────────────┤</span></span>
+<span class="line"><span>│  • PR description                                           │</span></span>
+<span class="line"><span>│  • Linked issues, tickets                                   │</span></span>
+<span class="line"><span>│  • Business requirements, Business value                    │</span></span>
+<span class="line"><span>└─────────────────────────────────────────────────────────────┘</span></span></code></pre>
+<p>Some highlight agent-based review tools: <a href="https://docs.devin.ai/work-with-devin/devin-review">Devin Review</a> and <a href="https://code.claude.com/docs/en/code-review">Claude Code Review</a>. Here is what an agent-based review process looks like under the hood:</p>
+<ol>
+<li>
+<p><strong>Clone the repository</strong> — large codebases require smart cloning strategies to stay fast:</p>
+<ul>
+<li><strong>Shallow clone</strong> (<code>--depth 1</code>) — only the latest commit, no full history; smallest download</li>
+<li><strong>Sparse checkout</strong> — download only the directories or files touched by the PR</li>
+<li><strong>Git LFS</strong> — handle large binary assets separately from the main repo</li>
+<li><strong>Cached clone</strong> — reuse a previously cloned copy and fetch only the delta</li>
+<li><strong>Incremental update</strong> (<code>git fetch</code>) — avoid re-cloning entirely if a warm copy already exists on the runner</li>
+</ul>
+</li>
+<li>
+<p><strong>Fetch the PR</strong> — pull the branch, the diff against the base, the commit chain, and PR metadata (title, description, linked issues). This is the raw material for the review.</p>
+</li>
+<li>
+<p><strong>Read review configuration</strong> — before touching code, read <code>REVIEW.md</code>, <code>AGENTS.md</code>, <code>CLAUDE.md</code>, or any project-level convention files. These act as standing instructions: project-specific rules that take precedence over generic heuristics.</p>
+</li>
+<li>
+<p><strong>Map the codebase structure</strong> — a targeted orientation pass with <code>grep</code>, <code>find</code>, and <code>ls</code> to understand the repository layout: where modules live, how they relate, where tests are, what the dependency graph looks like. The goal is not to read everything — it is to build enough of a mental model to understand the <em>role</em> of each changed file.</p>
+</li>
+<li>
+<p><strong>Read key files in depth</strong> — focused reads of the changed files, their callers and callees, the tests that should cover them, and any schema or config files they touch. This is where the agent shifts from knowing the <em>what</em> to understanding the <em>why</em>.</p>
+</li>
+<li>
+<p><strong>Run tests (if available)</strong> — execute the test suite, or at minimum the tests covering the changed modules. A pre-existing failure is worth flagging; a new failure after applying the PR branch is a direct regression signal.</p>
+</li>
+<li>
+<p><strong>Generate the review</strong> — synthesize everything into structured feedback: confirmed bugs, unhandled edge cases, security issues, architectural concerns, and readability notes. A good agent distinguishes <em>blocking</em> issues (must fix before merge) from <em>advisory</em> observations (worth noting, not a merge gate).</p>
+</li>
+</ol>
+<div align="center">
+<pre><code class="language-mermaid">graph LR
+    A[Clone Repo] --> B[Fetch PR]
+    B --> C[Read Config Files]
+    C --> D[Map Codebase]
+    D --> E[Read Key Files]
+    E --> F[Run Tests]
+    F --> G[Generate Review]
+</code></pre>
+</div>
+<h3 id="improve-via-memory-also-reduce-cost">Improve via memory (also reduce cost)</h3>
+<p>Every new session starts cold. The agent has no recollection of what it learned last time — the architecture you walked it through, the bug you fixed together, the convention you agreed on. So it re-reads the same files, re-greps for the same symbols, and re-asks the same clarifying questions. That is both friction for you and a direct token cost: the context window fills up with rediscovery instead of progress.</p>
+<p>Persistent memory closes this gap. Instead of treating each session as a fresh slate, the agent writes durable notes — decisions, gotchas, mental models — and reads them back on the next run. Three tools take meaningfully different approaches to the same problem.</p>
+<p><strong><a href="https://github.com/thedotmack/claude-mem">claude-mem</a> — lifecycle hooks + progressive disclosure</strong></p>
+<p>Built specifically for Claude Code. It wires into Claude’s lifecycle hooks (<code>SessionStart</code>, <code>UserPromptSubmit</code>, <code>PostToolUse</code>, <code>Stop</code>, <code>SessionEnd</code>) and passively observes tool usage, compressing what it sees into semantic summaries stored in SQLite with Chroma vector embeddings. The defining idea is <strong>progressive disclosure</strong>: retrieval happens in three layers — a compact index first (~50–100 tokens), then chronological context, then full details only when the agent actually needs them (~500–1,000 tokens). You pay for detail only when detail is needed, which keeps the running token cost low across sessions.</p>
+<p><strong><a href="https://github.com/mem0ai/mem0">mem0</a> — universal memory layer, multi-signal retrieval</strong></p>
+<p>A general-purpose memory SDK, not tied to any one agent. It organizes memory across three levels — <strong>user</strong> (long-term preferences), <strong>session</strong> (in-conversation context), and <strong>agent state</strong> (current operational data) — and retrieves with a blend of semantic search, BM25 keyword matching, and entity linking. The v3 algorithm uses single-pass ADD-only extraction: memories accumulate, nothing is overwritten, and agent-confirmed actions get the same priority as user-provided facts. The strength is generality — if you are building your own agent, mem0 gives you a memory plane without dictating an architecture.</p>
+<p><strong><a href="https://github.com/topoteretes/cognee">cognee</a> — knowledge graphs instead of vectors alone</strong></p>
+<p>Where mem0 treats memory as a set of retrievable facts, cognee treats it as a <strong>knowledge graph</strong>. It combines vector search, graph databases, and cognitive-science-inspired memory models, exposing four operations: <code>remember</code>, <code>recall</code>, <code>forget</code>, <code>improve</code>. Retrieval uses auto-routing — the engine picks vector-based or graph-based search depending on the query shape. The differentiator is relationship intelligence: a vector store can find “similar invoices”; cognee can reconstruct the timeline of an interaction, map resolution patterns, and detect contradictions that only surface when you see the edges, not just the nodes. Better suited when your memory has heavy structure — entities, timelines, cause/effect chains.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Tool</th><th>Storage</th><th>Best for</th><th>Tied to</th></tr></thead><tbody><tr><td>claude-mem</td><td>SQLite + Chroma</td><td>Continuity across Claude Code sessions</td><td>Claude Code (hook-based)</td></tr><tr><td>mem0</td><td>Vector + BM25 + entities</td><td>General agents, preference tracking</td><td>Any LLM</td></tr><tr><td>cognee</td><td>Vector + Graph DB</td><td>Relationship-heavy, structured knowledge</td><td>Any LLM</td></tr></tbody></table>
+<div align="center">
+<pre><code class="language-mermaid">graph LR
+    S1[Session 1] -->|observe + summarize| M[(Memory)]
+    M -->|retrieve relevant context| S2[Session 2]
+    S2 -->|observe + summarize| M
+    M -->|retrieve relevant context| S3[Session N]
+</code></pre>
+</div>
+<p>The cost story is the interesting part. Without memory, an agent spends tokens every session <em>re-discovering</em> what it already knew — reading the same files, running the same <code>grep</code>s, asking you to re-explain the same constraints. With memory, that discovery cost is paid once and cached. On a large codebase this is not a small optimization: the “exploration tax” of a fresh session can easily run into the hundreds of thousands of tokens before the agent does anything useful. A good memory layer turns that into a lookup, and progressive disclosure means you only inflate the context when the task genuinely needs the detail.</p>
+<p>The limitation worth naming: memory is only useful if it stays truthful. A stale note (“the auth module lives in <code>src/auth</code>”) that was true three months ago but false today is worse than no memory at all — the agent confidently acts on wrong information. Each tool addresses this differently (cognee has an <code>improve</code> operation, mem0 v3 uses ADD-only extraction to avoid overwrite conflicts, claude-mem re-derives summaries from live tool usage), but the general rule stands: <strong>trust but verify</strong>. Memory should prime the agent’s context, not replace its reading of the current code.</p>
+<p>A different philosophy worth studying is Andrej Karpathy’s <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f">LLM Wiki</a>. Instead of an opaque vector store, the memory is a folder of plain markdown files the LLM maintains on your behalf — an <code>index.md</code> catalog, entity pages with cross-references, and a <code>log.md</code> of everything that has been ingested or queried. The core idea is “<strong>compile knowledge once at ingest time, query the compiled wiki forever</strong>”: ingestion is where the work happens, not retrieval. Three workflows keep it alive — <em>ingest</em> (read a source, extract key points, update relevant pages), <em>query</em> (search the wiki and synthesize an answer with citations; valuable answers become new pages), and <em>lint</em> (periodic health checks for contradictions, stale claims, and orphan pages). The split of responsibility is the interesting part: the human curates and directs, the LLM handles the tedious bookkeeping. Compared to the three tools above, the tradeoff is transparency for automation — you can read and edit the wiki directly, at the cost of it being a more deliberate, human-in-the-loop system.</p>
 <h3 id="improve-via-feedback-loop">Improve via feedback loop</h3>
+<p>Another way to improve an agent is through feedback loops — mechanisms that let it learn from its own execution and get better over time. Early research pointed the way here. <strong><a href="https://arxiv.org/abs/2210.03629">ReAct</a></strong> (2022) introduced a “reasoning + acting” paradigm where the LLM interleaves thoughts (“I need to search for X”) with actions (calling a search tool) and observations, creating a tight loop that grounds reasoning in real-world results. <strong><a href="https://arxiv.org/abs/2303.04917">CodeAct</a></strong> (2023) took this further by treating code execution itself as the tool — the agent writes and runs Python code to solve problems, getting immediate feedback from execution errors or outputs. The insight is that code is a precise, executable specification: if the agent writes code that doesn’t run or produces the wrong answer, it knows immediately and can iterate. Compared to opaque tool calls, code execution gives the agent a sandbox where it can experiment, test hypotheses, and refine its approach through actual execution rather than speculation.</p>
+<p>A loop I’ve been thinking about lately is narrower but more practical: <strong>incident resolution as a learning loop</strong>. Building an agent that solves <em>any</em> problem perfectly is unrealistic, but scoping it down to one platform or one application makes it tractable — the universe of possible issues is finite, and patterns repeat. The mechanism works like this:</p>
+<ol>
+<li><strong>Ingest</strong> — a new issue or request arrives.</li>
+<li><strong>Lookup</strong> — check the knowledge base for similar past cases.</li>
+<li><strong>Hit</strong> — if a match exists, return the cached resolution (saves time and tokens, no execution needed).</li>
+<li><strong>Miss</strong> — if no match, execute: diagnose, attempt a fix, observe the outcome. This step can run fully autonomous (the agent handles it end-to-end) or as <strong>Human-in-the-Loop (HITL)</strong> collaboration, where the human brings business/domain knowledge and the agent brings parallel execution and pattern recall.</li>
+<li><strong>Persist</strong> — once resolved, write the <em>resolution</em>, the <em>outcome</em>, and the <em>execution trace</em> back to the knowledge base. The trace matters as much as the answer: it captures <em>how</em> the problem was solved, not just <em>what</em> the answer was.</li>
+<li><strong>Return</strong> the result to the user.</li>
+</ol>
+<div align="center">
+<pre><code class="language-mermaid">graph TD
+    I[New issue] --> K{Similar in KB?}
+    K -->|Hit| R[Return cached resolution]
+    K -->|Miss| E[Execute: autonomous or HITL]
+    E --> D{Resolved?}
+    D -->|No| E
+    D -->|Yes| P[Persist resolution + trace to KB]
+    P --> R
+    R --> U[Return to user]
+</code></pre>
+</div>
+<p>The interesting arc is what happens over time. Early on, humans are <strong>in the loop</strong> — they own the hard calls, and every resolution they make becomes a training example for the knowledge base. As the KB grows, the agent starts imitating past human decisions on similar issues, and the human role shifts from <em>in the loop</em> to <strong>on the loop</strong> — monitoring outcomes, correcting drift, but no longer executing every case. The business knowledge that used to live only in a human’s head has been transferred into the KB, where the agent can reference it.</p>
+<p>This pattern recurs under several names: <strong>case-based reasoning</strong> (retrieve past cases, adapt them), <strong>learn from the past</strong> (every execution is a training example), <strong>self-improvement</strong> (today’s resolution lowers tomorrow’s cost), <strong>continuous learning</strong> (the system improves as it runs), and <strong>knowledge transfer</strong> (tacit human expertise made explicit and durable). The common thread is that every resolved issue is not just a ticket closed — it is an asset deposited into the KB that makes the next resolution cheaper.</p>
+<p>The caveats mirror the memory section: the KB is only as good as its freshness and correctness. A wrong past resolution stored as a template becomes a persistent bug, confidently re-applied. So the loop needs an explicit lint step — periodic review of what the KB contains, pruning what has gone stale, and validating that high-confidence matches still reflect the current system.</p>
 <h2 id="5-conclusions">5. Conclusions</h2>
 <p>Some people say AI can replace developers, designers, testers, etc. Indeed, AI-assisted tools like <a href="https://code.claude.com/docs/en/overview">Claude Code</a> impact the human labor force in software development. But the reality is different. Tech giants like Google or Amazon, after firing thousands of employees, are rehiring them back in an effect called “Boomerang Hiring.” The core reason is that the code generated by AI lacks “Business Context” and “Domain Knowledge.” Also, the code is more complex and becomes a burden for senior developers to review and maintain, decreasing the productivity of the remaining team members.</p>
 <p>I remember that “Your code is your understanding of the problem you’re exploring. So it’s only when you have your code in your head that you really understand the problem.” — <a href="https://paulgraham.com/head.html">Paul Graham</a>. So coding is just a part of the process; it is not software development itself.</p>
 <p>There is a paradox here, called “<a href="https://en.wikipedia.org/wiki/Jevons_paradox">Jevons Paradox</a>.” The core idea is that increased efficiency in using a resource can lead to increased overall consumption of that resource, rather than decreased consumption. This means that if making software becomes easier, the demand for software development will increase, leading to more software being built.</p>
 <p>Coding faster makes coding less fun. We thought if AI could handle the code, we would have more time for other things, but that’s not true. I still spend the entire day at my desk, reviewing thousands of lines of code, testing more, and debugging more. The workload increases, and the pressure to deliver more features faster also increases.</p>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
 &copy; 2026 Locch. All rights reserved.
-<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.Cu0ch11Y.js"></script> </body> </html>
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.CH7OI514.js"></script> </body> </html>
