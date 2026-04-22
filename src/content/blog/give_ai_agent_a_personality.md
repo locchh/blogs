@@ -6,8 +6,6 @@ author: "locchh"
 tags: ["ai-agents", "claude", "personality", "skills", "hooks"]
 ---
 
-# Give Your AI Agent a Personality
-
 An AI agent without a personality is like a chess piece without a role — it can move, but it has no *character*. This post shows the exact structure and mechanism to give any agent a stable, consistent identity — using three tools: `CLAUDE.md`, Skills, and Hooks.
 
 ---

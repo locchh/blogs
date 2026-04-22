@@ -6,8 +6,6 @@ author: "locchh"
 tags: ["coding", "reflection", "2026"]
 ---
 
-# Coding Today
-
 ## 1. Some helpful commands
 
 ### Git commands
