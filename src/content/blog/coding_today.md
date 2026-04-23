@@ -202,7 +202,7 @@ graph TD
 
 ### Other variations of SDD
 
-Another variation — the one I actually use in [claude-bridge](https://github.com/locchh/claude-bridge) — treats SDD as **two nested loops bound by a single traceable ID**. A task like `M3.T1` appears in the phase plan, its pre-code spec, the test file, the commit message, and the milestone report. `grep M3.T1` reconstructs the full paper trail in one shot.
+Another variation — the one i saw from another developer — treats SDD as **two nested loops bound by a single traceable ID**. A task like `M3.T1` appears in the phase plan, its pre-code spec, the test file, the commit message, and the milestone report. `grep M3.T1` reconstructs the full paper trail in one shot.
 
 ```
 SDD ≈ Phase/Milestone/Task hierarchy + Pre-code TDD spec + Milestone retrospective
