@@ -189,7 +189,7 @@
     Constitution -.->|Can update later| Constitution
 </code></pre>
 <h3 id="other-variations-of-sdd">Other variations of SDD</h3>
-<p>Another variation — the one I actually use in <a href="https://github.com/locchh/claude-bridge">claude-bridge</a> — treats SDD as <strong>two nested loops bound by a single traceable ID</strong>. A task like <code>M3.T1</code> appears in the phase plan, its pre-code spec, the test file, the commit message, and the milestone report. <code>grep M3.T1</code> reconstructs the full paper trail in one shot.</p>
+<p>Another variation — the one i saw from another developer — treats SDD as <strong>two nested loops bound by a single traceable ID</strong>. A task like <code>M3.T1</code> appears in the phase plan, its pre-code spec, the test file, the commit message, and the milestone report. <code>grep M3.T1</code> reconstructs the full paper trail in one shot.</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SDD ≈ Phase/Milestone/Task hierarchy + Pre-code TDD spec + Milestone retrospective</span></span></code></pre>
 <p>The layout separates <em>what you write once</em> from <em>what you write per task</em> and <em>per milestone</em>:</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>project/</span></span>
