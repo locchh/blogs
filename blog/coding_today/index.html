@@ -189,66 +189,78 @@
     Constitution -.->|Can update later| Constitution
 </code></pre>
 <h3 id="other-variations-of-sdd">Other variations of SDD</h3>
-<p>Another variation I found focuses on formalization, traceability, and TDD:</p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SDD ≈ Layered formalization + Traceability + TDD</span></span></code></pre>
-<p>The project layout reflects the layers directly:</p>
+<p>Another variation — the one I actually use in <a href="https://github.com/locchh/claude-bridge">claude-bridge</a> — treats SDD as <strong>two nested loops bound by a single traceable ID</strong>. A task like <code>M3.T1</code> appears in the phase plan, its pre-code spec, the test file, the commit message, and the milestone report. <code>grep M3.T1</code> reconstructs the full paper trail in one shot.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SDD ≈ Phase/Milestone/Task hierarchy + Pre-code TDD spec + Milestone retrospective</span></span></code></pre>
+<p>The layout separates <em>what you write once</em> from <em>what you write per task</em> and <em>per milestone</em>:</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>project/</span></span>
-<span class="line"><span>├── research/                       ← exploration notes, tradeoff studies</span></span>
-<span class="line"><span>├── specs/</span></span>
-<span class="line"><span>│   ├── MVP.md                      ← product spec (the what)</span></span>
-<span class="line"><span>│   ├── tasks/</span></span>
-<span class="line"><span>│   │   ├── M1-T1.md                ← one file per atomic task</span></span>
-<span class="line"><span>│   │   ├── M1-T2.md</span></span>
-<span class="line"><span>│   │   └── M{N}-T{N}.md</span></span>
-<span class="line"><span>│   └── reports/</span></span>
-<span class="line"><span>│       ├── milestone-1-report.md   ← one per milestone</span></span>
-<span class="line"><span>│       └── milestone-N-report.md</span></span>
+<span class="line"><span>├── research/                              ← exploration notes, tradeoff studies</span></span>
 <span class="line"><span>├── plan/</span></span>
-<span class="line"><span>│   ├── architecture/               ← design docs (the how)</span></span>
+<span class="line"><span>│   ├── architecture/                      ← design docs (the how)</span></span>
 <span class="line"><span>│   │   ├── high-level.md</span></span>
 <span class="line"><span>│   │   └── {subsystem}.md</span></span>
-<span class="line"><span>│   └── implementation/             ← execution plan (the when)</span></span>
-<span class="line"><span>│       ├── phase-1-tasks.md</span></span>
-<span class="line"><span>│       └── phase-N-tasks.md</span></span>
-<span class="line"><span>├── src/                            ← scaffold first, patched per task</span></span>
-<span class="line"><span>└── tests/                          ← grows per task, one file per module</span></span></code></pre>
-<p>And the flow between them:</p>
-<pre><code class="language-mermaid">graph LR
-    R[research/] --> S[specs/MVP.md]
-    S --> P[plan/]
-    P --> SC[src/ scaffold]
-    SC --> TS[specs/tasks/]
-    TS --> T[tests/]
-    T --> MR[specs/reports/]
-    MR --> TS
-</code></pre>
-<p>The top row is written once upfront. The bottom row is the per-task loop: each task gets its own <code>specs/tasks/M{N}-T{N}.md</code>, tests are written against the scaffold, and the loop closes with a <code>specs/reports/milestone-N-report.md</code> that feeds the next milestone. Every task spec cites the architecture section it implements, so you can always walk the chain in reverse, from a line of code back to the research finding that justified it.</p>
-<p><strong>Layer 1 — <code>research/</code></strong></p>
-<p>A dump of exploration notes: existing tools, technical tradeoffs, competitive landscape. The output is an honest audit of what already exists and what gaps remain. This is the justification for everything downstream.</p>
-<p><strong>Layer 2 — <code>specs/</code> (the <em>what</em>)</strong></p>
-<p>The product spec (<code>MVP.md</code>) formalizes the research into user-facing behavior, success criteria, and data schema. It exists to be disagreed with — if the spec is wrong, you fix it here, not later.</p>
-<p><strong>Layer 3 — <code>plan/architecture/</code> (the <em>how</em>)</strong></p>
-<p>The architecture docs translate the product spec into component responsibilities, data flow, and module boundaries. Each architecture doc becomes the reference target that task specs will cite by section number.</p>
-<p><strong>Layer 4 — <code>plan/implementation/</code> (the <em>when</em>)</strong></p>
-<p>The execution plan slices the architecture into deliverables. The hierarchy is strict: <strong>Phase → Milestone → Task</strong>. A phase is a strategic chunk (“MVP”, “Queue + Permissions”). A milestone is a 1-to-2-day delivery checkpoint. A task is an atomic unit of 30 min to 3 hours. The same ID — <code>M3.T1</code> — threads through the phase plan, its own <code>specs/tasks/M3-T1.md</code>, the commit message, the test file, and the milestone report. You can grep any ID and see every artifact it touches.</p>
-<p><strong>Layer 5 — <code>src/</code> scaffold</strong></p>
-<p>Once all four layers above are settled, the whole code scaffold lands in one commit — not stubs, but working skeletons that realize the architecture in code. The scaffold is a draft, not a proof; it will be verified piece by piece in the task loop.</p>
-<p><strong>Layer 6 — Per-task loop (this is where TDD lives)</strong></p>
-<p>For each task you write <code>specs/tasks/M{N}-T{N}.md</code>, which includes a “Gaps in Existing Code” section — a deliberate diff between what the architecture says and what the scaffold actually does. Then tests come first, following classic TDD: <em>red → green → refactor</em>. Tests fail against whatever is wrong in the scaffold, you patch only what failed, commit. The commit message records the verdict — “Gaps fixed: none” means the scaffold was right on that piece; a list means TDD caught real drift.</p>
-<p><strong>Layer 7 — <code>specs/reports/milestone-N-report.md</code></strong></p>
-<p>Closes each milestone. Documents which tasks passed, what gaps were found, and where reality deviated from the architecture — and why. The next milestone reads this before starting.</p>
+<span class="line"><span>│   ├── phases/</span></span>
+<span class="line"><span>│   │   └── phase-{N}-{name}/README.md     ← phase overview: goal, demo, milestones</span></span>
+<span class="line"><span>│   └── implementation/</span></span>
+<span class="line"><span>│       └── phase-{N}-tasks.md             ← flat task breakdown per phase</span></span>
+<span class="line"><span>├── specs/</span></span>
+<span class="line"><span>│   ├── MVP.md                             ← product spec (the what)</span></span>
+<span class="line"><span>│   ├── tasks/</span></span>
+<span class="line"><span>│   │   └── M{M}-T{T}.md                   ← one per task, written BEFORE code</span></span>
+<span class="line"><span>│   └── reports/</span></span>
+<span class="line"><span>│       └── milestone-{N}-report.md        ← one per milestone, written AFTER</span></span>
+<span class="line"><span>├── src/                                   ← scaffold first, patched per task</span></span>
+<span class="line"><span>└── tests/                                 ← grows per task, one file per module</span></span></code></pre>
+<p>The flow is two nested loops on top of a one-time setup:</p>
 <div align="center">
 <pre><code class="language-mermaid">graph TD
-    R[research/] --> S[specs/ MVP.md]
-    S --> A[plan/architecture/]
-    A --> P[plan/implementation/]
-    P --> Sc[src/ scaffold]
-    Sc --> TL["per-task: spec → test → fix"]
-    TL --> MR[specs/reports/milestone-N]
-    MR --> TL
+    subgraph Setup["Upfront — once per project"]
+        R[research/] --> M[specs/MVP.md]
+        M --> A[plan/architecture/]
+        A --> Ph["plan/phases/{N}/README.md"]
+        Ph --> I["plan/implementation/phase-{N}-tasks.md"]
+        I --> Sc[src/ scaffold]
+    end
+
+    Sc --> Pick
+
+    subgraph TaskLoop["Per-task loop — TDD gate"]
+        Pick["Pick next task from phase-{N}-tasks.md"]
+        Pick --> Spec["Write specs/tasks/M{M}-T{T}.md&#x3C;br/>(refs + test plan + gaps)"]
+        Spec --> Tests["Write tests from the test plan"]
+        Tests --> Code["Write/fix code until green"]
+        Code --> Review["Code review"]
+        Review --> Commit["Commit: M{M}.T{T}: description"]
+        Commit --> MoreTasks{More tasks&#x3C;br/>in milestone?}
+        MoreTasks -->|Yes| Pick
+    end
+
+    MoreTasks -->|No| Suite[Run full test suite]
+
+    subgraph MilestoneLoop["Per-milestone retrospective"]
+        Suite --> Report["Write specs/reports/milestone-{N}-report.md"]
+        Report --> NextM{More milestones?}
+        NextM -->|Yes| Pick
+    end
+
+    NextM -->|No| Done([Done])
 </code></pre>
 </div>
-<p>The spirit is not “upfront design for its own sake” — it is that <strong>every line of code must have a paper trail back to a research finding</strong>. Nothing lives in the codebase that you can’t justify, layer by layer, up to the original problem. The payoff is that six months later, you can pick any commit, read its task spec, follow the cross-references up, and understand the full reason the code exists. The cost is the discipline of refusing to code ahead of the paper trail.</p>
+<p>The top subgraph runs once. The middle subgraph runs per task — spec first, then tests, then code, then commit, all tagged with the same ID. The bottom subgraph runs once per milestone, at the close, and only captures what the commit log can’t. Every task spec cites the architecture section it implements, so you can always walk the chain in reverse, from a line of code back to the research finding that justified it.</p>
+<p><strong>Layer 1 — <code>research/</code></strong></p>
+<p>A dump of exploration notes: existing tools, technical tradeoffs, competitive landscape. The output is an honest audit of what already exists and what gaps remain. This is the justification for everything downstream.</p>
+<p><strong>Layer 2 — <code>specs/MVP.md</code> (the <em>what</em>)</strong></p>
+<p>The product spec formalizes the research into user-facing behavior, success criteria, and data schema. It exists to be disagreed with — if the spec is wrong, you fix it here, not later.</p>
+<p><strong>Layer 3 — <code>plan/architecture/</code> (the <em>how</em>)</strong></p>
+<p>The architecture docs translate the product spec into component responsibilities, data flow, and module boundaries. Each architecture doc becomes the reference target that task specs will cite by section number.</p>
+<p><strong>Layer 4 — <code>plan/phases/</code> + <code>plan/implementation/</code> (the <em>when</em>)</strong></p>
+<p>The execution plan slices the architecture into deliverables. The hierarchy is strict: <strong>Phase → Milestone → Task</strong>. A phase is a strategic chunk (“MVP”, “Queue + Permissions”) with its own <code>phases/phase-{N}-{name}/README.md</code> that lists its milestones and a concrete demo scenario. A milestone is a 1-to-2-day delivery checkpoint. A task is an atomic unit of 30 min to 3 hours, enumerated in <code>implementation/phase-{N}-tasks.md</code>. The same ID — <code>M3.T1</code> — threads through the phase plan, its own <code>specs/tasks/M3-T1.md</code>, the commit message, the test file, and the milestone report. You can grep any ID and see every artifact it touches.</p>
+<p><strong>Layer 5 — <code>src/</code> scaffold</strong></p>
+<p>Once all four layers above are settled, the whole code scaffold lands in one commit — not stubs, but working skeletons that realize the architecture in code. The scaffold is a draft, not a proof; it will be verified piece by piece in the task loop.</p>
+<p><strong>Layer 6 — Per-task loop (TDD gate lives here)</strong></p>
+<p>For each task you write <code>specs/tasks/M{M}-T{T}.md</code> <em>before writing any code</em>. It contains references back to <code>plan/architecture/</code> and <code>plan/implementation/</code>, a test plan (happy path / edge cases / errors), key architecture constraints, and a “Gaps in Existing Code” section — a deliberate diff between what the architecture says and what the scaffold actually does. Only then do the tests come first, following classic TDD: <em>red → green → refactor</em>. Tests fail against whatever is wrong in the scaffold, you patch only what failed, commit with <code>M{M}.T{T}: description</code>. The commit message records the verdict — “Gaps fixed: none” means the scaffold was right on that piece; a list means TDD caught real drift.</p>
+<p><strong>Layer 7 — <code>specs/reports/milestone-{N}-report.md</code></strong></p>
+<p>Written <strong>once</strong>, at milestone close — not updated per task. Per-task status already lives in the git log (<code>M3.T1:</code> commits) and the green test suite. The report captures only what commits can’t: a summary table across tasks, gaps discovered and fixed, blockers, architecture deviations (and <em>why</em>), and readiness for the next milestone. The next milestone reads this before starting; if reality bent the architecture, <code>plan/architecture/</code> gets updated in the next cycle.</p>
+<p>The spirit is not “upfront design for its own sake” — it is that <strong>every line of code must have a paper trail back to a research finding</strong>, and that paper trail is kept cheap by the single ID. Nothing lives in the codebase that you can’t justify, layer by layer, up to the original problem. Six months later you can pick any commit, grep its ID, and read the full chain: task spec → phase plan → architecture doc → research note. The cost is the discipline of refusing to code ahead of the paper trail.</p>
 <p>Another simpler variation — strips the ceremony down to two phases: a constitutional phase and a feature phase.</p>
 <p><strong>Constitutional phase (once, at project start)</strong></p>
 <p>Create three files in <code>specs/</code>:</p>
