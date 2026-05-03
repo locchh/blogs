@@ -99,7 +99,7 @@ Make sure to:
 
 ### Speckit
 
-I studied some famous SDD frameworks like [BMAD](https://github.com/bmad-code-org/BMAD-METHOD) or [GSD](https://github.com/gsd-build/get-shit-done) but they seem too overkill for my current needs. I think in the future, developers will shift from writing code to design, so I love keeping the design in my head and making it grow up gradually by brainstorming with AI instead of delegating the entire work to AI. [Speckit](https://github.com/github/spec-kit/blob/main/spec-driven.md) is good enough for me. I will take care of the design and after having the codebase in my mental model, I will harness the power of AI to generate the code. SpecKit is quite flexible; it can accept a simple sentence about feature description or a full PRD document, and anything missing can be clarified when implementing the feature. That makes it more convenient because I don't need to write a PRD for my personal projects. Here is a structure of a PRD:
+I studied some famous SDD frameworks like [BMAD](https://github.com/bmad-code-org/BMAD-METHOD) or [GSD](https://github.com/gsd-build/get-shit-done) but they seem too overkill for my current needs. I think in the future, developers will shift from writing code to design, so **I love keeping the design in my head and making it grow up gradually by brainstorming with AI instead of delegating the entire work to AI**. [Speckit](https://github.com/github/spec-kit/blob/main/spec-driven.md) is good enough for me. **I will take care of the design and after having the codebase in my mental model, I will harness the power of AI to generate the code**. SpecKit is quite flexible; it can accept a simple sentence about feature description or a full PRD document, and anything missing can be clarified when implementing the feature. That makes it more convenient because I don't need to write a PRD for my personal projects. Here is a structure of a PRD:
 
 ```
 # PRD: [Feature Name]
@@ -424,11 +424,11 @@ This gives you a single source of truth that is human-readable in any editor, re
 
 ### The art of writing code
 
-Writing code is like writing a story — each commit message should carry semantic meaning and narrate what you were doing. Read the git graph six months later and you should be able to follow the plot: what was built, in what order, and why. That discipline makes a codebase maintainable not just for others, but for your future self.
+**Writing code is like writing a story — each commit message should carry semantic meaning and narrate what you were doing. Read the git graph six months later and you should be able to follow the plot: what was built, in what order, and why. That discipline makes a codebase maintainable not just for others, but for your future self.**
 
 I built [commit-explorer](https://github.com/locchh/commit-explorer) (CEX) for exactly this reason. GitHub doesn't show a commit timeline graph, and cloning a repo just to run `git log --graph` is wasteful. CEX lets you explore any repository's commit history — graph, diffs, branch comparisons — directly from the terminal without a full clone, using shallow fetching under the hood.
 
-The other craft is controlling how your code *grows*. Code change moves through several layers of isolation, and each boundary is a checkpoint:
+**The other craft is controlling how your code *grows*.** Code change moves through several layers of isolation, and each boundary is a checkpoint:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
