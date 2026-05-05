@@ -369,6 +369,12 @@ graph TD
 
 The `plan.md` maps directly to these steps: start with a reading pass of the relevant code, note the data shapes involved, list the components to add or modify, drive implementation with tests, then hand off for review. No upfront architecture docs needed — the existing codebase is already the architecture.
 
+>To summarize, there are many ways to perform SDD. This seems like a key to achieving autonomous coding agents. I think these are some key factors of an SDD method:
+>- Having a mental model about the code in your mind
+>- Make your coding workflow predictable
+>- Break down your work into smaller, implementable, verifiable units (targets, steps, tasks, milestones, phases, etc.)
+>- Accumulate the output, make your codebase grow gradually based on balancing between working units and agent system ability
+
 ### SDD ❤️ Mkdocs
 
 Most projects go through the same lifecycle, though not every project needs every artifact:
