@@ -58,23 +58,30 @@ The wordplay is fitting too: **DRY code is dehydrated** — all the redundant wa
 
 ## Symbolic — and what sits next to it
 
-The word "symbolic" alone is fine. The interesting part is what it sits *next to*: **sub-symbolic**.
+The word "symbolic" alone is fine. The interesting part is what it sits *next to*: **sub-symbolic**. And the split is older than AI by a long way — it is one of the oldest fault lines in how we have tried to explain how thinking works at all.
 
-**[Symbolic AI](https://en.wikipedia.org/wiki/Symbolic_artificial_intelligence)** represents knowledge as discrete, human-readable symbols and rules. Logic, predicates, ontologies. Reasoning is symbol manipulation. The strength is interpretability and compositional reasoning; the weakness is brittleness when the world is noisy.
+**Symbolic** is the side that says meaning lives in discrete signs that combine by rules. Aristotle's syllogisms (~350 BCE) were the first formal grammar of inference. Leibniz, in the 1670s, dreamed of a *[characteristica universalis](https://en.wikipedia.org/wiki/Characteristica_universalis)* — a symbol system so precise that arguments could be settled by calculation. *Calculemus!* — "let us calculate." George Boole made it algebra in *[An Investigation of the Laws of Thought](https://en.wikipedia.org/wiki/The_Laws_of_Thought)* (1854). Frege's *[Begriffsschrift](https://en.wikipedia.org/wiki/Begriffsschrift)* (1879) gave us modern predicate logic. By the time computers arrived, the symbolic tradition already had two millennia of practice behind it.
 
-**Sub-symbolic AI** stores knowledge as numbers distributed across millions of parameters. No neuron *means* anything by itself — meaning is the pattern. Neural networks, embeddings, LLMs. The strength is handling messy, perceptual data; the weakness is that you cannot easily look inside and ask *why*.
+**Sub-symbolic** is the older, quieter side that says meaning is a *pattern* — emerging from many small things, none of which mean anything on their own. Hume's [*Treatise of Human Nature*](https://en.wikipedia.org/wiki/A_Treatise_of_Human_Nature) (1739) located all knowledge in associations between sense impressions. William James, in his [*Principles of Psychology*](https://en.wikipedia.org/wiki/The_Principles_of_Psychology) (1890), described mental life as a "stream" of overlapping states rather than discrete tokens. Donald Hebb compressed the idea into a single line in *[The Organization of Behavior](https://en.wikipedia.org/wiki/Organization_of_Behavior)* (1949): *cells that fire together, wire together*. That is a claim about brains, not machines — but it is the seed every neural network later grew from.
+
+The split shows up across disciplines under different names:
+
+- Philosophy: **rationalism vs. empiricism** — Descartes and Leibniz against Locke and Hume.
+- Linguistics: **generative grammar vs. distributional semantics** — Chomsky's rules against Firth's *"you shall know a word by the company it keeps."*
+- Psychology: **cognitivism vs. associationism**.
+- Mathematics: **logic vs. statistics**.
+
+Same argument, restated each century in the vocabulary of its day. Two bets about what knowledge is made of: *crisp signs combined by rules*, or *blurry patterns shaped by exposure*.
 
 | | Symbolic | Sub-symbolic |
 |---|---|---|
-| Representation | Discrete symbols, rules | Distributed vectors, weights |
-| Reasoning | Logic, search, planning | Pattern matching over continuous spaces |
-| Strength | Interpretable, compositional | Robust to noise, scales with data |
-| Weakness | Brittle, knowledge bottleneck | Opaque, hard to verify |
-| Examples | Prolog, expert systems, CYC | Neural nets, embeddings, LLMs |
+| Carrier of meaning | Discrete signs | Distributed patterns |
+| How it's acquired | Stated, derived | Absorbed from experience |
+| Mode of operation | Rule-following | Association |
+| Strength | Precise, compositional | Robust, generalizing |
+| Weakness | Brittle, hand-authored | Opaque, example-hungry |
 
-LLMs are sub-symbolic at their core. But the moment one of them writes code, calls a calculator, or hands you a structured JSON response, it is borrowing symbolic machinery from the outside. That is the bridge — and it is the most interesting place in AI right now. The frontier (*neuro-symbolic AI*: [AlphaGeometry](https://en.wikipedia.org/wiki/AlphaGeometry), tool-using agents, code-execution loops) is exactly the question of how to splice a sub-symbolic core to a symbolic shell so each compensates for the other's weakness.
-
-The word "symbolic" looks like a single concept until you put it next to its shadow.
+Whichever side of this you're standing on, the other side is already there — as a competitor, a complement, or a debt you haven't paid yet. The word "symbolic" looks like a single concept until you put it next to its shadow. The shadow is older than the word.
 
 ---
 
@@ -109,7 +116,7 @@ These five words are short enough to slip past us in conversation. But each is a
 - *Testable* hides the journey from rough code to stable code.
 - *Lean* hides the discipline of refusing the unnecessary.
 - *DRY* hides the distinction between knowledge and lines.
-- *Symbolic* hides the entire other half of AI history.
+- *Symbolic* hides a millennia-old quarrel about what knowledge is made of.
 - *Abstraction* hides the act of drawing detail away to leave intent.
 
 The compression is what lets us communicate quickly, but it is also what lets us stop thinking. Every once in a while it's worth picking up one of these worn coins and turning it over — there is usually more on the other side than the design we've memorized.
