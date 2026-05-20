@@ -6,7 +6,7 @@ author: "locchh"
 tags: ["reflection", "vocabulary", "engineering", "ai", "wordplay"]
 ---
 
-Software has a habit of compressing big ideas into small words. We say them so often that the meaning calcifies — we hear the syllables and stop checking what is inside. Lately I've been collecting a few of these words and pulling them apart. The interesting thing is that almost every one of them carries a *second* meaning that the surface hides.
+**Software has a habit of compressing big ideas into small words.** We say them so often that the meaning calcifies — we hear the syllables and stop checking what is inside. Lately I've been collecting a few of these words and pulling them apart. The interesting thing is that almost every one of them carries a *second* meaning that the surface hides.
 
 Five that I keep coming back to: **testable**, **lean**, **DRY**, **symbolic**, and **abstraction**.
 
