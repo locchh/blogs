@@ -11,6 +11,17 @@
 <p>Testable code is not a shape your code already has. It is a shape your code has <em>survived into</em>.</p>
 </blockquote>
 <p>The canonical references are Michael Feathers’ <em>Working Effectively with Legacy Code</em> (where the word “seam” enters the vocabulary as the precise place you can substitute behavior for a test) and Martin Fowler’s bliki entry on <a href="https://martinfowler.com/bliki/TestDrivenDevelopment.html">TestDrivenDevelopment</a>, which frames the <em>red → green → refactor</em> loop that earns testability one cycle at a time.</p>
+<p>Push the word one step further and the adjective hardens into an imperative: <strong>make everything you wrote testable.</strong> That sounds like zealotry until you notice it is only the active voice of <em>survived into</em> — you don’t wait for code to become testable, you drive it there. And it is the only verification you actually have. A test is the one place where a claim about the code meets the code itself; everything before it — the design note, the comment, the confident commit message, the model’s tidy explanation of what it just produced — is a promise. The test is the receipt.</p>
+<p>The gap matters more, not less, when a model wrote the line. Models are not stably smart: the same prompt that returned clean code on Tuesday can return a quiet off-by-one on Wednesday, and it will narrate both with the same fluent confidence. You cannot read fluency and call it correct — you confirm it by running the code against a case whose answer you already know, which is exactly what a test is.</p>
+<p>So the question stops being <em>is this testable?</em> and becomes <em>what am I testing for?</em> — and that is several questions wearing one coat. Each rung of the ladder asks a different one:</p>
+<ul>
+<li><strong>Unit</strong> — does this piece do what I think, in isolation?</li>
+<li><strong>Integration</strong> — do the pieces still agree at their seams?</li>
+<li><strong>End-to-end</strong> — does the whole journey hold from the user’s seat?</li>
+<li><strong>Smoke</strong> — is it even alive, before I look closer?</li>
+<li><strong>Regression</strong> — did the bug I already killed stay dead?</li>
+</ul>
+<p>No single rung carries the weight. A green wall of unit tests can sit on two modules that have quietly stopped speaking the same language; an end-to-end suite can pass while a function it never touches rots. <em>Make everything testable</em> is what buys the right to run the next experiment at all — because with code you didn’t fully write yourself, running it is the only honest way to learn what it does.</p>
 <hr>
 <h2 id="lean--whats-hidden-in-a-four-letter-word">Lean — what’s hidden in a four-letter word</h2>
 <p>Lean code is what’s left after you’ve refused to add anything you don’t need. No speculative abstractions, no “just in case” helpers, no half-finished frameworks. <a href="https://martinfowler.com/bliki/Yagni.html">YAGNI</a> in two letters.</p>
