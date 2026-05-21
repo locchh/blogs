@@ -24,6 +24,20 @@ I prefer the second reading. Nothing is testable in the abstract. A function onl
 
 The canonical references are Michael Feathers' *Working Effectively with Legacy Code* (where the word "seam" enters the vocabulary as the precise place you can substitute behavior for a test) and Martin Fowler's bliki entry on [TestDrivenDevelopment](https://martinfowler.com/bliki/TestDrivenDevelopment.html), which frames the *red → green → refactor* loop that earns testability one cycle at a time.
 
+Push the word one step further and the adjective hardens into an imperative: **make everything you wrote testable.** That sounds like zealotry until you notice it is only the active voice of *survived into* — you don't wait for code to become testable, you drive it there. And it is the only verification you actually have. A test is the one place where a claim about the code meets the code itself; everything before it — the design note, the comment, the confident commit message, the model's tidy explanation of what it just produced — is a promise. The test is the receipt.
+
+The gap matters more, not less, when a model wrote the line. Models are not stably smart: the same prompt that returned clean code on Tuesday can return a quiet off-by-one on Wednesday, and it will narrate both with the same fluent confidence. You cannot read fluency and call it correct — you confirm it by running the code against a case whose answer you already know, which is exactly what a test is.
+
+So the question stops being *is this testable?* and becomes *what am I testing for?* — and that is several questions wearing one coat. Each rung of the ladder asks a different one:
+
+- **Unit** — does this piece do what I think, in isolation?
+- **Integration** — do the pieces still agree at their seams?
+- **End-to-end** — does the whole journey hold from the user's seat?
+- **Smoke** — is it even alive, before I look closer?
+- **Regression** — did the bug I already killed stay dead?
+
+No single rung carries the weight. A green wall of unit tests can sit on two modules that have quietly stopped speaking the same language; an end-to-end suite can pass while a function it never touches rots. *Make everything testable* is what buys the right to run the next experiment at all — because with code you didn't fully write yourself, running it is the only honest way to learn what it does.
+
 ---
 
 ## Lean — what's hidden in a four-letter word
