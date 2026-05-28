@@ -197,7 +197,7 @@ A working answer is one page with an id and a name (`Page 1` and `83b6d729-…` 
 - *"Generate the CSS for the current selection."*
 - *"Build a card component (header, body, footer) using flex layout."*
 
-### 6. What an agent can do over MCP
+### What an agent can do over MCP
 
 The connected agent gets a JavaScript runtime inside the Penpot plugin sandbox, plus tooling for export and inspection. In practice the scope is "anything a designer can do with mouse + keyboard, but scriptable" — and a few things that would be tedious by hand.
 
@@ -239,35 +239,7 @@ The connected agent gets a JavaScript runtime inside the Penpot plugin sandbox, 
 
 The pattern that works best is conversational and iterative: ask, see the diff in Penpot, adjust. Treat the agent as a designer-with-a-keyboard, not a one-shot generator.
 
-
-
-### 7. Comparison Penpot vs Figma
-
-**Shared core (works the same in both)**
-
-- Frames / artboards / boards
-- Vector tools (pen, shapes, boolean ops, masks)
-- Typography, colors, gradients, shadows, blurs
-- Components + variants + overrides
-- Auto-layout (Penpot calls it flex/grid, same idea)
-- Shared styles / libraries
-- Constraints & responsive resizing
-- Multi-page files
-- Real-time multiplayer + comments
-- Prototyping with clickable flows
-- Design tokens / variables
-- Dev handoff with CSS inspect
-- Export PNG/SVG/PDF
-- Plugin API
-
-**Where they still diverge (not core, but felt daily)**
-
-- Prototyping depth — Figma has conditional logic, expressions, complex variables; Penpot is simpler click-through.
-- Variables/modes — Figma's multi-mode variables (light/dark, density, etc.) are more powerful; Penpot's tokens are spec-compliant but less interactive.
-- Performance on huge files — Figma handles 1000+ frame files better.
-- Plugin ecosystem — Figma has thousands; Penpot has dozens.
-- AI features — Figma Make, First Draft, etc. Penpot has none yet.
-
+---
 
 ## The pipeline, with one card
 
@@ -335,7 +307,7 @@ The interesting part is that OD shipped *more than I asked for*. The brief said 
 
 ![The same card rebuilt in Penpot as a vector component](./agent-driven-design/penpot-forge-card.png)
 
-Visually faithful, structurally a different kind of object. The OD draft is a styled HTML document; the Penpot version is a tree of boards, frames, and tokens — design infrastructure you can build a system around. What didn't survive the transfer: the 48×48 grid background pattern, the OAuth SVG icons, the 4-cell strength meter under the password field. About 3% of the surface, and the most visually-noisy 3%. With one more prompt the gap closes; the point of the convert pass is structure, not pixel parity.
+Visually faithful, structurally a different kind of object. The OD draft is a styled HTML document; the Penpot version is a tree of boards, frames, and tokens — design infrastructure you can build a system around. The fidelity tradeoff comes up below.
 
 Then you tweak in chat: *"radius is too big, make it 12"*, *"swap the accent to mint"* — the agent retokens the value and every instance updates. Stage 4 is the cheapest part of the whole pipeline once the design is in.
 
@@ -349,7 +321,7 @@ The agent writes those back to disk with the regular `Write` tool. The engineer 
 
 ### The receipts
 
-I told myself, while doing this, that the whole pipeline cost roughly 60–80k tokens. Then I went and checked. Claude Code writes every session to `~/.claude/projects/<cwd>/<session>.jsonl`, including for OD's spawned subprocess — it gets its own log under the OD project directory. Counting the relevant turns produced numbers that surprised me.
+Claude Code writes every session to `~/.claude/projects/<cwd>/<session>.jsonl`, including for OD's spawned subprocess — it gets its own log under the OD project directory. Counting the relevant turns gives a hard number for what each phase of the pipeline actually costs.
 
 |  | Design phase (OD-Claude) | Convert phase (Penpot MCP) |
 |---|---|---|
@@ -363,15 +335,15 @@ I told myself, while doing this, that the whole pipeline cost roughly 60–80k t
 
 ¹ Anthropic prices `cache_read` at ~10% of input, so effective = `input + cache_creation + 0.1 × cache_read + output`.
 
-The convert phase came in at **~1.8 million effective tokens**, not 30k. I was off by roughly fifty times.
+The convert phase lands at **~1.8 million effective tokens** — about an order of magnitude more than the design phase. That ratio is larger than the work itself justifies, and the reason matters.
 
-The reason turned out to be unsubtle, and worth understanding. Every Claude Code turn re-sends the full conversation history as `cache_read`. By the time I reached the convert phase, the session was four hours deep — Penpot setup, MCP debugging, an earlier throwaway sign-up card, the OD install. Sixty-three convert-phase turns each dragged ~250k tokens of stale history through `cache_read` just to add another 1.5k of reasoning. That's where the 15.6M raw goes.
+Every Claude Code turn re-sends the full conversation history as `cache_read`. By the time the convert phase began, the session was four hours deep — Penpot setup, MCP debugging, an earlier throwaway sign-up card, the OD install. Sixty-three convert-phase turns each dragged ~250k tokens of stale history through `cache_read` just to add another 1.5k of fresh reasoning. That's where the 15.6M raw number comes from.
 
 Three lessons fell out of that:
 
 - **Long sessions amplify cost geometrically.** The same convert work, run in a *fresh* session in the OD project directory, would have been more like 150–200k effective tokens — close to the design phase.
 - **Failed `execute_code` attempts pay full price.** Each of the three retries on Penpot API quirks carried a full context rehydration. The fix is a `CLAUDE.md` that pre-loads the quirks; the cost is paying for them once.
-- **Token cost is not wall-clock cost.** The 13-minute convert phase was mostly me typing chat messages between MCP calls. Actual agent compute was a small fraction.
+- **Token cost is not wall-clock cost.** Most of the 13 minutes was time spent typing prompts between MCP calls, not agent compute.
 
 The quality side of the ledger comes through cleaner. The converted Penpot card is structurally faithful — palette, spacing, type, layout — but skips details that need real raster or SVG: the 48 × 48 grid background, the OAuth SVG icons, the strength meter. Maybe 3% of the surface, and visually the noisiest 3%. With one more prompt I could close that gap. The point of the convert is the structural pass, not pixel parity.
 
