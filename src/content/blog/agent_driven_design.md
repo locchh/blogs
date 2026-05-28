@@ -397,6 +397,92 @@ The agent wins in the middle of the pipeline — *brief → artifact → infra*.
 
 ---
 
+## Tearing it down
+
+When you're done playing:
+
+```bash
+# Open Design — stops daemon + web sidecars
+cd ~/Works/open-design && pnpm tools-dev stop
+
+# Penpot — stops every container, keeps your data in named volumes
+cd ~/Works/penpot && docker compose -p penpot down
+
+# Penpot, clean slate (also wipes the file you built in this post)
+docker compose -p penpot down -v
+```
+
+Sanity check nothing's still running:
+
+```bash
+docker ps --filter name=penpot
+pnpm --prefix ~/Works/open-design tools-dev status
+```
+
+---
+
+## Crossing into Figma
+
+If your team lives in Figma, the open-source pipeline above is only useful insofar as you can hand the result off. So: how does a Penpot file get into Figma?
+
+The blunt answer is **there's no `.penpot` import in Figma**, and there probably won't be — Adobe has no incentive to build one. What does work in 2026:
+
+### Route A — SVG + DTCG tokens (lossy, two minutes)
+
+Penpot exports SVG cleanly. From the editor: select a board → **File → Export** → choose SVG → drop the file into a Figma page. Figma treats it as editable vector. What survives the crossing: the visual fidelity, basic groups, fills, strokes. What doesn't: components, auto-layout containers, styles, anything tied to Penpot's library.
+
+For the design *system* — colors, typography, spacing — Penpot's local library exports as W3C-DTCG JSON. The [Tokens Studio](https://tokens.studio/) plugin in Figma imports DTCG. Tokens travel cleanly even when layouts don't.
+
+> **Visual fidelity travels through SVG. System fidelity travels through tokens. Neither carries components.**
+
+Good for: hero illustrations, icons, single screens you want to polish in Figma. Bad for: handing off a whole component library.
+
+### Route B — agent recreates via Figma's MCP (faithful, full token bill)
+
+The agent-era twist: **you don't need a file-format bridge.** The same pattern we used for OD → Penpot — agent reads from one tool, writes to another — works for Penpot → Figma. Figma ships its own [Dev Mode MCP server](https://developers.figma.com/docs/figma-mcp-server/), and most MCP clients can hold two servers concurrently:
+
+```json
+{
+  "mcpServers": {
+    "penpot": { "type": "http", "url": "http://localhost:9001/mcp/stream" },
+    "figma":  { "type": "http", "url": "http://localhost:3845/sse"      }
+  }
+}
+```
+
+Then in chat: *"Read the `Forge / SignUp Card` from Penpot and recreate it as a Figma component with auto-layout."* The agent does the structural translation — components stay components, tokens become Figma variables, auto-layout maps to auto-layout. Pays the convert-phase token cost again, just in the other direction.
+
+Good for: handing off a whole component library, keeping the design system intact across tools. Bad for: budgets that care about every million tokens.
+
+### Which route when
+
+| You want… | Use |
+|---|---|
+| One screen in Figma now, no system | Route A — SVG + DTCG |
+| Whole component library, faithful | Route B — agent + Figma MCP |
+| Engineering handoff only | Skip Figma entirely; Penpot's CSS export is enough |
+
+The third option is the one I'd nudge teams toward when the work is genuinely for production: the value of Figma in an open-source-design workflow is often *collaboration with designers who already know Figma*, not anything intrinsic to the file format. If the artifact is shipping straight to engineering, Penpot → CSS → repo is shorter and loses nothing.
+
+### Why Penpot, then?
+
+A reasonable question after spending a whole section on how to get *out* of Penpot is why I put the artifact there in the first place. It is **not** because Figma's MCP is read-only — it isn't. Figma's MCP in 2026 exposes write tools (`use_figma`, `generate_figma_design`, `create_new_file`, `upload_assets`) and can build a design from chat just like Penpot can.
+
+The reasons that *do* hold up:
+
+| Reason | Penpot | Figma |
+|---|---|---|
+| Self-hostable on your machine | Yes (Docker) | No (cloud-only) |
+| Open, inspectable file format | SVG-based | Proprietary `.fig` |
+| Cost per agent iteration | Free, local | Counts against seat + API quota |
+| Failed-attempt blast radius | Local DB, wipe with `down -v` | Live multiplayer file — your churn is visible to everyone |
+| Sandbox flexibility | `execute_code` is raw JS against the full Plugin API | Higher-level tool surface; less precise for arbitrary mutations |
+| Vendor / format lock-in | None | Adobe owns the format and roadmap |
+
+For a team that already lives in Figma, the agent does fine and the case for switching is weak. For a solo or open-source-aligned workflow that iterates with hundreds of `execute_code` calls against a fast-moving design — and pays in tokens for every retry — Penpot wins on cost, control, and reversibility. Not on capability.
+
+---
+
 ## What I keep coming back to
 
 The smoother the AI output, the easier it is to ship something that *looks* designed but doesn't *feel* designed. Open Design and Penpot+MCP together produced a very polished sign-up card in fifteen minutes. Whether it's *yours* is a separate question, and one no token budget will answer.
