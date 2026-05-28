@@ -323,7 +323,7 @@ Hit **Send answers** → OD spawns Claude to generate.
 
 **2. OD generates.** Its spawned Claude writes `~/Works/open-design/.od/projects/<id>/index.html` — in my run, a 20 KB standalone file with embedded CSS and inline JS for form validation. Brand: "forge.dev" (it picked the name itself). Accent: `oklch(74% 0.16 145)`, a muted dev-tool green. Nothing in Penpot yet.
 
-![OD's rendered Forge sign-up form on the grid-pattern dark background](/agent-driven-design/od-output.png)
+![OD's rendered Forge sign-up form on the grid-pattern dark background](./agent-driven-design/od-output.png)
 
 The interesting part is that OD shipped *more than I asked for*. The brief said heading, subhead, email input, primary CTA. The HTML included GitHub + GitLab OAuth buttons, a password field with a 4-cell strength meter, a ToS checkbox, loading states, and a "Check your inbox" success view. Either OD knows what *sign-up card* tends to mean and is helping me skip a round of refinement, or it's spending tokens on features I didn't authorize. Both are true depending on the day.
 
@@ -333,7 +333,7 @@ The interesting part is that OD shipped *more than I asked for*. The brief said 
 
 **4. Encode into Penpot.** This is where the MCP plugin earns its keep. I asked my session to translate the DNA into Penpot library colors and rebuild the card as a vector component. One `mcp__penpot__execute_code` call — four, actually; three of them failed first on Penpot API quirks I hadn't yet learned (`setFont` missing at runtime, `letterSpacing` rejecting `em` units, negative values rejected). The fourth succeeded and the card materialized: eleven library colors under `Forge/`, a fifty-shape vector board called `Forge / SignUp Card`, flex layouts top to bottom.
 
-![The same card rebuilt in Penpot as a vector component](/agent-driven-design/penpot-forge-card.png)
+![The same card rebuilt in Penpot as a vector component](./agent-driven-design/penpot-forge-card.png)
 
 Visually faithful, structurally a different kind of object. The OD draft is a styled HTML document; the Penpot version is a tree of boards, frames, and tokens — design infrastructure you can build a system around. What didn't survive the transfer: the 48×48 grid background pattern, the OAuth SVG icons, the 4-cell strength meter under the password field. About 3% of the surface, and the most visually-noisy 3%. With one more prompt the gap closes; the point of the convert pass is structure, not pixel parity.
 
