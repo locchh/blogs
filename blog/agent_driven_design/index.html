@@ -1,0 +1,550 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg"><link rel="icon" href="/blogs/favicon.ico"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.2"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/agent_driven_design/"><!-- Primary Meta Tags --><title>Agent-Driven Design</title><meta name="title" content="Agent-Driven Design"><meta name="description" content="Some thoughts on agent-driven design (May 2026)"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/agent_driven_design/"><meta property="og:title" content="Agent-Driven Design"><meta property="og:description" content="Some thoughts on agent-driven design (May 2026)"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/agent_driven_design/"><meta property="twitter:title" content="Agent-Driven Design"><meta property="twitter:description" content="Some thoughts on agent-driven design (May 2026)"><link rel="stylesheet" href="/blogs/_astro/about.CJd3ivxT.css">
+<style>main[data-astro-cid-bvzihdzo]{width:calc(100% - 2em);max-width:100%;margin:0}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:720px;max-width:calc(100% - 2em);margin:auto;padding:1em;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/blogs/" data-astro-cid-3ef6ksr2>Locch&#39;s Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/blogs/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blogs/blog/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/blogs/about/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo>  </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2026-05-28T00:00:00.000Z"> May 28, 2026 </time>  </div> <h1 data-astro-cid-bvzihdzo>Agent-Driven Design</h1> <hr data-astro-cid-bvzihdzo> </div>  <p>A friend asked me, in May 2026, what <em>“agent-driven design”</em> actually meant in practice. I sent them an HTML file an AI had written, then a screenshot of the same UI rebuilt as vectors by a <em>different</em> AI an hour later. Both said <em>sign-up card</em>. Both were that thing. Neither was a substitute for the other.</p>
+<p>This post is the longer version of that answer. Two tools sit on either side of the diagram:</p>
+<ul>
+<li><strong><a href="https://github.com/nexu-io/open-design">Open Design</a></strong> — an open-source generator that writes HTML / Markdown / decks from a brief, by spawning whatever coding-agent CLI you have on <code>PATH</code>.</li>
+<li><strong><a href="https://penpot.app/">Penpot</a> + MCP</strong> — a self-hostable vector design tool with a plugin that lets an agent push and pull from a live design file.</li>
+</ul>
+<p>They’re not competitors. Open Design compresses the blank-canvas phase; Penpot is where the artifact becomes design infrastructure. The interesting question — the only one this post is really about — is what happens to a single design intent as it travels between them, and where it leaks on the way.</p>
+<hr>
+<h2 id="open-design">Open Design</h2>
+<p><a href="https://github.com/nexu-io/open-design"><code>nexu-io/open-design</code></a> (v0.8.0-preview) calls itself <em>“an open-source, local-first alternative to Claude Design.”</em> The first thing I noticed is that it doesn’t ship its own model. Whichever coding-agent CLI you already have on <code>PATH</code> — Claude Code, Cursor, Gemini CLI, Copilot, sixteen of them detected automatically — that’s the one doing the design work. Open Design is the orchestrator, not the brain.</p>
+<p>The bundle is generous: 132 skills (<code>SKILL.md</code> folders organized by mode × scenario), 150 design systems lifted from real-world brands, five named visual directions, and a workflow that <em>forces</em> a brief through a discovery form before generation. The discovery form is the part I came to appreciate. It does the work of <em>“tell me what you actually want”</em> before any tokens are spent.</p>
+<h3 id="architecture">Architecture</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>┌─────────────────┐      ┌─────────────────┐      ┌──────────────────┐</span></span>
+<span class="line"><span>│  Web UI         │  ◀── │  Local daemon   │  ──▶ │  Agent CLI       │</span></span>
+<span class="line"><span>│  Next.js 16     │      │  Express +      │      │  (spawned)       │</span></span>
+<span class="line"><span>│  React 18 / TS  │      │  better-sqlite3 │      │  or OpenAI proxy │</span></span>
+<span class="line"><span>└─────────────────┘      └─────────────────┘      └──────────────────┘</span></span>
+<span class="line"><span>                                 │</span></span>
+<span class="line"><span>                                 ▼</span></span>
+<span class="line"><span>                         ┌──────────────────┐</span></span>
+<span class="line"><span>                         │ Stdio MCP server │  ◀── external coding agents</span></span>
+<span class="line"><span>                         │  (`od` binary)   │      query live design files</span></span>
+<span class="line"><span>                         └──────────────────┘</span></span></code></pre>
+<p>Everything persists in a local <code>.od/</code> directory — projects, conversations, open tabs in SQLite, generated artifacts on the filesystem. Nothing ships to a cloud you didn’t choose.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Asset</th><th>Count</th><th>What it is</th></tr></thead><tbody><tr><td>Skills</td><td>132</td><td><code>SKILL.md</code> folders, by mode (prototype / deck / template / image / video) × scenario (design / marketing / engineering / HR / finance)</td></tr><tr><td>Design systems</td><td>150</td><td><code>DESIGN.md</code> files (Linear, Stripe, Vercel, Notion, Tesla…) following a 9-section schema</td></tr><tr><td>Visual directions</td><td>5</td><td>Editorial, Modern Minimal, Tech Utility, Brutalist, Soft Warm — deterministic OKLch palettes</td></tr><tr><td>Export formats</td><td>—</td><td>HTML, PDF, PPTX, ZIP, Markdown</td></tr></tbody></table>
+<h3 id="how-i-installed-it">How I installed it</h3>
+<p>Three paths exist (AppImage, Docker, source). I picked source because I already had Node 24 and a <code>claude</code> CLI on <code>PATH</code> — the source install lets the daemon spawn my local CLI directly, no API key in any UI. The other two paths are listed in case your starting point is different.</p>
+<h4 id="option-a--linux-appimage-no-build-1-min">Option A — Linux AppImage (no build, ~1 min)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">mkdir</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> ~/Apps</span><span style="color:#E1E4E8"> &#x26;&#x26; </span><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> ~/Apps</span></span>
+<span class="line"><span style="color:#6A737D"># Grab the latest *.AppImage from https://github.com/nexu-io/open-design/releases</span></span>
+<span class="line"><span style="color:#B392F0">chmod</span><span style="color:#9ECBFF"> +x</span><span style="color:#9ECBFF"> open-design-</span><span style="color:#79B8FF">*</span><span style="color:#9ECBFF">.AppImage</span></span>
+<span class="line"><span style="color:#B392F0">./open-design-*.AppImage</span></span></code></pre>
+<p>The Electron app auto-discovers any agent CLI on your <code>PATH</code> (<code>claude</code>, <code>cursor-agent</code>, <code>gemini</code>, etc.).</p>
+<h4 id="option-b--docker-containerized-persistent-3-min">Option B — Docker (containerized, persistent, ~3 min)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">mkdir</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> ~/Works/open-design</span><span style="color:#E1E4E8"> &#x26;&#x26; </span><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> ~/Works/open-design</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#9ECBFF"> https://github.com/nexu-io/open-design.git</span><span style="color:#9ECBFF"> .</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> deploy</span></span>
+<span class="line"><span style="color:#B392F0">cp</span><span style="color:#9ECBFF"> .env.example</span><span style="color:#9ECBFF"> .env</span></span>
+<span class="line"><span style="color:#79B8FF">echo</span><span style="color:#9ECBFF"> "OD_API_TOKEN=$(</span><span style="color:#B392F0">openssl</span><span style="color:#9ECBFF"> rand </span><span style="color:#79B8FF">-hex</span><span style="color:#79B8FF"> 32</span><span style="color:#9ECBFF">)"</span><span style="color:#F97583"> >></span><span style="color:#9ECBFF"> .env</span></span>
+<span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> compose</span><span style="color:#9ECBFF"> up</span><span style="color:#79B8FF"> -d</span></span>
+<span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> compose</span><span style="color:#9ECBFF"> logs</span><span style="color:#79B8FF"> -f</span><span style="color:#9ECBFF"> od</span></span>
+<span class="line"><span style="color:#6A737D"># Browse: http://localhost:7456</span></span></code></pre>
+<p>Drawback: the container <strong>can’t see your host’s agent CLIs</strong>, so you’ll need to use the BYOK proxy (paste an Anthropic/OpenAI key into the UI).</p>
+<h4 id="option-c--from-source-recommended-if-you-have-agent-clis-locally">Option C — From source (recommended if you have agent CLIs locally)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># pnpm via corepack (shipped with Node 24)</span></span>
+<span class="line"><span style="color:#B392F0">corepack</span><span style="color:#9ECBFF"> enable</span></span>
+<span class="line"><span style="color:#B392F0">corepack</span><span style="color:#9ECBFF"> prepare</span><span style="color:#9ECBFF"> pnpm@10.33.2</span><span style="color:#79B8FF"> --activate</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">mkdir</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> ~/Works/open-design</span><span style="color:#E1E4E8"> &#x26;&#x26; </span><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> ~/Works/open-design</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#9ECBFF"> https://github.com/nexu-io/open-design.git</span><span style="color:#9ECBFF"> .</span></span>
+<span class="line"><span style="color:#B392F0">pnpm</span><span style="color:#9ECBFF"> install</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Fixed ports so you can bookmark it</span></span>
+<span class="line"><span style="color:#B392F0">pnpm</span><span style="color:#9ECBFF"> tools-dev</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> web</span><span style="color:#79B8FF"> --daemon-port</span><span style="color:#79B8FF"> 17456</span><span style="color:#79B8FF"> --web-port</span><span style="color:#79B8FF"> 17573</span></span>
+<span class="line"><span style="color:#6A737D"># Web UI → http://localhost:17573</span></span></code></pre>
+<p><code>pnpm tools-dev status</code> to inspect sidecars, <code>pnpm tools-dev stop</code> to shut down. The daemon runs as your user, so Claude Code / Cursor / Gemini CLIs on your <code>PATH</code> are detected and usable directly — no API keys needed.</p>
+<h3 id="two-claudes-no-shared-context">Two Claudes, no shared context</h3>
+<p>This is the part of agent-driven design that took me a moment to internalize. When you use Open Design’s web UI to generate something, it spawns <strong>a fresh <code>claude</code> subprocess</strong> — not the Claude Code session you’re currently chatting with somewhere else. The two share nothing.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>The Claude <strong>inside Open Design</strong></th><th>Your Claude Code session</th></tr></thead><tbody><tr><td>How invoked</td><td>OD’s daemon spawns <code>claude</code> as a subprocess per generation request</td><td>You launched it in some working dir</td></tr><tr><td>Sees</td><td>OD’s internal prompt, its skills/design systems, the task brief</td><td>Your chat history, your files, your <code>CLAUDE.md</code></td></tr><tr><td>Working dir</td><td><code>~/Works/open-design/.od/projects/&#x3C;id>/</code></td><td>Wherever you started it</td></tr><tr><td>Lifetime</td><td>Dies when the OD task finishes</td><td>Lives until you exit</td></tr><tr><td>Memory of the other</td><td>None</td><td>None</td></tr></tbody></table>
+<p>Three things follow from that:</p>
+<ul>
+<li>Context doesn’t carry. If your session and you decided on a palette, OD-Claude won’t know unless you paste it into the brief.</li>
+<li>The two can disagree — OD’s discovery form and per-skill checklists push it toward different choices than a free-form chat would.</li>
+<li>Token spend roughly doubles for the “generate in OD, then refine via Claude Code” loop.</li>
+</ul>
+<p>Artifacts land as plain files on disk, so your own session can <code>Read</code> / <code>Edit</code> / <code>Write</code> them directly once OD finishes — no MCP needed for filesystem edits. The OD MCP server is only useful when you want a <em>third</em> agent (Cursor, a different Claude Code instance) to query OD’s output without leaving its own workspace.</p>
+<hr>
+<h2 id="penpot">Penpot</h2>
+<p>If Open Design is the artifact factory, <a href="https://penpot.app/">Penpot</a> is the design-infrastructure layer downstream. It’s the open-source design tool people reach for when they want Figma without Figma — but the part that matters here is the <strong>MCP plugin</strong>. Install it in the editor, point your MCP client at a local endpoint, and your agent gets a JavaScript runtime inside the Penpot Plugin sandbox: create shapes, edit styles, apply tokens, export CSS, all from chat.</p>
+<p>Prerequisites: Docker, Docker Compose, ~4 GB free RAM.</p>
+<h3 id="1-run-penpot">1. Run Penpot</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">mkdir</span><span style="color:#9ECBFF"> penpot</span><span style="color:#E1E4E8"> &#x26;&#x26; </span><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> penpot</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -O</span><span style="color:#9ECBFF"> https://raw.githubusercontent.com/penpot/penpot/main/docker/images/docker-compose.yaml</span></span>
+<span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> compose</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> penpot</span><span style="color:#9ECBFF"> up</span><span style="color:#79B8FF"> -d</span></span></code></pre>
+<p>Open <a href="http://localhost:9001/">http://localhost:9001/</a> and create an account. No SMTP is configured, so the verification email is in the backend logs:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> compose</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> penpot</span><span style="color:#9ECBFF"> logs</span><span style="color:#9ECBFF"> penpot-backend</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> grep</span><span style="color:#79B8FF"> -i</span><span style="color:#9ECBFF"> verify-token</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> tail</span></span></code></pre>
+<h3 id="2-switch-the-mcp-server-to-single-user-mode">2. Switch the MCP server to single-user mode</h3>
+<p>There’s one detour I’d flag for self-hosters, because I lost an hour to it. The official image starts the MCP server with <code>--multi-user</code>, which forces token auth on every WebSocket. The plugin’s reconnect logic doesn’t carry the token on reconnect, so every idle drop turns into a red bar reading <strong>“Disconnected: Missing userToken parameter”</strong>. The plugin is fine; the server is rejecting it.</p>
+<p>For a self-host with one user, drop the flag. No tokens needed anywhere — not in <code>.mcp.json</code>, not in the plugin URL, not in the conversation.</p>
+<p>Create <code>docker-compose.override.yaml</code> next to <code>docker-compose.yaml</code>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">services</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  penpot-mcp</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    command</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">"node"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"index.js"</span><span style="color:#E1E4E8">]</span></span></code></pre>
+<p>Apply:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> compose</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> penpot</span><span style="color:#9ECBFF"> up</span><span style="color:#79B8FF"> -d</span><span style="color:#9ECBFF"> penpot-mcp</span></span>
+<span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> compose</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> penpot</span><span style="color:#9ECBFF"> logs</span><span style="color:#9ECBFF"> penpot-mcp</span><span style="color:#79B8FF"> --tail</span><span style="color:#79B8FF"> 5</span><span style="color:#6A737D">    # expect: "Multi-user mode: false"</span></span></code></pre>
+<h3 id="3-wire-up-your-agent">3. Wire up your agent</h3>
+<p><code>.mcp.json</code> (Claude Code, or your agent’s equivalent):</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  "mcpServers"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">    "penpot"</span><span style="color:#E1E4E8">: { </span><span style="color:#79B8FF">"type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"http"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"url"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"http://localhost:9001/mcp/stream"</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="4-install-the-penpot-mcp-plugin">4. Install the Penpot MCP plugin</h3>
+<p>In Penpot: <strong>Plugins icon → Plugin manager</strong> → paste:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>http://localhost:9001/plugins/mcp/manifest.json</span></span></code></pre>
+<p>Click <strong>Install</strong>, then <strong>Open</strong>. The panel should go <strong><code>● Connected</code></strong> immediately. Restart your agent so it picks up <code>.mcp.json</code>, and the <code>mcp__penpot__*</code> tools become available.</p>
+<blockquote>
+<p><strong>If you must run multi-user mode</strong> (shared instance): keep <code>--multi-user</code>, generate an access token in <strong>Your account → Access tokens</strong>, and append <code>?userToken=&#x3C;TOKEN></code> to <strong>both</strong> the <code>.mcp.json</code> URL and the plugin manifest URL. Expect occasional disconnects — the plugin’s reconnect logic loses the token.</p>
+</blockquote>
+<h3 id="5-first-call">5. First call</h3>
+<p>Ask your agent for something cheap to confirm round-trip works:</p>
+<blockquote>
+<p><em>“List the pages in my connected Penpot file.”</em></p>
+</blockquote>
+<p>A working answer is one page with an id and a name (<code>Page 1</code> and <code>83b6d729-…</code> in my case) plus a synthetic <code>Root Frame</code>. That’s normal — every Penpot page has one. From there you drive the design from chat:</p>
+<ul>
+<li><em>“List all the shapes on Page 1.”</em></li>
+<li><em>“Create a 400×80 button labeled ‘Sign up’ on Page 1.”</em></li>
+<li><em>“Select a shape in Penpot, then inspect its styles and export it as PNG.”</em></li>
+<li><em>“Generate the CSS for the current selection.”</em></li>
+<li><em>“Build a card component (header, body, footer) using flex layout.”</em></li>
+</ul>
+<h3 id="6-what-an-agent-can-do-over-mcp">6. What an agent can do over MCP</h3>
+<p>The connected agent gets a JavaScript runtime inside the Penpot plugin sandbox, plus tooling for export and inspection. In practice the scope is “anything a designer can do with mouse + keyboard, but scriptable” — and a few things that would be tedious by hand.</p>
+<p><strong>Read</strong></p>
+<ul>
+<li>Pages, boards, groups, and every shape with full geometry, fills, strokes, shadows, blurs, rotation, opacity, constraints, and layout settings</li>
+<li>Text content, font family, weight, size, line height, per-range styling</li>
+<li>Asset libraries — colors, typographies, components (local + connected external libs)</li>
+<li>Design tokens — sets, themes, values, and the references between them</li>
+<li>Current selection, current page, viewport, active collaborators</li>
+<li>Generated CSS, HTML, and SVG markup for any selection</li>
+<li>Exports of any shape or full page as PNG or SVG</li>
+</ul>
+<p><strong>Write</strong></p>
+<ul>
+<li>Create boards, rectangles, ellipses, paths, text, booleans, or import SVG</li>
+<li>Modify anything writable — position, size, fills, strokes, radii, rotation, opacity, text, font</li>
+<li>Apply flex/grid layouts, padding, gaps, sizing, alignment</li>
+<li>Append, insert, reparent, reorder, clone, or delete shapes</li>
+<li>Create and instantiate library components, including variant sets</li>
+<li>Create and apply design tokens; retoken existing shapes in bulk</li>
+<li>Upload images and use them as fills</li>
+</ul>
+<p><strong>Out of scope</strong></p>
+<ul>
+<li>Switching which file is connected (the user does that in Penpot’s UI)</li>
+<li>Files that aren’t open with the plugin running</li>
+<li>User accounts, billing, sharing, permissions — only design content</li>
+<li>Arbitrary HTTP from inside Penpot; everything goes through the plugin API</li>
+</ul>
+<p><strong>Tasks where the agent earns its keep</strong></p>
+<ul>
+<li><em>“Rename every layer on this page to PascalCase based on its content.”</em></li>
+<li><em>“Find every text on Page 1 and switch to Inter; report any missing weights.”</em></li>
+<li><em>“Build a 6-step ramp from #5B47F5 and add each step as a library color.”</em></li>
+<li><em>“Make a Button variant set: primary/secondary/ghost × default/hover/disabled.”</em></li>
+<li><em>“Audit every board on this page — flag any without a flex or grid layout.”</em></li>
+<li><em>“Generate React JSX + CSS for the selected card component.”</em></li>
+</ul>
+<p>The pattern that works best is conversational and iterative: ask, see the diff in Penpot, adjust. Treat the agent as a designer-with-a-keyboard, not a one-shot generator.</p>
+<h3 id="7-comparison-penpot-vs-figma">7. Comparison Penpot vs Figma</h3>
+<p><strong>Shared core (works the same in both)</strong></p>
+<ul>
+<li>Frames / artboards / boards</li>
+<li>Vector tools (pen, shapes, boolean ops, masks)</li>
+<li>Typography, colors, gradients, shadows, blurs</li>
+<li>Components + variants + overrides</li>
+<li>Auto-layout (Penpot calls it flex/grid, same idea)</li>
+<li>Shared styles / libraries</li>
+<li>Constraints &#x26; responsive resizing</li>
+<li>Multi-page files</li>
+<li>Real-time multiplayer + comments</li>
+<li>Prototyping with clickable flows</li>
+<li>Design tokens / variables</li>
+<li>Dev handoff with CSS inspect</li>
+<li>Export PNG/SVG/PDF</li>
+<li>Plugin API</li>
+</ul>
+<p><strong>Where they still diverge (not core, but felt daily)</strong></p>
+<ul>
+<li>Prototyping depth — Figma has conditional logic, expressions, complex variables; Penpot is simpler click-through.</li>
+<li>Variables/modes — Figma’s multi-mode variables (light/dark, density, etc.) are more powerful; Penpot’s tokens are spec-compliant but less interactive.</li>
+<li>Performance on huge files — Figma handles 1000+ frame files better.</li>
+<li>Plugin ecosystem — Figma has thousands; Penpot has dozens.</li>
+<li>AI features — Figma Make, First Draft, etc. Penpot has none yet.</li>
+</ul>
+<h2 id="the-pipeline-with-one-card">The pipeline, with one card</h2>
+<p>Setup done, here’s what an actual end-to-end run looks like. I picked the simplest brief I could think of — a single sign-up card — and walked it from a blank discovery form to a vector design source with a dev-ready CSS export. Five stages, two tools, two Claudes, one card.</p>
+<p>The interesting thing is that <strong>no single file format flows end to end</strong>. What crosses each boundary is the design <em>intent</em>, re-encoded for the next tool. Drawing the stages out makes that visible.</p>
+<h3 id="the-pipeline-at-a-glance">The pipeline at a glance</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>   1. OD output                 2. DNA spec               3. Penpot design          4. Dev handoff</span></span>
+<span class="line"><span>   ──────────────               ─────────────             ────────────────          ───────────────</span></span>
+<span class="line"><span>   Welcome.html                 text in agent             vector shapes             SignUp.png</span></span>
+<span class="line"><span>   styles.css                   chat context              + library colors          card.css</span></span>
+<span class="line"><span>   tokens.json                  (palette, type,           + library typography      tokens.json</span></span>
+<span class="line"><span>   /assets/*                    spacing, radius)          + component               saved to repo</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>   On disk:                     In agent memory          In Penpot's DB             On disk:</span></span>
+<span class="line"><span>   .od/projects/&#x3C;id>/           (no file by default)     (no file form)             ./design-handoff/</span></span></code></pre>
+<h3 id="step-by-step-with-the-sign-up-card">Step-by-step with the sign-up card</h3>
+<p><strong>1. Brief</strong> — fill OD’s discovery form like this:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>What should I build?</td><td><strong>Live artifact</strong></td></tr><tr><td>Who is this for?</td><td><code>Backend engineers signing up for a developer tool — assume they already chose the product.</code></td></tr><tr><td>Brand context</td><td>Click <strong>Pick a direction for me</strong></td></tr><tr><td>Roughly how much?</td><td><code>One card / single screen</code></td></tr><tr><td>Any important constraints?</td><td>See the block below</td></tr></tbody></table>
+<p>Paste this into <strong>“Any important constraints”</strong> verbatim:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Single sign-up card, centered on a dark background.</span></span>
+<span class="line"><span>Visual direction: Tech Utility. One accent color of your choice.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Content:</span></span>
+<span class="line"><span>- Heading: "Create your account"</span></span>
+<span class="line"><span>- Subhead: "Sign up in seconds — no credit card required."</span></span>
+<span class="line"><span>- One email input (placeholder: "you@company.com")</span></span>
+<span class="line"><span>- One primary CTA button: "Sign up"</span></span>
+<span class="line"><span>- Small muted footer link: "Already have an account? Sign in"</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>No marketing fluff. No hero illustration. No social-login buttons.</span></span>
+<span class="line"><span>Standalone HTML, no external CDNs or fonts beyond what's bundled.</span></span>
+<span class="line"><span>Output as a single HTML file plus tokens.json if a token schema is supported.</span></span></code></pre>
+<p>Hit <strong>Send answers</strong> → OD spawns Claude to generate.</p>
+<p><strong>2. OD generates.</strong> Its spawned Claude writes <code>~/Works/open-design/.od/projects/&#x3C;id>/index.html</code> — in my run, a 20 KB standalone file with embedded CSS and inline JS for form validation. Brand: “forge.dev” (it picked the name itself). Accent: <code>oklch(74% 0.16 145)</code>, a muted dev-tool green. Nothing in Penpot yet.</p>
+<p><img alt="OD&amp;#x27;s rendered Forge sign-up form on the grid-pattern dark background" loading="lazy" decoding="async" fetchpriority="auto" width="960" height="920" src="/blogs/_astro/od-output.CAGiVFpO_Z2hfCWb.webp" ></p>
+<p>The interesting part is that OD shipped <em>more than I asked for</em>. The brief said heading, subhead, email input, primary CTA. The HTML included GitHub + GitLab OAuth buttons, a password field with a 4-cell strength meter, a ToS checkbox, loading states, and a “Check your inbox” success view. Either OD knows what <em>sign-up card</em> tends to mean and is helping me skip a round of refinement, or it’s spending tokens on features I didn’t authorize. Both are true depending on the day.</p>
+<p><strong>3. Extract the DNA.</strong> I gave my Claude Code session the file path and asked it to summarize OD’s design choices in chat — palette, typography, geometry, motifs. The summary stays in agent context unless you ask for <code>dna.yaml</code> on disk.</p>
+<blockquote>
+<p><em>Palette: bg <code>#0E1116</code>, surface <code>#161B22</code>, accent <code>#5DDB95</code>, ink <code>#F4F6F8</code>, muted <code>#8993A3</code>. Type: Inter 20/600 heading, 13/400 body, JetBrains Mono 11 uppercase labels. Spacing: 32 padding, 14 row gap. Card: 6 radius, 1 px border. Motifs: 48 × 48 grid background, 3 px accent focus ring, 4-cell strength meter.</em></p>
+</blockquote>
+<p><strong>4. Encode into Penpot.</strong> This is where the MCP plugin earns its keep. I asked my session to translate the DNA into Penpot library colors and rebuild the card as a vector component. One <code>mcp__penpot__execute_code</code> call — four, actually; three of them failed first on Penpot API quirks I hadn’t yet learned (<code>setFont</code> missing at runtime, <code>letterSpacing</code> rejecting <code>em</code> units, negative values rejected). The fourth succeeded and the card materialized: eleven library colors under <code>Forge/</code>, a fifty-shape vector board called <code>Forge / SignUp Card</code>, flex layouts top to bottom.</p>
+<p><img alt="The same card rebuilt in Penpot as a vector component" loading="lazy" decoding="async" fetchpriority="auto" width="420" height="582" src="/blogs/_astro/penpot-forge-card.qWnlBfy4_ZJTfPP.webp" ></p>
+<p>Visually faithful, structurally a different kind of object. The OD draft is a styled HTML document; the Penpot version is a tree of boards, frames, and tokens — design infrastructure you can build a system around. What didn’t survive the transfer: the 48×48 grid background pattern, the OAuth SVG icons, the 4-cell strength meter under the password field. About 3% of the surface, and the most visually-noisy 3%. With one more prompt the gap closes; the point of the convert pass is structure, not pixel parity.</p>
+<p>Then you tweak in chat: <em>“radius is too big, make it 12”</em>, <em>“swap the accent to mint”</em> — the agent retokens the value and every instance updates. Stage 4 is the cheapest part of the whole pipeline once the design is in.</p>
+<p><strong>5. Dev handoff.</strong> From the vector source it’s one MCP call to engineer-ready artifacts:</p>
+<ul>
+<li><code>mcp__penpot__export_shape</code> returns PNG / SVG bytes</li>
+<li><code>penpot.generateStyle</code> (inside <code>execute_code</code>) returns a CSS string</li>
+<li>Local library tokens export as W3C-DTCG JSON</li>
+</ul>
+<p>The agent writes those back to disk with the regular <code>Write</code> tool. The engineer never opens Penpot — they get code-ready files in the repo.</p>
+<h3 id="the-receipts">The receipts</h3>
+<p>I told myself, while doing this, that the whole pipeline cost roughly 60–80k tokens. Then I went and checked. Claude Code writes every session to <code>~/.claude/projects/&#x3C;cwd>/&#x3C;session>.jsonl</code>, including for OD’s spawned subprocess — it gets its own log under the OD project directory. Counting the relevant turns produced numbers that surprised me.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>Design phase (OD-Claude)</th><th>Convert phase (Penpot MCP)</th></tr></thead><tbody><tr><td>Wall clock</td><td><strong>1m 58s</strong></td><td><strong>13m 24s</strong></td></tr><tr><td>Assistant turns</td><td>4</td><td>63</td></tr><tr><td><code>cache_creation</code></td><td>129,724</td><td>146,011</td></tr><tr><td><code>cache_read</code></td><td>116,469</td><td><strong>15,603,929</strong></td></tr><tr><td><code>output</code></td><td>30,095</td><td>104,974</td></tr><tr><td><strong>Effective billed</strong>¹</td><td><strong>~171,500 tokens</strong></td><td><strong>~1,811,500 tokens</strong></td></tr><tr><td>Output artifact</td><td>20 KB <code>index.html</code> + tokens.json</td><td>11 library colors + ~50-shape vector component</td></tr></tbody></table>
+<p>¹ Anthropic prices <code>cache_read</code> at ~10% of input, so effective = <code>input + cache_creation + 0.1 × cache_read + output</code>.</p>
+<p>The convert phase came in at <strong>~1.8 million effective tokens</strong>, not 30k. I was off by roughly fifty times.</p>
+<p>The reason turned out to be unsubtle, and worth understanding. Every Claude Code turn re-sends the full conversation history as <code>cache_read</code>. By the time I reached the convert phase, the session was four hours deep — Penpot setup, MCP debugging, an earlier throwaway sign-up card, the OD install. Sixty-three convert-phase turns each dragged ~250k tokens of stale history through <code>cache_read</code> just to add another 1.5k of reasoning. That’s where the 15.6M raw goes.</p>
+<p>Three lessons fell out of that:</p>
+<ul>
+<li><strong>Long sessions amplify cost geometrically.</strong> The same convert work, run in a <em>fresh</em> session in the OD project directory, would have been more like 150–200k effective tokens — close to the design phase.</li>
+<li><strong>Failed <code>execute_code</code> attempts pay full price.</strong> Each of the three retries on Penpot API quirks carried a full context rehydration. The fix is a <code>CLAUDE.md</code> that pre-loads the quirks; the cost is paying for them once.</li>
+<li><strong>Token cost is not wall-clock cost.</strong> The 13-minute convert phase was mostly me typing chat messages between MCP calls. Actual agent compute was a small fraction.</li>
+</ul>
+<p>The quality side of the ledger comes through cleaner. The converted Penpot card is structurally faithful — palette, spacing, type, layout — but skips details that need real raster or SVG: the 48 × 48 grid background, the OAuth SVG icons, the strength meter. Maybe 3% of the surface, and visually the noisiest 3%. With one more prompt I could close that gap. The point of the convert is the structural pass, not pixel parity.</p>
+<p>The mental model I keep returning to: <strong>OD is the first comp in HTML; Penpot is the same design as design infrastructure.</strong> The convert phase is the cost of making that second statement true.</p>
+<p>To cut the convert cost ~10× next time: run it in a fresh session in the OD project dir, ship a <code>CLAUDE.md</code> with the Penpot API quirks, and persist the DNA as <code>dna.yaml</code> so re-runs skip the HTML re-read.</p>
+<h3 id="the-design-gap">The design gap</h3>
+<p>The pipeline above is what works. It’s worth saying just as plainly what <em>doesn’t</em> — where the agent helps, where it doesn’t, and where it creates new gaps that didn’t exist before AI tools entered the diagram.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Gap</th><th>What it is</th><th>Agent’s effect</th></tr></thead><tbody><tr><td><strong>Intent → Brief</strong></td><td>Your vision vs. what you typed</td><td>Neutral — and dangerously easy to under-specify</td></tr><tr><td><strong>Brief → Artifact</strong></td><td>What the brief asked vs. what OD shipped</td><td>Big speedup, but expect scope drift (we got OAuth + strength meter we didn’t ask for)</td></tr><tr><td><strong>Artifact → Infra</strong></td><td>HTML draft vs. vector source of truth</td><td>Big speedup, small fidelity loss (grid bg, SVG icons skipped)</td></tr><tr><td><strong>Design → Code</strong></td><td>Mock vs. production frontend</td><td>Tokens bridge ~60 %; animation, focus, ARIA, edge cases stay human</td></tr><tr><td><strong>Code → Production</strong></td><td>Green-path vs. real users</td><td>Unchanged — AI rarely designs for long content, RTL, accessibility</td></tr><tr><td><strong>Two-Claude divergence</strong></td><td>OD-Claude’s taste vs. session-Claude’s</td><td><strong>New gap.</strong> Pass the DNA explicitly or they’ll disagree at the margins</td></tr><tr><td><strong>Taste</strong></td><td>Median-good vs. distinctive</td><td>AI smooths toward the average of its training data; humans earn their keep at the edges</td></tr></tbody></table>
+<p>The agent wins in the middle of the pipeline — <em>brief → artifact → infra</em>. The endpoints — intent, production reality, taste — stay human-shaped. Designing with agents doesn’t replace design judgement; it moves it. You spend less time pushing pixels and more time deciding what the artifact should <em>be</em>, and which AI drifts to overrule.</p>
+<hr>
+<h2 id="tearing-it-down">Tearing it down</h2>
+<p>When you’re done playing:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Open Design — stops daemon + web sidecars</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> ~/Works/open-design</span><span style="color:#E1E4E8"> &#x26;&#x26; </span><span style="color:#B392F0">pnpm</span><span style="color:#9ECBFF"> tools-dev</span><span style="color:#9ECBFF"> stop</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Penpot — stops every container, keeps your data in named volumes</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> ~/Works/penpot</span><span style="color:#E1E4E8"> &#x26;&#x26; </span><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> compose</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> penpot</span><span style="color:#9ECBFF"> down</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Penpot, clean slate (also wipes the file you built in this post)</span></span>
+<span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> compose</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> penpot</span><span style="color:#9ECBFF"> down</span><span style="color:#79B8FF"> -v</span></span></code></pre>
+<p>Sanity check nothing’s still running:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> ps</span><span style="color:#79B8FF"> --filter</span><span style="color:#9ECBFF"> name=penpot</span></span>
+<span class="line"><span style="color:#B392F0">pnpm</span><span style="color:#79B8FF"> --prefix</span><span style="color:#9ECBFF"> ~/Works/open-design</span><span style="color:#9ECBFF"> tools-dev</span><span style="color:#9ECBFF"> status</span></span></code></pre>
+<hr>
+<h2 id="crossing-into-figma">Crossing into Figma</h2>
+<p>If your team lives in Figma, the open-source pipeline above is only useful insofar as you can hand the result off. So: how does a Penpot file get into Figma?</p>
+<p>The blunt answer is <strong>there’s no <code>.penpot</code> import in Figma</strong>, and there probably won’t be — Adobe has no incentive to build one. What does work in 2026:</p>
+<h3 id="route-a--svg--dtcg-tokens-lossy-two-minutes">Route A — SVG + DTCG tokens (lossy, two minutes)</h3>
+<p>Penpot exports SVG cleanly. From the editor: select a board → <strong>File → Export</strong> → choose SVG → drop the file into a Figma page. Figma treats it as editable vector. What survives the crossing: the visual fidelity, basic groups, fills, strokes. What doesn’t: components, auto-layout containers, styles, anything tied to Penpot’s library.</p>
+<p>For the design <em>system</em> — colors, typography, spacing — Penpot’s local library exports as W3C-DTCG JSON. The <a href="https://tokens.studio/">Tokens Studio</a> plugin in Figma imports DTCG. Tokens travel cleanly even when layouts don’t.</p>
+<blockquote>
+<p><strong>Visual fidelity travels through SVG. System fidelity travels through tokens. Neither carries components.</strong></p>
+</blockquote>
+<p>Good for: hero illustrations, icons, single screens you want to polish in Figma. Bad for: handing off a whole component library.</p>
+<h3 id="route-b--agent-recreates-via-figmas-mcp-faithful-full-token-bill">Route B — agent recreates via Figma’s MCP (faithful, full token bill)</h3>
+<p>The agent-era twist: <strong>you don’t need a file-format bridge.</strong> The same pattern we used for OD → Penpot — agent reads from one tool, writes to another — works for Penpot → Figma. Figma ships its own <a href="https://developers.figma.com/docs/figma-mcp-server/">Dev Mode MCP server</a>, and most MCP clients can hold two servers concurrently:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  "mcpServers"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">    "penpot"</span><span style="color:#E1E4E8">: { </span><span style="color:#79B8FF">"type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"http"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"url"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"http://localhost:9001/mcp/stream"</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#79B8FF">    "figma"</span><span style="color:#E1E4E8">:  { </span><span style="color:#79B8FF">"type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"http"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"url"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"http://localhost:3845/sse"</span><span style="color:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>Then in chat: <em>“Read the <code>Forge / SignUp Card</code> from Penpot and recreate it as a Figma component with auto-layout.”</em> The agent does the structural translation — components stay components, tokens become Figma variables, auto-layout maps to auto-layout. Pays the convert-phase token cost again, just in the other direction.</p>
+<p>Good for: handing off a whole component library, keeping the design system intact across tools. Bad for: budgets that care about every million tokens.</p>
+<h3 id="which-route-when">Which route when</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>You want…</th><th>Use</th></tr></thead><tbody><tr><td>One screen in Figma now, no system</td><td>Route A — SVG + DTCG</td></tr><tr><td>Whole component library, faithful</td><td>Route B — agent + Figma MCP</td></tr><tr><td>Engineering handoff only</td><td>Skip Figma entirely; Penpot’s CSS export is enough</td></tr></tbody></table>
+<p>The third option is the one I’d nudge teams toward when the work is genuinely for production: the value of Figma in an open-source-design workflow is often <em>collaboration with designers who already know Figma</em>, not anything intrinsic to the file format. If the artifact is shipping straight to engineering, Penpot → CSS → repo is shorter and loses nothing.</p>
+<h3 id="why-penpot-then">Why Penpot, then?</h3>
+<p>A reasonable question after spending a whole section on how to get <em>out</em> of Penpot is why I put the artifact there in the first place. It is <strong>not</strong> because Figma’s MCP is read-only — it isn’t. Figma’s MCP in 2026 exposes write tools (<code>use_figma</code>, <code>generate_figma_design</code>, <code>create_new_file</code>, <code>upload_assets</code>) and can build a design from chat just like Penpot can.</p>
+<p>The reasons that <em>do</em> hold up:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Reason</th><th>Penpot</th><th>Figma</th></tr></thead><tbody><tr><td>Self-hostable on your machine</td><td>Yes (Docker)</td><td>No (cloud-only)</td></tr><tr><td>Open, inspectable file format</td><td>SVG-based</td><td>Proprietary <code>.fig</code></td></tr><tr><td>Cost per agent iteration</td><td>Free, local</td><td>Counts against seat + API quota</td></tr><tr><td>Failed-attempt blast radius</td><td>Local DB, wipe with <code>down -v</code></td><td>Live multiplayer file — your churn is visible to everyone</td></tr><tr><td>Sandbox flexibility</td><td><code>execute_code</code> is raw JS against the full Plugin API</td><td>Higher-level tool surface; less precise for arbitrary mutations</td></tr><tr><td>Vendor / format lock-in</td><td>None</td><td>Adobe owns the format and roadmap</td></tr></tbody></table>
+<p>For a team that already lives in Figma, the agent does fine and the case for switching is weak. For a solo or open-source-aligned workflow that iterates with hundreds of <code>execute_code</code> calls against a fast-moving design — and pays in tokens for every retry — Penpot wins on cost, control, and reversibility. Not on capability.</p>
+<hr>
+<h2 id="what-i-keep-coming-back-to">What I keep coming back to</h2>
+<p>The smoother the AI output, the easier it is to ship something that <em>looks</em> designed but doesn’t <em>feel</em> designed. Open Design and Penpot+MCP together produced a very polished sign-up card in fifteen minutes. Whether it’s <em>yours</em> is a separate question, and one no token budget will answer.</p>
+<p>Two tools in this post, both open source, both running on my laptop, both genuinely useful — but only as far as the design judgement you bring to the brief on the way in and the taste you apply to the artifact on the way out. The middle is solved. The ends are still the work.</p>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://www.anthropic.com/news/claude-design-anthropic-labs">Claude Design (Anthropic Labs)</a> — the reference point Open Design names itself against.</li>
+<li><a href="https://github.com/VoltAgent/awesome-claude-design"><code>VoltAgent/awesome-claude-design</code></a> — running list of agent-driven design tools.</li>
+<li><a href="https://github.com/nexu-io/open-design"><code>nexu-io/open-design</code></a> — the project covered above.</li>
+<li><a href="https://penpot.app/">Penpot</a> and the <a href="https://penpot.app/ai/mcp-server">Penpot MCP server</a>.</li>
+<li><a href="https://www.figma.com/">Figma</a> and its <a href="https://developers.figma.com/docs/figma-mcp-server/">MCP server docs</a> — for the other end of the open / proprietary axis.</li>
+</ul>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2026 Locch. All rights reserved.
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.DTvyIZGA.js"></script> </body> </html>
