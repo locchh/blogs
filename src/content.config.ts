@@ -13,6 +13,8 @@ const blog = defineCollection({
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: image().optional(),
+			// Drafts are committed but never built/listed (see pages + rss).
+			draft: z.boolean().default(false),
 		}),
 });
 
