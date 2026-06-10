@@ -17,6 +17,8 @@ draft: true
 
 - Workflow
 
+- One more important thing that is how we can split and accumulate the work for each migration task
+
 https://walkinglabs.github.io/learn-harness-engineering/en/
 
 - Why not just a skill?
