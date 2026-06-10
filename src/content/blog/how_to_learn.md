@@ -101,9 +101,9 @@ The story that helps you remember vocabulary — I don't know whether it works f
 
 #### How to "Workout"?
 
-"Workout" is where the real effort happens — this is the step that turns passive recognition into active recall.
+"Workout" is where the real effort happens — this is the step that **turns passive recognition into active recall**.
 
-**The power of the repetition loop.** I keep a note with the new words and the short piece I wrote, and I've realized that the simple act of writing them down already helps me remember the words better. Speaking is the next layer: each time I say the piece again, the words come back more easily. The loop — write, speak, review, repeat — is what makes recall faster every round.
+**The power of the repetition loop.** I keep a note with the new words and the short piece I wrote, and I've realized that the simple act of writing them down already helps me remember the words better. Speaking is the next layer: each time I say the piece again, the words come back more easily. **The loop — write, speak, review, repeat — is what makes recall faster every round.**
 
 **A tip for remembering vocabulary.** I write the English word and its Vietnamese meaning in two separate columns. When I want to test myself, I cover the Vietnamese column and try to recall the meaning from the English alone (and sometimes the other way around). It's a simple, fast self-test.
 
