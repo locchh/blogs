@@ -7,6 +7,24 @@ tags: ["learning", "education"]
 draft: false
 ---
 
+## How to learn?
+
+Confucius say we can gain knowledge in three ways:
+
+1. By reflection, which is the highest.
+
+2. By imitation, which is the easiest.
+
+3. By experience, which is the bitterest.
+
+Beautiful, isn't it? Wise, balanced, easy to remember. There is just one problem: **Confucius never said this.**
+
+Go looking in the *Analects* and you won't find it. The line traces back to a Western quote dictionary from 1899, and from there it spread across the internet — quote sites, posters, LinkedIn captions — each one copying the last, not one of them checking the source. Repeated a million times, a fake starts to wear the face of the truth.
+
+And that is the first lesson, the one that comes before all three: **qualify what you learn before you learn it.** Check the source. Question the authority. A famous name stamped on an idea is not proof — it is just a louder lie. Because here is the trap: you can *reflect* deeply on something false and only become confidently wrong; you can *imitate* a bad teacher and inherit their mistakes; you can pay for the wrong lesson with bitter *experience*. Garbage in, garbage out. All three roads to knowledge assume you started from something true.
+
+So before you learn anything — including everything I write below — verify it first. I just fooled you with one fake quote to prove a real point. Now you know the cost of trusting a source you never checked.
+
 ## How to learn English
 
 English is the lingua franca of the modern world, which means the latest knowledge and information are most likely available in English first. And with English, you can communicate widely with people from all over the world.
@@ -53,7 +71,7 @@ flowchart LR
 
 |Step|Time |Action|Goal|Note|
 |---|---|---|---|---|
-|1|10-15 min|Watch the video with subtitles|Try to understand the content and identify the sounds you don't understand|A **5-minute YouTube video** is enough; the key is to choose content suitable for you — not too hard to understand, not boring, etc.|
+|1|10-15 min|Watch the video without subtitles|Try to understand the content and identify the sounds you don't understand|A **5-minute YouTube video** is enough; the key is to choose content suitable for you — not too hard to understand, not boring, etc.|
 |2|20-30 min|Watch the video again with subtitles|Collect new words and write them down|I use a **sticky-note app** on my phone — it's quite convenient, I can easily review them later, and the **Google Translate** integration helps me quickly look up meanings and pronunciation just by tapping a word. From a 5-minute video, I can collect 10-20 new words.|
 |3|20-40 min|Write|Write something about the content of the video, BUT include the new words and phrases you learned|With 20 new words, you can write about **2 A5-sized pages** of notes. That is enough — not too much, not too little.|
 |4|10-20 min|Practice speaking|Speak the content of the video aloud|Practice until you can repeat it fluently, or half-fluently, without reading the text. I use my phone's **voice recorder** to record myself speaking — that is how I realized my pronunciation is terrible. You don't need to be perfect; just practice until your speech is smooth and natural, and don't hate your voice.|
@@ -67,7 +85,7 @@ So with this method, you can gain:
 
 #### How to "Watch"?
 
-I choose a 5-10 minute YouTube video that suits me. It's not only about the length — by my estimate, a 5-minute video gives me 10-20 new words, and that is quite enough for a day.
+I choose a 5-10 minute YouTube video that suits me. It's not only about the length — by my estimate, a 5-minute video gives me 10-20 new words, and that is quite enough for a day. Another reason that i choice Youtube is because you can save videos in your playlist for later review.
 
 The other thing that matters is the content. These are the channels I subscribe to:
 
@@ -111,6 +129,6 @@ The story that helps you remember vocabulary — I don't know whether it works f
 
 **How I improved my accent.** Record yourself speaking. The first time I recorded my voice and played it back, it felt like my ear had been hit by a hammer — but that discomfort is exactly the point. You can't fix what you can't hear, and the recording shows you precisely where your pronunciation goes wrong.
 
-## Final thoughts
+### Final thoughts
 
 Habit is the key. None of this works as a one-time burst — the method only pays off when it becomes something you do almost without thinking, a little every day. The good news is that it asks for very little: a phone, a short video, and a few minutes. That's why it travels with me anywhere, and why I can keep it up even with a full-time job. Pick content you love, run the loop, review a little each day — and trust that the progress, bit by bit, will add up.
