@@ -33,7 +33,7 @@ The [7 R's framework](https://www.ibm.com/think/insights/7-rs-cloud-migration) n
 
 In practice you don't pick one. Most enterprises apply *different* R's to different components — a hybrid strategy is the expected, healthy outcome, not a sign of indecision. The 7 R's are the decision layer. The rest of this post is about *how* you execute the hard ones (refactor and re-architect) without breaking the business.
 
-### The Strangler Fig and the seam
+### The Strangler Fig and the Seam
 
 A strangler fig germinates up in the branches of a host tree, grows its roots down to the ground, and slowly becomes self-sustaining until the original tree dies away — leaving the fig standing in its shape. [Martin Fowler's Strangler Fig pattern](https://martinfowler.com/bliki/StranglerFigApplication.html) borrows that image: you grow the new system *around* the old one, shifting behavior piece by piece, until the legacy code can be removed.
 
@@ -46,6 +46,14 @@ Seams are how you decompose a legacy system into stranglable pieces ([more from 
 ### The phases of migration
 
 Strategy and patterns are necessary but not sufficient. You also need a *workflow* — a sequence with checkpoints, so that "modernize this system" doesn't collapse into an unbounded mess. The [CoreStory code modernization playbook](https://docs.corestory.ai/playbooks/code-modernization) frames it as six phases, with human-in-the-loop (HITL) gates between them. Its core thesis is sharp: **modernization fails not because teams can't read the legacy code, but because they can't prove the new code does what the old code did.**
+
+Across those phases, CoreStory plays three distinct roles — they're the "Role" column in the table below, so it's worth defining them up front:
+
+- **Expert** — explains *how the system works*: behavior, architectural patterns, dependency chains, and data flows across the whole codebase. Most active in Phase 1 (Assessment) and Phase 3 (Target Architecture), where deep understanding drives strategy.
+- **Navigator** — points to *where the work is*: the specific files, methods, and code paths where business logic, coupling, and risk live. It translates the Expert's architectural picture into concrete locations to change, primarily in Phase 4 (Decomposition) and Phase 5 (Execution).
+- **Verifier** — proves *the new code matches the old*: it compares legacy and modernized implementations to confirm behavioral equivalence against the Phase 2 business rules. This is the whole of Phase 6.
+
+The split maps cleanly onto the harness idea from earlier — *understand → locate → verify* — and notice none of them decides anything. They inform; the human at each HITL gate commits.
 
 | Phase | Name | Purpose | Role | Sub-Playbook |
 |---|---|---|---|---|
@@ -130,7 +138,7 @@ One hard-won ordering rule: **move the data before the logic.** Data outlives co
 
 Get the data migrated and stable first, then you have a fixed target to write against. The Strangler Fig grows downward to the ground before it strangles the trunk; migrations work the same way — root yourself in the data, then let the logic follow.
 
-## What is Harness?
+## First look at Harness
 
 A harness doesn't "make the model smarter"; rather, it establishes a closed-loop working system *around* the model. The model is fixed — what changes is the environment it operates in, the instructions it reads, the tools it can reach, the memory it carries across sessions, and the feedback that tells it whether it actually succeeded. [Learn Harness Engineering](https://walkinglabs.github.io/learn-harness-engineering/en/) frames reliability as emerging from four dimensions — environment design, state management, verification, and control — wired into a loop:
 
@@ -227,13 +235,13 @@ Because the loop is grounded in each model's *own* failure signatures, the harne
 
 ## Migration is a Harness
 
-### Why not just a skill?
+### Why not just use skill?
 
 - Structure of folder
 
 - Workflow
 
-### The Pricing
+### The Price
 
 - The price of Fable 5
 
