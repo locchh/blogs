@@ -12,21 +12,21 @@ tags: ["coding", "reflection", "2026"]
 
 Here are some useful git commands for daily development:
 
-- `git add`: Stage changes for commit
-
 - `git log`: Review commit history
   - `git log` - show commit history of current branch
   - `git log --oneline` - compact view
   - `git log main..feature` - commits in feature but not in main
   - `git log --graph --all` - visual branch graph
 
+- `git add`: Stage changes for commit
+
 - `git commit`: Record staged changes
 
 - `git diff`: Show differences between working directory, index, and commits
-  - `git diff` - see unstaged changes (working vs staging)
-  - `git diff --staged` - see staged changes (staging vs last commit)
-  - `git diff main feature` - compare two branches
-  - `git diff origin/main` - compare with remote branch
+  - `git diff` - see unstaged changes (working vs staging) in the same current working branch
+  - `git diff --staged` - see staged changes (staging vs last commit) in the same current working branch
+  - `git diff origin/main` - compare your working tree against `origin/main` (the last-fetched snapshot of the remote `main`)
+  - `git diff main feature` - compare two branches in local
   - `git diff file.txt` - see changes of a specific file
 
 - `git reset`: Reset the current HEAD to a specified state
