@@ -29,11 +29,20 @@ Here are some useful git commands for daily development:
   - `git diff main feature` - compare two branches in local
   - `git diff file.txt` - see changes of a specific file
 
-- `git reset`: Reset the current HEAD to a specified state
-  - `git reset file.txt` - unstage a file
-  - `git reset --soft HEAD~1` - undo last commit but keep changes staged
-  - `git reset --hard HEAD~1` - undo last commit and discard changes
-  - `git reset --hard origin/main` - reset local branch to match remote
+The three "undo" commands — `git clean`, `git restore`, and `git reset` — confuse people because they sound interchangeable but operate at different points in the git pipeline. The clean way to remember them is to walk a change backwards, from a brand-new file all the way to a commit:
+
+```
+untracked  →  working dir  →  staging area  →  commit history
+(new file)     (edited)        (git add'd)      (git commit'd)
+    │              │                │                 │
+git clean      git restore   git restore      git reset
+                            --staged / reset
+```
+
+- `git clean`: Remove untracked files from the working tree (files git has *never* tracked — `restore`/`reset` can't touch these)
+  - `git clean -nfd` - **dry run**: preview which untracked files and directories *would* be removed, without deleting anything (always run this first)
+  - `git clean -fd` - actually remove untracked files and directories
+  - `git clean -fdx` - also remove ignored files (those in `.gitignore`) — use with caution
 
 - `git restore`: Discard changes in the working tree (the modern, safer replacement for `git checkout -- file`)
   - `git restore file.txt` - discard unstaged changes to a file
@@ -41,10 +50,19 @@ Here are some useful git commands for daily development:
   - `git restore --staged file.txt` - unstage a file but keep its changes
   - `git restore --source=HEAD~1 file.txt` - restore a file from an older commit
 
-- `git clean`: Remove untracked files from the working tree
-  - `git clean -nfd` - **dry run**: preview which untracked files and directories *would* be removed, without deleting anything (always run this first)
-  - `git clean -fd` - actually remove untracked files and directories
-  - `git clean -fdx` - also remove ignored files (those in `.gitignore`) — use with caution
+- `git reset`: Reset the current HEAD to a specified state
+  - `git reset file.txt` - unstage a file
+  - `git reset --soft HEAD~1` - undo last commit but keep changes staged
+  - `git reset --hard HEAD~1` - undo last commit and discard changes
+  - `git reset --hard origin/main` - reset local branch to match remote
+
+The one-liner that keeps them straight — it's really about *what git knows about the file*:
+
+> - **`git clean`** → delete untracked (brand-new) files
+> - **`git restore`** → discard unstaged edits (or unstage with `--staged`)
+> - **`git reset`** → undo commits, or unstage files
+
+So it's not "reset = after commit, restore = unstaged, clean = both before commit." The distinction is the file's state: untracked files (`clean`), tracked-file contents (`restore`), and staging plus committed history (`reset`).
 
 - `git fetch`: Download objects and refs from another repository
 
