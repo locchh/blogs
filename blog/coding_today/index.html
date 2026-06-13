@@ -5,9 +5,6 @@
 <p>Here are some useful git commands for daily development:</p>
 <ul>
 <li>
-<p><code>git add</code>: Stage changes for commit</p>
-</li>
-<li>
 <p><code>git log</code>: Review commit history</p>
 <ul>
 <li><code>git log</code> - show commit history of current branch</li>
@@ -17,15 +14,18 @@
 </ul>
 </li>
 <li>
+<p><code>git add</code>: Stage changes for commit</p>
+</li>
+<li>
 <p><code>git commit</code>: Record staged changes</p>
 </li>
 <li>
 <p><code>git diff</code>: Show differences between working directory, index, and commits</p>
 <ul>
-<li><code>git diff</code> - see unstaged changes (working vs staging)</li>
-<li><code>git diff --staged</code> - see staged changes (staging vs last commit)</li>
-<li><code>git diff main feature</code> - compare two branches</li>
-<li><code>git diff origin/main</code> - compare with remote branch</li>
+<li><code>git diff</code> - see unstaged changes (working vs staging) in the same current working branch</li>
+<li><code>git diff --staged</code> - see staged changes (staging vs last commit) in the same current working branch</li>
+<li><code>git diff origin/main</code> - compare your working tree against <code>origin/main</code> (the last-fetched snapshot of the remote <code>main</code>)</li>
+<li><code>git diff main feature</code> - compare two branches in local</li>
 <li><code>git diff file.txt</code> - see changes of a specific file</li>
 </ul>
 </li>
