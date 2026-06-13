@@ -62,13 +62,20 @@
 
 <table><thead><tr><th>Strategy</th><th>What it means</th><th>When to use it</th><th>Trade-off</th></tr></thead><tbody><tr><td><strong>Rehost</strong> (lift-and-shift)</td><td>Move the app as-is, no code changes</td><td>Tight deadlines, datacenter exits, low-risk workloads</td><td>Fastest and cheapest to move, but you carry the old inefficiencies with you</td></tr><tr><td><strong>Relocate</strong></td><td>Move a whole environment (VMs, containers) without new hardware or a new ops model</td><td>Large estates you want shifted wholesale with minimal disruption</td><td>Even less change than rehost — inherits every existing limitation</td></tr><tr><td><strong>Replatform</strong> (lift-tinker-shift)</td><td>Move with a few targeted optimizations (e.g. swap a self-managed DB for a managed one)</td><td>When small tweaks unlock real value without a rebuild</td><td>A middle ground: modest benefit, modest effort and risk</td></tr><tr><td><strong>Refactor / Re-architect</strong></td><td>Significantly rewrite to be cloud-native</td><td>Apps that need scale, agility, or features the old design can’t deliver</td><td>Highest cost, effort, and risk — but the highest long-term payoff</td></tr><tr><td><strong>Repurchase</strong> (drop-and-shop)</td><td>Replace with a different product, usually SaaS</td><td>When a commercial option beats maintaining your own</td><td>Less control and customization; data migration and retraining cost</td></tr><tr><td><strong>Retire</strong></td><td>Decommission the app entirely</td><td>Usage data shows it’s barely used, or its capability is duplicated elsewhere</td><td>Saves money and shrinks the surface area — but you need confidence it’s truly dead</td></tr><tr><td><strong>Retain</strong> (revisit)</td><td>Leave it where it is, for now</td><td>Recently upgraded, stable, or blocked by unresolved compliance/dependencies</td><td>Defers the decision instead of forcing a bad migration</td></tr></tbody></table>
 <p>In practice you don’t pick one. Most enterprises apply <em>different</em> R’s to different components — a hybrid strategy is the expected, healthy outcome, not a sign of indecision. The 7 R’s are the decision layer. The rest of this post is about <em>how</em> you execute the hard ones (refactor and re-architect) without breaking the business.</p>
-<h3 id="the-strangler-fig-and-the-seam">The Strangler Fig and the seam</h3>
+<h3 id="the-strangler-fig-and-the-seam">The Strangler Fig and the Seam</h3>
 <p>A strangler fig germinates up in the branches of a host tree, grows its roots down to the ground, and slowly becomes self-sustaining until the original tree dies away — leaving the fig standing in its shape. <a href="https://martinfowler.com/bliki/StranglerFigApplication.html">Martin Fowler’s Strangler Fig pattern</a> borrows that image: you grow the new system <em>around</em> the old one, shifting behavior piece by piece, until the legacy code can be removed.</p>
 <p>Why not just rewrite everything at once? Because big-bang rewrites tend to fail. Users can’t wait years for the new system, the old behavior is hard to replicate exactly, much of the legacy functionality isn’t even wanted (so rebuilding it is pure waste), and the whole effort is long and risky. The strangler approach changes the <em>economics</em>: investment and returns are spread out, value arrives early, and you’re never one deploy away from catastrophe.</p>
 <p>But you can only strangle a system you can take apart. That’s where the <strong>seam</strong> comes in. Michael Feathers defines it as <em>“a place where you can alter behavior in your program without editing in that place.”</em> The classic example: a <code>calculatePrice</code> function that calls a slow, expensive external shipping service. You can’t test it cheaply — until you introduce a seam that lets you redirect the dependency to a test double, <strong>without touching <code>calculatePrice</code> itself</strong>. Every seam has an <em>enabling point</em>: you edit the code once to create the seam, and afterward all the variation happens there.</p>
 <p>Seams are how you decompose a legacy system into stranglable pieces (<a href="https://martinfowler.com/bliki/LegacySeam.html">more from Fowler here</a>). Find the seams, route behavior through them, then swap implementations one at a time. When a façade can’t intercept traffic — for deeply embedded components — the same idea scales up as <strong>Branch by Abstraction</strong>: introduce an abstraction layer and switch implementations behind it incrementally.</p>
 <h3 id="the-phases-of-migration">The phases of migration</h3>
 <p>Strategy and patterns are necessary but not sufficient. You also need a <em>workflow</em> — a sequence with checkpoints, so that “modernize this system” doesn’t collapse into an unbounded mess. The <a href="https://docs.corestory.ai/playbooks/code-modernization">CoreStory code modernization playbook</a> frames it as six phases, with human-in-the-loop (HITL) gates between them. Its core thesis is sharp: <strong>modernization fails not because teams can’t read the legacy code, but because they can’t prove the new code does what the old code did.</strong></p>
+<p>Across those phases, CoreStory plays three distinct roles — they’re the “Role” column in the table below, so it’s worth defining them up front:</p>
+<ul>
+<li><strong>Expert</strong> — explains <em>how the system works</em>: behavior, architectural patterns, dependency chains, and data flows across the whole codebase. Most active in Phase 1 (Assessment) and Phase 3 (Target Architecture), where deep understanding drives strategy.</li>
+<li><strong>Navigator</strong> — points to <em>where the work is</em>: the specific files, methods, and code paths where business logic, coupling, and risk live. It translates the Expert’s architectural picture into concrete locations to change, primarily in Phase 4 (Decomposition) and Phase 5 (Execution).</li>
+<li><strong>Verifier</strong> — proves <em>the new code matches the old</em>: it compares legacy and modernized implementations to confirm behavioral equivalence against the Phase 2 business rules. This is the whole of Phase 6.</li>
+</ul>
+<p>The split maps cleanly onto the harness idea from earlier — <em>understand → locate → verify</em> — and notice none of them decides anything. They inform; the human at each HITL gate commits.</p>
 
 
 
@@ -202,7 +209,7 @@
 <h3 id="migrate-data-first-logic-follows">Migrate data first, logic follows</h3>
 <p>One hard-won ordering rule: <strong>move the data before the logic.</strong> Data outlives code. Schemas, formats, and the meaning of fields are the most durable thing in any legacy system — and the logic only makes sense in terms of the data it operates on. If you try to port logic onto a data model you haven’t settled yet, every business rule you migrate sits on shifting ground, and you re-do the work each time the schema moves.</p>
 <p>Get the data migrated and stable first, then you have a fixed target to write against. The Strangler Fig grows downward to the ground before it strangles the trunk; migrations work the same way — root yourself in the data, then let the logic follow.</p>
-<h2 id="what-is-harness">What is Harness?</h2>
+<h2 id="first-look-at-harness">First look at Harness</h2>
 <p>A harness doesn’t “make the model smarter”; rather, it establishes a closed-loop working system <em>around</em> the model. The model is fixed — what changes is the environment it operates in, the instructions it reads, the tools it can reach, the memory it carries across sessions, and the feedback that tells it whether it actually succeeded. <a href="https://walkinglabs.github.io/learn-harness-engineering/en/">Learn Harness Engineering</a> frames reliability as emerging from four dimensions — environment design, state management, verification, and control — wired into a loop:</p>
 <pre><code class="language-mermaid">flowchart TD
     Obj[Clear Objective&#x3C;br/>AGENTS.md]:::accent
@@ -282,7 +289,7 @@
 <p>Because the loop is grounded in each model’s <em>own</em> failure signatures, the harness it converges on is <strong>model-specific</strong> — the paper shows MiniMax-, Qwen-, and GLM-class models each accreting different edits (early-artifact creation, dependency prechecking, preserving shell environment state, breaking unproductive tool-use loops). There is no single best harness; there’s the best harness <em>for this model on these tasks</em>.</p>
 <h3 id="fundamental-of-harness">Fundamental of Harness</h3>
 <h2 id="migration-is-a-harness">Migration is a Harness</h2>
-<h3 id="why-not-just-a-skill">Why not just a skill?</h3>
+<h3 id="why-not-just-use-skill">Why not just use skill?</h3>
 <ul>
 <li>
 <p>Structure of folder</p>
@@ -291,7 +298,7 @@
 <p>Workflow</p>
 </li>
 </ul>
-<h3 id="the-pricing">The Pricing</h3>
+<h3 id="the-price">The Price</h3>
 <ul>
 <li>
 <p>The price of Fable 5</p>
