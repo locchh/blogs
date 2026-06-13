@@ -1,0 +1,315 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg"><link rel="icon" href="/blogs/favicon.ico"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.2"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/migration_is_a_harness/"><!-- Primary Meta Tags --><title>Migration is a harness</title><meta name="title" content="Migration is a harness"><meta name="description" content="Some thoughts about migration"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/migration_is_a_harness/"><meta property="og:title" content="Migration is a harness"><meta property="og:description" content="Some thoughts about migration"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/migration_is_a_harness/"><meta property="twitter:title" content="Migration is a harness"><meta property="twitter:description" content="Some thoughts about migration"><link rel="stylesheet" href="/blogs/_astro/about.CJd3ivxT.css">
+<style>main[data-astro-cid-bvzihdzo]{width:calc(100% - 2em);max-width:100%;margin:0}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:720px;max-width:calc(100% - 2em);margin:auto;padding:1em;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/blogs/" data-astro-cid-3ef6ksr2>Locch&#39;s Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/blogs/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blogs/blog/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/blogs/about/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo>  </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2026-06-13T00:00:00.000Z"> Jun 13, 2026 </time>  </div> <h1 data-astro-cid-bvzihdzo>Migration is a harness</h1> <hr data-astro-cid-bvzihdzo> </div>  <h2 id="introduction">Introduction</h2>
+<p>In my <a href="https://locchh.github.io/blogs/blog/coding_today/">previous blog</a>, I shared some thoughts about migration. Recently I’ve had hands-on experience with a migration project, and gained some insights that I want to share.</p>
+<p>The main pitfall is thinking that with an AI-powered solution, you can put legacy code in and get a modernized system out. That thinking is naive, because migration is not a one-time task you can do with AI. It is a long-term process that requires both human expertise and AI assistance. The ultimate goal is to keep your system running and hand it off safely to the next generation without breaking the business.</p>
+<h2 id="something-about-migration">Something About Migration</h2>
+<h3 id="the-7-rs">The 7 R’s</h3>
+<p>Before you write a single line of new code, you have to decide <em>what to do</em> with each piece of the old system. The mistake is treating “migration” as one decision applied to everything. It isn’t. Every application has its own architecture, dependencies, and business value, so you evaluate each one individually and pick the path that best balances speed, cost, and long-term value.</p>
+<p>The <a href="https://www.ibm.com/think/insights/7-rs-cloud-migration">7 R’s framework</a> names the seven options:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Strategy</th><th>What it means</th><th>When to use it</th><th>Trade-off</th></tr></thead><tbody><tr><td><strong>Rehost</strong> (lift-and-shift)</td><td>Move the app as-is, no code changes</td><td>Tight deadlines, datacenter exits, low-risk workloads</td><td>Fastest and cheapest to move, but you carry the old inefficiencies with you</td></tr><tr><td><strong>Relocate</strong></td><td>Move a whole environment (VMs, containers) without new hardware or a new ops model</td><td>Large estates you want shifted wholesale with minimal disruption</td><td>Even less change than rehost — inherits every existing limitation</td></tr><tr><td><strong>Replatform</strong> (lift-tinker-shift)</td><td>Move with a few targeted optimizations (e.g. swap a self-managed DB for a managed one)</td><td>When small tweaks unlock real value without a rebuild</td><td>A middle ground: modest benefit, modest effort and risk</td></tr><tr><td><strong>Refactor / Re-architect</strong></td><td>Significantly rewrite to be cloud-native</td><td>Apps that need scale, agility, or features the old design can’t deliver</td><td>Highest cost, effort, and risk — but the highest long-term payoff</td></tr><tr><td><strong>Repurchase</strong> (drop-and-shop)</td><td>Replace with a different product, usually SaaS</td><td>When a commercial option beats maintaining your own</td><td>Less control and customization; data migration and retraining cost</td></tr><tr><td><strong>Retire</strong></td><td>Decommission the app entirely</td><td>Usage data shows it’s barely used, or its capability is duplicated elsewhere</td><td>Saves money and shrinks the surface area — but you need confidence it’s truly dead</td></tr><tr><td><strong>Retain</strong> (revisit)</td><td>Leave it where it is, for now</td><td>Recently upgraded, stable, or blocked by unresolved compliance/dependencies</td><td>Defers the decision instead of forcing a bad migration</td></tr></tbody></table>
+<p>In practice you don’t pick one. Most enterprises apply <em>different</em> R’s to different components — a hybrid strategy is the expected, healthy outcome, not a sign of indecision. The 7 R’s are the decision layer. The rest of this post is about <em>how</em> you execute the hard ones (refactor and re-architect) without breaking the business.</p>
+<h3 id="the-strangler-fig-and-the-seam">The Strangler Fig and the seam</h3>
+<p>A strangler fig germinates up in the branches of a host tree, grows its roots down to the ground, and slowly becomes self-sustaining until the original tree dies away — leaving the fig standing in its shape. <a href="https://martinfowler.com/bliki/StranglerFigApplication.html">Martin Fowler’s Strangler Fig pattern</a> borrows that image: you grow the new system <em>around</em> the old one, shifting behavior piece by piece, until the legacy code can be removed.</p>
+<p>Why not just rewrite everything at once? Because big-bang rewrites tend to fail. Users can’t wait years for the new system, the old behavior is hard to replicate exactly, much of the legacy functionality isn’t even wanted (so rebuilding it is pure waste), and the whole effort is long and risky. The strangler approach changes the <em>economics</em>: investment and returns are spread out, value arrives early, and you’re never one deploy away from catastrophe.</p>
+<p>But you can only strangle a system you can take apart. That’s where the <strong>seam</strong> comes in. Michael Feathers defines it as <em>“a place where you can alter behavior in your program without editing in that place.”</em> The classic example: a <code>calculatePrice</code> function that calls a slow, expensive external shipping service. You can’t test it cheaply — until you introduce a seam that lets you redirect the dependency to a test double, <strong>without touching <code>calculatePrice</code> itself</strong>. Every seam has an <em>enabling point</em>: you edit the code once to create the seam, and afterward all the variation happens there.</p>
+<p>Seams are how you decompose a legacy system into stranglable pieces (<a href="https://martinfowler.com/bliki/LegacySeam.html">more from Fowler here</a>). Find the seams, route behavior through them, then swap implementations one at a time. When a façade can’t intercept traffic — for deeply embedded components — the same idea scales up as <strong>Branch by Abstraction</strong>: introduce an abstraction layer and switch implementations behind it incrementally.</p>
+<h3 id="the-phases-of-migration">The phases of migration</h3>
+<p>Strategy and patterns are necessary but not sufficient. You also need a <em>workflow</em> — a sequence with checkpoints, so that “modernize this system” doesn’t collapse into an unbounded mess. The <a href="https://docs.corestory.ai/playbooks/code-modernization">CoreStory code modernization playbook</a> frames it as six phases, with human-in-the-loop (HITL) gates between them. Its core thesis is sharp: <strong>modernization fails not because teams can’t read the legacy code, but because they can’t prove the new code does what the old code did.</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Phase</th><th>Name</th><th>Purpose</th><th>Role</th><th>Sub-Playbook</th></tr></thead><tbody><tr><td>1</td><td>Codebase Assessment</td><td>Evaluate modernization readiness: architecture, dependencies, tech debt, coupling, risk — including non-code artifacts (JCL, configuration, data stores)</td><td>Expert</td><td>Codebase Assessment</td></tr><tr><td>2</td><td>Business Rules Inventory</td><td>Extract, catalog, and validate all business rules the modernized system must preserve</td><td>Expert + Navigator</td><td>Business Rules Extraction</td></tr><tr><td>3</td><td>Target Architecture &#x26; Strategy</td><td>Select modernization pattern (7 R’s), define target architecture, human approval gate</td><td>Expert</td><td>Target Architecture</td></tr><tr><td>4</td><td>Decomposition &#x26; Sequencing</td><td>Identify service boundaries, map dependencies, produce an ordered migration plan, push to Jira/Linear</td><td>Navigator</td><td>Decomposition &#x26; Sequencing</td></tr><tr><td>5</td><td>Iterative Execution</td><td>Transform → Coexist → Eliminate per component, using Strangler Fig / Branch by Abstraction</td><td>Expert + Navigator</td><td>Spec-Driven Development + architecture-to-architecture variants</td></tr><tr><td>6</td><td>Behavioral Verification</td><td>Prove modernized components preserve the business rules from Phase 2</td><td>Verifier</td><td>Behavioral Verification</td></tr><tr><td>7</td><td>Cutover</td><td>Switch live traffic from the legacy system to the new one, and monitor closely</td><td>Navigator + Verifier</td><td>Cutover &#x26; Rollback</td></tr><tr><td>8</td><td>Decommission</td><td>Retire the legacy system — only after the new one has proven stable in production</td><td>Expert</td><td>Decommission</td></tr></tbody></table>
+<p>CoreStory’s playbook stops at Phase 6, because behavioral equivalence is the part AI can meaningfully drive. But verification proves a component is <em>ready</em>; it doesn’t make it <em>live</em>. Phases 7 and 8 are the system-level endgame — the moment the strangler fig finally takes over and the host tree comes down.</p>
+<p><strong>How the phases connect.</strong> They form a dependency chain with an iterative loop at the end:</p>
+<ul>
+<li><strong>Phase 1</strong> produces the assessment that informs <strong>Phase 3</strong> — you can’t choose a pattern without understanding what you’re modernizing.</li>
+<li><strong>Phase 2</strong> produces the behavioral contract that <strong>Phase 6</strong> verifies against. The business-rules inventory <em>is</em> the definition of “correct.” Skipping it is the most common way migrations fail.</li>
+<li><strong>Phase 3</strong> selects the pattern that determines which <strong>Phase 5</strong> variant you run — monolith-to-microservices executes very differently from mainframe-to-cloud.</li>
+<li><strong>Phase 4</strong> produces the sequenced work plan that <strong>Phase 5</strong> executes, each package with its own dependencies and acceptance criteria.</li>
+<li><strong>Phases 5 and 6 are iterative</strong> — each component cycles through execution and verification. A component isn’t done until its behavioral equivalence is confirmed.</li>
+<li><strong>Phases 7 and 8 are the cutover and the kill.</strong> Only once a verified component is carrying real traffic <em>and</em> holding up do you decommission its legacy counterpart. Cutover is reversible (you can route traffic back); decommission is not — which is exactly why it comes last and waits for stability.</li>
+</ul>
+<pre><code class="language-mermaid">flowchart TD
+    Start([🚀 Start]) --> P1
+
+    P1[Phase 1: Codebase Assessment&#x3C;br/>Expert · Readiness scoring]
+    P2[Phase 2: Business Rules Extraction&#x3C;br/>Expert · Behavioral inventory]
+    P1 --> P2
+
+    P2 --> G1{👤 HITL&#x3C;br/>Go / No-go}
+    G1 -->|Approved| P3
+
+    P3[Phase 3: Target Architecture&#x3C;br/>Expert + Navigator · Strategy selection]
+    P3 --> G2{👤 HITL&#x3C;br/>Architecture approval}
+    G2 -->|Approved| P4
+
+    P4[Phase 4: Decomposition &#x26; Sequencing&#x3C;br/>Navigator · Work packages]
+    P4 --> G3{👤 HITL&#x3C;br/>Sequence approval}
+    G3 -->|Approved| P5
+
+    P5[Phase 5: Iterative Execution&#x3C;br/>Navigator · Transform + Coexist]
+    P5 --> P6[Phase 6: Behavioral Verification&#x3C;br/>Verifier · Equivalence proof]
+
+    P6 --> G4{👤 HITL&#x3C;br/>Verification sign-off}
+    G4 -->|Needs remediation| P5
+    G4 -->|Verified| P7
+
+    P7[Phase 7: Cutover&#x3C;br/>Navigator + Verifier · Switch traffic, monitor]
+    P7 --> G5{📈 Stable in&#x3C;br/>production?}
+    G5 -->|Issues| P7
+    G5 -->|Stable| P8
+
+    P8[Phase 8: Decommission&#x3C;br/>Expert · Retire legacy system]
+    P8 --> Done([✅ Component Modernized])
+
+    P5 -.->|Iterative: each component cycles through&#x3C;br/>execution and verification| P6
+
+    click P1 "https://docs.corestory.ai/playbooks/modernization/codebase-assessment" "Codebase Assessment playbook" _blank
+    click P3 "https://docs.corestory.ai/playbooks/modernization/target-architecture" "Target Architecture playbook" _blank
+    click P4 "https://docs.corestory.ai/playbooks/modernization/decomposition-sequencing" "Decomposition &#x26; Sequencing playbook" _blank
+    click P5 "https://docs.corestory.ai/playbooks/modernization/monolith-to-microservices" "Monolith-to-Microservices playbook" _blank
+    click P6 "https://docs.corestory.ai/playbooks/modernization/behavioral-verification" "Behavioral Verification playbook" _blank
+</code></pre>
+<p>Notice what the gates are doing: AI does the heavy lifting at every phase, but <strong>AI informs, humans commit.</strong> Go/no-go, architecture approval, sequence approval, equivalence sign-off — these are the points where someone is accountable for an organizational decision the model shouldn’t make alone.</p>
+<p>Reading the per-phase playbooks (linked from the diagram) surfaced a few things I’d underrated:</p>
+<ul>
+<li><strong>Tribal knowledge is the silent killer.</strong> Engineers who’ve known a system for years still miss the utility seven services quietly depend on, or the batch job that runs once a month. And 30–50% of mainframe business logic hides in non-code artifacts (JCL, copybooks, config). A formal assessment exists to surface exactly what humans forget — under-scoping from these blind spots is what sinks projects.</li>
+<li><strong>Data is the real constraint, not code.</strong> Splitting a shared database across service boundaries is consistently the hardest part of any migration. The rule is <em>don’t break the monolith’s database on day one</em> — start with schema ownership, move to database-per-service only once the boundary is proven. (This is why “data first” below matters so much.)</li>
+<li><strong>Sequencing optimizes the wrong thing if you optimize per-component.</strong> The best order <strong>minimizes total temporary integration burden</strong> across the whole migration — every coexistence phase needs real adapters, façades, and data sync. And you extract the <em>easiest</em> service first on purpose: the goal isn’t speed, it’s building the pipeline, monitoring, and team muscle memory on a safe case.</li>
+<li><strong>Verification is tiered, and not every difference is a bug.</strong> Static rule-tracing → golden-master tests → shadow traffic → data reconciliation. Crucially, <em>classify before remediating</em>: differences are intentional improvements, acceptable deviations, or real regressions. The dangerous regressions are the invisible ones — default values, ordering guarantees, error-message formats — that no documented business rule covers.</li>
+<li><strong>The façade is infrastructure, not architecture</strong> — and distributed transactions are the hidden tax. Once a single-database operation spans two services it loses ACID, so you pay for it with saga patterns. Underinvesting in the routing layer (percentage rollout, circuit breaking, request mirroring) is what makes “gradual” migrations stop being gradual.</li>
+</ul>
+<p>There’s also a deeper thread running through CoreStory’s <em>bug-resolution</em> and <em>feature-implementation</em> playbooks: both split the work into an <strong>Expert phase</strong> (how the system works) and a <strong>Navigator phase</strong> (where to change it), insist on <strong>tests before implementation</strong>, and <strong>persist each investigation as institutional knowledge</strong>. That’s the same harness shape applied to everyday work — which is exactly the argument of the next section.</p>
+<h3 id="migrate-data-first-logic-follows">Migrate data first, logic follows</h3>
+<p>One hard-won ordering rule: <strong>move the data before the logic.</strong> Data outlives code. Schemas, formats, and the meaning of fields are the most durable thing in any legacy system — and the logic only makes sense in terms of the data it operates on. If you try to port logic onto a data model you haven’t settled yet, every business rule you migrate sits on shifting ground, and you re-do the work each time the schema moves.</p>
+<p>Get the data migrated and stable first, then you have a fixed target to write against. The Strangler Fig grows downward to the ground before it strangles the trunk; migrations work the same way — root yourself in the data, then let the logic follow.</p>
+<h2 id="what-is-harness">What is Harness?</h2>
+<p>A harness doesn’t “make the model smarter”; rather, it establishes a closed-loop working system <em>around</em> the model. The model is fixed — what changes is the environment it operates in, the instructions it reads, the tools it can reach, the memory it carries across sessions, and the feedback that tells it whether it actually succeeded. <a href="https://walkinglabs.github.io/learn-harness-engineering/en/">Learn Harness Engineering</a> frames reliability as emerging from four dimensions — environment design, state management, verification, and control — wired into a loop:</p>
+<pre><code class="language-mermaid">flowchart TD
+    Obj[Clear Objective&#x3C;br/>AGENTS.md]:::accent
+    Init[Initialization&#x3C;br/>init.sh]
+    Run{Run Tasks&#x3C;br/>AI Agent}
+    Verify{Verify &#x26; QA&#x3C;br/>Test suite}
+    Feedback[Runtime Feedback&#x3C;br/>CLI / Logs]
+    Done[Cleanup &#x26; Handoff&#x3C;br/>claude-progress.md]:::accent
+
+    Obj --> Init --> Run
+    Run -->|Code Completed| Verify
+    Run -->|Encounter Issues| Feedback
+    Verify -->|Auto-fix| Run
+    Verify -->|Failed| Feedback
+    Verify -->|Passed| Done
+    Feedback --> Run
+
+    classDef accent fill:#e8633a,stroke:#c44d28,color:#fff;
+</code></pre>
+<p>The point of the loop: the model never “declares victory” on its own word. It acts, the environment changes, verification judges the result, and that judgment — plus what’s worth remembering — feeds the next turn. Take the loop away and you’re back to one-shot prompting.</p>
+<p>OpenAI and Anthropic have both converged on this same idea — that the leverage for making agents run <em>longer and better</em> is in the harness, not just the model:</p>
+<ul>
+<li><strong>OpenAI</strong> (<a href="https://openai.com/index/harness-engineering/">Harness engineering</a>) encodes <em>“golden principles”</em> directly into the repository, treats plans as first-class versioned artifacts, and runs background tasks that scan for deviations and open refactoring PRs. The framing: you give the agent the same onboarding context — architecture maps, quality grades, operating principles — you’d give a new teammate, rather than overwhelming it with ad-hoc instructions.</li>
+<li><strong>Anthropic</strong> (<a href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents">effective harnesses</a>) tackles the cross-session problem with an <em>initializer + coding agent</em> split, a JSON feature list, a progress file, and guardrails that stop the agent from prematurely calling a project “done.”</li>
+<li><strong>Anthropic</strong> (<a href="https://www.anthropic.com/engineering/harness-design-long-running-apps">harness design</a>) adds the strongest lever of all: <strong>separate the agent that does the work from the agent that judges it</strong> (planner → generator → evaluator). Agents are poor self-evaluators, so an independent grader catches what a lone agent misses. And keep the harness as simple as possible — stress-test its assumptions as models improve, because components that were once load-bearing often stop being so.</li>
+</ul>
+<p>Recently the paper <a href="https://arxiv.org/html/2606.09498v1">Self-Harness: Harnesses That Improve Themselves</a> classified harness improvement into three kinds:</p>
+<ul>
+<li><strong>Human harness engineering</strong> — human engineers manually inspect and revise the agent’s harness.</li>
+<li><strong>Meta-Harness</strong> — a stronger external agent optimizes the harness of a weaker target agent, treating harness design as a searchable space.</li>
+<li><strong>Self-Harness</strong> — the agent improves its <em>own</em> operating harness, with no external guidance.</li>
+</ul>
+<h3 id="the-evolution-of-enhancement">The Evolution of Enhancement</h3>
+<p>The field has moved through three stages, each widening the surface we engineer:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Prompt engineering -> Context engineering -> Harness engineering</span></span></code></pre>
+<ul>
+<li><strong>Prompt engineering</strong> — crafting the wording of a single input so the model produces the output you want: instructions, examples, role framing, chain-of-thought. It treats the model as a function you tune one string at a time. <em>(Canonical reference: the <a href="https://www.promptingguide.ai/">Prompt Engineering Guide</a>.)</em></li>
+<li><strong>Context engineering</strong> — curating the <em>whole</em> set of tokens the model sees at inference: retrieved documents, tool results, memory, system state — deciding what to include, compress, or drop so the limited context window holds the right information at the right time. <em>(Canonical reference: Anthropic’s <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Effective context engineering for AI agents</a>.)</em></li>
+<li><strong>Harness engineering</strong> — designing the entire closed-loop system the model runs inside: environment, tools, verification, memory, and control flow, sustained across many turns and sessions. Prompt and context become just two components of it. <em>(Canonical references: the OpenAI and Anthropic posts above.)</em></li>
+</ul>
+<p>Each stage doesn’t replace the previous one — it <em>contains</em> it. A harness is full of prompts and managed context; it just no longer stops there.</p>
+<p><em>For a conscious being, to exist is to change, to change is to mature, to mature is to go on creating oneself endlessly.</em>
+<em>—Henri Bergson, Creative Evolution</em></p>
+<p>That line is the whole promise of self-improving agents: a harness that doesn’t just run the model, but keeps re-creating itself. A few concrete techniques point this way — <a href="https://github.com/nousresearch/hermes-agent">Nous Research’s Hermes agent</a> and the <a href="https://medium.com/@reliabledataengineering/claude-skills-2-0-the-self-improving-ai-capabilities-that-actually-work-dc3525eb391b">self-improving “Claude Skills 2.0”</a> pattern, where the agent accumulates and refines its own reusable skills.</p>
+<p>The <strong>Self-Harness</strong> paper makes the mechanism precise. The key constraint: the <strong>model and evaluator stay fixed</strong> — only the <em>harness</em> changes, so any improvement is attributable to harness edits alone. The agent edits only declared <em>editable surfaces</em> (system instructions, tool definitions, verification guidance, runtime policies, control structures), never model weights. It runs as a bounded, evidence-driven loop:</p>
+<ol>
+<li><strong>Weakness Mining</strong> — run the current harness over a held-in task set, collect execution traces with verifiable outcomes, then cluster the <em>failures</em> by <strong>verifier-grounded failure signature</strong> (terminal cause + contributing behavior + reusable mechanism). This turns scattered failures into a structured <em>evidence bundle</em> of patterns that admit a common fix.</li>
+<li><strong>Harness Proposal</strong> — the same fixed model, in a <em>proposer</em> role, reads the evidence bundle and generates <strong>K distinct candidate edits</strong>. Each must target one failure mechanism and touch only the minimal harness surface, leaving unrelated behavior intact.</li>
+<li><strong>Proposal Validation</strong> — re-evaluate each candidate on <strong>both</strong> a held-in and a held-out split. Accept only if it improves at least one split without regressing the other (Δin ≥ 0, Δho ≥ 0, max > 0). The held-out split is a regression gate ensuring the fix <em>generalizes</em>. Accepted edits merge into the next harness lineage; rejected ones are logged but discarded.</li>
+</ol>
+<pre><code class="language-mermaid">flowchart TD
+    H[Current Harness&#x3C;br/>lineage] --> Run
+
+    subgraph S1[1 · Weakness Mining]
+        Run[Run on held-in tasks&#x3C;br/>fixed model + evaluator] --> Traces[Execution traces&#x3C;br/>+ verifiable outcomes]
+        Traces --> Cluster[Cluster failures by&#x3C;br/>verifier-grounded signature]
+        Cluster --> Bundle[(Evidence bundle&#x3C;br/>failure patterns)]
+    end
+
+    subgraph S2[2 · Harness Proposal]
+        Bundle --> Propose[Proposer role:&#x3C;br/>generate K distinct candidates]
+        Propose --> Edits[Each edits only declared surfaces:&#x3C;br/>instructions · tools · verification&#x3C;br/>policies · control flow]
+    end
+
+    subgraph S3[3 · Proposal Validation]
+        Edits --> Eval{Re-eval on held-in&#x3C;br/>AND held-out splits}
+        Eval -->|Δin≥0 · Δho≥0 · max>0| Accept[✅ Accept → merge&#x3C;br/>into next lineage]
+        Eval -->|regresses a split| Reject[❌ Log &#x26; discard]
+    end
+
+    Accept --> H
+    Reject -.->|harness unchanged| H
+
+    Fixed[🔒 Model + evaluator stay FIXED&#x3C;br/>only the harness changes]
+    Fixed -.- Run
+</code></pre>
+<p>Because the loop is grounded in each model’s <em>own</em> failure signatures, the harness it converges on is <strong>model-specific</strong> — the paper shows MiniMax-, Qwen-, and GLM-class models each accreting different edits (early-artifact creation, dependency prechecking, preserving shell environment state, breaking unproductive tool-use loops). There is no single best harness; there’s the best harness <em>for this model on these tasks</em>.</p>
+<h3 id="fundamental-of-harness">Fundamental of Harness</h3>
+<h2 id="migration-is-a-harness">Migration is a Harness</h2>
+<h3 id="why-not-just-a-skill">Why not just a skill?</h3>
+<ul>
+<li>
+<p>Structure of folder</p>
+</li>
+<li>
+<p>Workflow</p>
+</li>
+</ul>
+<h3 id="the-pricing">The Pricing</h3>
+<ul>
+<li>
+<p>The price of Fable 5</p>
+</li>
+<li>
+<p>Cost and time, but if you use an outdated model, you will waste both</p>
+</li>
+</ul>
+<h3 id="other-important-aspects">Other important aspects</h3>
+<ul>
+<li>One more important thing that is how we can split and accumulate the work for each migration task</li>
+</ul>
+<h2 id="some-other-useful-tools">Some other useful tools</h2>
+<h3 id="understand-anything">Understand Anything</h3>
+<p><a href="https://github.com/Egonex-AI/Understand-Anything?ref=geeek.org">https://github.com/Egonex-AI/Understand-Anything?ref=geeek.org</a></p>
+<p><a href="https://github.com/aws-samples/aws-mainframe-modernization-carddemo">https://github.com/aws-samples/aws-mainframe-modernization-carddemo</a></p>
+<p><img alt="AWS Mainframe Modernization Card Demo" loading="lazy" decoding="async" fetchpriority="auto" width="1794" height="961" src="/blogs/_astro/carddemo-knowledge-graph.DHuVAKQw_ZIgF77.webp" ></p>
+<h3 id="playwright">Playwright</h3>
+<p><a href="https://playwright.dev/">https://playwright.dev/</a></p>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2026 Locch. All rights reserved.
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.q7s2O-JS.js"></script> </body> </html>
