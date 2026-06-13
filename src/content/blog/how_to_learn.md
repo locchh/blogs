@@ -174,6 +174,8 @@ I really dislike BBC and CNN — they always talk about politics and social issu
 
 The story that helps you remember vocabulary — I don't know whether it works for everyone, but it works for me. Learning a list of words without context is boring and hard to remember. That sounds backwards, right? **How can you remember better by taking in more information?** For me, when I learn a word that appears in a story, I can remember the context it appears in, who says it, and what the story is about. That somehow makes the word more meaningful and easier to remember.
 
+The core idea of this method is that the word never comes alone: along with the meaning, I pick up how it sounds, the words it sits next to, and the kind of situation a real person would use it in. That is the whole difference — **a word learned from a list is one you'll recognize; a word learned from a story is one you can actually use.**
+
 #### How to "Workout"?
 
 "Workout" is where the real effort happens — this is the step that **turns passive recognition into active recall**.
