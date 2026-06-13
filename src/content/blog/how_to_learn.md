@@ -1,7 +1,7 @@
 ---
 title: "How to learn?"
 description: "Some thoughts about learning"
-pubDate: "2026-06-13"
+pubDate: "2026-06-11"
 author: "locchh"
 tags: ["learning", "education"]
 draft: false

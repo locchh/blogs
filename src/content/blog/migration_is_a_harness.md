@@ -1,7 +1,7 @@
 ---
 title: "Migration is a harness"
 description: "Some thoughts about migration"
-pubDate: "2026-05-31"
+pubDate: "2026-06-13"
 author: "locchh"
 tags: ["migration", "harness", "coding", "ai-agent"]
 draft: true
