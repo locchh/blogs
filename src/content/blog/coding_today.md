@@ -8,7 +8,7 @@ tags: ["coding", "reflection", "2026"]
 
 ## 1. Some helpful commands
 
-### Git commands
+### Git commands and workflows
 
 Here are some useful git commands for daily development:
 
@@ -35,6 +35,17 @@ Here are some useful git commands for daily development:
   - `git reset --hard HEAD~1` - undo last commit and discard changes
   - `git reset --hard origin/main` - reset local branch to match remote
 
+- `git restore`: Discard changes in the working tree (the modern, safer replacement for `git checkout -- file`)
+  - `git restore file.txt` - discard unstaged changes to a file
+  - `git restore .` - discard all unstaged changes in the working tree
+  - `git restore --staged file.txt` - unstage a file but keep its changes
+  - `git restore --source=HEAD~1 file.txt` - restore a file from an older commit
+
+- `git clean`: Remove untracked files from the working tree
+  - `git clean -nfd` - **dry run**: preview which untracked files and directories *would* be removed, without deleting anything (always run this first)
+  - `git clean -fd` - actually remove untracked files and directories
+  - `git clean -fdx` - also remove ignored files (those in `.gitignore`) — use with caution
+
 - `git fetch`: Download objects and refs from another repository
 
 - `git rebase`: Reapply commits on top of another base tip
@@ -42,6 +53,278 @@ Here are some useful git commands for daily development:
   - `git rebase -i HEAD~3` - interactive rebase for last 3 commits
   - `git rebase --continue` - continue after resolving conflicts
   - `git rebase --abort` - abort rebase and return to original state
+
+### My feature-branch workflow
+
+Beyond the individual commands, here is the day-to-day workflow I follow for a feature task. The idea is simple: branch off the base, loop on small commits, and **sync with the base before I open the merge request** so I never push a stale branch. Two habits make it reliable — sync from the base *throughout* the work (not just at the end, so conflicts stay small), and put a **test gate** between "resolved" and "push".
+
+```mermaid
+graph TD
+    Start([Start on base branch A]) --> Branch["Create feature branch<br/>git checkout -b A1"]
+    Branch --> Code[Write code]
+    Code --> Commit["Stage + commit<br/>git add . && git commit"]
+    Commit --> More{"More work to do?"}
+    More -->|keep coding| Code
+    More -->|sync with base| Sync["Pull in the latest base<br/>git fetch origin<br/>git rebase origin/A"]
+    Sync --> Code
+    More -->|feature done| Refresh["Refresh the base<br/>git fetch origin"]
+    Refresh --> Behind{"New commits on A?<br/>(git log A1..origin/A)"}
+    Behind -->|yes| Integrate["Catch up onto base<br/>git rebase origin/A"]
+    Behind -->|no| Test["Run tests + lint"]
+    Integrate --> Conflict{"Conflict?"}
+    Conflict -->|yes| Resolve["Resolve, then<br/>git add . && git rebase --continue"]
+    Conflict -->|no| Test
+    Resolve --> Test
+    Test --> Green{"All green?"}
+    Green -->|no, fix it| Code
+    Green -->|yes| Push["Push the branch<br/>git push -u origin A1"]
+    Push --> MR(["Open merge request"])
+```
+
+The same flow, as the literal commands I actually type:
+
+```bash
+# start a feature off the latest base
+git fetch
+git checkout -b feature/TICKET-123-short-desc origin/main
+
+# work in a loop
+git add .
+git commit -m "meaningful message"
+
+# catch up before the PR
+git fetch
+git rebase origin/main
+
+# (optional) tidy history before review
+git rebase -i origin/main
+
+# publish and open the PR
+git push -u origin feature/TICKET-123-short-desc
+
+# after it is merged on GitHub, delete the local branch
+git branch -d feature/TICKET-123-short-desc
+```
+
+A few things I never do: force-push to `main`, commit directly to `main`, run `git merge main` locally just to catch up (rebase instead — see below), or leave stale branches lying around for weeks.
+
+### Git merge vs git rebase — a practical lesson
+
+The two commands that confuse people the most are `merge` and `rebase`. Both integrate changes between branches — but in opposite directions, for opposite purposes.
+
+> **merge** = integrate *your work* **into** the product (feature → main)
+>
+> **rebase** = integrate *the product's updates* **into** your work (main → feature)
+
+```
+rebase: main → your feature   (you catch up)
+merge:  your feature → main   (you ship)
+```
+
+#### There are three layers, not two
+
+Most confusion comes from thinking there are two things (local and GitHub) when there are really three:
+
+| # | Layer | Where it lives | What it is |
+|---|---|---|---|
+| 1 | Remote branch | GitHub's servers | the source of truth — the real `main` |
+| 2 | Remote-tracking branch | your machine (read-only) | `origin/main` — a cached copy, refreshed by `git fetch` |
+| 3 | Local branch | your machine | `feature/...` — where you actually work |
+
+**`origin/main` is a local cache, not GitHub itself.** It lives on your machine in `.git/refs/remotes/origin/main` — a read-only snapshot of what GitHub looked like the last time you ran `git fetch`.
+
+```
+GitHub (real): main → A-B-C-D
+        ↑
+git fetch (refresh the cache)
+        ↓
+Your machine: origin/main → A-B-C-D (cache, read-only)
+```
+
+Think of it like a news app: GitHub is the news server, `origin/main` is the articles cached on your phone, and `git fetch` is hitting refresh.
+
+| Command | What it updates |
+|---|---|
+| `git fetch` | only `origin/*` (remote-tracking branches) — never your files |
+| `git pull` | `fetch` **+** auto-merge into your current local branch |
+
+`git fetch` is the safe one — it never touches your local branches or working tree. And here's a senior-dev habit worth knowing: your local `main` goes stale the moment a teammate pushes, and you rarely actually need it — `origin/main` is always fresh after a fetch. Some people delete local `main` entirely and build from `origin/main` directly:
+
+```bash
+git branch -d main                  # you never edit main locally anyway
+git fetch
+git checkout --detach origin/main   # detached HEAD, no stale branch
+# build, test, run
+git checkout feature/your-branch    # back to work
+```
+
+#### Merge — how you ship
+
+`merge` combines two histories by creating a new merge commit. In a real workflow you rarely run it by hand — it happens when you click **"Merge pull request"** on GitHub/GitLab.
+
+```
+main: A - B - C ----------\
+                           \
+feature:      D  -  E  -  [M]   <- merge commit
+```
+
+`[M]` has two parents, so the full history is preserved — you can always see where the branch came from. The UI is just running this for you:
+
+```bash
+git checkout main
+git merge feature/your-branch
+```
+
+**Don't run `git merge main` locally to catch up.** It litters your feature branch with a noisy "merged main into feature" commit that reviewers have to wade through. Use `rebase` for catching up.
+
+#### Rebase — how you catch up
+
+`rebase` takes your commits and **replants them on top of the latest base**. No merge commit; history stays linear.
+
+```
+Before:                        After git rebase origin/main:
+
+main:    A - B - C             main:    A - B - C
+              \                                  \
+feature:       D - E           feature:           D' - E'
+              (based on B)                       (replayed on C)
+```
+
+`D'` and `E'` are *new* commits — rebase rewrites each one with a new parent and a new hash. Same changes, new objects. That is exactly why the rules are:
+
+- Only rebase **your own** local/feature branches — never a shared one.
+- Rewriting a branch others have already pulled breaks their history.
+- It is local-only until you `git push`.
+
+```bash
+git fetch                # refresh origin/main
+git rebase origin/main   # replay your commits on top
+```
+
+#### Interactive rebase — cleaning up history before a PR
+
+`git rebase -i origin/main` opens an editor where you can reshape your commits before they go up for review:
+
+```
+pick abc  wip
+pick def  fix
+pick ghi  fix again
+
+# rewrite to:
+pick   abc  add login feature
+squash def
+squash ghi          # 3 messy commits → 1 clean one
+```
+
+| Command | What it does |
+|---|---|
+| `pick` | keep the commit as-is |
+| `reword` | keep the commit, edit its message |
+| `squash` | fold into the previous commit |
+| `drop` | delete the commit entirely |
+
+Use plain `rebase origin/main` when your commits are already clean and you just need to catch up; use `rebase -i` right before opening a PR to turn "wip / fix / oops" into a history worth reading.
+
+#### Resolving conflicts
+
+A conflict happens when two branches edit the **same lines**. Git can't decide which version wins, so it stops and writes markers into the file:
+
+```
+<<<<<<< HEAD            (your version)
+const timeout = 3000;
+=======
+const timeout = 5000;
+>>>>>>> origin/main     (the incoming version)
+```
+
+Edit the file to keep the right code and delete the markers, then:
+
+```bash
+git status              # see which files conflict
+# ...fix the file by hand...
+git add src/config.ts   # stage the resolution
+git rebase --continue   # do NOT run git commit during a rebase
+```
+
+VS Code gives you buttons above each block — *Accept Current / Incoming / Both* — then you stage the file and run `git rebase --continue` in the terminal.
+
+The one difference between the two to keep in your head:
+
+| | Merge | Rebase |
+|---|---|---|
+| Conflicts surface | once, all together | one commit at a time |
+| Continue with | `git merge --continue` | `git rebase --continue` |
+| Bail out | `git merge --abort` | `git rebase --abort` |
+
+With rebase, if 2 of your 3 commits conflict, you resolve **twice** — once per commit as Git replays them. And if it ever gets too messy, `git rebase --abort` puts you back exactly where you started. No harm done.
+
+#### The golden rules
+
+> **Rebase to clean up your own work. Merge to integrate into shared history.**
+>
+> **`main` is protected — it only changes through a PR, never a direct push.**
+>
+> **Feature branches are rebased locally to catch up.**
+
+```
+main (protected, on GitHub)
+ └── changes only via PR — never pushed to directly
+
+feature (local)
+ └── rebased onto origin/main to catch up
+ └── pushed → PR → merged on GitHub
+```
+
+### Other workflows worth knowing
+
+A few more recipes I reach for regularly:
+
+**Park work-in-progress with `git stash`.** When something urgent interrupts you mid-change and you're not ready to commit:
+
+```bash
+git stash push -m "half-done login form"   # shelve changes, clean the working tree
+git checkout main                           # go deal with the urgent thing
+# ...later...
+git checkout feature/login
+git stash pop                               # bring the changes back
+git stash list                              # see everything you've shelved
+```
+
+**Undo a *pushed* commit with `git revert`, never `git reset`.** `reset` rewrites history — fine locally, but it breaks everyone else once a commit is shared. `revert` records a *new* commit that undoes the old one, so it is safe on shared branches:
+
+```bash
+git revert <commit-sha>   # creates an "undo" commit
+git revert HEAD           # undo the most recent commit
+```
+
+(Save `git reset` for commits that never left your machine.)
+
+**Find the commit that introduced a bug with `git bisect`.** Binary-search the history instead of reading every commit:
+
+```bash
+git bisect start
+git bisect bad             # the current commit is broken
+git bisect good v1.2.0     # this old tag worked
+# git checks out the midpoint — you test it, then mark it:
+git bisect good            # or: git bisect bad
+# repeat until git names the culprit, then clean up:
+git bisect reset
+```
+
+**Grab a single commit from another branch with `git cherry-pick`.** When you need just one fix without merging the whole branch:
+
+```bash
+git cherry-pick <commit-sha>
+```
+
+**Fix the last commit before pushing with `--amend`.** Forgot a file, or want to reword the message:
+
+```bash
+git add forgotten-file.ts
+git commit --amend         # folds the staged change into the last commit
+```
+
+Only amend commits you **haven't pushed** — like rebase, it rewrites history.
 
 ### Custom slash commands
 
