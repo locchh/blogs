@@ -7,7 +7,7 @@ tags: ["learning", "education"]
 draft: false
 ---
 
-## How to learn?
+## First thing before learning
 
 Confucius say we can gain knowledge in three ways:
 
@@ -25,7 +25,64 @@ And that is the first lesson, the one that comes before all three: **qualify wha
 
 So before you learn anything — including everything I write below — verify it first. I just fooled you with one fake quote to prove a real point. Now you know the cost of trusting a source you never checked.
 
-## How to learn English
+## How to learn in AI era?
+
+As I mentioned in my previous post [The Skills That Actually Matter in AI Assistance Era](https://www.linkedin.com/posts/chuong-loc_%F0%9D%90%93%F0%9D%90%A1%F0%9D%90%9E-%F0%9D%90%92%F0%9D%90%A4%F0%9D%90%A2%F0%9D%90%A5%F0%9D%90%A5%F0%9D%90%AC-%F0%9D%90%93%F0%9D%90%A1%F0%9D%90%9A%F0%9D%90%AD-%F0%9D%90%80%F0%9D%90%9C%F0%9D%90%AD%F0%9D%90%AE%F0%9D%90%9A%F0%9D%90%A5-activity-7385524291850846208-o9aW?utm_source=share&utm_medium=member_android&rcm=ACoAAD9laxkBsmkcAipJMc2HAVrKjjkg5sWujiY), as AI becomes more powerful, a lot of work can be handed off to it. I call this **"abstraction"**: you no longer have to worry about the low-level details — checking logs, debugging, and so on. Delegate those tasks to the AI and focus on what really matters: business problem-solving, creativity, and critical thinking. But in this section I want to talk about a different aspect — the **token**. Everybody is about to get hungry for tokens. For example, now that [GitHub is moving Copilot from request-based billing to usage-based billing](https://www.reddit.com/r/GithubCopilot/comments/1ttd1hl/end_of_an_era_june_1_2026_github_copilot_models/), a developer can burn through a whole month's budget in just a few days.
+
+So let's dig deeper into tokens.
+
+When you pay for AI, you pay per **token** — and every token is either something going *into* the model or something coming *out* of it. That's the whole game. So there are two families to understand: input tokens and output tokens.
+
+### Input tokens (and the cache)
+
+Input is everything you feed *into* the model on each turn: the system prompt, the list of tools it's allowed to use, every file you opened, every command output — and the big one, the **entire conversation history**. The model has no memory; the whole chat is re-sent on every single turn.
+
+That sounds wasteful, and it would be, except for **caching**. Input is split into three prices:
+
+- **cache write** (~1.25× the base price) — the first time a chunk of text is seen.
+- **cache read** (~10% of the base price) — every time that same chunk is reused afterwards.
+- **fresh input** (1× the base price) — anything new that isn't cached yet.
+
+Watch what happens in a long session — every turn drags the whole history along with it:
+
+|Turn|What gets re-sent as input|
+|---|---|
+|1|system prompt + tools + your first message|
+|5|all of the above + turns 1-4 (every message, file, and command output)|
+|20|all of the above + turns 1-19 — this can be *huge*|
+
+This is why a long chat gets expensive even when your own messages are short — you are re-paying for the context every time. And it's exactly why the **cache read** price matters so much: that re-sent history is read at ~10% instead of full price. Without the cache, a long session would cost a fortune.
+
+### Output tokens — there are 4 kinds
+
+Output is everything the model *generates*, and it's the expensive side — usually around **5× the price of input**.
+
+Most people only count the part they can see: how many lines of code it wrote, how many lines of content it produced. But that visible deliverable is just **one** kind of output. There are actually **four**:
+
+1. **Direct output** — the deliverable you asked for: the code, the file, the answer. This is the part everyone counts.
+2. **Intermediate output** — the tool calls the model makes to get there: read this file, run this command, search that folder. You didn't ask for these directly, but each one is generated, and each one costs.
+3. **Thinking** — the model reasoning to itself before it acts. Even when the tool hides the thinking from you, it still happened — and **you still paid for it.**
+4. **Explanation** — the part where it talks back to you: brainstorming, summarizing, explaining what it just did.
+
+So when you see "20 lines of code" come back, that was maybe a quarter of what you actually paid for. The other three kinds — the tool calls, the thinking, the chit-chat — are invisible on the screen but very visible on the bill.
+
+### The value the bill can't see
+
+But here is my real point: **direct output is good for your work; thinking and explanation are good for your brain.**
+
+Your boss sees only two numbers — how many lines of code you and the AI produced, and how much it cost. That is the whole of his accounting. But I am the kind of person who needs to understand the *logic* behind the code, not just copy and paste it and pray. So I ask the AI to explain, to give me examples, to show the evidence. I will open Claude Code inside a codebase, prompt it for an hour, and walk away **without generating a single file** — and that hour was not wasted. Often it was the most valuable hour of my day.
+
+This is the part the billing can never see. They measure the cost of the output, but they never measure the *value* of what you understood. And how would they? How do you put a price on knowledge? When you don't know something and the AI teaches it to you properly, that lesson is yours forever — you carry it to the next file, the next project, the next company. Direct output doesn't travel like that: the code it writes only works for the codebase you're sitting in right now. **The lesson works everywhere.**
+
+So don't let the line-count fool you into thinking output is the only thing worth paying for. Sometimes a single token — one "Yes" or "No," landing at the right moment in the right place — saves you days of walking down the wrong road. You will never find that on an invoice.
+
+### AI is an amplifier
+
+Here is the principle underneath all of this: **AI doesn't fix your work, it amplifies it.** Automation has always been a multiplier, never a cure. If your work is a mess — no understanding, no structure, copy-paste on top of copy-paste — AI just produces a bigger, faster mess, and now you're paying tokens for the privilege. But if your work is lean — you understand the problem, you know what you're asking for, you can tell a good answer from a plausible one — then AI multiplies *that*, and your productivity compounds.
+
+This is exactly why the thinking and explanation tokens matter. They are what keep your side of the equation lean. The more you understand, the more leverage every token of output gives you. Garbage in, garbage out — amplified. Clarity in, clarity out — amplified. The AI is the same in both cases; the difference is you.
+
+## How to learn English?
 
 English is the lingua franca of the modern world, which means the latest knowledge and information are most likely available in English first. And with English, you can communicate widely with people from all over the world.
 
