@@ -738,25 +738,30 @@ I built [commit-explorer](https://github.com/locchh/commit-explorer) (CEX) for e
 **The other craft is controlling how your code *grows*.** Code change moves through several layers of isolation, and each boundary is a checkpoint:
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│  6. Environment      ← local → staging → production                    │
-│  ┌──────────────────────────────────────────────────────────────────┐  │
-│  │  5. Repository     ← local vs. remote                            │  │
-│  │  ┌────────────────────────────────────────────────────────────┐  │  │
-│  │  │  4. Branch       ← isolated line of work                   │  │  │
-│  │  │  ┌──────────────────────────────────────────────────────┐  │  │  │
-│  │  │  │  3. Commit     ← atomic unit of change               │  │  │  │
-│  │  │  │  ┌────────────────────────────────────────────────┐  │  │  │  │
-│  │  │  │  │  2. Staged   ← deliberate selection            │  │  │  │  │
-│  │  │  │  │  ┌──────────────────────────────────────────┐  │  │  │  │  │
-│  │  │  │  │  │  1. Unstaged  ← scratch pad              │  │  │  │  │  │
-│  │  │  │  │  └──────────────────────────────────────────┘  │  │  │  │  │
-│  │  │  │  └────────────────────────────────────────────────┘  │  │  │  │
-│  │  │  └──────────────────────────────────────────────────────┘  │  │  │
-│  │  └────────────────────────────────────────────────────────────┘  │  │
-│  └──────────────────────────────────────────────────────────────────┘  │
-└────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│ 6. Environment   ← local → staging → production                                             │
+│  ┌───────────────────────────────────────────────────────────────────────────────────────┐  │
+│  │ 5. Repository    ← local vs. remote                                                   │  │
+│  │  ┌─────────────────────────────────────────────────────────────────────────────────┐  │  │
+│  │  │ 4. Branch        ← isolated line of work                                        │  │  │
+│  │  │  ┌───────────────────────────────────────────────────────────────────────────┐  │  │  │
+│  │  │  │ 3. Commit        ← atomic unit of change                                  │  │  │  │
+│  │  │  │  ┌─────────────────────────────────────────────────────────────────────┐  │  │  │  │
+│  │  │  │  │ 2. Staged        ← deliberate selection                             │  │  │  │  │
+│  │  │  │  │  ┌───────────────────────────────────────────────────────────────┐  │  │  │  │  │
+│  │  │  │  │  │ 1. Unstaged      ← scratch pad (tracked, edits not staged)    │  │  │  │  │  │
+│  │  │  │  │  │  ┌─────────────────────────────────────────────────────────┐  │  │  │  │  │  │
+│  │  │  │  │  │  │ 0. Untracked     ← outside git — no history to restore  │  │  │  │  │  │  │
+│  │  │  │  │  │  └─────────────────────────────────────────────────────────┘  │  │  │  │  │  │
+│  │  │  │  │  └───────────────────────────────────────────────────────────────┘  │  │  │  │  │
+│  │  │  │  └─────────────────────────────────────────────────────────────────────┘  │  │  │  │
+│  │  │  └───────────────────────────────────────────────────────────────────────────┘  │  │  │
+│  │  └─────────────────────────────────────────────────────────────────────────────────┘  │  │
+│  └───────────────────────────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
+
+The innermost layer, **untracked**, sits *outside* git's control: a brand-new file git has never recorded. It's even rawer than an unstaged change — an unstaged edit is to a file git already tracks, whereas an untracked file has no history at all, which is why only `git clean` (not `git restore` or `git reset`) can undo it. The first `git add` promotes it from untracked into the tracked staging area.
 
 By controlling each layer deliberately — what you stage, what you commit, when you push — your code can never ship without going through every checkpoint first: tested locally, merged to a shared branch, validated on staging, then released to production.
 
