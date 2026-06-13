@@ -674,24 +674,28 @@
 <p><strong>Writing code is like writing a story — each commit message should carry semantic meaning and narrate what you were doing. Read the git graph six months later and you should be able to follow the plot: what was built, in what order, and why. That discipline makes a codebase maintainable not just for others, but for your future self.</strong></p>
 <p>I built <a href="https://github.com/locchh/commit-explorer">commit-explorer</a> (CEX) for exactly this reason. GitHub doesn’t show a commit timeline graph, and cloning a repo just to run <code>git log --graph</code> is wasteful. CEX lets you explore any repository’s commit history — graph, diffs, branch comparisons — directly from the terminal without a full clone, using shallow fetching under the hood.</p>
 <p><strong>The other craft is controlling how your code <em>grows</em>.</strong> Code change moves through several layers of isolation, and each boundary is a checkpoint:</p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>┌────────────────────────────────────────────────────────────────────────┐</span></span>
-<span class="line"><span>│  6. Environment      ← local → staging → production                    │</span></span>
-<span class="line"><span>│  ┌──────────────────────────────────────────────────────────────────┐  │</span></span>
-<span class="line"><span>│  │  5. Repository     ← local vs. remote                            │  │</span></span>
-<span class="line"><span>│  │  ┌────────────────────────────────────────────────────────────┐  │  │</span></span>
-<span class="line"><span>│  │  │  4. Branch       ← isolated line of work                   │  │  │</span></span>
-<span class="line"><span>│  │  │  ┌──────────────────────────────────────────────────────┐  │  │  │</span></span>
-<span class="line"><span>│  │  │  │  3. Commit     ← atomic unit of change               │  │  │  │</span></span>
-<span class="line"><span>│  │  │  │  ┌────────────────────────────────────────────────┐  │  │  │  │</span></span>
-<span class="line"><span>│  │  │  │  │  2. Staged   ← deliberate selection            │  │  │  │  │</span></span>
-<span class="line"><span>│  │  │  │  │  ┌──────────────────────────────────────────┐  │  │  │  │  │</span></span>
-<span class="line"><span>│  │  │  │  │  │  1. Unstaged  ← scratch pad              │  │  │  │  │  │</span></span>
-<span class="line"><span>│  │  │  │  │  └──────────────────────────────────────────┘  │  │  │  │  │</span></span>
-<span class="line"><span>│  │  │  │  └────────────────────────────────────────────────┘  │  │  │  │</span></span>
-<span class="line"><span>│  │  │  └──────────────────────────────────────────────────────┘  │  │  │</span></span>
-<span class="line"><span>│  │  └────────────────────────────────────────────────────────────┘  │  │</span></span>
-<span class="line"><span>│  └──────────────────────────────────────────────────────────────────┘  │</span></span>
-<span class="line"><span>└────────────────────────────────────────────────────────────────────────┘</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>┌─────────────────────────────────────────────────────────────────────────────────────────────┐</span></span>
+<span class="line"><span>│ 6. Environment   ← local → staging → production                                             │</span></span>
+<span class="line"><span>│  ┌───────────────────────────────────────────────────────────────────────────────────────┐  │</span></span>
+<span class="line"><span>│  │ 5. Repository    ← local vs. remote                                                   │  │</span></span>
+<span class="line"><span>│  │  ┌─────────────────────────────────────────────────────────────────────────────────┐  │  │</span></span>
+<span class="line"><span>│  │  │ 4. Branch        ← isolated line of work                                        │  │  │</span></span>
+<span class="line"><span>│  │  │  ┌───────────────────────────────────────────────────────────────────────────┐  │  │  │</span></span>
+<span class="line"><span>│  │  │  │ 3. Commit        ← atomic unit of change                                  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  ┌─────────────────────────────────────────────────────────────────────┐  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  │ 2. Staged        ← deliberate selection                             │  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  │  ┌───────────────────────────────────────────────────────────────┐  │  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  │  │ 1. Unstaged      ← scratch pad (tracked, edits not staged)    │  │  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  │  │  ┌─────────────────────────────────────────────────────────┐  │  │  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  │  │  │ 0. Untracked     ← outside git — no history to restore  │  │  │  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  │  │  └─────────────────────────────────────────────────────────┘  │  │  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  │  └───────────────────────────────────────────────────────────────┘  │  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  │  └─────────────────────────────────────────────────────────────────────┘  │  │  │  │</span></span>
+<span class="line"><span>│  │  │  └───────────────────────────────────────────────────────────────────────────┘  │  │  │</span></span>
+<span class="line"><span>│  │  └─────────────────────────────────────────────────────────────────────────────────┘  │  │</span></span>
+<span class="line"><span>│  └───────────────────────────────────────────────────────────────────────────────────────┘  │</span></span>
+<span class="line"><span>└─────────────────────────────────────────────────────────────────────────────────────────────┘</span></span></code></pre>
+<p>The innermost layer, <strong>untracked</strong>, sits <em>outside</em> git’s control: a brand-new file git has never recorded. It’s even rawer than an unstaged change — an unstaged edit is to a file git already tracks, whereas an untracked file has no history at all, which is why only <code>git clean</code> (not <code>git restore</code> or <code>git reset</code>) can undo it. The first <code>git add</code> promotes it from untracked into the tracked staging area.</p>
 <p>By controlling each layer deliberately — what you stage, what you commit, when you push — your code can never ship without going through every checkpoint first: tested locally, merged to a shared branch, validated on staging, then released to production.</p>
 <p>Another art is how to control development via branches. <a href="https://nvie.com/posts/a-successful-git-branching-model/">A Successful Git Branching Model</a> was written in 2010 and is still one of the most referenced pieces on the topic — a sign that the fundamentals haven’t changed much. It defines a strategy built around two permanent branches and three supporting types:</p>
 <p><strong>Permanent branches</strong></p>
