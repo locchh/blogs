@@ -210,6 +210,7 @@
 <p>One hard-won ordering rule: <strong>move the data before the logic.</strong> Data outlives code. Schemas, formats, and the meaning of fields are the most durable thing in any legacy system — and the logic only makes sense in terms of the data it operates on. If you try to port logic onto a data model you haven’t settled yet, every business rule you migrate sits on shifting ground, and you re-do the work each time the schema moves.</p>
 <p>Get the data migrated and stable first, then you have a fixed target to write against. The Strangler Fig grows downward to the ground before it strangles the trunk; migrations work the same way — root yourself in the data, then let the logic follow.</p>
 <h2 id="first-look-at-harness">First look at Harness</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Harness = Instructions + Tools + Environment + State + Feedback</span></span></code></pre>
 <p>A harness doesn’t “make the model smarter”; rather, it establishes a closed-loop working system <em>around</em> the model. The model is fixed — what changes is the environment it operates in, the instructions it reads, the tools it can reach, the memory it carries across sessions, and the feedback that tells it whether it actually succeeded. <a href="https://walkinglabs.github.io/learn-harness-engineering/en/">Learn Harness Engineering</a> frames reliability as emerging from four dimensions — environment design, state management, verification, and control — wired into a loop:</p>
 <pre><code class="language-mermaid">flowchart TD
     Obj[Clear Objective&#x3C;br/>AGENTS.md]:::accent
@@ -288,6 +289,79 @@
 </code></pre>
 <p>Because the loop is grounded in each model’s <em>own</em> failure signatures, the harness it converges on is <strong>model-specific</strong> — the paper shows MiniMax-, Qwen-, and GLM-class models each accreting different edits (early-artifact creation, dependency prechecking, preserving shell environment state, breaking unproductive tool-use loops). There is no single best harness; there’s the best harness <em>for this model on these tasks</em>.</p>
 <h3 id="fundamental-of-harness">Fundamental of Harness</h3>
+<p>The clearest treatment I’ve found of <em>how</em> to build one is the <a href="https://walkinglabs.github.io/learn-harness-engineering/en/">Learn Harness Engineering</a> course, which synthesizes the OpenAI and Anthropic guidance into a working model. The rest of this section follows its framing.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Harness = Instruction + Tools + Runtime + State + Feedback</span></span></code></pre>
+<h4 id="where-agents-actually-get-stuck">Where agents actually get stuck</h4>
+<p>The <a href="https://walkinglabs.github.io/learn-harness-engineering/en/lectures/lecture-01-why-capable-agents-still-fail/">specific failure modes</a> really come down to just a handful:</p>
+<ul>
+<li><strong>Vague requirements — the agent can only guess.</strong> “Add a search feature” — that sentence means almost nothing. Search what? Full-text or structured queries? Should results be paginated? Highlighted? You didn’t spell it out, so the agent has to guess. A correct guess is luck; a wrong one means rework that costs several times more than being specific would have in the first place.</li>
+<li><strong>Implicit conventions not written down — the agent has no way to comply.</strong> Your whole team uses the new SQLAlchemy 2.0 syntax, but the agent writes 1.x code by default. All API endpoints must go through OAuth 2.0 authentication, but that rule only exists in your head and a Slack message from three months ago. The agent has no idea — it’s not that it doesn’t want to comply, it literally has never seen the rule.</li>
+<li><strong>Incomplete environment setup — the agent spends energy fixing the environment.</strong> Incomplete dev setup, missing dependencies, wrong tool versions — the agent burns precious context window on <code>pip install</code> errors and Node version conflicts instead of doing the actual work you gave it.</li>
+<li><strong>No verification methods — the agent calls it done when it feels done.</strong> No tests, no lint, or verification commands that were never communicated to the agent. The agent writes code, looks it over, decides it seems fine, and declares completion. Anthropic also observed an interesting phenomenon: when agents sense their context is running low, they rush to finish, skip verification steps, and choose a simple solution over the optimal one. They call this <em>“context anxiety.”</em></li>
+<li><strong>Cross-session state loss — every new session starts from scratch.</strong> All discoveries from the previous session are lost. Every new session has to re-explore the project structure and re-understand the code organization. Agents without persistent state see failure rates spike sharply on tasks exceeding 30 minutes.</li>
+</ul>
+<p>The central principle: <strong>when things fail, don’t swap the model first — check the harness.</strong></p>
+<h4 id="core-concepts">Core concepts</h4>
+<ul>
+<li><strong>What is a harness:</strong> everything in the engineering infrastructure outside the model weights. OpenAI distills the engineer’s core job into three things: designing environments, expressing intent, and building feedback loops. Anthropic directly calls their Claude Agent SDK a <em>“general-purpose agent harness.”</em></li>
+<li><strong>The repo is the single source of truth:</strong> anything the agent cannot see, for all practical purposes, does not exist. OpenAI treats the repo as the <em>“system of record”</em> — all necessary context must live there, delivered through structured files and clear directory organization.</li>
+<li><strong>Give a map, not a manual:</strong> OpenAI’s experience is that <code>AGENTS.md</code> should be a directory page, not an encyclopedia. Around 100 lines is enough. If it does not fit, split it into a <code>docs/</code> directory and let the agent read on demand.</li>
+<li><strong>Constrain, don’t micromanage:</strong> a good harness uses executable rules to constrain the agent, rather than enumerating instructions one by one. OpenAI says <em>“enforce invariants, don’t micromanage implementation”</em>; Anthropic found that agents confidently praise their own work, and the solution is to separate “the person who does the work” from “the person who checks the work.”</li>
+<li><strong>Remove one at a time and observe:</strong> to quantify each harness component’s marginal contribution, remove them one at a time and see which removal causes the biggest performance drop. This tells you which components are most valuable right now, and it also reveals which ones are not yet contributing meaningfully. Anthropic used this method and discovered that as models get stronger, some components stop being critical — but new critical components always emerge.</li>
+</ul>
+<h4 id="the-five-subsystem-harness-model">The five-subsystem harness model</h4>
+<p>Back to the analogy. A <a href="https://walkinglabs.github.io/learn-harness-engineering/en/lectures/lecture-02-what-a-harness-actually-is/">harness has five subsystems</a>, all wired around the agent:</p>
+<pre><code class="language-mermaid">flowchart TB
+    Agent((🤖 AI Agent))
+
+    Inst[📜 Instruction&#x3C;br/>AGENTS.md / CLAUDE.md]
+    Tools[🔧 Tools&#x3C;br/>shell / files / tests]
+    Runtime[⚙️ Runtime&#x3C;br/>deps / services / versions]
+    State[(🧠 State&#x3C;br/>PROGRESS.md / commits)]
+    Feedback[✅ Feedback&#x3C;br/>test / lint / build]
+
+    Inst --- Agent
+    Tools --- Agent
+    Runtime --- Agent
+    State --- Agent
+    Feedback --- Agent
+</code></pre>
+<ul>
+<li><strong>Instruction subsystem:</strong> create <code>AGENTS.md</code> (or <code>CLAUDE.md</code>) containing a project overview and purpose, tech stack and versions, first-run commands, non-negotiable hard constraints, and links to more detailed documentation.</li>
+<li><strong>Tool subsystem:</strong> ensure the agent has sufficient tool access. Do not disable shell for “security reasons” — if the agent cannot even run <code>pip install</code>, how is it supposed to get anything done? But do not open everything either — follow the principle of least privilege.</li>
+<li><strong>Environment subsystem:</strong> make the environment state self-describing. Use <code>pyproject.toml</code> or <code>package.json</code> to lock dependencies, <code>.nvmrc</code> or <code>.python-version</code> to specify runtime versions, and Docker or devcontainers to make the environment reproducible.</li>
+<li><strong>State subsystem:</strong> long tasks must have progress tracking. Use a simple <code>PROGRESS.md</code> file recording what is done, what is in progress, and what is blocked. Update before each session ends; read when the next session starts.</li>
+<li><strong>Feedback subsystem:</strong> this is the highest-ROI subsystem. Explicitly list verification commands in <code>AGENTS.md</code>:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Verification commands:</span></span>
+<span class="line"><span>- Tests: pytest tests/ -x</span></span>
+<span class="line"><span>- Type check: mypy src/ --strict</span></span>
+<span class="line"><span>- Lint: ruff check src/</span></span>
+<span class="line"><span>- Full verification: make check (includes all above)</span></span></code></pre>
+<p>Missing any one of the five subsystems means an incomplete harness, and the agent will always feel awkward to use.</p>
+<p><strong>Quantifying harness component value.</strong> Use a “controlled variable exclusion test.” Keep the model fixed, remove the five subsystems one at a time, and see which subsystem’s removal causes the biggest performance drop. The component with the largest drop has the highest marginal contribution for the current task and is worth prioritizing. Whether to strengthen it depends on failure attribution, not just the size of the drop. Components with near-zero impact should not be dismissed outright: they may be redundant, poorly designed, or simply not exercised by the current task. This experiment answers “which component is most valuable right now” — it cannot, by itself, prove “where the bottleneck is.” To truly locate a bottleneck, you must first examine failure records and attributions: was the task unclear, was context insufficient, was the environment unreproducible, was verification feedback missing, or was state management broken? Component ablation results can only serve as supporting evidence.</p>
+<h4 id="common-pitfalls">Common pitfalls</h4>
+<p>Beyond the bloated-instruction trap above, the course names a handful of recurring failure patterns. Each is a <em>harness</em> problem, not a model problem — and each has a harness-level fix.</p>
+<ul>
+<li>
+<p><strong>Knowledge visibility gap (finite context windows).</strong> No matter what window size is claimed (128K, 200K, 1M), <a href="https://walkinglabs.github.io/learn-harness-engineering/en/lectures/lecture-05-why-long-running-tasks-lose-continuity/">long tasks will eventually exhaust it</a>. After exhaustion, either compaction (losing information) or reset (starting a new session) is required — both lose something. The fix is to externalize state into the repo (<code>PROGRESS.md</code>, decision logs, commits) so nothing critical lives only in the window.</p>
+</li>
+<li>
+<p><strong>Context anxiety.</strong> A phenomenon observed by Anthropic — agents exhibit rushed finish behavior when approaching context limits, ending tasks early to avoid information loss. At its core, it’s an irrational resource anxiety, and it makes an agent skip verification and pick the simple solution over the right one.</p>
+</li>
+<li>
+<p><strong>Overreach and under-finish.</strong> <a href="https://walkinglabs.github.io/learn-harness-engineering/en/lectures/lecture-07-why-agents-overreach-and-under-finish/">Attention is a finite resource</a> — and this isn’t a metaphor, it’s math. Assume the agent’s context capacity is <em>C</em> and it activates <em>k</em> tasks simultaneously; each task gets an average of <em>C/k</em> reasoning resources. When <em>C/k</em> drops below the minimum threshold needed to complete a single task, none of them get finished. The fix is a <strong>WIP = 1</strong> workflow: one active task at a time, finished and verified before the next begins.</p>
+</li>
+<li>
+<p><strong>Declaring victory too early.</strong> <a href="https://walkinglabs.github.io/learn-harness-engineering/en/lectures/lecture-09-why-agents-declare-victory-too-early/">Premature completion</a> comes from confidence calibration bias and the assumption that <em>passing unit tests = task complete</em> (they don’t — mocks hide cross-component failures). The fix is a <strong>verification–validation dual gate</strong>: the first layer (verification) checks whether the code correctly implements the specified behavior; the second (validation) checks whether system-level behavior meets end-to-end requirements. Both must pass before the task is considered complete.</p>
+</li>
+<li>
+<p><strong>Missing observability.</strong> Agents don’t know what they don’t know. <a href="https://walkinglabs.github.io/learn-harness-engineering/en/lectures/lecture-11-why-observability-belongs-inside-the-harness/">They won’t proactively record signals</a> they don’t realize they need. Without harness-level constraints, agents only log what they think is important — and what they think is important is usually not enough. Build runtime signal collection into the harness rather than relying on the agent to do it.</p>
+</li>
+<li>
+<p><strong>“Clean up later” means never clean up.</strong> <a href="https://walkinglabs.github.io/learn-harness-engineering/en/lectures/lecture-12-why-every-session-must-leave-a-clean-state/">Clean state</a> isn’t simply “the code compiles.” Building without errors is the most basic requirement — the next session shouldn’t have to fix build errors first. All tests must pass too, including tests that existed before the session; the session is responsible for not breaking existing functionality, and this should be verified in CI, not just “works on my machine.” But that’s still not enough. Current progress must be recorded in machine-readable artifacts: completed subtasks with their passing criteria, in-progress subtasks with current state, and not-yet-started subtasks — good progress records cut session startup diagnostic time by 60–80%. Temporary artifacts — debug logs, temporary files, commented-out code, TODO markers — must also be cleaned up, because they increase cognitive load for the next session. And the standard startup path must remain functional: can the next session start working without manual intervention? Environment initialization, codebase loading, context acquisition, task selection — none of these paths can be broken.</p>
+</li>
+</ul>
 <h2 id="migration-is-a-harness">Migration is a Harness</h2>
 <h3 id="why-not-just-use-skill">Why not just use skill?</h3>
 <ul>
