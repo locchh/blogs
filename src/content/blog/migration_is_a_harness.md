@@ -239,10 +239,6 @@ Because the loop is grounded in each model's *own* failure signatures, the harne
 
 The clearest treatment I've found of *how* to build one is the [Learn Harness Engineering](https://walkinglabs.github.io/learn-harness-engineering/en/) course, which synthesizes the OpenAI and Anthropic guidance into a working model. The rest of this section follows its framing.
 
-```
-Harness = Instruction + Tools + Runtime + State + Feedback
-```
-
 #### Where agents actually get stuck
 
 The [specific failure modes](https://walkinglabs.github.io/learn-harness-engineering/en/lectures/lecture-01-why-capable-agents-still-fail/) really come down to just a handful:
@@ -322,31 +318,244 @@ Beyond the bloated-instruction trap above, the course names a handful of recurri
 
 ### Why not just use skill?
 
-- Structure of folder
+Instruction has steadily grown from a single line of text into a structured, reusable subsystem. It starts with the **prompt** — one instruction typed into chat, alive only for that turn. Then come [**rules**](https://code.claude.com/docs/en/memory#organize-rules-with-claude/rules/) (`CLAUDE.md` and `.claude/rules/`), which persist across sessions and define what the agent must *always* comply with — facts and constraints loaded into context every time, optionally scoped to certain file paths. Next are [**commands**](https://devin.ai/blog/windsurf-wave-8-cascade-customization-features#custom-workflows) and [**skills**](https://code.claude.com/docs/en/skills): both are step-by-step instructions for accomplishing a specific task, invoked with `/name`. Skills are the more advanced of the two — custom commands have in fact been folded into them — because they follow the **progressive-disclosure principle**: only a skill's name and description are loaded up front, while its body (`SKILL.md`) and any bundled files load on demand, the moment the skill is actually invoked or judged relevant. A long procedure therefore costs almost nothing in context until it's needed, and Claude can pull one in automatically. Most recently, Claude Code added [**workflows**](https://code.claude.com/docs/en/workflows), which push instruction one step further: instead of the model deciding what to do turn by turn, the *plan itself becomes code* — a script that orchestrates dozens or hundreds of subagents, keeps intermediate results in script variables rather than the context window, and can be saved and rerun. That makes them a natural fit for exactly the kind of large, repeatable work a migration is.
 
-- Workflow
+On my migration project, I watched a team use skills and agents as the migration *engine*. Once they had the strategy, they broke the work into smaller migration units, and for each unit they wrote a skill or an agent to handle it. For low-complexity units with few dependencies, this looked fine. But as they scaled, the output stopped matching expectations. So they did the natural thing: they improved the skill — more instructions, more checklists for both the AI and the humans to comply with. The skill grew and grew, past 500 lines, until they were squarely inside the [vicious cycle](https://walkinglabs.github.io/learn-harness-engineering/en/lectures/lecture-04-why-one-giant-instruction-file-fails/#the-vicious-cycle-at-the-root). Realizing the single skill had become unmanageable, they split it into more skills — generate, review, refine — until they were drowning in a sea of skills and ad-hoc instructions.
 
-### The Price
+I think the key problems were these:
 
-- The price of Fable 5
+- **One playbook applied to everything.** They tried to define deterministic, fixed steps and run them on every unit. But migration units don't share a shape — a script that fits a leaf module falls apart on a tangled, high-coupling one. Determinism is the wrong tool for genuinely varied work.
+- **State trapped in the session.** Intermediate outputs lived in the agent's working context, so they evaporated when the window filled or the session reset. Every new unit re-discovered the same ground — the [knowledge visibility gap](#common-pitfalls) again. This is exactly what externalized state (and why workflows keep results in script variables, not the window) is meant to prevent.
+- **No completion gate.** Nothing stopped an agent from declaring victory too early, or from overreaching and under-finishing. Without a verification–validation gate and a WIP = 1 discipline, "done" stayed subjective.
+- **Silent contradictions.** As the skills and ad-hoc instructions piled up, they began to conflict — and because no human was holding the whole set in their head, nobody noticed. The agent just picked one arbitrarily.
 
-- Cost and time, but if you use an outdated model, you will waste both
+And even if a team somehow survives a project this way, the work they produced — the skills, the piles of ad-hoc instructions — can't be reused on the next one. It's all glued to the specifics of this codebase and this set of mistakes.
 
+When I joined the project, I studied how their setup worked and then made a few changes. In hindsight, each one was me adding a missing harness subsystem.
 
-### Other important aspects
+- **Build the environment and the feedback loop first.** I set up the environment and installed the dependencies — [Java SDK](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html), [Ant](https://github.com/apache/ant), [Tomcat](https://tomcat.apache.org/) — and wrote reusable `verify.sh` and `preview.sh` scripts the agent could run after any migration task: type-checking, build, [SpotBugs](https://www.baeldung.com/spotbugs-detect-bugs-code), and so on. I also added the Playwright MCP so the agent could *actually see* the result of its migration in a browser, not just assume it worked. Together these give the agent a real feedback loop — concrete signals it can act on — which is what stops it from declaring done too early.
 
-- One more important thing that is how we can split and accumulate the work for each migration task
+- **Separate the doer from the checker with a multi-agent pattern.** Instead of one maximally capable agent doing everything, I used three: an **orchestrator** (the main agent — Opus 4.8 or Fable 5), a **generator** (Sonnet 4.6), and an **evaluator** (Sonnet 4.6). The orchestrator understands the skills and spawns the generator to write code, then spawns the evaluator to review, validate, and verify it. If the evaluator reports errors, the orchestrator spawns the generator again to fix them, looping until the evaluator passes. Separating the evaluator from the generator keeps the judgment independent (an agent grading its own work is the [declare-victory-too-early](https://walkinglabs.github.io/learn-harness-engineering/en/lectures/lecture-09-why-agents-declare-victory-too-early/) trap) and keeps each agent's context from blowing past its window. Crucially, the orchestrator doesn't just route work — it makes decisions from the evaluation results and can go back to the *as-is* source to find and resolve the hidden things a deterministic skill never anticipated. So I never had to keep editing the existing skills: a skill is just the *happy path* the orchestrator can reference, not a script it must obey. Its `CLAUDE.md` looks roughly like this:
+
+```
+You are the orchestrator responsible for a migration task.
+
+You can spawn a generator to write code, and an evaluator to review, validate, and verify the work.
+
+The skills for a specific migration task are a happy path you may reference. They provide the
+know-how, not exact steps you must follow blindly. While working, if something seems off, go back
+to the as-is source code and find and resolve the hidden things the deterministic skills missed.
+
+When you receive a migration task, you must:
+
+- Study and understand the requirement and the expected output.
+- Study the provided skills to learn the know-how.
+- Study the related components in the as-is source code until you have a crystal-clear
+  understanding of its structure and logic.
+- Study any incomplete work from a previous session (if it exists) — your staged or unstaged
+  changes — to see where you left off and what still needs to be done.
+- Make a plan.
+- Spawn the generator to write the code.
+- Spawn the evaluator to review, validate, and verify the work.
+- If the evaluator reports errors, spawn the generator again to fix them — loop until it passes.
+- If the evaluator passes, return the result.
+
+Always evaluate the final result with appropriate methods (build it, run verify.sh, run the
+review script, etc.).
+
+When finished, clean up all intermediate files and artifacts.
+```
+
+- **Externalize state, then clean it up.** Finally, I encouraged the agents to write intermediate files and artifacts to track progress, debug, and record what was verified — and to clean them up once the task was done. Writing state to disk offloads the context window and keeps progress persistent and consistent across sessions; cleaning up afterward keeps the next session starting from a clean state instead of wading through the last one's debris.
+
+After these changes the migration process became noticeably more reliable, consistent, and efficient. The output was good enough that I no longer had to sit and watch it run — I turned on [auto mode](https://code.claude.com/docs/en/auto-mode-config) and let the orchestrator work while I went for a coffee. That was the moment it clicked: I hadn't replaced the skills, I had **built a harness around them**.
+
+### Structure of the folder
+
+So what is my actual output? It's a repository that follows the [`.claude` directory](https://code.claude.com/docs/en/claude-directory) convention — the harness itself, version-controlled. It looks roughly like this:
+
+```
+harness/
+├── README.md           # human-facing: what this harness is and how to run it
+├── CLAUDE.md           # the orchestrator's instructions, loaded every session
+├── .mcp.json           # project-scoped MCP servers (e.g. Playwright), shared with the team
+├── .claude/
+│   ├── settings.json   # enforced permissions & hooks (not just guidance, like CLAUDE.md is)
+│   ├── rules/          # topic-scoped instructions, optionally gated by file path
+│   ├── skills/         # the "happy path" know-how the orchestrator can reference
+│   ├── commands/       # slash-command shortcuts (now the same mechanism as skills)
+│   ├── agents/         # the subagents: generator and evaluator, each with its own context
+│   └── workflows/      # dynamic workflow scripts that orchestrate many subagents
+├── docs/               # detailed reference the lean CLAUDE.md links to (reveal-on-demand)
+├── scripts/            # verify.sh, preview.sh — the feedback-loop commands agents reuse
+├── assets/             # reference material: diagrams, schemas, golden outputs, screenshots
+├── ASIS/               # the legacy source — what we migrate from
+├── TARGET/             # the modernized output — what we migrate to
+└── .gitignore          # ignores ASIS/, TARGET/, and other generated/local artifacts
+```
+
+Two of these earn special mention.
+
+**`settings.json` is where the guardrails actually live.** This is the distinction that matters: `CLAUDE.md` is *guidance* — the model reads it and tries to comply, but nothing forces it to. `settings.json` is *enforced*, whether the model cooperates or not. Its `permissions` key allows, denies, or prompts before specific tools and commands; its `hooks` key runs your own scripts at fixed points (before a tool call, after a file edit). So the reversibility principle from the guardrails section isn't a polite request here — `permissions.deny` blocks the dangerous command outright, and a `PreToolUse` hook can gate anything touching shared state. For an agent running in auto mode while I'm getting coffee, that enforced boundary *is* the safety net.
+
+**`workflows/` is where the orchestration becomes reusable code.** My three-agent loop started as orchestrator logic living in `CLAUDE.md`. A [workflow](https://code.claude.com/docs/en/workflows) lets that loop become a script — the plan codified, intermediate results kept in script variables instead of the context window, and the whole thing saved and rerun on the next batch of units. It's the natural home for the doer/checker loop once it stabilizes.
+
+The plain directories pull their weight too, and each one is an earlier principle made concrete. `scripts/` holds `verify.sh` and `preview.sh` — the feedback loop, kept as committed commands so every agent and every session runs the *same* checks. `docs/` is the "map, not a manual" payoff: the lean `CLAUDE.md` stays short and links here, so detail is revealed on demand instead of bloating the context window. And `assets/` holds the reference material the verifier leans on — schemas, diagrams, and especially **golden outputs**, which is where you'd put the behavioral-equivalence fixtures that prove the new code does what the old code did.
+
+The important property of the whole layout is that **everything that *is* the harness lives in version control, while the code being migrated does not.** `ASIS/` and `TARGET/` are gitignored, so the repo carries only the reusable machinery — instructions, enforced settings, skills, subagents, workflows, verification scripts, docs, and reference assets. That's the answer to the reusability problem from earlier: clone this repo onto the next project, drop in a different `ASIS/`, adjust the skills, and the orchestration transfers intact. The skills were glued to one codebase; the harness isn't.
+
+### The multi-agent pattern
+
+The three agents I described — orchestrator, generator, evaluator — are enough to get *one* migration unit done well. But a migration isn't one unit; it's hundreds, executed over weeks against a sequenced plan. Running that long-term process needs a fourth role: a **planner**.
+
+The four roles split cleanly along the *understand → locate → verify* line, plus one more axis — *who holds the long-running plan*:
+
+- **Planner** — owns the migration *across* units. It takes the strategy and the Decomposition & Sequencing output, breaks the system into units, orders them (easiest-first, dependency-respecting), and hands the orchestrator **one unit at a time** (WIP = 1). As each unit passes, it records progress and advances the schedule. The planner is the harness's long-running state and control: it's what makes the process survive across sessions and lets me come back the next morning to a plan that knows exactly where it is.
+- **Orchestrator** — owns a *single* unit. It studies the requirement, the relevant skills (the happy path), and the as-is source, then drives the generate-and-verify loop, makes decisions from the evaluator's feedback, and escalates to a human when a unit won't converge.
+- **Generator** — writes the code. The doer.
+- **Evaluator** — reviews, validates, and verifies against real signals (`verify.sh`, Playwright), independent of the generator so it can't rubber-stamp its own work.
+
+```mermaid
+flowchart LR
+    Human([👤 Human<br/>strategy · sign-off]) -.->|plan + escalations| Planner
+
+    Planner[🗺️ Planner<br/>decompose · sequence · track]
+    Planner -->|next unit · WIP=1| Orch
+
+    subgraph Unit [Per migration unit]
+        direction LR
+        Orch{{🎛️ Orchestrator<br/>understand · decide}}
+        Gen[⚙️ Generator<br/>write code]
+        Eval[🔍 Evaluator<br/>verify.sh · Playwright]
+
+        Orch -->|spawn| Gen
+        Gen -->|code| Eval
+        Eval -->|fail + feedback| Orch
+        Orch -->|retry| Gen
+    end
+
+    Eval -->|pass| Done([✅ unit done])
+    Done -->|update progress| Planner
+    Orch -.->|stuck after N retries| Human
+
+    classDef plan fill:#e8633a,stroke:#c44d28,color:#fff;
+    class Planner plan;
+```
+
+Read left to right: the planner feeds the orchestrator one unit, the orchestrator loops generator and evaluator until the unit verifies (or escalates if it can't), and the result flows back to the planner, which marks the unit done and releases the next. The inner loop is the *doer/checker* split that keeps any single unit honest; the outer loop is the *planner* that keeps the whole migration moving — and recoverable. Notice the human sits outside both loops, touched only twice: once to set strategy and sign off, and again when a unit genuinely needs judgment. That's the WIP = 1 discipline and the HITL gate from earlier, wired into agents.
+
+### The price
+
+The model is the one part of the harness you don't engineer — you rent it. So the real question is *which tier goes where*. Anthropic's lineup, at the time of writing, spans a 10× price range (per million tokens):
+
+| Model | Input | Output | Where it fits in the harness |
+|---|---|---|---|
+| **Fable 5** | $10 | $50 | The hardest long-horizon reasoning — a deeply tangled unit the orchestrator can't crack at Opus tier |
+| **Opus 4.8** | $5 | $25 | The orchestrator and planner — judgment, recovery, reading the as-is source, deciding what the skills missed |
+| **Sonnet 4.6** | $3 | $15 | The generator and evaluator — high-volume, well-scoped code generation and verification |
+| **Haiku 4.5** | $1 | $5 | Cheap mechanical sub-tasks — formatting, simple lookups, boilerplate |
+
+That table *is* the economics of the multi-agent pattern. You pay top-tier rates only where judgment lives — the orchestrator and planner, which run relatively few tokens making decisions — and you run the token-hungry roles (generator, evaluator, looping until green) on Sonnet, which is a third of Opus's price and more than capable for scoped work. Spending Opus tokens to write a getter, or Sonnet tokens to make an architectural call, are both mistakes in opposite directions.
+
+There's a caching reason to keep the split too: **switching models mid-session invalidates the prompt cache** (the cache is per-model). Because each role lives in its own subagent with its own model, each one's cache stays warm across the loop — the tiering is cache-friendly by construction, not just budget-friendly.
+
+But the sharper point is the one in the heading my draft started with: **a cheap or outdated model wastes both cost *and* time.** Migration is verification-bound, not generation-bound — a unit isn't done when code is written, it's done when the evaluator passes it. A weaker model doesn't just produce worse code; it produces more *rejected* attempts, so each unit takes more generate-and-verify loops. More loops means more wall-clock *and* more tokens. So the model with the lowest per-token price can easily be the most expensive end to end, because rework dominates the bill. You pay for weakness twice — once in tokens, once in the days it adds to the schedule.
+
+And there's a third cost that doesn't show up on the pricing page: a model too weak to *adapt to the harness* — to read the as-is source, recover from a tool error, follow the loop without hand-holding — keeps kicking work back to the human, the most expensive resource in the whole system. A capable model can even improve its own harness as it goes; a weak one needs you to keep patching it. The cheapest migration is the one that finishes, and choosing the model is itself a harness decision: match the tier to the role, and don't let a cut-rate model turn a one-pass unit into a five-loop one.
+
+### Splitting and accumulating the work
+
+The last piece is how work *accumulates* — how hundreds of finished units add up to a migration without the whole thing turning to mush. The answer is the most boring tool in the stack: **git**.
+
+A unit boundary should be a commit boundary. While the orchestrator works, its output lives in the working tree as **untracked, unstaged, and staged** changes — the churn of an in-progress attempt. A **commit** is something else entirely: a unit that *passed verification* and is now kept. The loop is simple:
+
+1. Orchestrator finishes a unit → evaluator passes it → **commit.**
+2. The working tree is now clean — a known-good baseline for the next unit.
+3. If the next unit goes wrong, it's contained: `git restore` / `git clean` / `git reset` wipe the failed attempt back to the last commit, and nothing good is lost.
+
+```mermaid
+flowchart TD
+    HEAD["✅ Clean working tree @ HEAD<br/>last verified unit"]:::clean
+    HEAD -->|start next unit| Gen
+
+    Gen["Orchestrator + generator work<br/>working tree: untracked · unstaged · staged"]:::dirty
+    Gen --> Ver{"Evaluator verifies<br/>verify.sh · Playwright"}
+
+    Ver -->|fail| Roll["git restore / clean / reset<br/>discard back to HEAD"]:::dirty
+    Roll --> HEAD
+
+    Ver -->|pass| Commit["git commit — keep the unit"]:::clean
+    Commit --> HEAD
+    Commit --> Log[("📜 Commit history<br/>audit trail · one strangler strand per unit")]
+
+    classDef clean fill:#dff5e1,stroke:#2e7d32,color:#1b3d20;
+    classDef dirty fill:#fff4e0,stroke:#c47f1a,color:#5a3d0a;
+```
+
+This is why the orchestrator's "study your staged and unstaged changes" step works at all: the diff against `HEAD` *is* the record of what this session was in the middle of. Git is the harness's externalized state and its undo button at the same time — the clean-state discipline from earlier, made concrete. Commit-per-verified-unit is literally how you leave a clean state for the next session.
+
+It also closes the loop with everything before it. Each commit is one more strand of the strangler fig grown around the legacy system, and the commit history is the migration's audit trail — the thing the planner reads to know what's done, and the thing that makes cutover and decommission (phases 7 and 8) granular: you can revert *one* unit without unwinding the whole batch. **Migrate data first, strangle unit by unit, verify before you keep, commit what passed.** That cadence — not the AI — is what carries a system safely to the next generation.
 
 ## Some other useful tools
 
+So where can this harness get *better*? Two places, and they map onto the two roles that carry the most risk:
+
+- **Understand the as-is source more deeply** — strengthen the *Expert*. The orchestrator is only as good as its grasp of the legacy system, and the hardest legacy systems (mainframe COBOL/JCL/CICS) are exactly where understanding is scarcest.
+- **Improve how we evaluate the output** — strengthen the *Verifier*. Recall the gap from earlier: `verify.sh` proves the new code *builds and is clean*, not that it *behaves* like the old. Closing that gap needs a tool that can actually drive the running app.
+
+One tool for each.
+
 ### Understand Anything
 
-https://github.com/Egonex-AI/Understand-Anything?ref=geeek.org
+To understand the as-is system, a code **knowledge graph** beats grepping around: it parses the codebase into nodes (files, functions, tables, jobs) and edges (imports, calls, data flow), so the agent can ask "what depends on this?" instead of guessing. A few tools do this; here's how they compare:
 
-https://github.com/aws-samples/aws-mainframe-modernization-carddemo
+| | [Graphify](https://github.com/safishamsi/graphify) | [GitNexus](https://github.com/abhigyanpatwari/GitNexus) | [Understand-Anything](https://github.com/Egonex-AI/Understand-Anything) |
+|---|---|---|---|
+| **Extraction** | tree-sitter (36 grammars) for code; LLM for docs/PDF/media | tree-sitter (14 languages) | tree-sitter (structure) **+ LLM agents** (semantics) |
+| **Clustering** | Leiden communities | Leiden communities | Louvain communities (batching) |
+| **Storage / query** | `graph.json` (+ Neo4j/FalkorDB export); MCP + CLI query | LadybugDB (graph + vector); Cypher + 16 MCP tools | `knowledge-graph.json`; interactive dashboard + `/understand-*` commands |
+| **Where it runs** | inside AI assistants (Claude Code, Cursor, …) | CLI + MCP, or fully in-browser via WASM | inside AI assistants; Vite dashboard |
+| **Distinctive strength** | broadest inputs — code *and* docs, images, video; git-native (commit the graph) | agent-facing precomputed tools (impact, rename, context in one call) | **architectural layering + guided tours + business-domain flows**; broad language coverage incl. mainframe |
 
-![AWS Mainframe Modernization Card Demo](./migration-is-a-harness/carddemo-knowledge-graph.png)
+They've converged on the same shape — tree-sitter + community detection + a graph served to agents over MCP. The differences are emphasis: Graphify ingests the widest range of artifacts, GitNexus optimizes for an agent calling precomputed graph tools, and Understand-Anything adds the layer that matters most for migration — it assigns every file to an **architectural layer** and builds a **guided tour** through the system, which is exactly the "what is this and how is it organized?" an Expert needs on day one.
+
+**How it works.** Understand-Anything runs a multi-phase pipeline (orchestrator + specialized subagents), hybrid by design: tree-sitter extracts deterministic structure (imports, definitions, call sites); LLM agents add the semantics tree-sitter can't (plain-English summaries, layer assignments, domain flows). Roughly: *scan* (discover files, detect languages, build an import map) → *batch* (group files into cohesive analysis units via community detection) → *analyze* (a file-analyzer subagent per batch, run in concurrent waves, emitting nodes + edges) → *merge* into one graph → *architecture* (assign every node to one layer) → *tour* (an ordered, dependency-respecting narrative) → *validate* → *save*. The result lands in `.understand-anything/knowledge-graph.json` — committable, so teammates skip the run — and incremental updates re-analyze only the files a `git diff` says changed.
+
+**The output, on a real mainframe.** I pointed it at AWS's [CardDemo](https://github.com/aws-samples/aws-mainframe-modernization-carddemo) — a reference COBOL/CICS credit-card system, the archetypal migration target. From **245 files** of COBOL, copybooks, JCL, BMS maps, DB2 DDL, IMS DBD/PSB, CICS CSD, and Assembler, it produced a graph of **242 nodes and 433 edges**, organized into **8 architectural layers** (Online/Presentation (CICS), Batch Processing, Job Control & Orchestration, Shared Copybooks & Data Structures, Data/Config/Resources, Build & Deployment Tooling, Optional Add-on Modules, Documentation) with a **13-step guided tour** from the sign-on screen through to batch posting and JCL scheduling. That's the kind of map that turns "nobody here fully understands the mainframe" into something an agent — and a new engineer — can navigate.
+
+![The Understand-Anything dashboard showing AWS CardDemo as a knowledge graph: a dark-themed, force-directed map of the COBOL/CICS system with nodes grouped and colored by architectural layer (online presentation, batch processing, job control, data, add-on modules), filterable by the layer chips along the top. The right-hand "Project Tour" panel lists the 13 ordered steps — Project Overview, Sign-On Entry Point, Menu Navigation, Account View and Update, … through Batch Transaction Posting, Job Control and Scheduling (JCL), and Build and Deployment Tooling — a dependency-ordered walkthrough of the legacy system.](./migration-is-a-harness/carddemo-knowledge-graph.png)
 
 ### Playwright
 
-https://playwright.dev/
+If Understand-Anything strengthens the Expert's grip on the *input*, [Playwright](https://playwright.dev/) strengthens the Verifier's grip on the *output*. It's a cross-browser automation framework (Chromium, Firefox, WebKit) built for reliable end-to-end testing — **auto-waiting** for elements before acting, **retrying assertions** until they hold, **test isolation** per run, and **semantic locators** (`getByRole`, `getByLabel`) that survive cosmetic markup changes instead of breaking on brittle CSS selectors.
+
+Two surfaces matter for a migration harness:
+
+- **The CLI.** `codegen` records a human clicking through the app and emits a runnable test; the **trace viewer** replays a run as a full timeline — DOM snapshots, network requests, console logs, and screenshots at every step. Record the golden flows against the *legacy* app, then replay them against the *modernized* one: that's a behavioral-equivalence check, not a compile check.
+- **The MCP server.** This is what lets the *agent itself* see the app. Crucially it drives the browser through the **accessibility tree, not screenshots** — structured, deterministic, and token-efficient, so the evaluator gets semantic element references instead of guessing at pixels. It can navigate, click, type, fill forms, snapshot the page, and read the network and console — 50+ tools in all.
+
+That second point is the one that closes the verification gap. Wiring the Playwright MCP into the evaluator means it doesn't just read the generated code and declare it correct — it **opens the migrated screen, exercises the flow, and confirms the result**, the way a human tester would. Combined with golden traces captured from the legacy system, it's the closest thing to the *parallel-run / behavioral-equivalence* check the CoreStory playbook calls for: the difference between "it builds" and "it does what the old code did." That's the half of the harness a build script alone can't give you.
+
+## What's next
+
+The harness in this post is hand-built and human-tuned. The research frontier is pushing each piece to improve *itself* — five directions I'd try next:
+
+- **A self-evolving playbook (planner).** [Agentic Context Engineering](https://arxiv.org/abs/2510.04618) (ICLR 2026) evolves the *context* into a refined playbook from execution feedback while resisting "context collapse" — the context-layer sibling of Self-Harness. Let the planner refine a migration playbook after each unit instead of leaning on static skills.
+- **Auto-generated guardrails.** AutoHarness (arXiv:2603.03329) *synthesizes* a code harness that blocks illegal agent actions — generate the domain validators instead of hand-writing them.
+- **A verifier that debates.** [Multi-agent debate for LLM judges](https://openreview.net/forum?id=Vusd1Hw2D9) (NeurIPS 2025) provably beats majority voting, and agent-as-judges run code rather than read it — swap the lone evaluator for a debate panel with adaptive stopping on the high-risk units.
+- **Cross-unit memory.** Trajectory-informed memory mines *typed* lessons from execution traces and retrieves them later — so unit 47 benefits from what unit 12 learned, closing the cross-unit gap.
+- **Behavioral oracles.** Independent of the AI hype, practitioners keep landing on the same primitives — seams, characterization tests, and fitness functions ([iSAQB](https://www.isaqb.org/blog/ai-agents-dont-modernize-legacy-code-on-their-own)) — the concrete tooling that closes the "verify behavior, not the build" gap.
+
+The pattern across all five: the parts we still hand-tune — playbook, guardrails, verifier, memory — are exactly the parts the next wave makes self-improving.
+
+## Final thoughts
+
+I started with the naive picture: feed legacy code into an AI, get a modernized system out. Everything since has been an argument against it — not because the models are weak, but because the model was never the hard part. A migration is hundreds of small, verifiable steps sustained over months against a live system the business depends on. What carries that work isn't the model's intelligence in any single turn; it's the **loop you build around it** — the environment, the instructions, the tools, the verification, the memory, and the control flow that turn a brilliant one-shot answer into a process that survives across sessions and doesn't quietly drift off the rails. That loop is the harness, and *building it* is the job.
+
+The reframe that took me a while to see: the model is the part you **rent**, and the harness is the part you **own**. Models change every few months — you swap `claude-sonnet-4-6` for the next one, re-tune a prompt, and the orchestration is unchanged. The harness is what persists: version-controlled, reusable across projects, model-agnostic, and increasingly able to improve itself. The skills a team wrote were glued to one codebase; the harness around them wasn't. If you take one practical thing from this post, let it be where you spend your effort — not on a cleverer prompt, but on the environment, the feedback loop, and the gates around the model.
+
+And those gates are the whole reason it's safe to let the thing run while you get a coffee. **AI informs; humans commit.** Autonomy isn't a property of the model — it's a property of the harness: behavioral verification that won't let an agent declare victory early, guardrails that block the irreversible command, git that makes every failed attempt a clean `reset` away from gone, and human sign-off at the moments that actually matter — the cutover, the decommission, the production deploy. Get those right and "I went for coffee" isn't recklessness; it's the system working as designed. The cadence underneath it all is simple: *understand the as-is, migrate the data first, strangle the system unit by unit, verify behavior rather than just the build, commit what passed, and cut over only once it holds.*
+
+> *To exist is to change, to change is to mature, to mature is to go on creating oneself endlessly.*
+
+Bergson was writing about conscious beings, but it's the right note to end on. A migration isn't a one-time event you survive; it's how a system keeps existing — shedding the parts that no longer serve it and growing the ones that do, without ever stopping. The harness is what makes that continuous rather than catastrophic. It's also the real deliverable: long after this migration is done and this model is retired, the harness — and the understanding of the system encoded in it — is what you hand to the next generation. That, in the end, is the point. Not to replace the engineer with an AI, but to build the thing that lets a system, and the people who tend it, keep creating themselves — safely, one verified commit at a time.
