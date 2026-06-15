@@ -142,7 +142,7 @@ So with this method, you can gain:
 
 #### How to "Watch"?
 
-I choose a 5-10 minute YouTube video that suits me. It's not only about the length — by my estimate, a 5-minute video gives me 10-20 new words, and that is quite enough for a day. Another reason that i choice Youtube is because you can save videos in your playlist for later review.
+I choose a 5-10 minute YouTube video that suits me. It's not only about the length — by my estimate, a 5-minute video gives me 10-20 new words, and that is quite enough for a day. Another reason I choose YouTube is that you can save videos in your playlist for later review.
 
 The other thing that matters is the content. These are the channels I subscribe to:
 
@@ -191,3 +191,8 @@ The core idea of this method is that the word never comes alone: along with the 
 ### Final thoughts
 
 Habit is the key. None of this works as a one-time burst — the method only pays off when it becomes something you do almost without thinking, a little every day. The good news is that it asks for very little: a phone, a short video, and a few minutes. That's why it travels with me anywhere, and why I can keep it up even with a full-time job. Pick content you love, run the loop, review a little each day — and trust that the progress, bit by bit, will add up.
+
+## How to learn coding?
+
+- The chain of simplification
+- The teaching-coding loop
