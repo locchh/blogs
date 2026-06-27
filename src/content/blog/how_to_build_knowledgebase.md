@@ -9,6 +9,10 @@ draft: true
 
 ## The current state of knowledge base
 
+- File-based LLM wiki, etc.
+
+- Structure DB
+
 - VectorDB
 
 - GraphDB
