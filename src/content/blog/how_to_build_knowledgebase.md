@@ -21,12 +21,11 @@ Data -> Information -> Knowledge -> Wisdom
 
 ## How to evaluate
 
-- the infinity of questions
+- The infinity of questions
 
-- interesting dimensions
+- Interesting dimensions
 
-- how to measure the quality of answers
-
+- How to measure the quality of answers
 
 ## Some other advanced techniques
 
@@ -35,3 +34,5 @@ https://machinelearningplus.com/gen-ai/hype-rag-how-hypothetical-prompt-embeddin
 https://www.anthropic.com/engineering/contextual-retrieval
 
 https://platform.claude.com/cookbook/capabilities-contextual-embeddings-guide
+
+https://github.com/thedotmack/claude-mem

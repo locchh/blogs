@@ -96,6 +96,16 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				});
 
 				await mermaid.run();
+
+				// Center diagrams; let them scroll horizontally only if they
+				// genuinely exceed the column (rare for compact diagrams).
+				document.querySelectorAll<HTMLElement>('.mermaid').forEach((container) => {
+					const svg = container.querySelector('svg');
+					if (!svg) return;
+					svg.style.height = 'auto';
+					container.style.textAlign = 'center';
+					container.style.overflowX = 'auto';
+				});
 			});
 		</script>
 	</body>

@@ -90,6 +90,33 @@ One more fact: **ACCENT DOES MATTER!!!** Even though people say "you don't need 
 
 I am a 30-year-old man with a strong Vietnamese accent. I have been learning English for over 15 years, counting from primary school and university, but I still struggle with interviews in English — what a shame!
 
+One of the biggest mistakes I've realized: in Vietnamese, a word is a single sound, but in English, multiple sounds can combine into a single word. English actually works on three levels — **sounds, words, and sentences** — and each level has its own rules I had been ignoring.
+
+At the **word level**, three things matter:
+
+- **final sounds** — and the difference between **content words** (nouns, verbs, adjectives, spoken fully) and **function words** (articles, prepositions, auxiliaries, which get squeezed). Vietnamese mostly drops final sounds, but in English they carry meaning (*ride* vs. *right*).
+- **stress** — every English word has a stressed syllable, and putting it in the wrong place can make the word unrecognizable.
+- **the schwa** — the lazy "uh" that unstressed syllables collapse into. It's everywhere in English, but it isn't a habit in Vietnamese.
+
+At the **sentence level**, we have:
+
+- **intonation** — the rise and fall in pitch that signals a question, a statement, or emotion.
+- **linking** — words flow into each other (*an apple* sounds like *anapple*).
+- **sentence stress** — only the important words get emphasized; the rest are de-emphasized.
+- **sound reduction** — weak words and syllables shrink (*going to* → *gonna*).
+
+So before, I tried to break an English word into multiple sounds and reproduce each one with something similar in Vietnamese. That was wrong — and that's exactly why my accent never improved. Instead, I should learn to perform a single, complex mouth action *correctly in English*. This video made it click for me: [ Learn everything about ENGLISH PRONUNCIATION.](https://www.youtube.com/watch?v=LiR1ijwO6J0).
+
+This also taught me the difference between **pronunciation** and **articulation**. Pronunciation is *what* the correct sounds are — the right vowels, the right stress, the right intonation. Articulation is *how* clearly your mouth physically produces them — the tongue, lips, and jaw doing the work. You can know the correct pronunciation and still sound mumbled, because your articulation is lazy. For a Vietnamese speaker like me, this is the part that gets skipped: I was so focused on hitting the right sound that I never trained my mouth to actually *move* the English way.
+
+The fix is almost embarrassingly simple. Vinh Giang teaches a 3-step exercise to improve your articulation:
+
+1. Grab a book.
+2. Read out loud for 5 minutes.
+3. **Overdo** the mouth movement — exaggerate every sound, open wide, push your lips and tongue further than feels natural.
+
+The exaggeration is the point: when you overdo it in practice, normal speech comes out crisp and clear by comparison. See: [EASY 3-Step Exercise To INSTANTLY Improve Your Articulation!](https://www.youtube.com/watch?v=S5f0FKhPax0).
+
 I think certificates like IELTS, TOEFL, and TOEIC are a plus; most students need them to get a job or study abroad. But real work needs you to be fluent in English, not just to pass a test.
 
 My most hated question is: **"Can you introduce yourself?"** I don't answer it as well as interviewers expect. Maybe it's because I don't like talking about myself, but I can't deny the fact that my speaking skill is really bad. Still, I think that next time, when someone asks me that question, I will tell them my success story of learning English — what I have learned, what my abilities are, what problems I have faced, and how I overcame them. Everyone loves to hear a story.
@@ -184,6 +211,8 @@ The core idea of this method is that the word never comes alone: along with the 
 
 **A tip for remembering vocabulary.** I write the English word and its Vietnamese meaning in two separate columns. When I want to test myself, I cover the Vietnamese column and try to recall the meaning from the English alone (and sometimes the other way around). It's a simple, fast self-test.
 
+**Let AI generate practice material from your own words.** Recently YouTube added an "Ask Gemini" feature, and since Gemini can read the video's transcript, I use it to speed things up a lot. I give it the list of words and phrases I just collected and ask it to write a few paragraphs about the video that use them. Because it already knows the content, the paragraphs stay on-topic and the new words land in a context I actually understand — which is exactly the kind of material the "Write" and "Workout" steps need. I read it, tweak it into my own words, then practice speaking it. It saves me the slow part of staring at a blank page while still forcing the new vocabulary into real sentences.
+
 **Beat the forgetting curve.** New words fade quickly if you never revisit them — that's the [forgetting curve](https://en.wikipedia.org/wiki/Forgetting_curve). The fix is cheap: short review sessions of just 4-5 minutes a day are enough to keep what you learned before from slipping away.
 
 **How I improved my accent.** Record yourself speaking. The first time I recorded my voice and played it back, it felt like my ear had been hit by a hammer — but that discomfort is exactly the point. You can't fix what you can't hear, and the recording shows you precisely where your pronunciation goes wrong.
@@ -194,5 +223,82 @@ Habit is the key. None of this works as a one-time burst — the method only pay
 
 ## How to learn coding?
 
-- The chain of simplification
-- The teaching-coding loop
+Do we still need to learn fundamentals with agentic tools like Claude Code, Codex, and Cursor? **Yes — more than before.**
+
+The AI abstracts the mechanical layer: typing code, enforcing syntax, generating DDL. What it cannot abstract is the layer above — the *why* and *what*. Take a database: AI writes the DDL in seconds, but it cannot decide your ERD, your access patterns, your consistency guarantees, your backup strategy. Those live in your understanding, not in the prompt. Feed it a weak model of what you need and it builds that, fast.
+
+The fundamentals that matter have shifted. Syntax recall and API memorization belong to the AI now. What you need more of:
+
+- **Mental models of tradeoffs** — *why* eventual vs. strong consistency, not how to configure it
+- **Domain understanding** — what the data *means*, not how to persist it
+- **Verification ability** — you can only catch AI mistakes if you know what correct looks like
+- **Design judgment** — AI fills in a design you specify; it cannot choose the design
+
+Think of it as a chain of abstraction:
+
+<div style="display: flex; justify-content: center;">
+
+```mermaid
+graph TD
+    A["🏢 Company<br/><i>Business domain knowledge</i><br/>What problem matters, what success looks like"]
+    B["👨‍💻 Developer<br/><i>Technical translation</i><br/>How business intent maps to system design and tradeoffs"]
+    C["🤖 AI Agent<br/><i>Mechanical execution</i><br/>Typing code, enforcing syntax, running commands"]
+    D["⚙️ Running System"]
+
+    A -->|"abstracts over"| B
+    B -->|"abstracts over"| C
+    C -->|"abstracts over"| D
+```
+
+</div>
+
+The developer's value is in that middle layer. Lose the fundamentals and you collapse into the company above you — passing vague intent downward and hoping something useful comes back. The AI will oblige, and build you exactly what you described. If what you described was wrong, you won't know until it breaks. So here are my tips for studying software:
+
+### Learning Tips
+
+**The chain of simplification.** Here is my tip for learning something new — a concept, a framework, a dense paper. I call it the *chain of simplification*. First I read it myself. If I don't understand, I hand it to the AI and ask for a simpler version: less jargon, more analogy, a concrete example, explain it like I'm five (that holy prompt still works today). If the first pass doesn't land, I simplify again — and again — looping until it clicks.
+
+Here is a real example. Yann LeCun's recent paper, [When Does LeJEPA Learn a World Model?](https://arxiv.org/pdf/2605.26379). First read:
+
+> *A representation that scrambles the true degrees of freedom of the world cannot support reliable planning or compositional generalization. We prove that LeJEPA (alignment plus Gaussian regularization) linearly recovers the world's latent variables from nonlinear observations, a property known as linear identifiability, in a broad class of worlds where latents evolve under stationary, additive-noise transitions. Our main result is that among all such worlds, the Gaussian is the unique latent distribution for which this guarantee holds...*
+
+My honest first reaction: *"Am I stupid?"* But don't quit. Feed it to Opus 4.8, ask for the simple version, and it comes back with something that actually clicks:
+
+> Imagine a robot arm with a camera. If you only look at the raw pixels, you are seeing shadows of the real thing. What *actually* drives the motion are hidden factors — the joint angles — and those never appear directly in the image. They live behind the pixels. A good representation should recover those hidden factors from the pixels alone.
+
+And that was it. Stripped of the spectral decompositions and the identifiability proofs, the paper makes one clean claim: **the world has hidden factors that drive what you observe, and this particular self-supervised recipe provably recovers them** — with the Gaussian being the special distribution that makes the guarantee hold. Once I had the robot-arm picture, I could go back to that dense abstract and every term had a home.
+
+That is the whole method: don't bounce off the hard version and conclude you are not smart enough. Lower the rung until you can reach it, stand on it, then climb back up to the original.
+
+**Reproduce.** The other way to learn is to reproduce. Learning a new programming language? Start typing it, instead of just reading it. Learning how a bigger system works? Build it from scratch.
+
+Does typing it yourself still matter when the agent can do it for you? It does. The rebuilt artifact is not the prize — the understanding you earn producing it is. When the AI reproduces it, the *code* exists; when you reproduce it, the *knowledge* exists, and the knowledge is what travels to the next project. Letting the agent do the reps for you is like watching someone else lift your weights: the barbell still goes up, but you don't get any stronger. There is also muscle memory in this — type the syntax enough times and your hands stop asking your brain for permission. The patterns sink below conscious thought, and that frees your attention for the problem instead of the keystrokes.
+
+And building from scratch is a technique we have used to learn software for a long, long time — the AI does not retire it, it makes it faster. You still do the rebuilding, but now you have a tutor beside you the whole way, ready to explain anything the moment you get stuck. Want to learn how your editor talks to a language server? Build one: [LSP From Scratch](https://www.youtube.com/watch?v=p0Vlz66AFNw&list=PLq5tGLDKHlW-owkJWZrueldeR6mbqBvOg).
+
+But from-scratch has a limit: it does not scale to large scope. Rebuild a toy language server and you learn how the protocol works; try to rebuild VS Code and you will drown before you learn anything. The bigger the target, the more time you spend wrestling plumbing that teaches you nothing. So keep the scope small. Reproduce the *one idea* you are trying to understand — the smallest version that still contains the lesson — and leave the rest out. From-scratch is a scalpel, not a bulldozer; point it at the concept, not the whole product.
+
+**The teaching-coding loop.** Recently I found another way to learn coding: use the agent as a *teacher* instead of a worker. It sounds backwards — why hold a tool that can write the whole thing and choose to write it yourself? But that is exactly the point. Once I have finalized the design of a repository, I ask the agent to lay out an implementable roadmap — each step small enough to code and test on its own. Then I write the code myself, following the roadmap, and lean on the agent whenever I get stuck. The agent guides; I do the typing.
+
+And honestly? This is the most fun I have had coding in years. There is a real thrill to it — you hit a wall, ask, get the *aha*, and write the line yourself, over and over. It feels less like grinding through a ticket and more like pair-programming with someone who knows everything and never gets tired of your questions. Every small task ends with a little win and something new in your head. Learning is supposed to feel like that, and somewhere along the way most of us forgot.
+
+```mermaid
+%%{init: {'flowchart': {'nodeSpacing': 20, 'rankSpacing': 26}}}%%
+graph LR
+    D["Design"] --> R["Roadmap"]
+    R --> S["Pick task"]
+    S --> C["Code<br/><i>agent guides</i>"]
+    C --> T["Test"]
+    T --> L["Lesson"]
+    L -->|"next"| S
+```
+
+The trap to avoid is the "I am the boss" mindset. A lot of people pick up an agent and immediately start barking orders, as if their job is only to delegate. But think about it honestly: if I am a beginner learning TypeScript, the agent is flat-out better at TypeScript than I am. Why would I order around the most knowledgeable person in the room instead of learning from them? Drop the boss act. Treat the agent as the senior engineer sitting next to you — one with infinite patience, who will explain the same thing five different ways until it lands. You are not here to command it; you are here to get good.
+
+This flips the usual loop. The "boss" loop is *prompt → accept output → move on*, and you end the day with code you cannot explain. The teaching loop is *plan → attempt → get corrected → understand*, and you end the day a little better than you started. Same tool, same tokens — the only thing that changed is who is supposed to be learning.
+
+**Use the agent as a knowledge checker.** Reading something and *knowing* it are not the same thing — and the gap between them is invisible until someone tests you. So let the agent test you. After I study a topic, say AWS S3, I ask it to quiz me: generate ten multiple-choice questions, A/B/C/D, wait for my answers, then score me and explain every one I missed. Suddenly the parts I only *thought* I understood show up as wrong answers.
+
+This works because it flips the direction of the conversation. Most of the time you pull answers out of the agent; here you make it pull answers out of *you*. That reversal is the whole point — recalling something under test burns it into memory far deeper than reading it ever will, and the questions you fail map out exactly where to study next. Ask for harder questions as you improve, have it focus on the corners you keep getting wrong, and keep going until the score stops embarrassing you.
+
+A quiz also closes the loop on everything above. The chain of simplification gets a concept *in*; reproduction makes you *use* it; the teaching loop builds it into real work — and the quiz checks that it actually stuck. Cheap to run, brutally honest, and the one part of learning the AI can grade for you.
