@@ -278,7 +278,7 @@ And building from scratch is a technique we have used to learn software for a lo
 
 But from-scratch has a limit: it does not scale to large scope. Rebuild a toy language server and you learn how the protocol works; try to rebuild VS Code and you will drown before you learn anything. The bigger the target, the more time you spend wrestling plumbing that teaches you nothing. So keep the scope small. Reproduce the *one idea* you are trying to understand — the smallest version that still contains the lesson — and leave the rest out. From-scratch is a scalpel, not a bulldozer; point it at the concept, not the whole product.
 
-**The teaching-coding loop.** Recently I found another way to learn coding: use the agent as a *teacher* instead of a worker. It sounds backwards — why hold a tool that can write the whole thing and choose to write it yourself? But that is exactly the point. Once I have finalized the design of a repository, I ask the agent to lay out an implementable roadmap — each step small enough to code and test on its own. Then I write the code myself, following the roadmap, and lean on the agent whenever I get stuck. The agent guides; I do the typing.
+**The teaching-coding loop.** Recently I found another way to learn coding: use the agent as a *teacher* instead of a worker. It sounds backwards — why hold a tool that can write the whole thing and choose to write it yourself? But that is exactly the point. Once I have finalized the design of a repository, I ask the agent to lay out an implementable roadmap — each step small enough to code and test on its own. Then I write the code myself, following the roadmap, and lean on the agent whenever I get stuck. The agent guides; I do the typing. When a test fails or a review turns up something wrong, I bring it back — ask the agent to explain *why*, then fix it myself. That inner loop between testing and correcting is where most of the actual learning happens.
 
 And honestly? This is the most fun I have had coding in years. There is a real thrill to it — you hit a wall, ask, get the *aha*, and write the line yourself, over and over. It feels less like grinding through a ticket and more like pair-programming with someone who knows everything and never gets tired of your questions. Every small task ends with a little win and something new in your head. Learning is supposed to feel like that, and somewhere along the way most of us forgot.
 
@@ -287,8 +287,9 @@ And honestly? This is the most fun I have had coding in years. There is a real t
 graph LR
     D["Design"] --> R["Roadmap"]
     R --> S["Pick task"]
-    S --> C["Code<br/><i>agent guides</i>"]
-    C --> T["Test"]
+    S --> C["Code<br/><i>agent guides/explains</i>"]
+    C --> T["Test/Review"]
+    T -->|"fix"| C
     T --> L["Lesson"]
     L -->|"next"| S
 ```
