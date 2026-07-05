@@ -15,9 +15,11 @@ draft: true
 
 - [Loop Engineering](https://addyosmani.com/blog/loop-engineering/) - Loop Engineering, Addy Osmani
 
-- [The Art of Loop Engineering](https://www.langchain.com/blog/the-art-of-loop-engineering) - Langchain's blog about looping engineering
-
 - [Loop Engineering: The Anthropic Playbook for Designing Systems That Prompt Your Agents](https://drive.google.com/file/d/1qzKI4DKnyHRpXK1J3ATPqwaqLc0iNu-M/view?trk=public_post_comment-text) - A Field Study of Designing Loops That Run Themselves
+
+- [3 Key Loops for Building 0-to-1 Products with AI Agents](https://www.linkedin.com/posts/andrewyng_loop-engineering-is-a-hot-buzzphrase-after-share-7477753882505338880-dBJ-/?utm_source=share&utm_medium=member_android&rcm=ACoAAD9laxkBsmkcAipJMc2HAVrKjjkg5sWujiY) - Loop Engineering, Andrew Ng
+
+- [The Art of Loop Engineering](https://www.langchain.com/blog/the-art-of-loop-engineering) - Langchain's blog about looping engineering
 
 ### Harness Engineering
 
