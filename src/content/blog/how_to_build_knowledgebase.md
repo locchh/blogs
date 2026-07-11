@@ -3,7 +3,7 @@ title: "How to build a knowledge base"
 description: "Storage is not knowledge. On the inference layer a real knowledge base needs, where to put it, how to assemble knowledge like packages, and how to grade it."
 pubDate: "2026-07-11"
 author: "locchh"
-tags: ["knowledge-base", "vector-db", "graph-db", "dikw", "agent-memory", "inference", "knowledge-hub"]
+tags: ["knowledge-base", "vector-db", "graph-db", "dikw", "agent-memory", "inference", "knowledge-hub", "hebbian-learning"]
 draft: false
 ---
 
@@ -13,7 +13,13 @@ Everyone building with AI right now is quietly building a knowledge base. You gi
 
 Before the vector database, before RAG, before any of it, two people already had the whole idea.
 
-The first is [Donald Hebb](https://en.wikipedia.org/wiki/Donald_O._Hebb). In *The Organization of Behavior* (1949) he wrote the sentence that neuroscience has been unpacking ever since: *"When an axon of cell A is near enough to excite cell B and repeatedly or persistently takes part in firing it, some growth process or metabolic change takes place... such that A's efficiency, as one of the cells firing B, is increased."* The bumper-sticker version you've heard — *"neurons that fire together, wire together"* — is a later paraphrase, not his words, but it captures the point. Memory, biologically, is not a stored symbol sitting in a slot. It is a **strengthened connection**. The primitive is the *link*.
+The first is [Donald Hebb](https://en.wikipedia.org/wiki/Donald_O._Hebb) (1904–1985), the man often called the father of neuropsychology. In *The Organization of Behavior* (1949) he wrote the sentence that neuroscience has been unpacking ever since: *"When an axon of cell A is near enough to excite a cell B and repeatedly or persistently takes part in firing it, some growth process or metabolic change takes place in one or both cells such that A's efficiency, as one of the cells firing B, is increased."* The bumper-sticker version you've heard — *"neurons that fire together, wire together"* — is a later paraphrase, not his words, but it captures the point. Memory, biologically, is not a stored symbol sitting in a slot. It is a **strengthened connection**. The primitive is the *link*. (One detail is easy to skip: A must fire *first* and help *cause* B — the rule is about causal order, not coincidence. The lab didn't confirm that timing detail until ~50 years later, when it was named spike-timing-dependent plasticity.)
+
+Hebb didn't stop at the rule; he built the whole book *up* from it, and every floor he added is something we are now rebuilding in software. When neurons keep firing together they bind into a **cell assembly** — a team that acts as one unit and holds a single concept (the old word for such a stored trace, coined by Richard Semon back in 1904, is an *engram* — keep that word, it comes back). Because the team is wired to itself, lighting up *part* of it re-lights the *whole* — a fragment of a cue brings back the entire memory, which is just associative recall by another name. One assembly can then trigger the next, and the next: a **phase sequence**, which Hebb argued *is* a train of thought. Hold that phrase, because a chain of linked memories igniting in order is exactly Bush's *trail* below, and exactly a path through a graph. The two founders were describing one object from two directions.
+
+He even had a theory of *time*. Before a connection sets, Hebb said, activity keeps **reverberating** around the assembly — looping, holding the pattern alive — and if the loop runs long enough it drives the slow physical change that makes the memory permanent. Short-term memory becoming long-term memory: an early sketch of what we now call **consolidation**. His version only makes a trace *stick*, not a machine that reasons over its traces — but he already had the *shape* of the idea a later section of this post leans on hard: write it down when it fires, then reprocess it offline. The background "sleep" jobs further down are not a metaphor I reached for; they are Hebb's reverberation, grown up.
+
+And there is one crack in the rule that turns out to be the most important thing in this whole post. Pure "fire together, wire together" is **unstable**: a strong link fires together more, which strengthens the link, which fires them together more — a runaway loop that ends with everything wired to everything and nothing able to tell anything apart. Biology's fix, and every artificial version since (Oja's rule, the BCM theory, homeostatic plasticity), does the same thing — it makes some connections *weaker* and caps the total. Neuroscience even names the downstroke: long-term *depression*, the mirror of potentiation. **The lesson, eighty years early: a memory that only ever adds destroys itself. Forgetting is not decay to be minimized — it is half of the machine.** Pocket that too. When we reach the systems that resolve contradictions and decay stale facts on purpose, and the reason merging two knowledge bases by plain union makes them *worse*, this is why.
 
 The second is [Vannevar Bush](https://en.wikipedia.org/wiki/Memex). In 1945, in *As We May Think*, he described the **Memex** — a desk that stored your documents on microfilm and, crucially, let you build **associative trails** between them. The name is "memory" plus "index." Bush explicitly rejected the alphabetical, hierarchical filing of a library as "artificial," and proposed retrieval "by association... as we may think." His primitive, too, is the link.
 
@@ -145,6 +151,59 @@ Two caveats I owe you, because I don't want to sell a fantasy:
 1. **Write-time thinking isn't free.** It costs write latency, and bad consolidation causes *drift* — the store confidently believing something wrong, at machine speed. Tellingly, mem0's v3 algorithm (April 2026) actually *retreated* from write-time UPDATE/DELETE back to append-only, pushing conflict resolution to read time. The eager approach I'm advocating is a real tradeoff, not a free lunch.
 2. **Non-monotonic beliefs are hard to maintain.** When a source changes, the engine has to know exactly which *derived* knowledge to invalidate and cheaply re-derive. Symbolic systems (RDFox's deletion/re-derivation) solved this for hard logic; nobody has solved it for soft, probabilistic, LLM-derived facts with confidence scores. This is the open research problem, and it's a good one.
 
+## The self-wiring graph
+
+Everything above says *put inference in the store*, but stays abstract about how. Here is the most concrete mechanism I know — and it is the one you already met at the top of this post, in the Hebb section. **Make the graph itself plastic.** Not a graph with fixed edges you write once and query forever, but a graph whose edges carry *weights*, and whose weights *change with use*, exactly the way Hebb said a brain's connections do. Read his four ideas as four database operations:
+
+| Hebb's idea | ...in the brain | ...as a graph-DB operation |
+|---|---|---|
+| **Learning rule** — fire together, wire together | co-active neurons strengthen their link | **Potentiate**: when two nodes are co-activated — retrieved together, cited in the same answer, used to settle one query — bump the weight of the edge between them (create it if it's missing) |
+| **Cell assembly** — part of the team re-lights the whole | a cue reactivates the bound group | **Spreading activation**: a query lights a few seed nodes; activation flows along the weighted edges and pulls in the rest of the cluster. The densely-wired clusters *are* your communities |
+| **Phase sequence** — a train of thought | assemblies fire in order | **Trails**: paths traversed together accumulate weight and harden into materialized reasoning chains — Bush's trail, grown from use instead of drawn by hand |
+| **Reverberation → consolidation** | looping activity is later made permanent | **Consolidate & prune** (the sleep job): distill hot, densely-wired subgraphs into higher-order summary nodes; let cold edges fade; drop what falls below threshold |
+
+The whole thing runs on three forces — and the second and third are the ones every naive knowledge base forgets to build:
+
+```python
+# POTENTIATION — every time a query co-activates a set of nodes
+def on_coactivation(graph, nodes, was_useful):
+    delta = +LR if was_useful else -LR           # LTP if it helped, LTD if it misled
+    for a, b in pairs(nodes):
+        e = graph.edge(a, b) or graph.add_edge(a, b, w=0)
+        e.w += delta                             # fire together, wire together
+        e.last_seen = clock()
+
+# THE SLEEP JOB — decay, prune, consolidate, normalize (runs while idle)
+def sleep(graph):
+    for e in graph.edges:
+        e.w *= exp(-(clock() - e.last_seen) / TAU)   # disuse fades
+        if e.w < PRUNE:
+            graph.drop(e)                            # forgetting is half the machine
+    for hub in dense_communities(graph):             # reverberation -> consolidation
+        summary = llm_distill(hub)                   # a higher-order "insight" node
+        graph.add(summary, abstracts=hub.members)
+    for n in graph.nodes:
+        renormalize(n.edges, cap=W_MAX)              # homeostasis: no runaway
+```
+
+Read that against the Hebb flaw from the top of the post: **the decay-and-prune is not an optimization, it is the half of the mechanism that stops the graph from wiring everything to everything.** Potentiation alone is the runaway loop; `sleep()` is the homeostasis that fixes it. A knowledge base that only ever calls `on_coactivation` and never `sleep` is a Hebbian network with the brakes cut — it just grows denser and dumber forever. (This is the same "a memory that only ever adds destroys itself" from the opening, now with a line number.)
+
+```mermaid
+graph TD
+    Q["Query / interaction"] -->|"co-activation"| P["POTENTIATE (write / query time)<br/>fire together → wire together:<br/>strengthen the edge, or create it"]
+    P --> G[("Weighted graph<br/>each edge: strength + last-seen")]
+    G --> S{"Background<br/>sleep job"}
+    S -->|"DECAY + PRUNE<br/>disuse fades, weak edges cut"| G
+    S -->|"CONSOLIDATE<br/>distill dense hubs into<br/>higher-order nodes"| G
+    G -.->|"spreading activation:<br/>light a seed, the assembly re-lights"| ANS["Answer"]
+```
+
+This lands exactly on the three loci from earlier: **potentiation** is write/query-time inference (cheap, every interaction), while **decay, pruning, and consolidation** are the background sleep jobs. Belief revision falls out for free — a contradicted fact is simply an edge that stops getting corroborated, so it depresses and eventually prunes itself: the graded, soft version of Graphiti's hard bi-temporal invalidation.
+
+And, as with every section here, the idea is not mine — it is converging, and I owe you the names. Spreading activation over weighted semantic networks is fifty years old ([Collins & Loftus, 1975](https://en.wikipedia.org/wiki/Spreading_activation)); ACT-R has modeled memory strength with usage-driven decay for decades; and HippoRAG's query-time PageRank (from earlier) is spreading activation wearing a graph-algorithm hat. What's new in 2026 is making the *weights themselves* plastic — learned from usage, not fixed at ingest — and pairing them with the prune-and-consolidate loop. [HeLa-Mem](https://arxiv.org/abs/2604.16839) (ACL 2026) builds precisely this: a dynamic graph that "evolves through co-activation patterns," plus **Hebbian Distillation**, where a reflective agent finds densely-connected hubs and distills them into reusable semantic knowledge — reverberation-into-consolidation, implemented. [Kairos](https://openreview.net/forum?id=EN9VRTnZbK) is even more on the nose: edges traversed during *validated* reasoning strengthen (an LTP analog), unused edges weaken (LTD), and frequently co-activated entities grow **emergent** edges that were in neither the data nor the schema. Hold onto that last one — it is exactly the "missing edge" the next section's union-merge can never produce. A static merge cannot invent it; a plastic graph *grows* it, from use.
+
+The catch is the catch from everywhere else in this post: these live as frameworks *over* a graph store (Neo4j, FalkorDB), not inside the engine. Nobody has yet made edge plasticity a native storage primitive — a `WEIGHT` that decays on a clock, an index that prunes itself, a `CONSOLIDATE` that runs like `VACUUM`. That is the same missing engine from the last section, now wearing Hebb's coat.
+
 ## A hub of knowledge
 
 Now back to the Memex, because earlier I only told you half of it — and the half I skipped is the reason I'm writing this post at all.
@@ -163,11 +222,11 @@ But here is the catch, and it's the same catch as the whole post. The naive merg
 merged = (nodes_A ∪ nodes_B,  edges_A ∪ edges_B)
 ```
 
-Union the nodes, union the edges, done. And what you get is exactly what this post has been warning about: a **bigger pile of information, not bigger knowledge.** Three things go wrong, and they should look familiar by now:
+Union the nodes, union the edges, done. And what you get is exactly what this post has been warning about — and exactly what Hebb warned about eighty years ago: a system that only ever *adds* destroys itself. A union is a **bigger pile of information, not bigger knowledge.** Three things go wrong, and they should look familiar by now:
 
 1. **Identity.** Graph A has a node `Postgres`, graph B has `PostgreSQL`. The union happily keeps both, and your "bigger" graph is now *worse* — the trails don't connect where they should. Entity resolution is mandatory (the semantic web spent a decade on `owl:sameAs` learning this).
 2. **Contradiction.** A says the service default is X, B — built six months later — says Y. Union keeps both, silently. Your agent now flips a coin at answer time.
-3. **The missing edges.** The real reason to merge at all: the connections that exist in *neither* input. A knows your service runs Postgres 14; B knows Postgres 14 has a particular vacuum behavior. The edge that matters — *your service is exposed to that behavior* — is not in A, not in B, and no union operation will ever produce it. Only inference does.
+3. **The missing edges.** The real reason to merge at all: the connections that exist in *neither* input. A knows your service runs Postgres 14; B knows Postgres 14 has a particular vacuum behavior. The edge that matters — *your service is exposed to that behavior* — is not in A, not in B, and no union operation will ever produce it. Only inference does — or, over time, the co-activation of the self-wiring graph from the previous section, which grows that edge the first time both facts light up on one query.
 
 Which delivers the punchline this whole post was building toward: **merging is just a big write.** If your store already has the inference layer from the previous section, composition falls out of the same machinery — a pack import is bulk ingest through the same resolve → revise → derive pipeline, and the sleep job afterward is what welds the new knowledge to the old. Concatenation is what happens *without* the inference layer. **Composition is what happens with it.** (Your brain agrees: integrating new learning into old schemas is precisely what sleep consolidation is for.)
 
@@ -299,7 +358,7 @@ Where the "inference layer beside the store" is already shipping. The columns to
 | [cognee](https://github.com/topoteretes/cognee) | Graph + vector + relational — can run entirely on one Postgres | **Write time** (`cognify` builds the graph) *and* **background** (`improve`/`memify` enrich it) | Partial — LLM entity consolidation merges fragmented, conflicting descriptions | You want a semantic knowledge graph derived from arbitrary data, self-hosted |
 | [Zep / Graphiti](https://github.com/getzep/zep) ([paper](https://arxiv.org/abs/2501.13956)) | Temporal graph on Neo4j / FalkorDB / Neptune | **Write time** — entity resolution, fact extraction, temporal dating | The best story here — bi-temporal edges: contradicted facts are *invalidated, never deleted*; "true now" and "true then" both queryable | Your facts change over time and you need to know *when* |
 | [Letta](https://github.com/letta-ai/letta) ([paper](https://arxiv.org/abs/2504.13171)) | Postgres + vectors, organized as memory blocks | **Background** — a dedicated *sleep-time agent* rewrites memory while the main one is idle | Via consolidation — the sleep agent cleans, merges, and reorganizes | You're building stateful agents; this is the "sleep jobs" locus, literally named |
-| [engram](https://github.com/Gentleman-Programming/engram) | One Go binary, one SQLite file — FTS5 only, no embeddings | **Write time, by the agent itself** — it decides what's worth saving; conflict scans run on demand | Explicit — an LLM judges conflicts into a relations table (`conflicts_with`, `supersedes`) | You want zero-dependency, local-first memory for coding agents |
+| [engram](https://github.com/Gentleman-Programming/engram) | One Go binary, one SQLite file — FTS5 only, no embeddings (named after Hebb's word for a stored memory trace, from the top of this post) | **Write time, by the agent itself** — it decides what's worth saving; conflict scans run on demand | Explicit — an LLM judges conflicts into a relations table (`conflicts_with`, `supersedes`) | You want zero-dependency, local-first memory for coding agents |
 | [Maximem (Synap)](https://www.maximem.ai/) | Hosted; polyglot vector + graph + files | **Write time** (multi-stage ingestion) *and* **background** consolidation cycles modeled on sleep | Contradiction detection, retraction processing, decay, deliberate forgetting | You'd rather pay than operate — vendor benchmarks, take with salt (as they themselves advise) |
 
 ### Code-as-knowledge-graph
