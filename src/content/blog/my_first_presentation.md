@@ -7,7 +7,7 @@ tags: ["lessons-learned", "ai-agent"]
 draft: false
 ---
 
-A few months ago, I gave a demo to a big client of my company about how applying AI agents could increase their productivity.
+A few months ago, I gave a demo to a big client of my company about how applying AI agents could increase their productivity. It taught me more than any project since — and almost none of what it taught me was about AI. It was my first real lesson that a demo is not judged by its engineering, and it would not be the last.
 
 I didn't work with the client directly — I worked with a business unit of my company that did. But they didn't transfer the requirements to me clearly enough (or maybe they didn't want to).
 
@@ -83,19 +83,25 @@ And the hard questions in a client Q&A are never abstract. They arrive as produc
 
 There is one pattern behind all six rows of that table, and it is the last thing this presentation taught me — about what "senior" actually means.
 
-A junior engineer (me, at that demo) enjoys one thing: turning the idea into code. And that part *is* genuinely fun — the model answers, the demo runs, everyone claps. But idea-into-code is the smallest part of the job. A senior spends their effort on everything around the code, in a specific order:
+A junior engineer (me, at that demo) enjoys one thing: turning the idea into code. And that part *is* genuinely fun — the model answers, the demo runs, everyone claps. But here is what took me too long to accept: **idea-into-code is the smallest part of the job, and it is the part a senior enjoys least** — not because they can't do it, but because they have learned the code is not where the software lives or dies. Everything that actually decides whether it survives contact with the business sits *around* the code. This is the checklist a senior carries, and not one line of it is "which framework":
 
-- **Before failure — the kinds of error.** Not "errors" as one bucket, but a taxonomy: **transient** errors (the network hiccuped — safe to retry), **validation** errors (the output is malformed — retry once, *with the error attached*), **business** errors (fraud blocked the refund — do *not* retry; explain), and **coding** errors (our own bug — no retry will ever fix it). The taxonomy is the real design decision; everything else follows from it.
+- **Solution architecture — design the system before you build it.** The senior's first artifact is not code, it is a *design*: the stages the work flows through, the boundaries between them, where state lives, which component owns which responsibility, and the contract each one exposes to the next. These are the decisions that are expensive to change later — so a senior makes them first, deliberately, instead of discovering them by accident three weeks in.
 
-- **At failure — the handling.** A policy per kind, not one global `try/catch` with an apology: when to retry and how many times, when to back off, when to fall back to a simpler path or a human queue, and when to stop and say so honestly.
+- **Error handling — with a real taxonomy of errors.** "Errors" is not one bucket, and treating it as one is the junior tell. There are at least four kinds, and each is handled differently: **transient / transition** errors (the network hiccuped, a service was briefly down — safe to retry); **validation** errors (the output is malformed or fails a rule — retry once, feeding the specific error back); **business** errors (fraud blocked the refund, the policy said no — do *not* retry, explain and stop); and **logic / coding** errors (our own bug — no retry will *ever* fix it; it needs a human and a code change). Naming the kind is the real design decision; the handling falls out of the name.
 
-- **After failure — the debugging.** Logs that carry *meaning*, not noise: record ID, stage name, error type, prompt and model version — so the log line itself tells you which kind of failure hit which record at which stage. Semantic errors make debugging a query. `"Operation failed"` makes it archaeology.
+- **Escalation — when to hand off, and to whom.** A system that cannot escalate fails silently, which is the worst way to fail. So the escalation path is designed in advance: to a human review queue, to the on-call engineer, to the compliance desk — each with its own trigger. And an explicit human request — "let me talk to a person" — escalates *immediately*, before any further automation, no matter how confident the system is.
 
-- **At scale — the operations.** How it deploys, how it scales, how you roll it back, and how you know it's healthy: **numbers first** (throughput, error rate per type, stratified accuracy), **inspection second** (drill into the one record that broke). If you cannot answer "how do we roll this back?", it is not finished.
+- **The acceptable rate — the number the business draws, not you.** Escalation and monitoring both hang on one threshold: the error rate (or the confidence floor) below which the system must stop and ask a human. That number is *not* an engineering choice — it is set by the business, and it is wildly different for a payment (near zero) than for a product recommendation (generous). A senior asks for it out loud, early, and builds the whole failure policy around it.
+
+- **Logging and observability — explainable, reliable, traceable.** Those are the three words a client actually says, and each is a concrete property, not a vibe. **Traceable:** every record carries an ID and a lineage, so any output can be walked back to the exact input, prompt, and model version that produced it. **Explainable:** the log line itself carries *meaning* — record ID, stage, error kind — so "why did this happen?" is a query, not an archaeological dig. **Reliable:** the system does the same thing twice on the same input, and you can prove it. `"Operation failed"` delivers none of the three; a structured, semantic log delivers all of them.
+
+- **Monitoring — performance, issues, and the numbers that matter.** Watch throughput and latency, watch the error rate *per kind*, and watch accuracy **stratified** by case type — never one flattering average, because an average of 97% can hide a category sitting at 70%. Monitoring is how you find the issue *before* the client does.
+
+- **Deployment and scale.** How it ships, how it **rolls back** (if you cannot answer "how do we undo this?", it is not finished), how it holds up when the load is 100× the demo, and how it stays healthy with nobody watching. The demo runs once, on one machine, with you standing over it. Production runs forever, on many machines, alone. Those are two different programs, and the second one is the deliverable.
 
 The uncomfortable summary: the happy path is the demo; the unhappy paths are the product.
 
-> **Lesson 7:** Turning the idea into code is the fun 20% — the senior work is the other 80%: the kinds of failure, the handling of each kind, the meaning in the logs, and the numbers that prove it runs. Code that works is the beginning. **A system that fails well is the job.**
+> **Lesson 7:** Turning the idea into code is the fun 20% — the senior 80% is everything around it: the **architecture** you design first, the **taxonomy of errors**, the **escalation** path and the **acceptable rate** that triggers it, logs that are **explainable, reliable, and traceable**, the **monitoring** that catches the issue before the client does, and a **deploy you can roll back** and scale. Code that works is the beginning. **A system that fails well is the job.**
 
 And still — none of those seven lessons touch the two things that scared me most in that room. The system questions I could study for. What actually made me sweat was much simpler: speaking English, and making the slides.
 
@@ -121,7 +127,43 @@ Everything above is still an engineer talking about engineering — the system, 
 
 The quiet trick is that a well-designed system already contains most of these answers — the record store prices a case, the error taxonomy names the risks, the review queue names the people. The engineering questions and the business questions are the same questions at different altitudes.
 
-> **Lesson 10:** Technology waves change every few years; feasibility, cost, risk, people, and timing never do. If you can only answer the technical questions, you are hired for the wave. If you can answer both, you stay in the room after it passes. That is the difference between *writing* the system and *owning* it — and the career is in the owning.
+But there is a deeper version of this, and it is the thing I most want to keep. Notice that none of those five questions are about *frameworks*. A senior does not think in React and Kafka and Postgres — those are horizontal, shallow, and they change with every wave. A senior thinks in the client's own nouns: **payment, extraction, customer support, voting, authentication, continuous update.** And each of those nouns quietly decides *which* property is the one that can get you fired. The components barely change; the meaning does:
+
+| The same generic parts | The business noun | What actually dominates | What "failure" means here |
+|---|---|---|---|
+| API + DB + queue | **Payment** | idempotency, reconciliation, audit trail | a double-charge, money lost |
+| API + model + DB | **Extraction** | stratified accuracy, human-in-loop on low confidence | one wrong figure shipped as fact |
+| API + LLM + tools | **Customer support** | escalation calibration, policy enforced in code | an unauthorized action taken |
+| API + ledger | **Voting** | anonymity *and* one-vote-per-person *and* tamper-evidence | a vote changed or double-counted |
+| API + token store | **Authentication** | least privilege, revocation, blast-radius | account takeover |
+| pipeline + scheduler | **Continuous update** | idempotent re-runs, backfill, no double-apply | stale or corrupted state |
+
+One layer up sits the industry, and it decides *which failure is unacceptable at all* — which is not an engineering choice you get to make:
+
+- **Regulated** — banking, insurance, healthcare, fintech, gambling: the acceptable error rate is a compliance floor, not a dial you turn. Here "97% accurate" can be *illegal*.
+- **Throughput and cost** — ecommerce, warehouse, logistics, industry: the failure is unit economics, not a courtroom. Here 97% is fine if it is cheap and fast.
+
+Same phrase — "acceptable rate" — means a regulator in one column and a profit margin in the other. A senior knows which column they are standing in before writing a line.
+
+But failure-cost is only half of what an industry hands you. The other half is a whole **vocabulary** you have to learn before you can even name the right services — the part that never shows up on a résumé's skills list:
+
+| Industry | The vocabulary you actually have to learn | The flow that decides everything | The constraint that rules it |
+|---|---|---|---|
+| **Healthcare** | PHI, EHR, HL7/FHIR, ICD/CPT codes, prior authorization | patient → encounter → claim → adjudication → payout | HIPAA — a leaked record is a fine, not a bug report |
+| **Ecommerce** | cart, SKU, inventory, fulfillment, RMA, chargeback | browse → cart → checkout → fulfill → return | conversion and fraud — a second of latency is revenue |
+| **Fintech / banking** | ledger, double-entry, reconciliation, settlement, KYC/AML | authorize → capture → settle → reconcile | it must balance to the cent, and stay auditable |
+| **Insurance** | policy, premium, underwriting, claim, adjuster, actuarial | quote → underwrite → bind → claim → adjust | pricing is regulated; the claim decision is contestable |
+| **Logistics** | WMS, SKU, pick/pack/ship, routing, last-mile | inbound → store → pick → pack → ship → track | throughput per hour — one mis-pick cascades downstream |
+
+Read across any row and you feel it: knowing "REST + Postgres" tells you nothing here. Knowing that a *chargeback* is not a *refund*, or that a *claim* is not an *invoice*, is the whole game. It is also the exact difference between a demo that sounds like the customer's business and one that makes them squint and say *"this data looks so strange"* — which, if you remember Lesson 3, is precisely the wall I walked into.
+
+Put all of that together and you get the stack a senior actually holds in their head — not files and functions, but **business → service → module → infrastructure → deployment**. Ask one about the payment system and watch them move straight down it: the domain (regulated fintech), the service (payment — so idempotency and reconciliation dominate), the module (the nightly reconciliation job), the infrastructure (the ledger DB, the queue), the deployment (blue-green, because you cannot drop a charge mid-rollout). That vertical fluency — top to bottom on a single business noun — is the senior tell. A junior can talk about any one layer; a senior can walk the whole column without changing the subject.
+
+And the durable asset is not any one of these domains — a banker who cannot move industries is still narrow. It is the *habit* of thinking in the business's nouns instead of the framework's, plus knowing how to pick up a new domain fast: interview the experts, read the *real* data, map each service to the property that dominates it. Which is Lessons 1 and 3 again, wearing a suit — because domain knowledge is exactly the thing AI cannot hand you. It is not on the internet. It lives in *their* production database and *their* regulator's rulebook. That is where your value compounds, and why it outlasts the wave.
+
+> **Lesson 10:** Technology waves change every few years; feasibility, cost, risk, people, and timing never do — and neither does the business's own vocabulary. Learn to think in the client's nouns (payment, claim, order, vote), not your frameworks, because each noun decides which failure gets you fired and each industry decides which failure is even allowed. If you can only answer the technical questions, you are hired for the wave. If you can answer both — in their language — you stay in the room after it passes. That is the difference between *writing* the system and *owning* it, and the career is in the owning.
+
+I've been collecting the long version of this last lesson — the failure taxonomy sorted by *owner*, the SLI/SLO/error-budget math, the reflex questions you should ask of your own designs — in my [software handbook](https://locchh.github.io/sw-handbook/software/basics/becoming_senior/). The one idea from it I'd carve into a desk: **seniority is not measured by what you deliver, but by what you can be handed.** A junior is handed *tasks*; a mid-level engineer, *features*; a senior, *problems* — undefined, and yours to shape; a staff engineer, pure *ambiguity*. The jump is never "more code, faster." It is a change in what you accept as the deliverable. And if you want the whole self-study path behind it — the books, the postmortems, the practice drills — that lives in [the senior curriculum](https://locchh.github.io/sw-handbook/software/basics/senior_curriculum/).
 
 ## The ten lessons
 
@@ -134,4 +176,4 @@ The quiet trick is that a well-designed system already contains most of these an
 7. **A system that fails well is the job** — code that works is only the beginning.
 8. **Your English delivers the presentation** before your slides do — train it like a skill.
 9. **Build a loop around the nightmare** — the deck was always important; the clicking never was.
-10. **Answer the business questions too** — that is how you stay in the room after the wave passes.
+10. **Answer the business questions too — in the business's own vocabulary** — think in the client's nouns (payment, claim, vote), not your frameworks; that is how you stay in the room after the wave passes.
