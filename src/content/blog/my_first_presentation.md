@@ -35,7 +35,7 @@ Think about who actually asks the explainability question in that room. It is ne
 - Operations is asking: *"When it fails, how fast do we know **what kind** of failure it was?"*
 - The delivery lead is asking: *"How do we know it's actually **good** — and where exactly is it weak?"*
 
-A trace viewer answers none of those three questions, because it treats the AI as the system. It is not: **in real business, the model call is one stage in a data pipeline, and observability is a property of the pipeline, not of the model.**
+A trace viewer answers none of those three questions — not because it is a bad tool, but because it is a single service, and a single service is never the answer to a real business problem: **the model call is one stage in a data pipeline, and observability is a property of the pipeline, not of any single service inside it.**
 
 Think about how the client already runs everything they trust: as orchestrated pipelines. Ingest → transform → validate → persist → deliver. Nobody "traces every function call" of the billing system to explain an invoice — they query the invoice's *records*, because every stage writes records with IDs, timestamps, and versions. That is the treatment AI inference has to earn. Not a special AI dashboard on a projector. The same boring discipline as every other component in their stack:
 
