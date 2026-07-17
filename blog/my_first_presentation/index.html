@@ -27,7 +27,7 @@
 <li>Operations is asking: <em>“When it fails, how fast do we know <strong>what kind</strong> of failure it was?”</em></li>
 <li>The delivery lead is asking: <em>“How do we know it’s actually <strong>good</strong> — and where exactly is it weak?”</em></li>
 </ul>
-<p>A trace viewer answers none of those three questions, because it treats the AI as the system. It is not: <strong>in real business, the model call is one stage in a data pipeline, and observability is a property of the pipeline, not of the model.</strong></p>
+<p>A trace viewer answers none of those three questions — not because it is a bad tool, but because it is a single service, and a single service is never the answer to a real business problem: <strong>the model call is one stage in a data pipeline, and observability is a property of the pipeline, not of any single service inside it.</strong></p>
 <p>Think about how the client already runs everything they trust: as orchestrated pipelines. Ingest → transform → validate → persist → deliver. Nobody “traces every function call” of the billing system to explain an invoice — they query the invoice’s <em>records</em>, because every stage writes records with IDs, timestamps, and versions. That is the treatment AI inference has to earn. Not a special AI dashboard on a projector. The same boring discipline as every other component in their stack:</p>
 <pre><code class="language-mermaid">graph LR
     IN["Ingest&#x3C;br/>documents, tickets"] --> PRE["Preprocess&#x3C;br/>parse, normalize"]
