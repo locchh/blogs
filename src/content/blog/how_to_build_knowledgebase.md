@@ -249,7 +249,7 @@ Union the nodes, union the edges, done. And what you get is exactly what this po
 2. **Contradiction.** A says the service default is X. B, built six months later, says Y. Union keeps both, without a word. Your agent now flips a coin at answer time.
 3. **The missing edges.** The real reason to merge at all: the connections that exist in *neither* input. A knows your service runs Postgres 14; B knows Postgres 14 has a particular vacuum behavior. The edge that matters — *your service is exposed to that behavior* — is not in A, not in B, and no union operation will ever produce it. Only inference does — or, over time, the co-activation of the self-wiring graph from the previous section, which grows that edge the first time both facts light up on one query.
 
-Which delivers the punchline this whole post was building toward: **merging is just a big write.** If your store already has the inference layer from the previous section, composition falls out of the same machinery — a pack import is bulk ingest through the same resolve → revise → derive pipeline, and the sleep job afterward is what welds the new knowledge to the old. Concatenation is what happens *without* the inference layer. **Composition is what happens with it.**
+Which is the punchline the whole post was building toward: **merging is just a big write.** If your store already has the inference layer, composition comes for free — importing a pack is bulk ingest through the same resolve → revise → derive pipeline, and the sleep job afterward welds the new knowledge to the old. Without that layer you get concatenation. **With it you get composition.**
 
 ```mermaid
 graph LR
@@ -267,7 +267,7 @@ graph LR
     KB --> A["Deep domain understanding —<br/>no fine-tuning, inspectable,<br/>uninstallable"]
 ```
 
-Concretely, a pack needs surprisingly little — the manifest, the facts, and (this is the valuable part) the *already-derived* knowledge, so you inherit the scaffolding and not just the record:
+A pack needs surprisingly little — a manifest, the facts, and (the valuable part) the *already-derived* knowledge, so you inherit the scaffolding, not just the record:
 
 ```
 postgres-internals@1.7/
@@ -301,7 +301,7 @@ def install(kb, pack):
                                               #     the edges neither graph had
 ```
 
-Wrap it in the developer experience we already know from software, and the Memex economy is suddenly very buildable:
+Wrap it in the developer tools we already know, and Bush's knowledge economy is suddenly very buildable:
 
 ```
 kb search "postgres internals"       # browse the hub
@@ -311,11 +311,11 @@ kb remove postgres-internals         # try doing THAT to a fine-tune
 kb publish ./my-oncall-lessons       # become a trail blazer
 ```
 
-A `kb.lock` pinning pack versions and content hashes gives you something slightly wild if you say it out loud: a **reproducible mind** — or, less romantically, reproducible *knowledge*: the exact same facts and derived structure, rebuilt on any machine (the reasoning still comes from whatever model you plug in).
+A `kb.lock` that pins pack versions and content hashes buys something wild: a **reproducible mind** — or, less dramatically, reproducible *knowledge*. The same facts and derived structure, rebuilt on any machine (the reasoning still comes from whatever model you plug in).
 
-Two design notes before I oversell it. First, you don't always want to *download*. Sometimes you want to **link** — leave the pack living on someone else's server and query it over MCP at answer time. That's federation, and it is our old friend for the third time in this post: download-and-merge is *eager* (fast, offline, private, but stale and you pay the merge), federation is *lazy* (always fresh, no merge cost, but latency, dependency, and your questions leak to someone else's server). Bush's memex and today's MCP are the two ends of the same axis, and the cost-based planner from the previous section should be choosing per pack.
+Two notes before I oversell it. First, you don't always want to *download*. Sometimes you want to **link** — leave the pack on someone else's server and query it over MCP when a question comes. That's federation, and it's the eager-vs-lazy choice again: download-and-merge is *eager* (fast, offline, private, but it goes stale and you pay the merge); linking is *lazy* (always fresh, no merge, but slower, and your questions leak to someone else's server). Same axis as before — pick per pack.
 
-Second — and this is the part that keeps me honest — a hub of knowledge is a **supply chain**, and supply chains get poisoned. A malicious or just plain wrong pack makes your agent confidently, consistently wrong, at machine speed, in everything downstream of the merge. Signatures and per-fact provenance are the bare minimum (that's what `kb why` is for), but the deeper question is: how do you *grade* a pack you didn't build, before you let it into your agent's head? You already know my answer — it's the next section. Score every pack along the interesting dimensions and stamp the profile on it, the way an npm package wears its test badge. The hub isn't just a registry of knowledge; it's a registry of **graded** knowledge, or it's a registry of confident lies.
+Second, a hub of knowledge is a **supply chain**, and supply chains get poisoned. One bad pack — malicious or just wrong — makes your agent confidently, consistently wrong in everything downstream of the merge. Signatures and per-fact provenance are the bare minimum (that's what `kb why` is for). But the real question is: how do you *grade* a pack you didn't build, before you let it into your agent's head? That's the next section. Score every pack on the dimensions that matter and stamp the profile on it, the way an npm package wears its test badge. A hub is a registry of **graded** knowledge — or it's a registry of confident lies.
 
 ## How to evaluate
 
