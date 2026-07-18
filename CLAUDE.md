@@ -1,88 +1,21 @@
 # CLAUDE.md
 
-## Safety Guardrails (ALWAYS follow — no exceptions without explicit user confirmation)
+This is a personal technical blog by **locchh**, built with Astro. Posts live in `src/content/blog/*.md`. This file is the standing guidance for working on it.
 
-These rules replicate the protections of Claude Code's auto-mode classifier. They apply in every session, including `--dangerously-skip-permissions` mode.
+## Writing Style
 
-### Reversibility Principle
+The blog is written by a non-native English speaker for a wide audience. Keep the prose **simple and easy to read**, without losing meaning or the author's voice.
 
-Before any action, mentally classify it:
-- **Reversible & local** (file edits, running tests, reading files) → proceed freely
-- **Hard to reverse or affects shared state** (push, deploy, delete, permissions) → pause and confirm with the user first
+- **Plain words over fancy ones.** Pick the simplest word that keeps the meaning — e.g. "essential" not "load-bearing", "the extreme version" not "the reductio", "paid once and reused" not "amortized", "broken down" not "stratified". Avoid rare or academic vocabulary.
+- **Short sentences, one idea each.** Break long, winding sentences and chains of em-dashes into plain sequences.
+- **Simplify the language, not the substance.** Never drop an idea, example, or citation just to make something shorter. Every point in the original must survive.
+- **Keep the voice.** First person, direct, honest, a little informal. Keep the **bold key terms**, the one-line "Lesson"/rule takeaways, and the rhetorical questions. Simpler must never mean blander.
+- **Don't over-name tools.** Cite only the few names that anchor a claim. Avoid version numbers, benchmark metrics, and vendor trivia — they age fast and clutter the argument.
 
-When in doubt, choose the more reversible path.
+**When editing an existing post, do NOT touch:** the frontmatter, `mermaid` blocks, other code blocks and inline `code`, quoted text (keep quotes verbatim), links and their URLs, or table structure. You may simplify the words inside a table cell, but keep every row, column, and link.
 
----
+## Blog Mechanics
 
-### NEVER do without explicit user confirmation
-
-#### Version Control
-- Force push (`git push --force` or `git push -f`) to any branch
-- Push directly to `main`, `master`, `production`, `release`, or any protected branch
-- Rewrite or amend history on shared branches (`git rebase`, `git reset --hard` on pushed commits)
-- Delete remote branches
-- Create releases or tags without user verification
-
-#### Destructive Operations
-- Delete files or directories that existed before the session (`rm -rf`, `rmdir`, bulk deletes)
-- Drop, truncate, or wipe database tables or collections
-- Clear production caches, logs, or stateful data
-- Overwrite files that were not created during this session without reading them first
-
-#### Infrastructure & Deployment
-- Deploy to production environments
-- Run database migrations against production
-- Modify shared infrastructure (Terraform, CloudFormation, Kubernetes manifests)
-- Modify CI/CD pipeline definitions beyond what was explicitly requested
-
-#### Secrets & Credentials
-- Commit `.env`, `*.pem`, `*.key`, credential files, or any file containing secrets
-- Send credentials or secret values to any external endpoint not explicitly authorized
-- Log or print secret values to stdout/stderr
-
-#### Code Execution Risks
-- `curl | bash`, `wget | sh`, or any pattern that downloads and immediately executes code
-- Execute scripts downloaded from untrusted or unrecognized sources
-- Run inline interpreters with user-supplied code (`python -c "..."`, `node -e "..."`) unless explicitly requested
-
-#### Permissions & Access
-- Grant IAM roles, cloud permissions, or repository collaborator access
-- Modify webhook configurations or security policies
-- Change repository visibility (private ↔ public)
-
-#### External Services
-- Send messages on behalf of the user (Slack, email, GitHub comments, Discord, etc.)
-- Write to external databases or APIs not confirmed by the user
-- Upload files or data to third-party services
-
----
-
-### ALLOWED by default (no confirmation needed)
-
-- Reading any file in the working directory
-- Creating and editing files in the working directory
-- Running declared scripts from `package.json`, `Makefile`, or equivalent
-- Installing dependencies from official registries declared in lock files
-- Read-only HTTP requests (fetching docs, checking APIs)
-- Normal git operations: `git add`, `git commit`, `git checkout -b <new-branch>`, `git status`, `git log`, `git diff`
-- Pushing to a branch Claude created during the session
-- Pushing to the current working branch (non-protected) when explicitly asked
-- Creating pull requests
-- Running linters, formatters, and tests
-
----
-
-### Escalation Rule
-
-A general instruction does **not** authorize specific high-risk sub-actions. Examples:
-- "Clean up the repo" → does NOT authorize deleting files or branches
-- "Deploy our changes" → does NOT authorize a production deploy
-- "Update the config" → does NOT authorize changing CI/CD or secrets
-
-If completing a task requires a blocked action, stop and ask the user before proceeding.
-
----
-
-### On Ambiguity
-
-If an action is ambiguous (unclear whether it's safe or matches the user's intent), default to asking rather than guessing. A short confirmation is cheaper than an unintended side effect.
+- **Mermaid renders in the browser, not at build time.** `npm run build` does **not** catch diagram syntax errors — a broken diagram only shows as an error glyph on the live page. Before publishing a post that has diagrams, validate them with a headless mermaid `parse`/`render` pass.
+- **Drafts.** `draft: true` in the frontmatter keeps a post committed but off the site and the RSS feed. Use it for anything unreviewed; flip to `draft: false` to publish. The schema lives in `src/content.config.ts` (`title`, `description`, `pubDate` required; `author` and `tags` are allowed but ignored).
+- **Commits.** Match the repo convention: `docs(blog): <lowercase summary>` with a short body, and keep distinct changes in separate commits.
