@@ -7,7 +7,7 @@ tags: ["attention", "cognitive-science", "ai-agent", "focus", "collaboration"]
 draft: false
 ---
 
-I can cook dinner while listening to music. I cannot read while I code. That small, stupid fact bothered me for a week, because it breaks the story I'd been telling myself — that I'm bad at multitasking, that focus is a muscle I never trained hard enough. If focus were a muscle, cooking-and-music would be just as impossible as reading-and-coding. It isn't. So the muscle story is wrong, and something more interesting is going on.
+I can cook dinner while listening to a podcast. I cannot code while listening to the same podcast — either the voice disappears or the code does. That small, stupid fact bothered me for a week, because it breaks the story I'd been telling myself — that I'm bad at multitasking, that focus is a muscle I never trained hard enough. If focus were a muscle, the fix would be more training. But the podcast didn't get any heavier between the kitchen and the keyboard, and no amount of practice has ever made the coding pair work — while the cooking pair needed no practice at all. So the muscle story is wrong, and something more interesting is going on.
 
 Here's what set it off. I'd been running AI agents the way the tools now let you — spawn a handful, let them work in parallel, come back and collect the results. The machine juggles sixteen tasks without breaking a sweat. I sat in the middle of it and watched my own head fill up and stall at *two*. The obvious question — *why can the agent do this and I can't?* — has an obvious answer that turns out to be completely backwards.
 
@@ -48,16 +48,16 @@ So the serial seat is **essential**. It's the price of staying coherent, not a s
 
 ## It was never focus — it was channels
 
-Back to the onions. Why *can* I cook to music but not read while coding? Because "attention" is not one thing. [Christopher Wickens' Multiple Resource Theory](https://interruptions.net/literature/Wickens-HF08.pdf) says you don't have a single pool of attention but *several*. They split by sense (seeing vs. hearing), by kind of information (verbal vs. spatial), and by response (hands vs. voice). Two tasks get in each other's way based on how much they pull from the *same* pool. Sharing time between tasks is easy when the pools are separate, and brutal when they collide.
+Back to the onions. Why *can* I cook to a podcast but not code to one? Because "attention" is not one thing. [Christopher Wickens' Multiple Resource Theory](https://interruptions.net/literature/Wickens-HF08.pdf) says you don't have a single pool of attention but *several*. They split by sense (seeing vs. hearing), by kind of information (verbal vs. spatial), and by response (hands vs. voice). Two tasks get in each other's way based on how much they pull from the *same* pool. Sharing time between tasks is easy when the pools are separate, and brutal when they collide.
 
 | task pair | resources each demands | verdict |
 |---|---|---|
-| cook + music | motor/spatial + passive auditory — mostly automatic | coexist ✓ |
+| cook + podcast | half-automatic motor/spatial + verbal — separate pools | coexist ✓ |
 | walk + talk | motor + verbal | coexist ✓ |
-| read + code | the central verbal-symbolic reasoner — both | collide ✗ |
+| code + podcast | the central verbal-symbolic reasoner — both | collide ✗ |
 | code + code (two problems) | the central verbal-symbolic reasoner — both | collide ✗ |
 
-Read across it and the pattern is plain. Cooking and music hit two different, cheap, half-automatic channels. Reading and coding both demand the *one* channel that matters for knowledge work: the central symbolic reasoner — the part that reads meaning, holds a model in your head, and reasons forward. Two hands reaching for one tool. One wins; the other drops.
+Read across it and the pattern is plain. Cooking and a podcast pull from different pools: the hands run a half-automatic motor program, so the verbal channel is free for the words. Coding and a podcast both demand the *one* channel that matters for knowledge work: the central symbolic reasoner — the part that reads meaning, holds a model in your head, and reasons forward. Two hands reaching for one tool. One wins; the other drops.
 
 So the thing we have exactly one of isn't "attention" in general — it's **one central symbolic reasoner**. Everything on the edges, everything we've drilled until it runs on its own, we do in bulk all day long. The single reasoner is the only resource we can neither copy nor push into the background. And — hold this thought — it's exactly the resource an AI agent can copy.
 
@@ -73,7 +73,7 @@ And here's the part that should end the "just multitask" fantasy for good: switc
 
 Now put the agent next to you and the difference snaps into focus. When a system "runs sixteen tasks at once," that is not one mind holding sixteen things. It's sixteen minds each holding *one* — sixteen fresh context windows, kept apart, each running a single thread, each dying when its one job is done. Every single agent in the swarm runs the same **WIP = 1** discipline a focused human does. The parallel work happens *between* agents, never *inside* one.
 
-Anthropic's own [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) is the clean example: a lead agent plans, spawns three-to-five subagents *in parallel*, each with its own goal and its own context, and then pulls the results together. It beat the single-agent version by 90%. A spawned subagent isn't a spare hand or a background song — it's a **second full reasoner**. That's the entire difference, put as plainly as it will go:
+Anthropic's own [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) is the clean example: a lead agent plans, spawns three-to-five subagents *in parallel*, each with its own goal and its own context, and then pulls the results together. It beat the single-agent version by 90%. A spawned subagent isn't a spare hand or a podcast in the kitchen — it's a **second full reasoner**. That's the entire difference, put as plainly as it will go:
 
 > An agent can `fork()` a second reasoner. You have exactly one, and it does not copy.
 
