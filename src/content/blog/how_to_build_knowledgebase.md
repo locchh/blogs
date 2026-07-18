@@ -359,6 +359,24 @@ Cross the two families, generate questions per cell, score them 0–5, and you g
 
 Which is the neat part. **The same dimensions that grade a knowledge base also *define* one.** A store that scores well on connection, contradiction, and freshness isn't a well-graded database — it's a knowledge base. That was the whole point.
 
+### Or: don't grade the answer, grade its consequences
+
+Notice what every method so far has in common: they grade the answer with a **judge** — a rubric, an LLM, a profile. So ask the obvious question for a FAQ agent: in real life, who is the judge? The user who asked. And that is the one person who *can't* grade it — they asked *because* they don't have the answer. A thumbs-up from them measures whether the answer *felt* right — fluent, confident, on-topic — not whether it *was* right. Worse, the bias runs the wrong way: a confident, well-written, wrong answer collects upvotes; a hedged, correct one collects shrugs. User scores measure satisfaction, and satisfaction is a different axis from truth.
+
+So when the asker can't grade the answer, stop asking the asker and ask **reality**. Feed the knowledge base's answer into the next step, and the next, until you reach something you *can* check — code that runs, a total that reconciles, an action whose result is measurable — and grade the whole chain by that verifiable end. If the thing built on top of the answer works, the answer was good enough. This is why code is the easy case (the CodeAct idea from [coding today](/blogs/blog/coding_today/)): running it is a free, honest grader, with no human in the loop. Same shape as the incident loop in that post — the fix either stopped the outage or it didn't, and *that* is the label.
+
+There's a small ladder of what you can actually check, worth keeping straight:
+
+| What you check | Who grades it | Needs the true answer? |
+|---|---|---|
+| Fluency / helpfulness | the asker (thumbs) | No — but it isn't correctness |
+| **Faithfulness** — did the answer come from the KB, and cite it? | automatic (`kb why`, provenance) | **No** — the cheap escape |
+| **Correctness** | a verifiable downstream result | Yes — and this is where you get it |
+
+The middle row is the one people skip. Even without the true answer, you can check whether the answer really traced back to a stored fact instead of being invented — that's what `kb why` and per-fact provenance are for (RAGAS calls it *faithfulness*). It doesn't prove the KB is right — garbage in, garbage out — but it cleanly splits "the KB was wrong" from "the model made something up past the KB." The bottom row, real correctness, is what a downstream check buys you when the asker can't hand it to you.
+
+Two caveats, the same as everywhere else in this post. A downstream pass/fail is **coarse**: it tells you the *pipeline* failed, not *which* step — retrieval, reasoning, or step four. (That is the same credit-assignment problem as `was_useful` from the self-wiring section.) And **not every question ends in something checkable** — a policy lookup may have no crisp result for hours. So this doesn't replace the profile; it patches its weakest spot. Grade the answer (the profile) to see *where* the KB is weak; grade what the answer *causes* (the consequence) to know it's actually *right* where it matters. A real evaluation uses both.
+
 ## Something related
 
 The reading and the tools behind everything above — grouped, and where a group is big enough, laid side by side so you can compare.
