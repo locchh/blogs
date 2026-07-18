@@ -233,7 +233,7 @@ Bush did not stop at private trails. Read [the 1945 essay](https://www.theatlant
 
 And then the line that gives me chills: *"The inheritance from the master becomes, not only his additions to the world's record, but for his disciples **the entire scaffolding by which they were erected**."* You don't just inherit the master's conclusions. You inherit the connected structure that produced them.
 
-That is the idea: **once knowledge is built and stored, knowledge is an artifact — and artifacts snap together.** A knowledge base becomes something you can copy, diff, version, sign, publish, *download*, and **merge into a bigger one**. Imagine a hub of knowledge, the way npm is a hub of code and Hugging Face is a hub of weights. Your agent needs to work on Kubernetes networking, so you `install` the pack a trail blazer already built. It merges into your agent's store, and now — without a second of training — the agent can retrieve and reason over that domain's facts *and the connections someone already worked out between them*. Not literally Neo's *"I know kung fu"* — the agent still has to think at query time, and a pack is knowledge to draw on, not skill wired into the weights — but close enough to feel like it, and it's just a JSON file.
+That is the idea: **once knowledge is built and stored, knowledge is an artifact — and artifacts snap together.** A knowledge base becomes something you can copy, diff, version, sign, publish, *download*, and **merge into a bigger one**. Imagine a hub of knowledge, the way npm is a hub of code and Hugging Face is a hub of weights. Your agent needs to work on Kubernetes networking, so you `install` a **pack** — one domain's knowledge, bundled into a few files so it can be shared — that a trail blazer already built. It merges into your agent's store, and now — without a second of training — the agent can retrieve and reason over that domain's facts *and the connections someone already worked out between them*. Not literally Neo's *"I know kung fu"* — the agent still has to think at query time, and a pack is knowledge to draw on, not skill wired into the weights — but close enough to feel like it, and it's just a JSON file.
 
 Notice what training *cannot* do here. Fine-tuning is per-model, slow, opaque, and permanent — you can't diff it, can't inspect it, can't uninstall it, and it quietly forgets things it wasn't supposed to. A knowledge pack is model-agnostic cargo: plug it into whatever reasoner you run today, swap the reasoner tomorrow, keep the knowledge. And this is already starting to happen: Understand-Anything's committed `knowledge-graph.json` lets teammates *skip the pipeline* entirely; Graphify literally ships a `merge-graphs` command; GitNexus stitches separate repo graphs together across API-contract links; the skills marketplaces hand out procedural knowledge as installable folders. The two giant examples point the way and mark the trap: [Wikidata](https://en.wikipedia.org/wiki/Wikidata) — communal, machine-readable, CC0, over a hundred million items — is the closest thing to a working hub today, while [Cyc](https://en.wikipedia.org/wiki/Cyc) spent four decades hand-writing one proprietary universal knowledge base and never became the base anyone builds on. The bazaar beat the cathedral in software; I'd take the same bet for knowledge.
 
@@ -249,28 +249,28 @@ Union the nodes, union the edges, done. And what you get is exactly what this po
 2. **Contradiction.** A says the service default is X. B, built six months later, says Y. Union keeps both, without a word. Your agent now flips a coin at answer time.
 3. **The missing edges.** The real reason to merge at all: the connections that exist in *neither* input. A knows your service runs Postgres 14; B knows Postgres 14 has a particular vacuum behavior. The edge that matters — *your service is exposed to that behavior* — is not in A, not in B, and no union operation will ever produce it. Only inference does — or, over time, the co-activation of the self-wiring graph from the previous section, which grows that edge the first time both facts light up on one query.
 
-Which is the punchline the whole post was building toward: **merging is just a big write.** If your store already has the inference layer, composition comes for free — importing a pack is bulk ingest through the same resolve → revise → derive pipeline, and the sleep job afterward welds the new knowledge to the old. Without that layer you get concatenation. **With it you get composition.**
+Which is the punchline the whole post was building toward: **merging is just a big write.** If your store already has the inference layer, composition comes for free — importing a pack runs the same resolve → revise → derive pipeline, and the sleep job then welds it onto what was already there. Without that layer, you get concatenation. **With it, you get composition.**
 
 ```mermaid
 graph LR
-    tb["Trail blazers publish packs<br/>(signed, versioned,<br/>eval profile attached)"] --> HUB
-    subgraph HUB["The hub — a registry of knowledge packs"]
-        p1["k8s-networking@2.3"]
-        p2["postgres-internals@1.7"]
-        p3["team-oncall-lessons@0.9"]
+    tb["Authors<br/>publish packs"] --> HUB
+    subgraph HUB["A hub of packs"]
+        p1["Pack A"]
+        p2["Pack B"]
+        p3["Pack C"]
     end
-    HUB -->|"kb install"| MERGE
-    subgraph MERGE["Merge = bulk ingest through the inference layer"]
-        m1["Resolve entities<br/>(same thing,<br/>different names)"] --> m2["Revise beliefs<br/>(invalidate,<br/>don't delete)"] --> m3["Sleep job: derive<br/>the cross-pack<br/>edges"]
+    HUB -->|"install"| MERGE
+    subgraph MERGE["Merge = ingest through the inference layer"]
+        m1["Resolve entities"] --> m2["Revise beliefs"] --> m3["Derive new edges"]
     end
-    MERGE --> KB[("Your agent's<br/>knowledge base")]
-    KB --> A["Deep domain understanding —<br/>no fine-tuning, inspectable,<br/>uninstallable"]
+    MERGE --> KB[("Your knowledge base")]
+    KB --> OUT["Domain knowledge —<br/>no training, inspectable, removable"]
 ```
 
-A pack needs surprisingly little — a manifest, the facts, and (the valuable part) the *already-derived* knowledge, so you inherit the scaffolding, not just the record:
+A pack is a folder named `<pack>@<version>` (npm-style), and it needs surprisingly little inside — a manifest, the facts, and (the valuable part) the *already-derived* knowledge, so you inherit the scaffolding, not just the record:
 
 ```
-postgres-internals@1.7/
+<pack>@<version>/
   manifest.json      # name, version, license, author, signature,
                      # eval profile (its scorecard — see next section)
   entities.jsonl     # nodes: canonical name, aliases, embedding
@@ -304,11 +304,11 @@ def install(kb, pack):
 Wrap it in the developer tools we already know, and Bush's knowledge economy is suddenly very buildable:
 
 ```
-kb search "postgres internals"       # browse the hub
-kb install postgres-internals@1.7    # download, verify, merge
-kb why "connection pooling limit"    # provenance: which pack claims this?
-kb remove postgres-internals         # try doing THAT to a fine-tune
-kb publish ./my-oncall-lessons       # become a trail blazer
+kb search "<topic>"           # browse the hub
+kb install <pack>@<version>   # download, verify, merge
+kb why "<a claim>"            # provenance: which pack claims this?
+kb remove <pack>              # try doing THAT to a fine-tune
+kb publish ./<pack>           # become a trail blazer
 ```
 
 A `kb.lock` that pins pack versions and content hashes buys something wild: a **reproducible mind** — or, less dramatically, reproducible *knowledge*. The same facts and derived structure, rebuilt on any machine (the reasoning still comes from whatever model you plug in).
