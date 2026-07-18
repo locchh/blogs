@@ -7,7 +7,7 @@ tags: ["attention", "cognitive-science", "ai-agent", "focus", "collaboration"]
 draft: false
 ---
 
-I can cook dinner while listening to a podcast. I cannot code while listening to the same podcast — either the voice disappears or the code does. That small, stupid fact bothered me for a week, because it breaks the story I'd been telling myself — that I'm bad at multitasking, that focus is a muscle I never trained hard enough. If focus were a muscle, the fix would be more training. But the podcast didn't get any heavier between the kitchen and the keyboard, and no amount of practice has ever made the coding pair work — while the cooking pair needed no practice at all. So the muscle story is wrong, and something more interesting is going on.
+I can cook dinner while listening to a podcast. I cannot code while listening to the same podcast — either the voice disappears or the code does. That small, stupid fact bothered me for a week, because it breaks the story I'd been telling myself: that I'm bad at multitasking and just need to try harder. But effort can't be the missing piece. Cooking to a podcast takes none, and it works fine. Coding to one has never worked, no matter how hard I try or how long I practice. So the problem isn't how hard I focus. Something more interesting is going on.
 
 Here's what set it off. I'd been running AI agents the way the tools now let you — spawn a handful, let them work in parallel, come back and collect the results. The machine juggles sixteen tasks without breaking a sweat. I sat in the middle of it and watched my own head fill up and stall at *two*. The obvious question — *why can the agent do this and I can't?* — has an obvious answer that turns out to be completely backwards.
 
@@ -63,7 +63,7 @@ So the thing we have exactly one of isn't "attention" in general — it's **one 
 
 ## Focus is a count, not a skill
 
-This reframes the whole self-improvement project. You don't "lose focus" because your willpower is weak. You lose it because two System-2 tasks are competing for the single reasoner, and no amount of grit adds a second one. Focus was never a muscle. **It's a count problem, and the count is one.**
+This reframes the whole self-improvement project. You don't "lose focus" because your willpower is weak. You lose it because two System-2 tasks are competing for the single reasoner, and no amount of grit adds a second one. Focus was never a skill you train up. **It's a count problem, and the count is one.**
 
 There is exactly one way a human ever *appears* to add a reasoner, and it's not by trying harder — it's by making part of the work stop needing one. [Schneider and Shiffrin (1977)](https://psych.indiana.edu/documents/shiffrin-and-schneider-1977.pdf) drew the line between *controlled* processing (one step at a time, limited in how much it holds, eats the central channel) and *automatic* processing (built by steady practice, runs without using up the seat). Practice doesn't strengthen focus. It *kicks a task out of the seat entirely*. I said the same thing in [how to learn](/blogs/blog/how_to_learn/) without knowing the citation: "type the syntax enough times and your hands stop asking your brain for permission… that frees your attention for the problem instead of the keystrokes." That's automaticity pushing typing out of the reasoner, so the reasoner is free for the *problem*. But the problem itself — reading the meaning, making the decision — never leaves the seat. That core is the single seat, and it stays single forever.
 
