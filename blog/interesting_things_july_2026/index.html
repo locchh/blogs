@@ -1,0 +1,233 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg"><link rel="icon" href="/blogs/favicon.ico"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.2"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/interesting_things_july_2026/"><!-- Primary Meta Tags --><title>Interesting Things I Found — July 2026</title><meta name="title" content="Interesting Things I Found — July 2026"><meta name="description" content="Ten more open-source projects, two months on. This time the theme isn't new capability — it's learning to operate the agent stack we already have."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/interesting_things_july_2026/"><meta property="og:title" content="Interesting Things I Found — July 2026"><meta property="og:description" content="Ten more open-source projects, two months on. This time the theme isn't new capability — it's learning to operate the agent stack we already have."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/interesting_things_july_2026/"><meta property="twitter:title" content="Interesting Things I Found — July 2026"><meta property="twitter:description" content="Ten more open-source projects, two months on. This time the theme isn't new capability — it's learning to operate the agent stack we already have."><link rel="stylesheet" href="/blogs/_astro/about.CJd3ivxT.css">
+<style>main[data-astro-cid-bvzihdzo]{width:calc(100% - 2em);max-width:100%;margin:0}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:720px;max-width:calc(100% - 2em);margin:auto;padding:1em;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/blogs/" data-astro-cid-3ef6ksr2>Locch&#39;s Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/blogs/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blogs/blog/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/blogs/about/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo>  </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2026-07-19T00:00:00.000Z"> Jul 19, 2026 </time>  </div> <h1 data-astro-cid-bvzihdzo>Interesting Things I Found — July 2026</h1> <hr data-astro-cid-bvzihdzo> </div>  <p><a href="/blog/trending_tools_may_2026">Two months ago</a> I walked through twelve projects and argued the agent stack was starting to look like the web stack circa 2012 — a set of layers that only make sense once you’ve seen all of them at once. Routing, frameworks, workflow, codebase intelligence, memory.</p>
+<p>The layers haven’t changed much since. What I keep finding has. The May batch was mostly about <em>new capability</em> — here’s a memory plane, here’s a knowledge graph, here’s a proxy. This July batch is about something quieter and, I think, more telling: <strong>how you actually operate the stack once you have it.</strong> How you stop the agent over-engineering. How you run it on a schedule instead of babysitting it. How you diff and replay what it did. How hundreds of agents share one graph without stepping on each other.</p>
+<p>Ten this time, in six groups: frameworks, workflow, code intelligence, memory and coordination, observability, and a testing-and-infrastructure coda with no AI in it at all. As before, each multi-tool section ends with a short comparison so you can pick the one that fits your situation — not the one with the loudest README.</p>
+<hr>
+<h2 id="1-agent-frameworks--the-minimal-and-the-ambient">1. Agent frameworks — the minimal and the ambient</h2>
+<p>Two projects, two opposite answers to the question “what is an agent application?” One strips it down to the studs so you can read it. The other wraps it around your whole working day.</p>
+<h3 id="tau"><a href="https://github.com/huggingface/tau">tau</a></h3>
+<p>Hugging Face’s <code>tau</code> is a terminal coding agent that doubles as a <em>teaching tool</em>. It’s a real, usable TUI agent — read, write, edit, and shell tools, sessions saved to disk, project instructions from <code>AGENTS.md</code>, and it talks to OpenAI, Anthropic, OpenRouter, Hugging Face, or any local OpenAI-compatible endpoint. But the point isn’t the feature list. The point is that the codebase is small and layered on purpose, so you can read it end-to-end and finally understand what a coding agent <em>is</em> underneath.</p>
+<p>The layers are clean: a provider-neutral streaming layer, an agent layer that owns the message loop and tools, and a coding layer that’s the actual app. Most agents hide this. <code>tau</code> shows it to you. If you’ve ever wanted to build your own agent but bounced off a giant production framework, this is where to start.</p>
+<h3 id="rowboat"><a href="https://github.com/rowboatlabs/rowboat">rowboat</a></h3>
+<p>Rowboat is the opposite instinct. It’s a local-first desktop “AI coworker” that lives across your email, meetings, and chats and <em>remembers</em> them. The core idea is what they call the <strong>Brain</strong> — an Obsidian-style, backlinked knowledge graph of your work, stored on your machine as plain Markdown you can open and edit yourself. No cloud, no proprietary store, no cold start every session.</p>
+<p>Around that memory it stacks the things an ambient assistant needs: an email client that drafts replies, background agents that run on a trigger or a schedule, local meeting transcription, and a code mode that farms work out to Claude Code or Codex. You bring your own model — hosted or a local one through Ollama or LM Studio — and can swap it without losing the memory. Where <code>tau</code> is a tool you open, rowboat is an assistant that’s always on.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>tau</th><th>rowboat</th></tr></thead><tbody><tr><td>Shape</td><td>Terminal coding agent</td><td>Local-first desktop coworker</td></tr><tr><td>Stack</td><td>Python + Textual TUI</td><td>TypeScript desktop app</td></tr><tr><td>Memory</td><td>Session files on disk</td><td>Backlinked Markdown “Brain”</td></tr><tr><td>Killer feature</td><td>Small, readable, hackable</td><td>Durable memory across your work</td></tr><tr><td>Best for</td><td>Learning how agents work</td><td>An always-on private assistant</td></tr></tbody></table>
+<hr>
+<h2 id="2-workflow-and-skill-layer--teaching-the-agent-restraint">2. Workflow and skill layer — teaching the agent restraint</h2>
+<p>In May I flagged this as the layer where methodology becomes installable — process you <code>install</code>, not process you describe. Superpowers was the example. Two months on, the trend has sharpened into something more specific: teaching the agent <em>what not to do</em>.</p>
+<h3 id="ponytail"><a href="https://github.com/DietrichGebert/ponytail">ponytail</a></h3>
+<p>Ponytail’s pitch is the best one-liner in this whole post: it makes your agent “think like the laziest senior dev in the room.” Agents love to write code. Ask for a small feature and they’ll invent a helper, a config option, and an abstraction you didn’t ask for. Ponytail injects a <strong>decision ladder</strong> the agent has to walk before it writes anything: Does this need to exist at all? Is it already in the codebase? In the standard library? A native platform feature? An installed dependency? A one-liner? <em>Only then</em> — the minimum viable code.</p>
+<p>It installs as a skill or plugin across roughly twenty agents (Claude Code, Codex, Copilot, Cursor, and the rest), with dials for how strict to be and commands to audit a repo or flag over-engineering in a diff. On their own benchmark it cut the amount of code written by about half — up to 94% on the worst over-building cases — while keeping validation, security, and accessibility intact. Take the number with the usual salt, but the direction is right. <strong>The best code is the code you never wrote</strong>, and this is the first tool I’ve seen that makes an agent believe it.</p>
+<h3 id="loop-engineering"><a href="https://github.com/cobusgreyling/loop-engineering">loop-engineering</a></h3>
+<p>If ponytail is about restraint inside one task, loop-engineering is about not being in the loop at all. Its thesis, borrowed from Peter Steinberger: <em>you shouldn’t be prompting coding agents anymore — you should be designing the loops that prompt them.</em> A loop is a scheduled, stateful system that triggers an agent, orchestrates it, remembers what happened, and re-runs — with budget and safety guardrails baked in.</p>
+<p>It ships this as a real toolkit, not just an essay. You scaffold a pattern with one <code>npx</code> command, then estimate token cost and audit readiness before you turn it on. It comes with seven named production patterns — daily triage, a PR babysitter, a CI sweeper, a dependency sweeper, and more — each tagged with a cadence, an autonomy level, and a cost tier. It’s the <a href="/blog/coding_today">SDD idea I keep coming back to</a> pushed one level up: not “what process does the agent follow inside a task,” but “what system decides when the agent runs at all.” Loop engineering as a <em>concept</em> has been a buzzphrase for a while — this is what it looks like once it’s actual code you can run.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>ponytail</th><th>loop-engineering</th></tr></thead><tbody><tr><td>Scope</td><td>Inside a single task</td><td>Across scheduled runs</td></tr><tr><td>Form</td><td>Installable skill / ruleset</td><td>CLI toolkit + patterns</td></tr><tr><td>The lesson</td><td>Reuse before you write</td><td>Design the loop, don’t prompt it</td></tr><tr><td>Guardrails</td><td>Intensity dials, diff audits</td><td>Budget, autonomy, denylists</td></tr><tr><td>Best for</td><td>Curbing over-engineering + cost</td><td>Running agents on autopilot</td></tr></tbody></table>
+<hr>
+<h2 id="3-code-intelligence--version-control-that-speaks-in-functions">3. Code intelligence — version control that speaks in functions</h2>
+<p>In May the codebase-intelligence story was about <strong>graphs over code</strong> — GitNexus and graphify indexing a repo once so the agent could query structure instead of re-grepping. This month’s entry comes at the same problem from a different door: not a graph beside git, but git <em>rebuilt</em> around meaning.</p>
+<h3 id="sem"><a href="https://github.com/ataraxy-labs/sem">sem</a></h3>
+<p><code>sem</code> is semantic version control. Git diffs, blames, and greps in lines. But nobody thinks in lines — we think in functions, methods, and classes. <code>sem</code> parses your code with tree-sitter (roughly two dozen-plus languages) and does its git operations at the <em>entity</em> level instead. <code>sem diff</code> tells you which functions changed, not which lines. <code>sem blame</code> blames a method. <code>sem impact</code> traces what a change ripples out to across files. And <code>sem context</code> assembles a token-budgeted slice of exactly the code an agent needs, so you’re not dumping whole files into the window.</p>
+<p>It’s a fast Rust CLI with an entity cache, and — the part that matters for agents — it ships an MCP server for Claude Code, Cursor, and others, exposing those same operations as tools. The through-line with May is clear: GitNexus and graphify taught the agent to <em>read</em> a codebase as structure; <code>sem</code> teaches it to <em>track change</em> as structure. Both are the same bet — that line-level and file-level views are the wrong resolution for an agent, and structure is the right one.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>GitNexus / graphify (May)</th><th>sem</th></tr></thead><tbody><tr><td>What it models</td><td>Structure of the code now</td><td>How the code changes over time</td></tr><tr><td>Built on</td><td>Knowledge graph</td><td>Git, at the entity level</td></tr><tr><td>Agent interface</td><td>MCP tools over a graph</td><td>MCP tools over git</td></tr><tr><td>Answers</td><td>”What is this codebase?"</td><td>"What changed, and what does it hit?“</td></tr></tbody></table>
+<hr>
+<h2 id="4-memory-and-coordination--the-shared-graph">4. Memory and coordination — the shared graph</h2>
+<p>May’s memory section was three tools, three philosophies: claude-mem, mem0, cognee. The two entries this month push past single-agent memory into a newer question — how do <em>many</em> agents share one store without corrupting it, and who’s willing to run the infrastructure?</p>
+<h3 id="omnigraph"><a href="https://github.com/ModernRelay/omnigraph">omnigraph</a></h3>
+<p>Omnigraph is a graph database with a striking design choice: it borrows git. When many agents write to one shared knowledge graph, they collide — and there’s no history to untangle it. Omnigraph gives every agent its own <strong>branch</strong>, lets it work in isolation, and only merges after review, three-way, like code. Hundreds of agents can work in parallel and you keep an audit trail of who committed what.</p>
+<p>The other half is where it stores all this: nowhere special. It runs directly on object storage — S3, R2, MinIO — in a columnar format, with no database server to babysit. You declare graphs, schemas, and access policies as code, query graph, vector, and full-text search in a single call, and reach it from Claude Code or Codex through an MCP server. It’s early (pre-1.0), but it’s the clearest picture I’ve seen of what <em>multi-agent</em> memory infrastructure wants to look like: versioned, governed, and object-storage-native.</p>
+<h3 id="synap-by-maximem"><a href="https://www.maximem.ai/">Synap</a> (by Maximem)</h3>
+<p>Synap is the opposite deployment story: don’t run anything. It’s a hosted long-term memory service you reach through an SDK. You ingest conversations, it extracts structured knowledge, resolves entities, compacts without losing facts, and hands back scoped, ranked context — no vector database to tune, no retrieval pipeline to build. Its framing is sharp: bigger context windows and plain vector search aren’t memory, because they retrieve what’s <em>similar</em>, not what’s currently <em>true</em>.</p>
+<p>It leans hard on its numbers — topping the long-memory benchmarks (they cite around 92% on LongMemEval, well ahead of the usual names) at very low recall latency, with an eval harness they say is reproducible. Treat vendor benchmarks with the usual caution, but the product bet is coherent: memory as a managed plane you call, tuned for production support, sales, and voice agents. It plugs into the whole zoo of agent frameworks, the Claude Agent SDK included.</p>
+<p>This is the same split I flagged in the routing layer in May. There, cost arbitrage and operations pulled apart into two different products. Here, memory is pulling apart into <strong>the graph you self-host and version</strong> (omnigraph) and <strong>the service you call and forget</strong> (Synap). If relationships and audit matter, you run the graph. If you just want your agent to stop forgetting and to ship this quarter, you call the service. This connects to the <a href="/blog/how_to_build_knowledgebase">inference layer I argued a real knowledge base needs</a> — storage was never the hard part.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>omnigraph</th><th>Synap</th></tr></thead><tbody><tr><td>Model</td><td>Graph DB on object storage</td><td>Hosted memory SDK</td></tr><tr><td>Run it?</td><td>Self-host, declared as code</td><td>Managed service, call it</td></tr><tr><td>Standout</td><td>Git-style branching for agents</td><td>Structured, current-fact recall</td></tr><tr><td>Coordination</td><td>Built for agent fleets</td><td>Per-agent / per-user scoping</td></tr><tr><td>Best for</td><td>Governed shared memory</td><td>Ship production memory fast</td></tr></tbody></table>
+<hr>
+<h2 id="5-observability--recording-what-the-agent-did">5. Observability — recording what the agent did</h2>
+<p>Here’s a layer the May stack didn’t have at all, and its absence was a real gap. You can give an agent a workflow, a memory, and a graph — and still have no idea <em>why</em> it did what it did in production, or any safe way to change it without holding your breath.</p>
+<h3 id="kitaru"><a href="https://github.com/zenml-io/kitaru">kitaru</a></h3>
+<p>Kitaru, from the ZenML team, is record-replay-improve for agents. You decorate your Python functions with <code>@flow</code> and <code>@checkpoint</code> — no graph DSL, just normal control flow — and it records every step of a run: the model calls, the tool calls, the decisions, as typed, versioned, replayable checkpoints. When a run fails in production, you don’t guess. You <strong>replay the actual run</strong> against the actual code, swap the model or a parameter, and watch what changes — before you ship it. It’ll even resume a crashed run from the last good checkpoint using cached outputs.</p>
+<p>It’s framework-agnostic (PydanticAI, the OpenAI and Claude Agent SDKs, LangGraph, and plain Python all work), self-hosted with its own dashboard so there’s no mandatory SaaS in the middle, and it has an MCP server so a coding agent can dig through runs too. The name for the pattern it wants you to adopt is worth stealing: <em>observe every execution from day one.</em> You can’t improve a loop you can’t see.</p>
+<hr>
+<h2 id="6-testing-and-infrastructure--the-parts-with-no-ai-in-them">6. Testing and infrastructure — the parts with no AI in them</h2>
+<p>These last two have nothing to do with agents — no LLM, no MCP, no skills. I’m including them anyway, and the title of this post is the excuse: they’re <em>interesting things I found</em>, not <em>agent tools</em>. The plumbing your agent’s output runs on still matters — arguably more now that an agent can generate ten times the code that has to be tested and run somewhere.</p>
+<h3 id="opentest"><a href="https://github.com/mcdcorp/opentest">opentest</a></h3>
+<p>I’ll be honest about this one, because the honest read is the interesting part. Opentest is a mature, open-source functional test-automation framework — McDonald’s built it to unify testing across a lot of teams. It’s keyword-driven YAML over Selenium, Appium, and HTTP, with a sync server orchestrating test actors across machines so a single test can span web, mobile, and API. It’s solid engineering.</p>
+<p>Its last release was back in 2022, and there’s no LLM or agent anywhere in it — yet it keeps surfacing on “agent tooling” lists. I think that’s because it points at a hole nobody has filled. Agents will happily write unit tests all day. But end-to-end functional testing — drive a real browser, tap through a real app, assert across a real API — still has no agent-native shape. Opentest is what that layer looked like <em>before</em> agents: a distributed, source-controlled, low-code runner you could point an agent at. The gap isn’t that opentest is old. The gap is that nobody has built the agent-native version of it yet.</p>
+<h3 id="floci"><a href="https://github.com/floci-io/floci">floci</a></h3>
+<p>Floci is a local AWS emulator. You point your AWS SDKs, the AWS CLI, or Terraform at <code>http://localhost:4566</code> and it answers like the real thing — no account, no bill. If that sounds like LocalStack, that’s exactly the point: LocalStack’s free Community edition stopped getting updates this year, and floci showed up as the maintained, MIT-licensed replacement. It covers dozens of services — S3, Lambda, DynamoDB, RDS, SQS, and on down the list — and where fidelity matters it backs the stateful ones with real Docker containers instead of shallow mocks.</p>
+<p>What makes it <em>interesting</em> rather than merely useful is the engineering diet. It’s a native binary a fraction of LocalStack’s size that starts in milliseconds and idles on a few megabytes of memory — small and fast enough to spin up fresh for every test run in CI without thinking about it. It has nothing to do with AI. But every agent that writes code touching a bucket or a queue needs somewhere cheap and honest to run it, and right now this is the best free answer to that.</p>
+<hr>
+<h2 id="how-the-layers-fit-together">How the layers fit together</h2>
+<p>Same exercise as last time. Each project is a tool on its own; the picture is what happens when you stack them.</p>
+<div align="center">
+<pre><code class="language-mermaid">graph TD
+    User[Developer]
+    User --> WF[Workflow layer&#x3C;br/>ponytail / loop-engineering]
+    WF --> Agent[Agent framework&#x3C;br/>tau / rowboat / Claude Code]
+    Agent --> Mem[Memory + coordination&#x3C;br/>omnigraph / Synap]
+    Agent --> Code[Code intelligence&#x3C;br/>sem]
+    Agent --> Obs[Observability&#x3C;br/>kitaru]
+    Agent --> Test[Testing + infra&#x3C;br/>opentest / floci]
+    Code --> Git[(Git history)]
+    Mem --> Store[(Object store / service)]
+    Obs --> Store
+</code></pre>
+</div>
+<p>Read it top-down this month, because that’s the direction the work flows. The workflow layer decides <em>when and how restrained</em> the agent runs — loop-engineering schedules it, ponytail keeps it honest. The framework runs the loop. Memory and code intelligence decide <em>what it knows</em> — the shared graph or service, and the entity-level view of the code. Observability records <em>what it actually did</em> so the next run is better. And the testing-and-infra layer — no AI in it at all — is still what decides whether any of the above actually works, and where it runs.</p>
+<p>A reasonable “operate it” stack today, on top of the May foundation:</p>
+<ul>
+<li><strong>Claude Code</strong> or <strong>tau</strong> as the agent shell</li>
+<li><strong>ponytail</strong> so it stops over-engineering, <strong>loop-engineering</strong> so it runs on a schedule</li>
+<li><strong>sem</strong> so it diffs and reasons in functions, not lines</li>
+<li><strong>omnigraph</strong> if a fleet of agents shares memory, or <strong>Synap</strong> if you just want managed recall</li>
+<li><strong>kitaru</strong> so you can replay and debug what happened in production</li>
+<li><strong>floci</strong> to run the AWS-touching parts locally and in CI, for free</li>
+</ul>
+<hr>
+<h2 id="what-im-watching-next">What I’m watching next</h2>
+<p>A few patterns from this batch:</p>
+<ol>
+<li><strong>Git semantics are eating the agent stack.</strong> <code>sem</code> rebuilds diff and blame at the entity level. Omnigraph gives graph data branches and three-way merges. Loop-engineering isolates work in worktrees. Version control is quietly becoming the agent’s native language for change — not a thing beside the work, but the shape of the work.</li>
+<li><strong>Multi-agent coordination is the new frontier.</strong> May’s stack was built for one agent. This month keeps assuming <em>fleets</em> — omnigraph’s whole pitch is hundreds of agents on branches, loop-engineering orchestrates sub-agents, kitaru replays them. The interesting problems have moved from “make one agent good” to “make many agents not collide.”</li>
+<li><strong>Restraint is a feature now.</strong> Ponytail is the counter-current to a year of “more autonomy, more code, more tools.” The winning move turns out to be teaching the agent to write <em>less</em>. Expect more of this — the smallest correct diff, not the most impressive one.</li>
+<li><strong>Memory is splitting into self-host vs. managed</strong>, exactly the way routing split into arbitrage vs. operations in May. Omnigraph and Synap are the two ends. They probably won’t merge into one product either.</li>
+<li><strong>The most solid tools this month have no AI in them.</strong> Opentest and floci both surfaced on “agent” lists, and neither is an agent tool — one’s a decade-old test runner, the other a local AWS emulator. That’s the tell. We have agents that write code, remember, and get observed, but the plumbing that proves the code works and gives it somewhere to run is still plain, un-hyped infrastructure. Someone will make the testing half agent-shaped; the infra half may just quietly keep being good.</li>
+</ol>
+<p>May was about <em>assembling</em> the stack — seeing which layers exist. July is about <em>operating</em> it — restraint, scheduling, semantic version control, coordination, replay. The layers were the hard part to see. Running them without the whole thing catching fire is turning out to be the hard part to build. Pick the ones that fit the gap you’re feeling — and, as always, not the ones with the loudest README.</p>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2026 Locch. All rights reserved.
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.CqYEPtYP.js"></script> </body> </html>
