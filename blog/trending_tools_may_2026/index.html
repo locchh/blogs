@@ -96,7 +96,7 @@
 <li><strong>Code Review</strong> — systematic review against the plan</li>
 <li><strong>Branch Completion</strong> — merge and cleanup</li>
 </ol>
-<p>This is essentially the SDD philosophy I <a href="/blog/coding_today">wrote about before</a> compiled into composable skills. It runs on Claude, OpenAI Codex, Cursor, Gemini, and GitHub Copilot via official marketplace installs. At 175k stars it’s clearly resonating with people who’ve felt the pain of “agent jumps straight to code, ships a mess.”</p>
+<p>This is essentially the SDD philosophy I <a href="/blogs/blog/coding_today/">wrote about before</a> compiled into composable skills. It runs on Claude, OpenAI Codex, Cursor, Gemini, and GitHub Copilot via official marketplace installs. At 175k stars it’s clearly resonating with people who’ve felt the pain of “agent jumps straight to code, ships a mess.”</p>
 <h3 id="awesome-claude-code"><a href="https://github.com/hesreallyhim/awesome-claude-code">awesome-claude-code</a></h3>
 <p>The canonical curated list for the Claude Code ecosystem — skills, hooks, slash commands, agent orchestrators, plugins, integrations. 42k stars, currently being reorganized as the underlying ecosystem has outgrown its original table of contents. If you’re trying to figure out what already exists before building yet another <code>/review</code> command, start here.</p>
 <hr>
@@ -149,7 +149,7 @@
 <table><thead><tr><th></th><th>GitNexus</th><th>graphify</th><th>tolaria</th></tr></thead><tbody><tr><td>Input</td><td>Code repos</td><td>Code + docs + media</td><td>Hand-authored markdown</td></tr><tr><td>Output</td><td>Interactive graph + MCP tools</td><td>HTML graph + report + JSON</td><td>Vault of files + git history</td></tr><tr><td>Storage</td><td>LadybugDB (graph + vector)</td><td>NetworkX + JSON cache</td><td>Plain markdown files</td></tr><tr><td>Best for</td><td>”Understand this codebase"</td><td>"Understand this folder of stuff"</td><td>"Curate context for my agent”</td></tr></tbody></table>
 <hr>
 <h2 id="5-memory-layer--making-sessions-stop-forgetting">5. Memory layer — making sessions stop forgetting</h2>
-<p>I covered <a href="/blog/coding_today">memory at length in the previous post</a>, so the short version here. Three projects, three philosophies:</p>
+<p>I covered <a href="/blogs/blog/coding_today/">memory at length in the previous post</a>, so the short version here. Three projects, three philosophies:</p>
 <ul>
 <li>
 <p><strong><a href="https://github.com/thedotmack/claude-mem">claude-mem</a></strong> — Claude Code-specific. Hooks into <code>SessionStart</code>, <code>UserPromptSubmit</code>, <code>PostToolUse</code>, etc., compresses tool usage into SQLite + Chroma, retrieves with progressive disclosure (compact index → chronological → full detail). Privacy controls via <code>&#x3C;private></code> tags. Best when you live in Claude Code and want zero-config continuity.</p>
