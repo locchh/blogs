@@ -78,7 +78,7 @@ Superpowers calls itself "a complete software development methodology for your c
 6. **Code Review** — systematic review against the plan
 7. **Branch Completion** — merge and cleanup
 
-This is essentially the SDD philosophy I [wrote about before](/blog/coding_today) compiled into composable skills. It runs on Claude, OpenAI Codex, Cursor, Gemini, and GitHub Copilot via official marketplace installs. At 175k stars it's clearly resonating with people who've felt the pain of "agent jumps straight to code, ships a mess."
+This is essentially the SDD philosophy I [wrote about before](/blogs/blog/coding_today/) compiled into composable skills. It runs on Claude, OpenAI Codex, Cursor, Gemini, and GitHub Copilot via official marketplace installs. At 175k stars it's clearly resonating with people who've felt the pain of "agent jumps straight to code, ships a mess."
 
 ### [awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code)
 
@@ -119,7 +119,7 @@ Why it sits in this section: in the SDD world you want your specs, mission docs,
 
 ## 5. Memory layer — making sessions stop forgetting
 
-I covered [memory at length in the previous post](/blog/coding_today), so the short version here. Three projects, three philosophies:
+I covered [memory at length in the previous post](/blogs/blog/coding_today/), so the short version here. Three projects, three philosophies:
 
 - **[claude-mem](https://github.com/thedotmack/claude-mem)** — Claude Code-specific. Hooks into `SessionStart`, `UserPromptSubmit`, `PostToolUse`, etc., compresses tool usage into SQLite + Chroma, retrieves with progressive disclosure (compact index → chronological → full detail). Privacy controls via `<private>` tags. Best when you live in Claude Code and want zero-config continuity.
 

@@ -6,7 +6,7 @@ author: "locchh"
 tags: ["ai-agents", "claude-code", "tooling", "memory", "version-control", "observability", "2026"]
 ---
 
-[Two months ago](/blog/trending_tools_may_2026) I walked through twelve projects and argued the agent stack was starting to look like the web stack circa 2012 — a set of layers that only make sense once you've seen all of them at once. Routing, frameworks, workflow, codebase intelligence, memory.
+[Two months ago](/blogs/blog/trending_tools_may_2026/) I walked through twelve projects and argued the agent stack was starting to look like the web stack circa 2012 — a set of layers that only make sense once you've seen all of them at once. Routing, frameworks, workflow, codebase intelligence, memory.
 
 The layers haven't changed much since. What I keep finding has. The May batch was mostly about *new capability* — here's a memory plane, here's a knowledge graph, here's a proxy. This July batch is about something quieter and, I think, more telling: **how you actually operate the stack once you have it.** How you stop the agent over-engineering. How you run it on a schedule instead of babysitting it. How you diff and replay what it did. How hundreds of agents share one graph without stepping on each other.
 
@@ -54,7 +54,7 @@ It installs as a skill or plugin across roughly twenty agents (Claude Code, Code
 
 If ponytail is about restraint inside one task, loop-engineering is about not being in the loop at all. Its thesis, borrowed from Peter Steinberger: *you shouldn't be prompting coding agents anymore — you should be designing the loops that prompt them.* A loop is a scheduled, stateful system that triggers an agent, orchestrates it, remembers what happened, and re-runs — with budget and safety guardrails baked in.
 
-It ships this as a real toolkit, not just an essay. You scaffold a pattern with one `npx` command, then estimate token cost and audit readiness before you turn it on. It comes with seven named production patterns — daily triage, a PR babysitter, a CI sweeper, a dependency sweeper, and more — each tagged with a cadence, an autonomy level, and a cost tier. It's the [SDD idea I keep coming back to](/blog/coding_today) pushed one level up: not "what process does the agent follow inside a task," but "what system decides when the agent runs at all." Loop engineering as a *concept* has been a buzzphrase for a while — this is what it looks like once it's actual code you can run.
+It ships this as a real toolkit, not just an essay. You scaffold a pattern with one `npx` command, then estimate token cost and audit readiness before you turn it on. It comes with seven named production patterns — daily triage, a PR babysitter, a CI sweeper, a dependency sweeper, and more — each tagged with a cadence, an autonomy level, and a cost tier. It's the [SDD idea I keep coming back to](/blogs/blog/coding_today/) pushed one level up: not "what process does the agent follow inside a task," but "what system decides when the agent runs at all." Loop engineering as a *concept* has been a buzzphrase for a while — this is what it looks like once it's actual code you can run.
 
 | | ponytail | loop-engineering |
 |---|---|---|
@@ -101,7 +101,7 @@ Synap is the opposite deployment story: don't run anything. It's a hosted long-t
 
 It leans hard on its numbers — topping the long-memory benchmarks (they cite around 92% on LongMemEval, well ahead of the usual names) at very low recall latency, with an eval harness they say is reproducible. Treat vendor benchmarks with the usual caution, but the product bet is coherent: memory as a managed plane you call, tuned for production support, sales, and voice agents. It plugs into the whole zoo of agent frameworks, the Claude Agent SDK included.
 
-This is the same split I flagged in the routing layer in May. There, cost arbitrage and operations pulled apart into two different products. Here, memory is pulling apart into **the graph you self-host and version** (omnigraph) and **the service you call and forget** (Synap). If relationships and audit matter, you run the graph. If you just want your agent to stop forgetting and to ship this quarter, you call the service. This connects to the [inference layer I argued a real knowledge base needs](/blog/how_to_build_knowledgebase) — storage was never the hard part.
+This is the same split I flagged in the routing layer in May. There, cost arbitrage and operations pulled apart into two different products. Here, memory is pulling apart into **the graph you self-host and version** (omnigraph) and **the service you call and forget** (Synap). If relationships and audit matter, you run the graph. If you just want your agent to stop forgetting and to ship this quarter, you call the service. This connects to the [inference layer I argued a real knowledge base needs](/blogs/blog/how_to_build_knowledgebase/) — storage was never the hard part.
 
 | | omnigraph | Synap |
 |---|---|---|
