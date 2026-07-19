@@ -377,6 +377,21 @@ The middle row is the one people skip. Even without the true answer, you can che
 
 Two caveats, the same as everywhere else in this post. A downstream pass/fail is **coarse**: it tells you the *pipeline* failed, not *which* step — retrieval, reasoning, or step four. (That is the same credit-assignment problem as `was_useful` from the self-wiring section.) And **not every question ends in something checkable** — a policy lookup may have no crisp result for hours. So this doesn't replace the profile; it patches its weakest spot. Grade the answer (the profile) to see *where* the KB is weak; grade what the answer *causes* (the consequence) to know it's actually *right* where it matters. A real evaluation uses both.
 
+### Evaluate in tiers
+
+Step back, and those two — the profile and the consequence — are really the middle and the end of a **four-tier** stack. No single tier is enough: each draws its truth from a different place, and each has a blind spot the others cover. So don't pick one — **layer them**, pairing a *narrow-but-hard* signal with a *broad-but-soft* one:
+
+| Tier | What it is | Where the truth comes from | Answers |
+|---|---|---|---|
+| **1 · Golden set** | pre-defined questions with known answers, for the critical few | **you** — you already know the must-not-break answers | Did we break something that matters? |
+| **2 · Sample audit** | pull real questions from usage, verify the answers | **an expert / oracle**, per sample | How good are we on what people *actually* ask? |
+| **3 · Profile** | questions per ability, scored 0–5 by a judge | **a judge** — approximated, no true answer needed | What's the shape, and is it drifting? |
+| **4 · Consequence** | feed the answer into a verifiable task; check provenance | **reality** (the outcome) + the **store** (provenance) | Is it actually right where it counts? |
+
+The first two sharpen the "you can't enumerate the questions" rule rather than break it. You can't enumerate *all* the questions — but you can enumerate the **critical few** and pin them with ground truth. That's the golden set: a **regression gate**, not a coverage tool — the payment that must never double-charge, the compliance answer that can't be wrong. The sample audit is the only tier that reads the *real* question distribution (tiers 1 and 3 test questions *you* chose), and its catch is that the grader can't be the asker — it needs an expert.
+
+The shape of the stack: tiers **1 and 4 give hard truth but narrow coverage** (the curated few, the checkable few); tiers **2 and 3 give broad coverage but a softer signal** (a sample, a judge's guess). Run **3 continuously** to watch the shape and catch drift, **1 on every change** as the gate, **2 now and then** to keep the judge and the golden set honest against reality, and **4 wherever a downstream result actually checks out**. Defense in depth — the same discipline the rest of this post asks for, turned on the evaluation itself.
+
 ## Something related
 
 The reading and the tools behind everything above — grouped, and where a group is big enough, laid side by side so you can compare.
