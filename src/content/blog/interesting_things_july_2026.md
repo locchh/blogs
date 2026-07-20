@@ -1,6 +1,6 @@
 ---
 title: "Interesting Things I Found — July 2026"
-description: "Eleven open-source projects, two months on — from the model runtime up to the workflow. The theme isn't new capability; it's learning to operate the agent stack we already have."
+description: "Twelve open-source projects, two months on — from the model runtime up to a finished application. The theme isn't new capability; it's learning to operate the agent stack we already have."
 pubDate: "2026-07-19"
 author: "locchh"
 tags: ["ai-agents", "claude-code", "tooling", "memory", "version-control", "inference", "observability", "2026"]
@@ -8,7 +8,7 @@ tags: ["ai-agents", "claude-code", "tooling", "memory", "version-control", "infe
 
 [Two months ago](/blogs/blog/trending_tools_may_2026/) I walked through twelve projects and argued the agent stack was starting to look like the web stack circa 2012 — layers that only make sense once you've seen them all at once. Those layers haven't changed much. What I keep finding has: the May batch was about *new capability*; this batch is about **operating the stack once you have it** — running the model, restraining the agent, scheduling it, diffing and replaying what it did, letting a fleet share one graph without collisions.
 
-Eleven tools this time, in seven groups: frameworks, workflow, code intelligence, memory and coordination, observability, runtime, and a testing-and-infrastructure coda with no AI in it at all. They're grouped by the job they do — where two tools do the same job, I end with a one-line **pick**. Not the loudest README; the one that fits the gap you're feeling.
+Twelve tools this time, in eight groups: frameworks, workflow, code intelligence, memory and coordination, observability, runtime, one full application built from all of it, and a testing-and-infrastructure coda with no AI in it at all. They're grouped by the job they do — where two tools do the same job, I end with a one-line **pick**. Not the loudest README; the one that fits the gap you're feeling.
 
 ---
 
@@ -69,7 +69,15 @@ Eleven tools this time, in seven groups: frameworks, workflow, code intelligence
 
 ---
 
-## 7. Testing and infrastructure — the parts with no AI in them
+## 7. The application — the whole stack, pointed at one problem
+
+*Every entry so far is a layer. This is what you get when one person stacks them into a single shipped tool — and it shows off half the themes in this post at once.*
+
+- **[ai-job-search](https://github.com/MadsLorentzen/ai-job-search)** — a complete job-search assistant built entirely out of Claude Code slash commands and skills. Fork it, load your profile (`/setup`), search the boards (`/scrape`), then `/apply <url>` runs the pipeline: judge the fit, draft a tailored CV and cover letter in LaTeX, compile to PDF, and check the result against ATS parsing. The interesting part is *how* it drafts — a **drafter-reviewer** split: one agent writes, a second one with fresh context researches the employer and tears the draft apart, then the first revises, with a rule that every claim is checked against your real profile so it owns gaps instead of inventing them. That's the multi-agent coordination theme from below, wired into a real workflow. Two more notes: it runs entirely on your machine and treats job postings as **untrusted input** (no obeying instructions hidden in a posting, no fetching its links), and the author says he used it to land a job — 69 applications, 20 first interviews, a signed offer. Honest limits: those injection defenses are instruction-level, not sandboxed, and the search skills are tuned for the Danish market (swappable per board). *Best for:* job hunting — and as a worked example of a whole vertical app built from nothing but agent skills.
+
+---
+
+## 8. Testing and infrastructure — the parts with no AI in them
 
 *The last two have nothing to do with agents — no LLM, no MCP, no skills. I'm including them anyway; the title of this post is the excuse. The plumbing your agent's output runs on still matters — more now that an agent can generate ten times the code that has to be tested and run somewhere.*
 
@@ -111,6 +119,8 @@ Read it top-down — the direction the work flows:
 - **Runtime** decides whether the model runs on your hardware at all — colibri.
 - **Testing + infra** — no AI in it — decides whether any of it works, and where it runs — opentest, floci.
 
+And **ai-job-search** sits above all of it — not a layer but a *product*: the whole stack assembled and aimed at one task.
+
 A reasonable "operate it" stack today, on the May foundation:
 
 - **Claude Code** or **tau** as the shell
@@ -131,5 +141,6 @@ A reasonable "operate it" stack today, on the May foundation:
 4. **Memory is splitting into self-host vs. managed** — omnigraph and Synap, the two ends — exactly the way routing split into arbitrage vs. operations in May.
 5. **MoE's sparsity is becoming a *serving* trick, not just a training one.** colibri streams experts from disk because only a few fire per token. The same sparsity that made frontier models cheap to run in the cloud is starting to make them runnable on a laptop.
 6. **The most solid tools this month have no AI in them.** opentest and floci both surfaced on "agent" lists, and neither is an agent tool. The plumbing that proves the code works and gives it somewhere to run is still plain, un-hyped infrastructure.
+7. **Agents are starting to treat their own input as hostile.** ai-job-search reads job postings as *untrusted* — it won't obey instructions hidden in a posting or fetch its links. As agents act on text pulled off the open web, prompt-injection defense stops being optional. Expect "treat the input as an attacker" to become a default, not a feature.
 
 May was about *assembling* the stack — seeing which layers exist. July is about *operating* it — running the model, restraining, scheduling, versioning, coordinating, replaying. Seeing the layers was the hard part; running them without the whole thing catching fire is turning out to be the next one. Pick the ones that fit the gap you're feeling — and, as always, not the ones with the loudest README.
