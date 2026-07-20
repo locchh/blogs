@@ -8,7 +8,7 @@ tags: ["transformer", "world-model", "jepa", "titans", "nested-learning", "sleep
 
 Every frontier lab is quietly saying the same thing: the pure-scaling era is ending. Costs go up like a rocket, quality goes up like a snail. This post is my attempt to sort out what's actually being built as the way out. Three directions, three very different levels of ambition: **MoE**, which makes the current paradigm cheaper; **world models**, which change *what* the model learns; and Google's memory line — **Titans, Hope, and now "sleep"** — which changes *how the model learns over time*.
 
-I'll cite the original papers as we go, because most of what circulates about these ideas is summaries of summaries. Some of it can be misleading. (The article that sent me down this hole got the author list and the arXiv ID of its own subject wrong — more on that below.)
+I'll cite the original papers as we go, because most of what circulates about these ideas is summaries of summaries. Some of it can be misleading.
 
 ---
 
