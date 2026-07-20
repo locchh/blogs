@@ -1,6 +1,6 @@
 ---
 title: "Interesting Things I Found — July 2026"
-description: "Twelve open-source projects, two months on — from the model runtime up to a finished application. The theme isn't new capability; it's learning to operate the agent stack we already have."
+description: "Thirteen open-source projects, two months on — from the model runtime up to a finished application. The theme isn't new capability; it's learning to operate the agent stack we already have."
 pubDate: "2026-07-19"
 author: "locchh"
 tags: ["ai-agents", "claude-code", "tooling", "memory", "version-control", "inference", "observability", "2026"]
@@ -8,7 +8,7 @@ tags: ["ai-agents", "claude-code", "tooling", "memory", "version-control", "infe
 
 [Two months ago](/blogs/blog/trending_tools_may_2026/) I walked through twelve projects and argued the agent stack was starting to look like the web stack circa 2012 — layers that only make sense once you've seen them all at once. Those layers haven't changed much. What I keep finding has: the May batch was about *new capability*; this batch is about **operating the stack once you have it** — running the model, restraining the agent, scheduling it, diffing and replaying what it did, letting a fleet share one graph without collisions.
 
-Twelve tools this time, in eight groups: frameworks, workflow, code intelligence, memory and coordination, observability, runtime, one full application built from all of it, and a testing-and-infrastructure coda with no AI in it at all. They're grouped by the job they do — where two tools do the same job, I end with a one-line **pick**. Not the loudest README; the one that fits the gap you're feeling.
+Thirteen tools this time, in eight groups: frameworks, workflow, code intelligence, memory and coordination, observability, runtime, one full application built from all of it, and a testing-and-infrastructure coda with no AI in it at all. They're grouped by the job they do — where two tools do the same job, I end with a one-line **pick**. Not the loudest README; the one that fits the gap you're feeling.
 
 ---
 
@@ -23,14 +23,15 @@ Twelve tools this time, in eight groups: frameworks, workflow, code intelligence
 
 ---
 
-## 2. Workflow and skill layer — teaching the agent restraint
+## 2. Workflow and skill layer — the process the agent follows
 
-*In May this was where methodology became installable (superpowers). Two months on, it's sharpening into teaching the agent what NOT to do.*
+*In May this was where methodology became installable (superpowers). Two months on it's splitting three ways — teach the agent to write less, make a single run repeatable, or design the loops that run it for you.*
 
 - **[ponytail](https://github.com/DietrichGebert/ponytail)** — makes your agent "think like the laziest senior dev in the room." Before it writes anything, it walks a **decision ladder**: does this need to exist at all? Already in the codebase? In the standard library? A platform feature? A dependency? A one-liner? *Only then* — minimal code. Installs as a skill across roughly twenty agents, with strictness dials and diff audits; on their own benchmark it roughly halved the code written (take the number with salt). **The best code is the code you never wrote** — the first tool I've seen that makes an agent believe it. *Best for:* curbing over-engineering and token cost.
+- **[Archon](https://github.com/coleam00/Archon)** — a "harness builder" whose whole pitch is making AI coding **deterministic and repeatable**. Instead of hoping the agent remembers to plan, test, and review, you encode the process as a YAML workflow — planning → implementation → validation → review → PR — and the agent fills in the intelligence *inside* those guardrails. It ships close to twenty ready-made workflows (fix a GitHub issue, build a feature, review a PR, refactor), runs each in its own **git worktree** so several fixes go in parallel without colliding, and adds loop nodes and human approval gates so you can fire one off and come back to a finished, reviewed PR. TypeScript/Bun, SQLite or Postgres, a CLI and a web dashboard, driven mostly through Claude Code. *Best for:* turning ad-hoc agent coding into a process you can run the same way twice.
 - **[loop-engineering](https://github.com/cobusgreyling/loop-engineering)** — a toolkit for *not being in the loop at all*. The thesis, via Peter Steinberger: stop prompting agents, design the **loops** that prompt them — scheduled, stateful systems that trigger, orchestrate, remember, and re-run, with budget and safety baked in. Scaffold a pattern with one `npx` command; it ships seven named patterns (daily triage, a PR babysitter, a CI sweeper, and more), each tagged with cadence, autonomy, and cost. It's the [SDD idea](/blogs/blog/coding_today/) pushed up a level: not the process inside a task, but what decides when the agent runs at all. *Best for:* running agents on autopilot.
 
-**Pick:** ponytail for restraint inside one task; loop-engineering for restraint across scheduled runs.
+**Pick:** ponytail to make one task *smaller*, Archon to make one run *repeatable*, loop-engineering to make many runs *scheduled*.
 
 ---
 
@@ -95,7 +96,7 @@ Each tool is useful alone; the picture is the stack.
 ```mermaid
 graph TD
     User[Developer]
-    User --> WF[Workflow layer<br/>ponytail / loop-engineering]
+    User --> WF[Workflow layer<br/>ponytail / Archon / loop-engineering]
     WF --> Agent[Agent framework<br/>tau / rowboat / Claude Code]
     Agent --> Mem[Memory + coordination<br/>omnigraph / Synap]
     Agent --> Code[Code intelligence<br/>sem]
@@ -112,7 +113,7 @@ graph TD
 
 Read it top-down — the direction the work flows:
 
-- **Workflow** decides *when and how restrained* the agent runs — loop-engineering schedules it, ponytail keeps it honest.
+- **Workflow** decides *what process* the agent follows — ponytail keeps it lean, Archon makes each run repeatable, loop-engineering schedules it.
 - **Framework** runs the loop — tau, rowboat, Claude Code.
 - **Memory + code intelligence** decide *what it knows* — the shared graph or service, and the entity-level view of the code.
 - **Observability** records *what it actually did* so the next run is better — kitaru.
@@ -124,7 +125,7 @@ And **ai-job-search** sits above all of it — not a layer but a *product*: the 
 A reasonable "operate it" stack today, on the May foundation:
 
 - **Claude Code** or **tau** as the shell
-- **ponytail** to stop over-engineering, **loop-engineering** to run on a schedule
+- **ponytail** to stop over-engineering, **Archon** to make a run repeatable, **loop-engineering** to run on a schedule
 - **sem** to diff and reason in functions, not lines
 - **omnigraph** for fleet memory, or **Synap** for managed recall
 - **kitaru** to replay and debug production runs
@@ -135,7 +136,7 @@ A reasonable "operate it" stack today, on the May foundation:
 
 ## What I'm watching next
 
-1. **Git semantics are eating the agent stack.** sem rebuilds diff and blame at the entity level; omnigraph gives graph data branches and three-way merges; loop-engineering isolates work in worktrees. Version control is becoming the agent's native language for change.
+1. **Git semantics are eating the agent stack.** sem rebuilds diff and blame at the entity level; omnigraph gives graph data branches and three-way merges; loop-engineering and Archon isolate each run in its own worktree. Version control is becoming the agent's native language for change.
 2. **Multi-agent coordination is the new frontier.** May's stack was built for one agent; this month keeps assuming *fleets* — omnigraph's branches, loop-engineering's sub-agents, kitaru's replay. The problem moved from "make one agent good" to "make many not collide."
 3. **Restraint is a feature now.** ponytail is the counter-current to a year of more autonomy, more code, more tools. The winning move is teaching the agent to write *less* — the smallest correct diff, not the most impressive one.
 4. **Memory is splitting into self-host vs. managed** — omnigraph and Synap, the two ends — exactly the way routing split into arbitrage vs. operations in May.
