@@ -1,0 +1,282 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg"><link rel="icon" href="/blogs/favicon.ico"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.2"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/how_an_idea_grows_up/"><!-- Primary Meta Tags --><title>How an Idea Grows Up</title><meta name="title" content="How an Idea Grows Up"><meta name="description" content="The transformer is a 2017 paper. Claude Code is 2026. That's nine years for one idea to grow up — and almost none of it was the idea getting better. A rule for how a breakthrough matures into real impact: four gaps, two rules, then run forward onto quantum computing."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/how_an_idea_grows_up/"><meta property="og:title" content="How an Idea Grows Up"><meta property="og:description" content="The transformer is a 2017 paper. Claude Code is 2026. That's nine years for one idea to grow up — and almost none of it was the idea getting better. A rule for how a breakthrough matures into real impact: four gaps, two rules, then run forward onto quantum computing."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/how_an_idea_grows_up/"><meta property="twitter:title" content="How an Idea Grows Up"><meta property="twitter:description" content="The transformer is a 2017 paper. Claude Code is 2026. That's nine years for one idea to grow up — and almost none of it was the idea getting better. A rule for how a breakthrough matures into real impact: four gaps, two rules, then run forward onto quantum computing."><link rel="stylesheet" href="/blogs/_astro/about.CJd3ivxT.css">
+<style>main[data-astro-cid-bvzihdzo]{width:calc(100% - 2em);max-width:100%;margin:0}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:720px;max-width:calc(100% - 2em);margin:auto;padding:1em;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/blogs/" data-astro-cid-3ef6ksr2>Locch&#39;s Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/blogs/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blogs/blog/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/blogs/about/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo>  </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2026-07-22T00:00:00.000Z"> Jul 22, 2026 </time>  </div> <h1 data-astro-cid-bvzihdzo>How an Idea Grows Up</h1> <hr data-astro-cid-bvzihdzo> </div>  <p>The paper that made all of this possible came out in 2017. It was called <a href="https://arxiv.org/abs/1706.03762">“Attention Is All You Need”</a>. Claude Code, the thing I now use to do a day’s work in an afternoon, showed up in 2025 and got good in 2026. That’s roughly <strong>nine years</strong> for one idea to grow up — to go from a clever result in a paper to something a whole industry runs on.</p>
+<p>Here’s the part that took me a while to see: almost none of those nine years were spent making the idea <em>better</em>. The transformer was already the transformer. What took nine years was everything <em>around</em> it catching up.</p>
+<p>We don’t really have a good word for that. We say a technology “takes off,” as if it were a single moment. It isn’t. Growing up is a slow process with a shape — and the shape is worth learning, because once you can see it, you can tell a breakthrough that’s about to change your life from one that’s still ten years out. So here’s the whole post in one line: <strong>maturing is not the idea getting better. It’s the world catching up to it.</strong></p>
+<p>And it’s this blog’s usual thesis, one size larger. <a href="/blogs/blog/migration_is_a_harness/">The model is the rented part; the system around it is the job.</a> Scale that up — from a single model to a whole technology growing up in the world — and you get the same shape.</p>
+<blockquote>
+<p>The breakthrough is the cheap part. Growing up is the job.</p>
+</blockquote>
+<p>Software people have an old name for believing the opposite. <a href="https://en.wikipedia.org/wiki/No_Silver_Bullet">Fred Brooks</a>, back in 1986, called the hoped-for fix the <strong>silver bullet</strong>: every few years a technology promises a ten-times jump, and Brooks argued none would deliver, because the hard part of software was never the typing — it’s deciding what the thing should do. The transformer is the first technology I’ve seen that even aims at that hard part. And still it took nine years of unglamorous work — cost, access, harness — before it landed. Brooks’s rule didn’t break. It moved: the silver bullet finally showed up, and the world still had to spend a decade building the gun around it.</p>
+<hr>
+<h2 id="four-gaps-not-one">Four gaps, not one</h2>
+<p>We talk about technology as if there’s a single line: it works, therefore it matters. That line is wrong. Between “it works in a lab” and “it changes an industry” there are <strong>four separate gaps</strong>, and each one has to close on its own schedule. Those four gaps <em>are</em> what we call maturing — nothing more, nothing less.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Gap</th><th>It closes when…</th><th>The old idea behind it</th></tr></thead><tbody><tr><td><strong>1. Works</strong></td><td>it does a <em>real, bounded, valuable</em> task reliably — not a cherry-picked demo</td><td><a href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html">the bitter lesson</a>, scaling laws — the capability curve</td></tr><tr><td><strong>2. Cheap</strong></td><td>the cost per unit of useful work drops below the thing it’s replacing</td><td><a href="https://en.wikipedia.org/wiki/Experience_curve_effects">experience curves</a> — cost falls as volume grows</td></tr><tr><td><strong>3. Reachable</strong></td><td>a normal person can try it and <em>see</em> it work, without being an expert</td><td><a href="https://en.wikipedia.org/wiki/Diffusion_of_innovations">diffusion of innovations</a> — trialability and observability</td></tr><tr><td><strong>4. Embedded</strong></td><td>the surrounding system exists: tools, workflows, standards, trust, org change</td><td><a href="https://en.wikipedia.org/wiki/Complementary_assets">complementary assets</a>; the <a href="https://www.nber.org/papers/w25148">productivity J-curve</a></td></tr></tbody></table>
+<p>Look at gap 4 for a second. That’s this whole blog. The harness, the memory layer, the knowledge base, <code>CLAUDE.md</code>, the tests that act as receipts — that is the “surrounding system” a raw model needs before it can do real work. <strong>The thing I’ve been calling “the job” is gap 4 for the entire LLM era.</strong></p>
+<div align="center">
+<pre><code class="language-mermaid">graph LR
+    I["A breakthrough&#x3C;br/>(the idea)"] --> G1["Gap 1&#x3C;br/>Works"]
+    G1 --> G2["Gap 2&#x3C;br/>Cheap"]
+    G2 --> G3["Gap 3&#x3C;br/>Reachable"]
+    G3 --> G4["Gap 4&#x3C;br/>Embedded"]
+    G4 --> R["Real impact&#x3C;br/>× the value pool"]
+</code></pre>
+</div>
+<p>The gaps close in roughly this order, but they overlap, and — this is the important part — <strong>they close at wildly different speeds.</strong> An idea is only as grown-up as its slowest gap.</p>
+<hr>
+<h2 id="two-rules">Two rules</h2>
+<p>Once you see the four gaps, two rules fall out. They’re the whole formula.</p>
+<p><strong>The clock rule: an idea grows up at the speed of its <em>widest</em> gap, not its narrowest.</strong></p>
+<p>Hype watches gap 1. Every demo, every benchmark, every “look what it did” clip is about capability. But the technology doesn’t land until the <em>slowest</em> of the four gaps closes — and that’s almost never gap 1. This is exactly why <a href="https://en.wikipedia.org/wiki/Roy_Amara">Amara’s Law</a> is true: <em>“We tend to overestimate the effect of a technology in the short run and underestimate the effect in the long run.”</em> We see gap 1 close and assume the rest follow next week. They don’t. They take years, quietly, while everyone’s disappointed.</p>
+<p><strong>The magnitude rule: how much a grown-up idea matters is set by the value pool it sits on.</strong></p>
+<p>A chess engine crossed all four gaps decades ago. It plays better than any human alive. It changed almost nothing about the economy, because there was no giant pool of money and labor tied up in “humans playing chess.” A coding agent crosses the same four gaps and sits on top of the entire global software-labor budget. Same maturity. Completely different earthquake.</p>
+<p>So the formula, in one line:</p>
+<blockquote>
+<p><strong>Impact ≈ (the value pool) × [all four gaps closed] — and it arrives at the speed of the widest gap.</strong></p>
+</blockquote>
+<p>One rule tells you <em>how big</em>. The other tells you <em>how long</em>. Most arguments about technology confuse the two — people point at a huge value pool (gap: big!) and conclude it’ll happen soon (clock: unrelated).</p>
+<hr>
+<h2 id="the-worked-example-transformer-to-your-terminal">The worked example: transformer to your terminal</h2>
+<p>Let me run the formula backwards on the thing I actually know. Here’s how the four gaps closed for AI coding — how the idea grew up.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Gap</th><th>When it closed</th><th>What closed it</th></tr></thead><tbody><tr><td><strong>Works</strong></td><td>2017 → 2020 → 2024</td><td>Transformer, then GPT-3 scale, then <a href="/blogs/blog/what_comes_after_transformer/">reasoning trained on verifiable rewards</a> — which finally made multi-step code reliable, not just plausible</td></tr><tr><td><strong>Cheap</strong></td><td>2020 → 2026</td><td>Inference cost per token fell by orders of magnitude — Mixture-of-Experts, distillation, open weights, better chips</td></tr><tr><td><strong>Reachable</strong></td><td>2022 → 2025</td><td>ChatGPT was the moment <em>language</em> became reachable; Copilot, then Cursor, then Claude Code were the moment <em>code</em> became reachable — you watch it write something and the tests pass</td></tr><tr><td><strong>Embedded</strong></td><td>2024 → 2026</td><td>The harness: the agent loop, tools, <a href="/blogs/blog/agent_driven_design/">MCP</a>, git as <a href="/blogs/blog/agents_arent_the_point_state_is/">durable state</a>, tests as feedback, skills, <code>CLAUDE.md</code></td></tr></tbody></table>
+<p>Notice the shape. <strong>Capability raced ahead and stopped being the bottleneck around 2020.</strong> The other six years were gaps 2, 3, and 4. The nine-year childhood of this idea was not the idea getting smarter. It was the world building the parts around it.</p>
+<p>That’s the clock rule in one story. The widest gap for LLMs was gap 4 — embedding — and it set the pace for everything.</p>
+<p>And nine years is the <em>short</em> version of this story. The transformer was act three of an idea that had been waiting since 1958, when Rosenblatt’s <a href="https://en.wikipedia.org/wiki/Perceptron">perceptron</a> first learned from examples. Act one had a real flaw — Minsky and Papert proved in 1969 that a perceptron couldn’t learn even XOR, one of the simplest functions in logic — and act two, backprop, fixed it by 1986. That part <em>was</em> the idea getting better, so let me be honest about it. But after 1986 the idea was done, and it still sat for another 26 years, parked at gap 2: no cheap compute, no big data. GPUs got cheap because gamers wanted better graphics; in 2012, <a href="https://en.wikipedia.org/wiki/AlexNet">AlexNet</a> borrowed two of them and the wait ended. Twenty-six years of “the idea doesn’t work,” when the truth was “the world hasn’t caught up.” And notice <em>who</em> closed the gap: not the field that needed it — a market next door, by accident.</p>
+<blockquote>
+<p><strong>Lesson 1:</strong> when a technology feels stuck, the thing that’s stuck is usually not the breakthrough. It’s the slowest gap. Find it, and you know what the idea is actually waiting on to grow up.</p>
+</blockquote>
+<hr>
+<h2 id="why-code-grew-up-first">Why code grew up first</h2>
+<p>Here’s a question worth sitting with. Of all the knowledge work in the world, why did <strong>software</strong> get automated first? Not law, not medicine, not accounting — code. Why?</p>
+<p>Because code has the <strong>smallest gap 4</strong> of any serious domain. Its complementary parts are almost free:</p>
+<ul>
+<li><strong>It’s verifiable.</strong> Tests are a reward signal you get for nothing. The machine can check its own work. (I’ve called this <a href="/blogs/blog/migration_is_a_harness/">tests as receipts</a> before.)</li>
+<li><strong>It’s structured.</strong> Git is free, actor-agnostic state. The syntax tree is free context. The work already lives in a shape a machine can pick up and put down.</li>
+<li><strong>It’s observable.</strong> Code runs, or it doesn’t. There’s no committee arguing about whether it’s good.</li>
+<li><strong>It’s expensive.</strong> Software labor is one of the biggest value pools there is. The magnitude rule was always going to be kind to it.</li>
+</ul>
+<p>Everything a raw model needs to become useful — a feedback loop, a memory of the work, a way to tell right from wrong — code hands over for free. In every other field you’d have to <em>build</em> those things, and building them is slow and expensive. That’s gap 4 being wide.</p>
+<p>This gives a genuinely useful rule of thumb, the kind of thing you can point at the future:</p>
+<blockquote>
+<p><strong>Lesson 2:</strong> a field grows up at the speed of its feedback loop. Where truth is cheap to check, the machine arrives early. Where truth is expensive or contested, it arrives late.</p>
+</blockquote>
+<p>Run that forward inside AI itself. The next domains to mature are the ones with cheap ground truth — parts of math, parts of finance and operations, anything where the answer can be checked by a machine. The last will be the ones where “correct” is a matter of taste, judgment, or care, and no test can settle it. Not because the model can’t do them — because gap 4 is expensive there, and the clock runs slow.</p>
+<hr>
+<h2 id="now-run-it-forward-quantum-computing">Now run it forward: quantum computing</h2>
+<p>This is the part I actually wanted to write. Everyone asks “is quantum computing the next AI?” The formula gives a sharper answer than yes or no. Score it against the four gaps.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Gap</th><th>AI coding (2026)</th><th>Quantum computing (2026)</th></tr></thead><tbody><tr><td><strong>Works</strong></td><td>✅ raced ahead early</td><td>❌ still limited by error correction; a handful of narrow problems</td></tr><tr><td><strong>Cheap</strong></td><td>✅ collapsed</td><td>❌ cryogenic, capital-heavy, no experience curve at scale</td></tr><tr><td><strong>Reachable</strong></td><td>✅ the ChatGPT moment</td><td>❌ no way for a normal person to try it and see it work</td></tr><tr><td><strong>Embedded</strong></td><td>⏳ the slow part</td><td>❌ almost no software, few algorithms, no ecosystem</td></tr></tbody></table>
+<p>Look at the <em>shape</em>, not just the checks. AI and quantum are almost mirror images.</p>
+<p>For LLMs, capability came first and the slow gap was embedding — gap 4. Growing up was <strong>inevitable but delayed</strong>: the engine was running, the world just had to build the car around it.</p>
+<p>For quantum, <strong>all four gaps are open, and the widest one is gap 1 — the physics itself.</strong> That changes everything about the prediction. When the rate-limiter is embedding, you’re waiting on engineers and habits, and that’s a matter of years. When the rate-limiter is <em>capability</em>, you’re waiting on physics, and nobody can put a date on physics.</p>
+<p>So the honest read: “quantum is the next AI” is the wrong comparison, at least for now. The two are at different stages of growing up, gated by different gaps. Quantum’s clock is set by the hardware, not the software — which means the right thing to watch is gap 1 (are we getting reliable logical qubits?), and the right thing to ignore is the demos and the funding rounds. Those are gap-1 excitement leaking into a <a href="https://en.wikipedia.org/wiki/Gartner_hype_cycle">hype-cycle</a> peak, and they tell you nothing about the clock.</p>
+<blockquote>
+<p><strong>Lesson 3:</strong> to guess how far off a technology is, don’t ask how exciting it is. Ask which gap is widest, and what that gap is waiting on. A gap waiting on engineering closes in years. A gap waiting on physics has no schedule.</p>
+</blockquote>
+<hr>
+<h2 id="two-stories-from-history-electricity-and-the-car-thats-always-one-year-away">Two stories from history: electricity, and the car that’s always one year away</h2>
+<p>If you don’t believe the clock rule, history has two clean proofs of ideas that grew up slowly for opposite reasons.</p>
+<p><strong>Electricity.</strong> The electric motor was ready in the 1890s. Factories didn’t get much more productive for about <em>forty years</em>. Why? Because factories were built around one giant steam engine driving shafts and belts, and you can’t just swap the engine — you have to redesign the whole building around small motors on each machine, retrain everyone, rethink the workflow. That’s gap 4, and it took a generation. The economist <a href="https://en.wikipedia.org/wiki/Productivity_paradox">Paul David told this story</a> to explain why computers, too, showed up in every office long before they showed up in the productivity numbers. Which is the same thing Robert Solow said in 1987, in the line every economist quotes: <em>“You can see the computer age everywhere but in the productivity statistics.”</em> Gap 1 was closed. Gap 4 was not. The idea was capable long before it was grown up.</p>
+<p><strong>The self-driving car.</strong> The opposite failure. We’ve had impressive demos since the early 2010s, and a confident “next year” every year since. What’s stuck? Gap 1 is <em>jagged</em> — the car is superhuman on the highway and helpless in a situation it’s never seen — and gap 4 is brutal, because the surrounding system here is public trust, regulation, and liability, which move at the speed of law, not code. Ten years of “almost” is Amara’s Law wearing a seatbelt.</p>
+<p>Two technologies, two different wide gaps, and in both cases the excitement was about a gap that had <em>already</em> closed. That’s the trap this whole formula is built to avoid.</p>
+<hr>
+<h2 id="what-happens-when-the-gaps-finally-close">What happens when the gaps finally close</h2>
+<p>Now the question that actually scares people. When does a grown-up technology “wake the whole market”?</p>
+<p>Not at the breakthrough. At gap 4. <a href="https://en.wikipedia.org/wiki/Technological_Revolutions_and_Financial_Capital">Carlota Perez</a> splits every technological revolution into two halves: an <strong>installation phase</strong> — the frenzy, the bubble, the capability racing ahead — and a <strong>deployment phase</strong>, where the technology stops being a toy for enthusiasts, turns into boring infrastructure, and <em>reprices everything it touches</em>. The labor shock lives in the deployment phase. It’s a gap-4 event, not a gap-1 event. Adulthood, not the clever childhood.</p>
+<p>And the shape of that shock is something this blog already predicted, from the other end. When a task gets automated, it doesn’t vanish evenly. The cheap-to-check parts collapse first (Lesson 2), and what’s left is the expensive human residue: judgment, taste, deciding what’s worth doing at all. Which is exactly the move I argued for in <a href="/blogs/blog/you_cant_fork_yourself/">you can’t fork yourself</a> — stop being one more worker in the swarm, become the orchestrator. A grown-up technology doesn’t delete the human seat. It moves the seat up, to the one job that can’t be forked.</p>
+<p>So “AI coding wakes the labor market” is true, but be precise about <em>why</em>. It’s not because the model got smart. It’s because the idea finished growing up — gap 4 closed — on top of the biggest value pool in knowledge work. Magnitude rule times clock rule, landing at the same time.</p>
+<hr>
+<h2 id="making-it-grow-up--and-whats-next">Making it grow up — and what’s next</h2>
+<p>So far this has been a way to <em>read</em> an idea’s age. Flip it over and the same four gaps become a to-do list for anyone trying to <em>push</em> one to grow up — and it turns out “making an idea mature” and “winning with it” are the same act.</p>
+<p>Here’s the pattern, stated as strategy: <strong>capability leads, complements lag, and whoever builds the complements — not whoever had the breakthrough — both makes the idea mature and keeps the money.</strong> Google published the transformer; the labs that built the harness around it captured the decade. <a href="https://en.wikipedia.org/wiki/Complementary_assets">David Teece</a> named this forty years ago: owning the engine and owning the road are different businesses.</p>
+<p>So the recipe is simple to say and hard to do. Find your widest gap, and deliberately build what’s missing:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>If the widest gap is…</th><th>The move to close it</th></tr></thead><tbody><tr><td><strong>Works</strong></td><td>Don’t wait for general capability. <strong>Shrink the task</strong> to the slice the jagged frontier already does reliably, and ship that. Then build a <em>verifiable reward</em> so it keeps climbing — a checkable answer is why code and math trained so well.</td></tr><tr><td><strong>Cheap</strong></td><td>Ride the experience curve on purpose: attack the biggest cost line, distill and quantize, cache, and <strong>take the human out of every step</strong> — a human in every loop caps you at human cost.</td></tr><tr><td><strong>Reachable</strong></td><td>Build the <em>ChatGPT moment</em> — a non-expert tries it and sees value in seconds. Collapse the time to first win, and make the win <strong>visible</strong>.</td></tr><tr><td><strong>Embedded</strong></td><td>Manufacture the missing complement — above all, <strong>a cheap feedback loop</strong>. Where the domain won’t hand you free ground truth the way code hands over tests, <em>build the grader or the simulator yourself</em>. Then add state, standards, trust, and workflow fit.</td></tr></tbody></table>
+<p>And here’s the one hard limit, which is the whole game: <strong>you can buy your way across gaps 2, 3, and 4 with engineering and money. You cannot buy your way across gap 1 when it’s waiting on science.</strong> So the real move isn’t heroics — it’s <em>choosing a domain where gap 1 is already closed</em>, then closing gap 4 faster than anyone else.</p>
+<blockquote>
+<p><strong>Lesson 4:</strong> you can build cheap, reachable, and embedded. You can’t build physics. Pick a field where the science is already done, then win by building the feedback loop first.</p>
+</blockquote>
+<p>Which brings us to the obvious question: what’s next? We already scored quantum — all four gaps open, stuck on the physics. Here’s the rest of the field, read the same way:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>What’s next</th><th>Works</th><th>Cheap</th><th>Reachable</th><th>Embedded</th><th>Widest gap → read</th></tr></thead><tbody><tr><td><strong>Agentic AI beyond code</strong> — agents that browse, book, run operations</td><td>⏳ jagged</td><td>✅</td><td>✅</td><td>⏳</td><td><strong>Gap 4</strong> — growing up now, one vertical at a time; blocked only where truth is hard to check</td></tr><tr><td><strong>Humanoid / embodied AI</strong> — driven by <a href="/blogs/blog/what_comes_after_transformer/">world models</a></td><td>❌ but moving</td><td>❌ hardware</td><td>❌ can’t try one</td><td>❌</td><td><strong>Gaps 1 + 2</strong> — a real childhood, capability-gated by engineering, not new physics</td></tr><tr><td><strong>AI for science</strong> — drug and material discovery</td><td>✅ in pockets</td><td>⏳</td><td>⏳ expert-only</td><td>⏳</td><td><strong>Gap 1, per subfield</strong> — matures fastest where a simulation or experiment gives cheap truth</td></tr><tr><td><strong>Quantum · fusion · brain interfaces</strong></td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td><strong>Gap 1 = physics</strong> — a different clock; watch the science, ignore the funding</td></tr></tbody></table>
+<p>The one bet I’d actually make: the next idea to finish growing up is <strong>agentic AI in verifiable verticals</strong> — agents that don’t just write code but run real tasks, in domains where the result can be checked. It inherits code’s cheap-feedback advantage, and the embedding layer — MCP, A2A, evals — is being poured right now. After it come <strong>robotics</strong> and <strong>AI for science</strong>, both gated by gap 1, both sitting on enormous value pools, so when they land the magnitude rule will be merciless. Anything gated by physics is on a different clock, and no amount of funding moves it.</p>
+<p>Notice what every one of these has in common. The way to grow <em>any</em> of them up is to build its harness — and the single most valuable piece of harness is the one that hands the machine cheap ground truth. That’s Lesson 2 turned into a business plan, and it’s the same claim this blog started with: the model is the rented part, and the system you build around it is the job.</p>
+<hr>
+<h2 id="the-idea-isnt-mine">The idea isn’t mine</h2>
+<p>None of the pieces here are original, and pretending otherwise would break the one rule this blog actually keeps. The four gaps are a repackaging of work that’s been sitting in plain sight for decades:</p>
+<ul>
+<li><strong>Amara’s Law</strong> — Roy Amara, on over- and under-estimating. The clock rule is just his line with a mechanism attached.</li>
+<li><strong>Diffusion of Innovations</strong> — Everett Rogers, on why trialability and observability (my gap 3) decide adoption, and Geoffrey Moore’s <em>Crossing the Chasm</em> on the cliff between the curious and the mainstream.</li>
+<li><strong>Experience curves</strong> — the old observation (often called Wright’s Law) that cost falls predictably with volume. That’s gap 2.</li>
+<li><strong>General-purpose technology</strong> economics — Bresnahan and Trajtenberg on why a few technologies (steam, electricity, the computer) reshape everything, and Erik Brynjolfsson’s <a href="https://www.nber.org/papers/w25148">productivity J-curve</a> on why they <em>lower</em> measured productivity first, while everyone quietly rebuilds around them. That’s gap 4, with a number on it.</li>
+<li><strong>Complementary assets</strong> — David Teece on why the inventor usually isn’t the one who gets rich. Google published the transformer. OpenAI, Anthropic, and Nvidia captured the impact. Inventing the engine and owning the road are different businesses.</li>
+<li><strong>Technological revolutions</strong> — Carlota Perez on installation versus deployment.</li>
+</ul>
+<p>What I’ve done is line them up against one lineage I know from the inside, and notice they’re all describing the same thing: the four stages of an idea growing up.</p>
+<p>And the honest catch, because the formula cuts both ways: it is equally a cure for “it’s all just hype” and for “this time is different.” Both are lazy. One stares at a wide gap and calls the whole thing fake; the other stares at a closed gap and calls the whole thing imminent. The formula’s only demand is that you say <em>which gap you mean</em> before you make a prediction.</p>
+<hr>
+<h2 id="where-this-leaves-us">Where this leaves us</h2>
+<p>The transformer was finished in 2017. The impact showed up years later, and when it did, it came from the least glamorous work imaginable: making it cheap, making it reachable, and building the harness around it. That’s what growing up looks like for an idea. The breakthrough was the easy part. It’s almost always the easy part.</p>
+<p>That’s the uncomfortable lesson for anyone trying to spot the next big thing. You will be shown gap 1 — the demo, the benchmark, the breakthrough — and asked to bet on impact. Don’t. Go find the widest gap instead. Ask what it’s waiting on. If it’s waiting on engineering and habit, it’s coming, slower than the hype and bigger than you think. If it’s waiting on physics, no one knows.</p>
+<blockquote>
+<p><strong>Lesson:</strong> a breakthrough tells you an idea is <em>possible</em>. It tells you almost nothing about when it grows up, or how much it will matter when it does. For that, stop watching the idea. Watch the four gaps around it — and time the slowest one.</p>
+</blockquote>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2026 Locch. All rights reserved.
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.CqYEPtYP.js"></script> </body> </html>
