@@ -1,14 +1,14 @@
 ---
 title: "Interesting Things I Found — July 2026"
-description: "Thirteen open-source projects, two months on — from the model runtime up to a finished application. The theme isn't new capability; it's learning to operate the agent stack we already have."
+description: "Fourteen open-source projects, two months on — from the model runtime up to a finished application. The theme isn't new capability; it's learning to operate the agent stack we already have."
 pubDate: "2026-07-19"
 author: "locchh"
 tags: ["ai-agents", "claude-code", "tooling", "memory", "version-control", "inference", "observability", "2026"]
 ---
 
-[Two months ago](/blogs/blog/trending_tools_may_2026/) I walked through twelve projects and argued the agent stack was starting to look like the web stack circa 2012 — layers that only make sense once you've seen them all at once. Those layers haven't changed much. What I keep finding has: the May batch was about *new capability*; this batch is about **operating the stack once you have it** — running the model, restraining the agent, scheduling it, diffing and replaying what it did, letting a fleet share one graph without collisions.
+[Two months ago](/blogs/blog/trending_tools_may_2026/) I walked through twelve projects and argued the agent stack was starting to look like the web stack circa 2012 — layers that only make sense once you've seen them all at once. Those layers haven't changed much. What I keep finding has: the May batch was about *new capability*; this batch is about **operating the stack once you have it** — running the model, restraining the agent, scheduling it, diffing and replaying what it did, letting a fleet share one graph without collisions, and letting the agent learn from its own logs.
 
-Thirteen tools this time, in eight groups: frameworks, workflow, code intelligence, memory and coordination, observability, runtime, one full application built from all of it, and a testing-and-infrastructure coda with no AI in it at all. They're grouped by the job they do — where two tools do the same job, I end with a one-line **pick**. Not the loudest README; the one that fits the gap you're feeling.
+Fourteen tools this time, in nine groups: frameworks, workflow, code intelligence, memory and coordination, observability, self-improvement, runtime, one full application built from all of it, and a testing-and-infrastructure coda with no AI in it at all. They're grouped by the job they do — where two tools do the same job, I end with a one-line **pick**. Not the loudest README; the one that fits the gap you're feeling.
 
 ---
 
@@ -62,7 +62,15 @@ Thirteen tools this time, in eight groups: frameworks, workflow, code intelligen
 
 ---
 
-## 6. Runtime — running the model at all
+## 6. Self-improvement — learning from the agent's own logs
+
+*Observability records what the agent did. This is the layer that reads that record and changes the agent.*
+
+- **[evolver](https://github.com/EvoMap/evolver)** — a self-evolution engine for agents. It scans an agent's memory and session logs for patterns — repeated failures, fixes that worked — and turns them into **Genes**: small, reusable instruction changes that follow a strict protocol. Every evolution step is logged as an event that can never be changed, so you can audit the history and roll any step back through git. It is deliberately *not* a code patcher: it only writes the improvement prompt — your agent applies it — and it never edits your files or runs arbitrary commands. It works fully offline, and an optional hub adds a shared gene store. Run it once, add a review step with `--review`, or let `--loop` keep it running in the background, with strategy dials from "innovate" to "repair-only". Hooks plug it into Claude Code, Cursor, and others. Their own trials found that small Genes steer an agent better than long skill documents. That matches the ponytail lesson: smaller beats more. The idea is as old as machine learning itself. Samuel's 1959 checkers paper — the one that put "machine learning" in its title — described a program that got better by studying the records of its own games. This is that loop for agents, with an audit trail. Two honest notes. The core modules ship obfuscated, so you cannot read them — the tool that keeps an audit trail for your agent cannot itself be fully audited. And the license is moving from GPL toward source-available, so "open" here comes with conditions. *Best for:* turning the logs an agent has collected into lasting, reviewable improvements instead of one-off prompt tweaks.
+
+---
+
+## 7. Runtime — running the model at all
 
 *The floor under everything, the one May and this post kept skipping: not which model, but whether it runs on your hardware. MoE made frontier models huge in total size but sparse in what fires per token — and that fact turns out to be exploitable.*
 
@@ -70,7 +78,7 @@ Thirteen tools this time, in eight groups: frameworks, workflow, code intelligen
 
 ---
 
-## 7. The application — the whole stack, pointed at one problem
+## 8. The application — the whole stack, pointed at one problem
 
 *Every entry so far is a layer. This is what you get when one person stacks them into a single shipped tool — and it shows off half the themes in this post at once.*
 
@@ -78,70 +86,9 @@ Thirteen tools this time, in eight groups: frameworks, workflow, code intelligen
 
 ---
 
-## 8. Testing and infrastructure — the parts with no AI in them
+## 9. Testing and infrastructure — the parts with no AI in them
 
 *The last two have nothing to do with agents — no LLM, no MCP, no skills. I'm including them anyway; the title of this post is the excuse. The plumbing your agent's output runs on still matters — more now that an agent can generate ten times the code that has to be tested and run somewhere.*
 
 - **[opentest](https://github.com/mcdcorp/opentest)** — a mature, open-source functional test-automation framework (McDonald's built it): keyword-driven YAML over Selenium, Appium, and HTTP, with a sync server running test actors across machines so a single test can span web, mobile, and API. Its last release was 2022 and there's no AI anywhere in it — yet it keeps surfacing on "agent" lists, because it marks a hole nobody has filled. Agents write unit tests all day, but end-to-end functional testing still has no agent-native shape. This is what that layer looked like *before* agents. *Best for:* seeing the empty seat at the table.
 - **[floci](https://github.com/floci-io/floci)** — a local AWS emulator: point your AWS SDKs, the AWS CLI, or Terraform at `localhost:4566` and it answers like the real thing, no account and no bill. It's the maintained, MIT-licensed replacement for LocalStack's now-frozen free edition — dozens of services, with real Docker containers behind the stateful ones. A native binary a fraction of LocalStack's size that starts in milliseconds, small enough to spin up fresh for every test run in CI. *Best for:* running the AWS-touching parts of an agent's output locally and free.
-
----
-
-## How the layers fit together
-
-Each tool is useful alone; the picture is the stack.
-
-<div align="center">
-
-```mermaid
-graph TD
-    User[Developer]
-    User --> WF[Workflow layer<br/>ponytail / Archon / loop-engineering]
-    WF --> Agent[Agent framework<br/>tau / rowboat / Claude Code]
-    Agent --> Mem[Memory + coordination<br/>omnigraph / Synap]
-    Agent --> Code[Code intelligence<br/>sem]
-    Agent --> Obs[Observability<br/>kitaru]
-    Agent --> Run[Runtime<br/>colibri]
-    Agent --> Test[Testing + infra<br/>opentest / floci]
-    Code --> Git[(Git history)]
-    Mem --> Store[(Object store / service)]
-    Obs --> Store
-    Run --> Weights[(MoE weights on disk)]
-```
-
-</div>
-
-Read it top-down — the direction the work flows:
-
-- **Workflow** decides *what process* the agent follows — ponytail keeps it lean, Archon makes each run repeatable, loop-engineering schedules it.
-- **Framework** runs the loop — tau, rowboat, Claude Code.
-- **Memory + code intelligence** decide *what it knows* — the shared graph or service, and the entity-level view of the code.
-- **Observability** records *what it actually did* so the next run is better — kitaru.
-- **Runtime** decides whether the model runs on your hardware at all — colibri.
-- **Testing + infra** — no AI in it — decides whether any of it works, and where it runs — opentest, floci.
-
-And **ai-job-search** sits above all of it — not a layer but a *product*: the whole stack assembled and aimed at one task.
-
-A reasonable "operate it" stack today, on the May foundation:
-
-- **Claude Code** or **tau** as the shell
-- **ponytail** to stop over-engineering, **Archon** to make a run repeatable, **loop-engineering** to run on a schedule
-- **sem** to diff and reason in functions, not lines
-- **omnigraph** for fleet memory, or **Synap** for managed recall
-- **kitaru** to replay and debug production runs
-- **colibri** to run a big MoE on your own hardware
-- **floci** to run the AWS-touching parts locally and free
-
----
-
-## What I'm watching next
-
-1. **Git semantics are eating the agent stack.** sem rebuilds diff and blame at the entity level; omnigraph gives graph data branches and three-way merges; loop-engineering and Archon isolate each run in its own worktree. Version control is becoming the agent's native language for change.
-2. **Multi-agent coordination is the new frontier.** May's stack was built for one agent; this month keeps assuming *fleets* — omnigraph's branches, loop-engineering's sub-agents, kitaru's replay. The problem moved from "make one agent good" to "make many not collide."
-3. **Restraint is a feature now.** ponytail is the counter-current to a year of more autonomy, more code, more tools. The winning move is teaching the agent to write *less* — the smallest correct diff, not the most impressive one.
-4. **Memory is splitting into self-host vs. managed** — omnigraph and Synap, the two ends — exactly the way routing split into arbitrage vs. operations in May.
-5. **MoE's sparsity is becoming a *serving* trick, not just a training one.** colibri streams experts from disk because only a few fire per token. The same sparsity that made frontier models cheap to run in the cloud is starting to make them runnable on a laptop.
-6. **The most solid tools this month have no AI in them.** opentest and floci both surfaced on "agent" lists, and neither is an agent tool. The plumbing that proves the code works and gives it somewhere to run is still plain, un-hyped infrastructure.
-7. **Agents are starting to treat their own input as hostile.** ai-job-search reads job postings as *untrusted* — it won't obey instructions hidden in a posting or fetch its links. As agents act on text pulled off the open web, prompt-injection defense stops being optional. Expect "treat the input as an attacker" to become a default, not a feature.
-
-May was about *assembling* the stack — seeing which layers exist. July is about *operating* it — running the model, restraining, scheduling, versioning, coordinating, replaying. Seeing the layers was the hard part; running them without the whole thing catching fire is turning out to be the next one. Pick the ones that fit the gap you're feeling — and, as always, not the ones with the loudest README.
