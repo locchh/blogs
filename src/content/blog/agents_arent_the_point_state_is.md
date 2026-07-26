@@ -48,4 +48,28 @@ LangGraph's [reducers](https://docs.langchain.com/oss/python/langgraph/graph-api
 
 AI itself already ran this experiment, fifty years ago. [Hearsay-II](https://en.wikipedia.org/wiki/Blackboard_system), a 1970s speech-understanding system, was built as a **blackboard**: a dozen independent specialist programs, none of which ever called another, cooperating only by reading and writing one shared board. The specialists were swappable by design, because the blackboard *was* the system. Long before anyone said "multi-agent," the answer to coordinating actors was already: don't. Let them meet in the state.
 
+## The ladder just grew a fifth rung
+
+Look at what we've called this job over three years. **Prompt engineering** — write better instructions. **Context engineering** — the instructions were never the problem, what's in the window is. **Harness engineering** — the window isn't the problem either, it's [the tools and checks around the model](/blogs/blog/migration_is_a_harness/). **Loop engineering** — one pass isn't enough, let it run again. And now, this July, **graph engineering**.
+
+[LangChain named it directly](https://www.langchain.com/blog/3-years-of-graph-engineering-with-langgraph) after three years of building LangGraph: nodes do the work, edges decide what's allowed next. Their sharpest line ends the fight before it starts — *a loop is just a directed, cyclic graph*. Loops were never the rival of graphs. A loop is the smallest graph there is. So rung five doesn't replace rung four, it **contains** it, the same way context contains the prompt and the harness contains the context. Each rung wraps the last one.
+
+Then a [12-page playbook](https://drive.google.com/file/d/1OdGtGSpD2KnR6vrqvFohj0n5gqhH03f5/view) went around, [pushed hard on X](https://x.com/0xMovez/status/2080728910291959884) as "Andrew Ng just dropped." Worth a moment of care: the four patterns inside it — reflection, tool use, planning, multi-agent — really are Ng's, but the playbook itself isn't. Its own cover says it was independently compiled and is not endorsed by him. Good document, wrong label. Its spine is one sentence:
+
+> a loop externalizes revision, a chain externalizes task order, a network externalizes role specialization, and a graph externalizes shared state
+
+That's a different ladder from mine, and it lands on the same rung. Which is the tell. Read either version that way and it stops being five fashions in a row. It's **one move, repeated:** each rung takes something that was living inside the actor and puts it somewhere outside.
+
+| Rung | What moves out of the actor |
+| --- | --- |
+| Prompt engineering | the instructions — out of your head |
+| Context engineering | the knowledge — out of the weights |
+| Harness engineering | the tools and checks — out of the model |
+| Loop engineering | the revision — out of a single pass |
+| Graph engineering | the state — out of the session |
+
+We aren't getting smarter about agents. We're moving more of the work out of them. And the last thing still stuck inside was the state — which is why this rung is the one that matters, and why I don't expect the next name to be a new idea either. The playbook's own version: "the agent forgets, the graph does not."
+
+One brake, and the playbook supplies it. The failure mode has a name: a **phantom graph**, an elaborate structure that no agent ever queries — pure cost, no payoff. The rule it gives is the right one: a graph earns itself when the same fact gets read by more than one agent, or across more than one session. Below that bar, don't build one. "A loop with a state file is already partway to a graph." My `CLAUDE.md` is a graph with one node in it, and it still does the job.
+
 > **Lesson:** design for state that outlives its actor. Whoever's turn it is — human, AI, or both — the only job is to leave the state better-formed than you found it, and hand it off clean.
