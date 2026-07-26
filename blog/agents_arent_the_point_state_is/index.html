@@ -21,6 +21,46 @@
 <p>But that graph has a flaw built into its definition: <strong>you stand on exactly one node at a time.</strong> <a href="https://www.informatik.uni-hamburg.de/TGI/PetriNets/history/CAPetriAndPetriNets.pdf">Carl Adam Petri’s dissertation</a> (submitted 1961, defended 1962) exists because he thought that assumption was wrong for anything real — actual processes are asynchronous, and more than one thing is true at once. His fix was to stop tracking one position. A Petri net has <em>places</em> that hold tokens, and a transition fires wherever enough tokens have gathered. Tokens can sit in several places at once, so the graph holds multiple truths instead of one label. <a href="https://www.vdaalst.com/publications/p671.pdf">Workflow researchers built directly on this</a> to formalize real business processes, because that’s what real work looks like — parallel, not sequential.</p>
 <p>LangGraph’s <a href="https://docs.langchain.com/oss/python/langgraph/graph-api">reducers</a> are the same fix, renamed. The moment two branches — a human and an agent, or two subagents — write to shared state at once, “we’re on one node” stops being true, and something has to decide how the writes merge. Not a LangGraph invention. Petri’s tokens, sixty years later, running on a Google Pregel-derived engine. A state model that can only hold one truth at a time breaks the first moment work happens in parallel — which, for anything with more than one actor, is immediately.</p>
 <p>AI itself already ran this experiment, fifty years ago. <a href="https://en.wikipedia.org/wiki/Blackboard_system">Hearsay-II</a>, a 1970s speech-understanding system, was built as a <strong>blackboard</strong>: a dozen independent specialist programs, none of which ever called another, cooperating only by reading and writing one shared board. The specialists were swappable by design, because the blackboard <em>was</em> the system. Long before anyone said “multi-agent,” the answer to coordinating actors was already: don’t. Let them meet in the state.</p>
+<h2 id="the-ladder-just-grew-a-fifth-rung">The ladder just grew a fifth rung</h2>
+<p>Look at what we’ve called this job over three years. <strong>Prompt engineering</strong> — write better instructions. <strong>Context engineering</strong> — the instructions were never the problem, what’s in the window is. <strong>Harness engineering</strong> — the window isn’t the problem either, it’s <a href="/blogs/blog/migration_is_a_harness/">the tools and checks around the model</a>. <strong>Loop engineering</strong> — one pass isn’t enough, let it run again. And now, this July, <strong>graph engineering</strong>.</p>
+<p><a href="https://www.langchain.com/blog/3-years-of-graph-engineering-with-langgraph">LangChain named it directly</a> after three years of building LangGraph: nodes do the work, edges decide what’s allowed next. Their sharpest line ends the fight before it starts — <em>a loop is just a directed, cyclic graph</em>. Loops were never the rival of graphs. A loop is the smallest graph there is. So rung five doesn’t replace rung four, it <strong>contains</strong> it, the same way context contains the prompt and the harness contains the context. Each rung wraps the last one.</p>
+<p>Then a <a href="https://drive.google.com/file/d/1OdGtGSpD2KnR6vrqvFohj0n5gqhH03f5/view">12-page playbook</a> went around, <a href="https://x.com/0xMovez/status/2080728910291959884">pushed hard on X</a> as “Andrew Ng just dropped.” Worth a moment of care: the four patterns inside it — reflection, tool use, planning, multi-agent — really are Ng’s, but the playbook itself isn’t. Its own cover says it was independently compiled and is not endorsed by him. Good document, wrong label. Its spine is one sentence:</p>
+<blockquote>
+<p>a loop externalizes revision, a chain externalizes task order, a network externalizes role specialization, and a graph externalizes shared state</p>
+</blockquote>
+<p>That’s a different ladder from mine, and it lands on the same rung. Which is the tell. Read either version that way and it stops being five fashions in a row. It’s <strong>one move, repeated:</strong> each rung takes something that was living inside the actor and puts it somewhere outside.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Rung</th><th>What moves out of the actor</th></tr></thead><tbody><tr><td>Prompt engineering</td><td>the instructions — out of your head</td></tr><tr><td>Context engineering</td><td>the knowledge — out of the weights</td></tr><tr><td>Harness engineering</td><td>the tools and checks — out of the model</td></tr><tr><td>Loop engineering</td><td>the revision — out of a single pass</td></tr><tr><td>Graph engineering</td><td>the state — out of the session</td></tr></tbody></table>
+<p>We aren’t getting smarter about agents. We’re moving more of the work out of them. And the last thing still stuck inside was the state — which is why this rung is the one that matters, and why I don’t expect the next name to be a new idea either. The playbook’s own version: “the agent forgets, the graph does not.”</p>
+<p>One brake, and the playbook supplies it. The failure mode has a name: a <strong>phantom graph</strong>, an elaborate structure that no agent ever queries — pure cost, no payoff. The rule it gives is the right one: a graph earns itself when the same fact gets read by more than one agent, or across more than one session. Below that bar, don’t build one. “A loop with a state file is already partway to a graph.” My <code>CLAUDE.md</code> is a graph with one node in it, and it still does the job.</p>
 <blockquote>
 <p><strong>Lesson:</strong> design for state that outlives its actor. Whoever’s turn it is — human, AI, or both — the only job is to leave the state better-formed than you found it, and hand it off clean.</p>
 </blockquote>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
