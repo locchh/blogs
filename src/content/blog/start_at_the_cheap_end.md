@@ -133,11 +133,15 @@ That's why it's last. If you want a better agent tonight, this is the worst poss
 
 I've been writing as if there were two dials, cost and quality. There are three. The one I left out is **time** — how long a run takes.
 
-Once you see it, the trade is the old "fast, good, cheap — pick two." Want better answers without paying a higher rate per second? Then the run gets longer. Want it cheaper with the same wall-clock? Then something in the answer gives. You can push any two of the three; the third one pays for it.
+Once you see it, the trade is the old "fast, good, cheap — pick two." For agents there's arithmetic under the saying, not just folk wisdom. **Cost is a rate times a time.** Pick a model and you have picked, near enough, what one second of work costs you. After that, cost and time are welded together. Want better answers without raising the rate? The run has to go longer — and going longer *is* spending more. Want a smaller bill without the run getting slower? Then quality is the thing that gives. You can hold any two of the three still. The third one moves.
+
+Which tells you where the real lever is: **to break the weld, change the rate.** A smaller model, fewer tokens per step, a cached prefix you don't pay to re-read. That is what most of the ladder above is quietly doing — not winning the trade, but lowering the price of a second so the same time buys more.
 
 Every rung above is a bet on which dial to give up. More thinking (#3) buys quality with time. Routing (#9) buys cost by accepting slightly worse answers on the easy jobs. Caching (#2) is the odd one that buys cost *and* speed together, which is exactly why it reads as a free lunch. And distillation (#12) is the strangest bet of all: you spend weeks of *your own* time so that later runs are both cheap and fast.
 
 The labs made this same trade one level up. I wrote about it in [what comes after the transformer](/blogs/blog/what_comes_after_transformer/): reasoning models moved compute from training time to thinking time, so the bill moved from the lab to every single query. Nobody removed the cost. They moved it onto a different dial.
+
+There is one honest escape, and this post opened with it. Run the work in **parallel** and time stops tracking cost. The swarm from the first section burns about 15× the tokens of a plain chat, but the sub-agents work side by side, so the clock doesn't stretch the way the bill does. That's buying wall-clock with money, at the same quality — the one move that pries two of the dials apart. It is also why a swarm feels like magic and bills like a swarm.
 
 One thing to keep straight, because the table below uses the word too. "Time to pay off" there means how long a fix takes to earn out. This dial means wall-clock inside one run. They can point opposite ways — turning up thinking pays off the moment you flip it, and makes every single run slower.
 
