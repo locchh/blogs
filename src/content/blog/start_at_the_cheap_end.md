@@ -33,6 +33,16 @@ That last point is the one to hold onto. On the research task above, more tokens
 
 Keep that in mind, because the fixes below are sorted by effort, not by which move they make. Some of the cheapest ones are the win-wins.
 
+## Before the ladder: put a cap on it
+
+One thing comes before all of this, and it isn't an optimization. Before you let an agent run on its own, give it a hard ceiling — a **maximum number of turns**, a **maximum spend**, or both. Not a target. A wall it can't walk through.
+
+The reason is that an agent loop has no natural end. It stops when it decides it's done, and a confused agent never decides. Researchers gave this failure a name: [**infinite agentic loops**](https://arxiv.org/abs/2607.01641). They built a scanner for it and pointed it at 6,549 agent projects, confirming 68 real cases across 47 of them — loops with no effective bound, able to turn one request into runaway model calls, runaway spend, and repeated side effects out in the world.
+
+Plain computing settled this long ago. A Unix process has carried a [CPU-time and memory limit](https://man7.org/linux/man-pages/man2/setrlimit.2.html) for decades, and mainframe batch jobs before that were submitted with a time parameter that killed them if they overran. Nobody called those tuning. They were there so one bad job couldn't take the machine down with it.
+
+**Real result:** a cap doesn't make the average run better. It makes the worst run survivable — which is exactly what lets you experiment with everything below while the money is still in your pocket. It costs one config value.
+
 ## The cheap end: things you can do today
 
 ### 1. Right-size the model, and the output
@@ -119,12 +129,25 @@ Here's the one everybody reaches for first and should reach for last. [**Distill
 
 That's why it's last. If you want a better agent tonight, this is the worst possible first move. It's the reward for having already done the other eleven — you distill a system that already works, not one you're still figuring out.
 
+## Three dials, not two
+
+I've been writing as if there were two dials, cost and quality. There are three. The one I left out is **time** — how long a run takes.
+
+Once you see it, the trade is the old "fast, good, cheap — pick two." Want better answers without paying a higher rate per second? Then the run gets longer. Want it cheaper with the same wall-clock? Then something in the answer gives. You can push any two of the three; the third one pays for it.
+
+Every rung above is a bet on which dial to give up. More thinking (#3) buys quality with time. Routing (#9) buys cost by accepting slightly worse answers on the easy jobs. Caching (#2) is the odd one that buys cost *and* speed together, which is exactly why it reads as a free lunch. And distillation (#12) is the strangest bet of all: you spend weeks of *your own* time so that later runs are both cheap and fast.
+
+The labs made this same trade one level up. I wrote about it in [what comes after the transformer](/blogs/blog/what_comes_after_transformer/): reasoning models moved compute from training time to thinking time, so the bill moved from the lab to every single query. Nobody removed the cost. They moved it onto a different dial.
+
+One thing to keep straight, because the table below uses the word too. "Time to pay off" there means how long a fix takes to earn out. This dial means wall-clock inside one run. They can point opposite ways — turning up thinking pays off the moment you flip it, and makes every single run slower.
+
 ## The ladder, in one table
 
 Two things matter when you pick what to try: how much **effort** it takes to build, and how long until it **pays off**. Here they are, cheapest and fastest at the top.
 
 | # | Fix | Effort to build | Time to pay off | What you get |
 |---|-----|-----------------|-----------------|--------------|
+| 0 | Cap the turns and the spend | Tiny (a config value) | Instant | Bounds the worst case |
 | 1 | Right-size the model & output | Tiny (config + prompt) | Instant | Free lunch |
 | 2 | Prompt caching | Tiny (a flag) | Instant | Free lunch |
 | 3 | More thinking on medium-hard tasks | Tiny (a setting) | Instant | Trade — spend more |
@@ -138,10 +161,30 @@ Two things matter when you pick what to try: how much **effort** it takes to bui
 | 11 | A lesson library (rules + skills) | Large | Weeks | Compounds over time |
 | 12 | Fine-tune / distill | Large | Weeks–months | Cheap once it's stable |
 
+## The ladder assumes the model holds still
+
+Every fix above treats the model as a fixed thing you tune around. It isn't. The newest models are trained to keep working on their own for long stretches, and that training brought habits with it — habits that cost money and buy nothing.
+
+I found two by reading my own transcripts with [clear-mind](https://github.com/locchh/clear-mind), a small tool I wrote to make session logs legible.
+
+**It checks the same thing several ways.** Half a dozen `curl` calls at one page, each differing by a flag, all asking the same question and all getting the same answer. Nobody asked for the redundancy. It just felt thorough.
+
+**It repairs the instrument instead of doing the job.** One verify command fails. An equivalent one, sitting right there, already passed. Instead of escalating to me or moving to the next step, the agent spends the rest of the run debugging the broken command — a thing that never needed to work.
+
+I went looking for names for these two, and came back with one near-miss and nothing settled.
+
+The near-miss is [**overthinking**](https://arxiv.org/abs/2502.08235), studied on reasoning models doing software tasks. That work names three shapes: **analysis paralysis** (planning instead of touching the environment), **rogue actions**, and **premature disengagement**. Analysis paralysis is the closest to my second habit, but it isn't the same thing — my agent isn't stalling, it's working hard in the wrong direction. The mechanism people describe elsewhere fits better: the model has no sense of *I already tried this*. Ten failures sitting in the history read as "search harder," not "this road is wrong."
+
+My first guess was the sunk-cost fallacy, so I checked. A [study of escalation of commitment in language models](https://arxiv.org/abs/2508.01545) found the opposite of what I expected: a single model deciding alone mostly reasons about cost and benefit sensibly. The bias showed up when models deliberated in groups, and under piled-on pressure. One agent stubbornly debugging one command is the case where the bias was *absent*. So that isn't the name either. For the redundant checks, the nearest idea is the overreach from fix #5 — agents handed a broad goal do more than the goal asked for. I'd still like a proper name for both.
+
+**Real result:** the same overthinking work gives the number that earns this a place on a cost ladder, and it's a direct rebuttal to fix #3. They ran the model twice on *low* thinking effort and kept whichever run flailed less. That nearly matched the expensive high-thinking setup at 43% lower cost, and a third sample beat it outright while still costing less. Be clear about what that costs — you pay for several runs and you need a way to score which one flailed. It isn't free. But more thinking is not always the move. Sometimes two cheap runs and a good pick beat one deep one.
+
+Which brings me to why this sits at the end instead of being one more rung. These habits belong to *this* model, and they move. Anthropic compared two releases of the same model family and found they lean toward [different values](https://www.anthropic.com/research/claude-values-models-languages) — one toward deference and brevity, the next toward caution and depth — differences that fall out of character training and other fine-tuning choices. So rung #1's dull instruction, *measure*, turns out not to be dull. **A new model can score better on every public benchmark and behave worse inside your harness.** Re-measure on every bump, and read a few transcripts by hand before you trust the new one.
+
 ## Work down from the top
 
 There is no single "optimize" button. And it isn't honest to call all of this "saving cost" — some of these fixes spend *more* on purpose. The best ones do both at once: save money and raise quality. The one thing they all share is the real goal underneath: **make every token earn its place.**
 
-The trap is skipping straight to the bottom of the ladder. Fine-tuning feels like the serious answer, so people burn a month on it while a smaller model, a caching flag, a shorter prompt, and a retry loop were sitting right there, ready by tonight. Work down from the top instead. Take the free lunches first, add the scaffolding when the cheap wins run out, and only distill a system once it already works.
+The trap is skipping straight to the bottom of the ladder. Fine-tuning feels like the serious answer, so people burn a month on it while a smaller model, a caching flag, a shorter prompt, and a retry loop were sitting right there, ready by tonight. Cap the run first so a bad night can't cost you a month's budget. Then work down from the top: take the free lunches, add the scaffolding when the cheap wins run out, and only distill a system once it already works.
 
 > **Lesson:** cost and quality trade off, but the smartest moves don't trade at all — they push the line out or break it. Sort every fix by effort, start at the cheap end, and treat fine-tuning as the reward for a system that already works, never the first thing you try.
