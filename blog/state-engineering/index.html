@@ -1,0 +1,419 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg"><link rel="icon" href="/blogs/favicon.ico"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.2"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/state-engineering/"><!-- Primary Meta Tags --><title>State Engineering: You Don&#39;t Know the Steps When You Start</title><meta name="title" content="State Engineering: You Don't Know the Steps When You Start"><meta name="description" content="Five names, one after another: prompt, context, harness, loop, graph. Each one moved something out of the agent. I think the fifth rung is misnamed. It isn't graph engineering, it's state engineering: a graph makes you name the steps before you walk them, and real work doesn't arrive that way."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/state-engineering/"><meta property="og:title" content="State Engineering: You Don't Know the Steps When You Start"><meta property="og:description" content="Five names, one after another: prompt, context, harness, loop, graph. Each one moved something out of the agent. I think the fifth rung is misnamed. It isn't graph engineering, it's state engineering: a graph makes you name the steps before you walk them, and real work doesn't arrive that way."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/state-engineering/"><meta property="twitter:title" content="State Engineering: You Don't Know the Steps When You Start"><meta property="twitter:description" content="Five names, one after another: prompt, context, harness, loop, graph. Each one moved something out of the agent. I think the fifth rung is misnamed. It isn't graph engineering, it's state engineering: a graph makes you name the steps before you walk them, and real work doesn't arrive that way."><link rel="stylesheet" href="/blogs/_astro/about.CJd3ivxT.css">
+<style>main[data-astro-cid-bvzihdzo]{width:calc(100% - 2em);max-width:100%;margin:0}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:720px;max-width:calc(100% - 2em);margin:auto;padding:1em;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/blogs/" data-astro-cid-3ef6ksr2>Locch&#39;s Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/blogs/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blogs/blog/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/blogs/about/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo>  </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2026-08-03T00:00:00.000Z"> Aug 3, 2026 </time>  </div> <h1 data-astro-cid-bvzihdzo>State Engineering: You Don&#39;t Know the Steps When You Start</h1> <hr data-astro-cid-bvzihdzo> </div>  <h2 id="introduction">Introduction</h2>
+<p>From the end of 2025 to now, we’ve been handed a new <strong>x-engineering</strong> every few months. Prompt. Context. Harness. Loop. Graph. Each one arrives with a course, a blog post from a lab, and someone on LinkedIn saying the last one is dead.</p>
+<p>They’re not dead. They stack. I <a href="/blogs/blog/agents_arent_the_point_state_is/">wrote about that ladder already</a>, so I won’t re-argue it here. The short version: every rung takes something that used to live inside the agent and puts it somewhere outside.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Rung</th><th>What moves out of the actor</th></tr></thead><tbody><tr><td>Prompt engineering</td><td>the instructions — out of your head</td></tr><tr><td>Context engineering</td><td>the knowledge — out of the weights</td></tr><tr><td>Harness engineering</td><td>the tools and checks — out of the model</td></tr><tr><td>Loop engineering</td><td>the revision — out of a single pass</td></tr><tr><td>Graph engineering</td><td>the state — out of the session</td></tr></tbody></table>
+<p>What I want to do here is different. I went and studied the <em>best</em> resource for each rung. Not the SEO blogs, the real ones. Then I pulled out what each actually teaches. Finally, I want to argue with my last post about that fifth row.</p>
+<p>Because I think “graph engineering” is the wrong name for it.</p>
+<p>The name I want is <strong>state engineering</strong>: <em>deciding what a piece of work knows about itself, no matter who or what is working on it right now.</em> The idea underneath is old. Last time I traced it back to Petri nets and 1970s blackboards, and I’m not going to pretend I invented that. But as far as I can tell nobody is using this name for the rung yet, so I’m taking it. The rest of this post is the argument for why it’s the better one.</p>
+<h2 id="the-highlights">The highlights</h2>
+<h3 id="prompt-engineering">Prompt engineering</h3>
+<p>The <a href="https://www.promptingguide.ai/">Prompt Engineering Guide</a> is still the reference. What’s funny is that it has outgrown its own title: it now carries whole sections on agents, on function calling, and on context engineering. The standard prompt guide absorbed the next two rungs instead of being replaced by them. That’s the stacking showing up in a table of contents.</p>
+<p>The craft itself settled into a shape most frameworks agree on: <strong>role, instruction, context, example</strong>. Tell the model who it is, what to do, what it needs to know, and show it one. Everything after this rung is about the third item getting too big to type.</p>
+<h3 id="context-engineering">Context engineering</h3>
+<p>LangChain’s <a href="https://www.langchain.com/blog/context-engineering-for-agents">context engineering post</a> gives the four verbs I keep coming back to. Almost every later article is a reshuffle of these:</p>
+<ul>
+<li><strong>Write</strong> — put information outside the window so it survives: scratchpads during a task, memories across sessions.</li>
+<li><strong>Select</strong> — pull the right piece back in when it’s needed.</li>
+<li><strong>Compress</strong> — keep only the tokens that still earn their place. Summarize, trim.</li>
+<li><strong>Isolate</strong> — split context across separate agents or a sandbox so no single window has to hold everything.</li>
+</ul>
+<p>Anthropic’s <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">companion guide</a> supplies the reason all four are necessary: context is finite, and not in the way you think. Models suffer <strong>context rot</strong> — accuracy falls as the window fills, and it starts falling long before you hit the limit. So the goal isn’t “fit everything in.” It’s to find the <em>smallest</em> set of high-signal tokens that gets the outcome.</p>
+<p>The field report I’d read next is <a href="https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus">Manus</a>, because one of its lessons is genuinely counterintuitive: <strong>keep the wrong stuff in.</strong> Leave failed actions and error traces in the context. The model learns from them and stops repeating the mistake. Naive compaction deletes exactly that.</p>
+<h3 id="harness-engineering">Harness engineering</h3>
+<p><a href="https://walkinglabs.github.io/learn-harness-engineering/en/">Learn Harness Engineering</a> is a free thirteen-lecture course, and it’s the best structured thing on this rung. Every lecture is named after a <em>failure mode</em>, not a technique — which tells you what kind of discipline this is.</p>
+<p>Its definition is the cleanest I’ve found:</p>
+<blockquote>
+<p>Harness: Everything outside the model — instructions, tools, environment, state management, verification feedback. If it’s not model weights, it’s harness.</p>
+</blockquote>
+<p>And it names five subsystems. Five, not six: permissions live inside Tools, rather than in a separate guardrail layer.</p>
+<pre><code class="language-mermaid">flowchart TD
+    H["&#x3C;b>the harness&#x3C;/b>&#x3C;br/>everything outside the model weights"]
+    H --> I["&#x3C;b>Instructions&#x3C;/b>&#x3C;br/>the entry file, and what it links to"]
+    H --> T["&#x3C;b>Tools&#x3C;/b>&#x3C;br/>real access, least privilege"]
+    H --> E["&#x3C;b>Environment&#x3C;/b>&#x3C;br/>pinned versions, a reproducible box"]
+    H --> S["&#x3C;b>State&#x3C;/b>&#x3C;br/>what survives the session"]
+    H --> F["&#x3C;b>Feedback&#x3C;/b>&#x3C;br/>the command that proves it worked"]
+</code></pre>
+<p>The course’s rule is that missing any one of the five gives you an incomplete harness, and the agent “will always feel awkward to use.” Its diagnostic advice is the line I’d put on a wall:</p>
+<blockquote>
+<p>When things fail, don’t swap the model first — check the harness.</p>
+</blockquote>
+<p>The lectures I’d read even if you skip the rest:</p>
+<ul>
+<li><strong>The repository must become the system of record.</strong> The agent can’t ask people. It sees system prompts, repo files, and tool output — and nothing else. Slack, Confluence, and your head are invisible to it. So: <em>“The repo has the final say — nowhere else counts.”</em> With a warning attached: <em>“Out-of-date documentation is more dangerous than no documentation at all.”</em></li>
+<li><strong>One giant instruction file fails.</strong> Everyone’s <code>CLAUDE.md</code> grows 50 → 300 → 600 lines and gets worse the whole way. The entry file is a router, not an encyclopedia. The fix I liked most: every instruction should carry a source, a condition where it applies, and <strong>a condition where it expires</strong>.</li>
+<li><strong>Agents overreach and under-finish.</strong> They start more than they finish, and the two are the same disease — context split across too many tasks means none get enough. The fix is WIP=1 and a completion ratio you actually track.</li>
+<li><strong>Agents declare victory too early.</strong> The diagnosis is not that the model is dishonest. It’s structural: <em>“The same model both generates and evaluates, so it is inherently inclined to be generous with itself.”</em> You don’t fix that with a better prompt. You separate the worker from the checker.</li>
+<li><strong>Observability belongs inside the harness.</strong> Not a feature you bolt on later. Without it you can’t tell “correct” from “looks correct,” evaluation becomes taste, and retries become guessing. I built a version of this idea into <a href="https://github.com/locchh/veronica/tree/main/armors/mod-04">one of my own modules</a>. It never writes code itself. It hands out one item at a time, and marks it done only when a separate evaluator pastes output it ran itself.</li>
+<li><strong>Every session must leave a clean state.</strong> Five conditions at session end: build passes, tests pass, progress recorded, no stale artifacts, startup path available. Miss one and the session isn’t done. The framing is entropy: <em>“‘Clean up later’ equals never cleaning up.”</em></li>
+</ul>
+<h3 id="loop-engineering">Loop engineering</h3>
+<p>The best applied resource here is <a href="https://claude.ai/public/artifacts/11bdc800-3d82-4cd1-8a05-a82ae516f8cb">Claude Code Loops</a>, a coursebook published as a public artifact. (It’s user-generated, so treat it as a well-organized practitioner’s notebook rather than a lab’s word.)</p>
+<p>Its first move is the useful one: <strong>“loop” is one word doing three jobs.</strong> Keep them apart and everything else gets easier.</p>
+<pre><code class="language-mermaid">flowchart TD
+    ROOT["A &#x26;quot;loop&#x26;quot; is three things"]
+    ROOT --> GOAL["&#x3C;b>GOAL LOOP&#x3C;/b>&#x3C;br/>run until a condition holds, then stop"]
+    ROOT --> INTERVAL["&#x3C;b>INTERVAL / EVENT LOOP&#x3C;/b>&#x3C;br/>re-run on a clock, or fire on a trigger"]
+    ROOT --> SURFACE["&#x3C;b>EXECUTION SURFACE&#x3C;/b>&#x3C;br/>where it runs · who pays · must the machine be awake?"]
+    GOAL -. compose .-> INTERVAL
+    GOAL -. runs on .-> SURFACE
+    INTERVAL -. runs on .-> SURFACE
+</code></pre>
+<p>You have three real questions. <em>Does it stop on its own? Where do I put it? What does it cost?</em> Each one is about one of those three. And the basic goal loop underneath is small enough to draw:</p>
+<pre><code class="language-mermaid">flowchart LR
+    TURN["&#x3C;b>TURN&#x3C;/b>&#x3C;br/>the agent edits · runs · reads"] --> EVAL["&#x3C;b>EVALUATOR&#x3C;/b>&#x3C;br/>a separate, smaller model"]
+    EVAL -->|yes| STOP["&#x3C;b>STOP&#x3C;/b>&#x3C;br/>the goal clears"]
+    EVAL -. "no — and the reason&#x3C;br/>becomes the next instruction" .-> TURN
+</code></pre>
+<p>The evaluator is a <em>different</em> model from the one doing the work. That’s what stops the agent grading its own homework. And look at the dashed line: a “no” doesn’t re-send the original prompt — <strong>the failure reason becomes the next instruction.</strong></p>
+<p>The evaluator only sees the transcript. It can’t run commands or read files. That one constraint dictates how you write every condition: name an observable end state, and make the work print its own proof. “All tests pass” works because the runner’s output lands in the conversation. “The code is clean” never will.</p>
+<p>A complete production loop breaks into six parts:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Primitive</th><th>Job</th></tr></thead><tbody><tr><td>Discovery / scheduling</td><td>find work on a cadence</td></tr><tr><td>Goal-conditioned execution</td><td>work until a stop condition holds</td></tr><tr><td>Verification</td><td>a separate agent grades the result</td></tr><tr><td>Memory / state</td><td>persist across runs</td></tr><tr><td>Parallelism / isolation</td><td>many agents, no collisions</td></tr><tr><td>Safety / circuit-breakers</td><td>stop a runaway</td></tr></tbody></table>
+<p>If you remember one sentence from that book, it’s this one: <strong>an unattended loop without a verifier is a machine that ships bugs with high confidence.</strong></p>
+<p>Then loops stack. LangChain’s <a href="https://www.langchain.com/blog/the-art-of-loop-engineering">four-loop version</a> wraps the agent loop in a verification loop, that in an event loop, and all of it in a hill-climbing loop that reads production traces and edits the harness itself:</p>
+<pre><code class="language-mermaid">flowchart TB
+    TRIGGER(["event trigger"])
+    subgraph EVENT["loop 3 · event"]
+      subgraph VERIFY["loop 2 · verification"]
+        subgraph AGENT["loop 1 · agent"]
+          MODEL["model"]
+          TOOLS["tools"]
+          MODEL -. action .-> TOOLS
+          TOOLS -. observation .-> MODEL
+          MODEL --> RESULT["result"]
+        end
+        RESULT --> GRADER["grader&#x3C;br/>rubric / eval"]
+      end
+      GRADER --> UPDATE["system update&#x3C;br/>the service improves"]
+    end
+    ANALYSIS["&#x3C;b>loop 4 · hill climbing&#x3C;/b>&#x3C;br/>an agent reading the traces"]
+    TRIGGER --> MODEL
+    GRADER -. retry with feedback .-> MODEL
+    UPDATE -. traces .-> ANALYSIS
+    ANALYSIS -. harness improvements .-> MODEL
+    ANALYSIS -. new events .-> TRIGGER
+</code></pre>
+<p>Watch the outermost arrow. It doesn’t loop back to the top — it reaches <em>inside</em> and rewrites the loop below it. That’s a loop that edits its own instructions, which is a wonderful idea and a dangerous one. I built <a href="https://github.com/locchh/veronica/tree/main/armors/mod-05">a module around exactly this</a>. What makes it safe isn’t the writing, it’s the gate. The agent writes one general rule per run, and the rule is kept only if a score it cannot edit goes up. Reflection without that gate isn’t hill-climbing. It’s drift, and after twenty runs you have a file full of confident superstition that every future run reads.</p>
+<p>Set a cap on every loop — turns, or time, or cost. All three if you can.</p>
+<p><strong>Where loops go wrong.</strong> The coursebook’s catalogue is seven: runaway, confident conveyor belt, un-verifiable goal, primitive mismatch, cost blowout, skill decay, ungated prod. I’d compress it differently. Each anti-pattern is one move skipped:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Move skipped</th><th>What you get</th></tr></thead><tbody><tr><td>Discovery</td><td>a <strong>blind</strong> loop — it never finds the work</td></tr><tr><td>Handoff</td><td>a <strong>tangled</strong> loop — agents stomping each other</td></tr><tr><td>Verification</td><td>a <strong>nodding</strong> loop — it agrees with itself</td></tr><tr><td>Persistence</td><td>an <strong>amnesiac</strong> loop — it relearns everything each run</td></tr><tr><td>Scheduling</td><td>a <strong>manual</strong> loop — you’re still the trigger</td></tr></tbody></table>
+<p>And the costs land in two places. On the machine: <strong>context rot</strong> and <strong>cost bloat</strong>, because every cycle re-sends the window. On you: <strong>verification debt</strong> (checks you stopped running), <strong>comprehension rot</strong> (code you no longer understand), and <strong>cognitive surrender</strong> (you stopped reading it at all).</p>
+<p>The whole point of a loop is that it should <strong>accumulate progress</strong>. A loop that doesn’t is just a script you’re paying more to run.</p>
+<h2 id="state-engineering">State engineering</h2>
+<p>Here’s where I want to argue with myself.</p>
+<p>In my last post I called the fifth rung <strong>graph engineering</strong>, because that’s what LangChain called it. Then I spent the last paragraph of that post quietly taking it back. I want to say why properly now.</p>
+<h3 id="a-graph-means-you-already-knew-the-steps">A graph means you already knew the steps</h3>
+<p>I have to be careful here, because the obvious version of this argument is wrong.</p>
+<p>The obvious version says: if you can draw the graph, the states are fixed, so you must have known them all in advance. That isn’t true. Add a cycle, a conditional edge, or one value that varies, and a small graph describes an enormous space of situations. I said as much in <a href="/blogs/blog/agents_arent_the_point_state_is/">my last post</a>: an FSM is a graph, and Petri nets exist precisely because one finite graph can hold many truths at once. A graph is not a list of states.</p>
+<p>What a graph does fix is smaller, and it’s still the whole problem. <strong>You have to name every place the work can be, and the rules for moving between them, before the work starts.</strong> The nodes are authored up front even when the states aren’t.</p>
+<p>And that’s the cost, because <strong>you don’t know the steps of a piece of work when you start working.</strong> You find out what they were somewhere in the middle, usually right after you’ve already been through three of them.</p>
+<p>AI has scar tissue here. <a href="https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/strips.pdf">STRIPS</a> (Fikes and Nilsson, 1971) is the ancestor of every planner since. It doesn’t list states either — it declares predicates and operators and generates the rest, which is the clever part. What it can’t survive is its other assumption: the <strong>closed world</strong>, where anything not written down is false. It plans beautifully inside what you declared. It has nothing to say the moment the world contains a fact nobody declared, which in real work is about turn two.</p>
+<p>Nineteen years later, Rodney Brooks made the opposite bet in <a href="https://people.csail.mit.edu/brooks/papers/elephants.pdf">“Elephants Don’t Play Chess”</a> (1990) — stop maintaining the internal model at all:</p>
+<blockquote>
+<p>The world is its own best model. It is always exactly up to date. It always contains every detail there is to be known.</p>
+</blockquote>
+<p>Change one word and you have the harness course’s third lecture. <strong>The repo is its own best state.</strong> It’s always exactly up to date, it holds every detail there is to know, and the trick is to read it often enough. The agent shouldn’t carry the state of the work. It should read it off the artifact.</p>
+<pre><code class="language-mermaid">flowchart TB
+    subgraph GRAPH["graph engineering — you author the steps first"]
+      direction LR
+      D1["name every place the work can be,&#x3C;br/>before it starts"] --> D2["the work moves between&#x3C;br/>places you already named"]
+    end
+    subgraph STATE["state engineering — the shape shows up later"]
+      direction LR
+      W1["declare only where&#x3C;br/>state gets written"] --> W2["the shape appears&#x3C;br/>while the work runs"] --> W3["prune what stopped&#x3C;br/>being true"]
+    end
+</code></pre>
+<p>So a graph is one <em>encoding</em> of state, and a good one — the encoding whose cost is paid up front. State engineering is the larger job, and it lets you defer that payment.</p>
+<p>Which is the whole reason I wanted a different name at the top of this post, and it’s worth restating now that it’s earned:</p>
+<blockquote>
+<p><strong>State engineering</strong> is deciding what a piece of work knows about itself, no matter who or what is working on it right now.</p>
+</blockquote>
+<h3 id="why-we-need-the-rung-at-all">Why we need the rung at all</h3>
+<p>Look at what the four rungs below it optimize. The prompt is what the actor is told. The context is what the actor sees. The harness is what the actor can do and gets checked by. The loop is how many times the actor runs. <strong>All four take the actor as the unit, and all four die when the run dies.</strong></p>
+<p>State is the only one whose object is the work rather than the worker. That’s not a nicer way of saying the same thing — it changes who can pick the work up.</p>
+<pre><code class="language-mermaid">flowchart LR
+    S[("the state&#x3C;br/>on disk")]
+    A1["a human"] -->|writes| S
+    S -->|reads| A2["a human + an agent"]
+    A2 -->|writes| S
+    S -->|reads| A3["an agent alone"]
+    A3 -->|writes| S
+    S -->|reads| A1
+</code></pre>
+<h3 id="what-the-vendor-cant-ship-you">What the vendor can’t ship you</h3>
+<p>Here’s the part I keep chewing on. Nearly every big lab has converged on <strong>one general-purpose agent</strong> — one node that fits all. Claude Code, Codex, and the open clones are all the same bet: a session, a context window, a tool loop, pointed at anything.</p>
+<p>I don’t think that’s a technical conclusion. I think it’s an economic one. One general agent scales <strong>horizontally</strong>: the same product serves every use case and every user, and each extra customer costs almost nothing. That is an extremely good business. It scales <strong>vertically</strong> much worse, and the reason isn’t effort — it’s <a href="https://www.trychroma.com/research/context-rot">context rot</a>. The session is the only state a general agent has, and a session degrades as it fills. A bigger window doesn’t rescue it, because the accuracy was already falling well before the window was full.</p>
+<p>The database people had this fight twenty years ago. Stonebraker and Çetintemel argued in <a href="https://cs.brown.edu/people/ugur/fits_all.pdf">“One Size Fits All”: An Idea Whose Time Has Come and Gone</a> (2005) that the general engine would lose to specialized ones on every workload. They were right about the engineering and wrong about the market — but look at <em>how</em> they were wrong. The general engine survived by <strong>absorbing</strong> the specialists. Postgres swallowed JSON, then full-text, then time-series, then vectors.</p>
+<p>So I expect absorption here too, and I should be honest that it argues against me. The vendors are already shipping memory, project files, checkpoints, sub-agents. They will keep shipping more.</p>
+<p>What they can’t ship is the content. <strong>They give you the filing cabinet. Only you can write the files</strong> — because the thing that makes your long work survive is what <em>your</em> work knows about itself, and that isn’t a feature anyone can ship to everybody. That’s why this is a job and not a menu item.</p>
+<h3 id="whats-already-solved">What’s already solved</h3>
+<p>Give the harness course credit: it doesn’t leave state as a vibe. It borrows <strong>ACID</strong> from databases and applies it straight to agent state. Atomicity: one commit per logical operation, all or nothing. Consistency: the invariants still hold after the write. Isolation: concurrent work can’t see each other’s half-finished writes. Durability: if it isn’t written down, it didn’t happen.</p>
+<p>That’s the right instinct, and forty years of hardening for free. But notice what ACID answers — <em>how to write state safely.</em> It says nothing about <strong>what</strong> to write, <strong>who</strong> may write it, or <strong>when</strong> to delete it. Those are the open questions.</p>
+<h3 id="the-aspects-worth-studying">The aspects worth studying</h3>
+<p>Harness engineering organized itself around failure modes. Loop engineering organized itself around primitives. Here’s the equivalent list for state. Each row is a question I don’t think anyone has settled, paired with what happens when you ignore it:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Aspect</th><th>The question</th><th>How it fails</th></tr></thead><tbody><tr><td><strong>Extent</strong></td><td>What belongs in the state at all?</td><td><strong>Bloat</strong> — it only grows, until you’ve rebuilt context rot on disk. Or <strong>amnesia</strong>, where the real state stayed in the session and died with it.</td></tr><tr><td><strong>Discovery</strong></td><td>How do you add state nobody declared up front?</td><td><strong>Fabrication</strong> — an entry that was never true gets written once and believed forever.</td></tr><tr><td><strong>Authority</strong></td><td>Who may write which field, and when does it freeze?</td><td><strong>Self-serving writes</strong> — the actor edits the check that grades it.</td></tr><tr><td><strong>Merge</strong></td><td>What happens when two permitted writers collide?</td><td><strong>Contradiction</strong> — both entries are in there, and nobody knows which is live.</td></tr><tr><td><strong>Decay</strong></td><td>What gets removed, and on what signal?</td><td><strong>Drift</strong> — it was true in March.</td></tr><tr><td><strong>Handoff</strong></td><td>How does the next actor resume without re-reading everything?</td><td><strong>Orphaned state</strong> — perfect notes, no next shift.</td></tr></tbody></table>
+<p>Two of those deserve a note.</p>
+<p><strong>Drift is worse than amnesia</strong>, which is not obvious. An empty file makes the next actor go look. A confidently wrong file doesn’t. The harness course puts it flatly: <em>“Out-of-date documentation is more dangerous than no documentation at all.”</em></p>
+<p><strong>Authority is where I’d start</strong>, because it’s the one both good sources reached independently. The harness course, on feature lists: <em>“State transitions are controlled by the harness, not freely changed by the agent.”</em> A feature moves to passing only when its verification command runs green. When I built my own orchestrator I arrived from the other direction. The field holding an item’s check is frozen once written. Weakening a check mid-run is the cheapest way to make the whole system report success, and it feels completely reasonable at the time.</p>
+<p>That’s the shape of the insight: <strong>state engineering is mostly about write permissions.</strong> Not storage.</p>
+<p>Only one failure on that list is solved elsewhere, and the fix is old: orphaned state needs something watching. A checkpoint is worthless without an operator to hand it to. That’s the <a href="/blogs/blog/the_seat_needs_a_watcher/">watcher problem</a>, and it’s why state outliving its actor is only half of what “durable” means.</p>
+<p>The best one-line summary of this rung comes from the harness course. It’s almost the line I ended my last post with, and I’ll take that as a sign we’re looking at the same thing:</p>
+<blockquote>
+<p>The agent forgets. The repository doesn’t.</p>
+</blockquote>
+<h2 id="the-long-journey">The long journey</h2>
+<p>Everything above is about one session handing off to the next. A migration is different in size, and size changes the problem. You’re not resuming a task. You’re carrying a number, 500 of 800 units done, for weeks or months. That number is the state, and it has to grow.</p>
+<p>I’ve <a href="/blogs/blog/migration_is_a_harness/">written about the mechanics before</a>: a unit boundary is a commit boundary, the evaluator passes it, you commit. The working tree holds the churn; the commit history holds what survived. That rhythm is the ratchet.</p>
+<p>There’s a reason a ratchet scales when nothing else does. <a href="https://arxiv.org/abs/1901.01930">Hellerstein’s CALM result</a> stands for consistency as logical monotonicity. It says a problem can be solved without coordination exactly when it’s <strong>monotone</strong> — when facts only get added, never retracted.</p>
+<p>Be careful with the noun, because I wasn’t at first. Monotonicity is a property of the <em>question you ask</em>, not of the pile of facts. A commit log is append-only; whether a query over it needs coordination depends on the query. “Unit 412 passed on Tuesday” only ever gets added, so agents can write those facts in parallel and never agree on anything. That half is free. They still have to coordinate on <em>who takes unit 412</em> — Bun’s sixty-odd agents ran off a shared work queue — because handing out work isn’t monotone. Results need no lock. Assignment does.</p>
+<p>And the number I opened with is already the wrong kind of question. A count isn’t monotone: “500 done” has to be retracted the moment a 501st unit lands. Read it as a floor instead — <em>at least</em> 500 have ever passed — and it’s monotone again. That reading is the one you get for free, and it’s exactly the one the next section destroys.</p>
+<p>The trouble starts with the word <em>passed</em>.</p>
+<h3 id="what-verified-actually-means">What “verified” actually means</h3>
+<p>A long migration can’t use one bar for everything. The harness course stacks verification in three layers, cheapest first:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>What it asks</th><th>Cost</th></tr></thead><tbody><tr><td><strong>Level 1 · static</strong></td><td>does it compile, type-check, lint?</td><td>seconds</td></tr><tr><td><strong>Level 2 · runtime</strong></td><td>do the relevant tests pass, with real output pasted?</td><td>minutes</td></tr><tr><td><strong>Level 3 · system</strong></td><td>does it behave right at the boundary a human touches?</td><td>expensive</td></tr></tbody></table>
+<p>Level 3 is the rung that needs a name attached, because “the boundary a human touches” means completely different things for different items. When I built my own <a href="https://github.com/locchh/veronica/tree/main/armors/mod-04">orchestrator module</a> I had to make each item declare its <strong>kind</strong> up front — <em>logic</em>, <em>integration</em>, or <em>ui</em> — because that’s what decides whether level 3 means running the unit with real input, driving a real database, or driving the actual screen. One rung, three different bars. You pick at plan time, not when you’re tired and grading it.</p>
+<p>Here’s the part I think people miss. <strong>If your state records only a boolean, your count is a lie of unknown size.</strong> Not because the plan was wrong — because the plan and the outcome can differ. An item planned for level 3 and quietly promoted on a level-1 pass looks identical to one that earned it. Both read <code>passing</code>. So “500 done” averages the earned and the waved-through into a number that means nothing, and only the record tells you which is which. The level that actually promoted an item belongs in the state.</p>
+<h3 id="evidence-has-a-shelf-life">Evidence has a shelf life</h3>
+<p>Now the harder one, and I don’t think anyone has a clean answer.</p>
+<p>The harness course says a feature’s move to <code>passing</code> is <strong>irreversible</strong> — once passing, it can’t go back. That’s the right instinct for stopping an agent from quietly downgrading its own work. But run it for three months and it becomes false. An item verified in March, against a rulebook amended in May and a dependency replaced in June, is still sitting there marked green. The mark is stale and nothing knows it.</p>
+<p>Build systems had the shape of this in 1976. Stuart Feldman’s <code>make</code> doesn’t ask whether a target was ever built — it asks whether the target is <strong>older than its inputs</strong>. If an input changed, the target is out of date, full stop, no matter how green it looked last time. Fifty years later that’s still the only honest reading of a verification record: not “this passed,” but “this passed <em>against these inputs</em>.”</p>
+<p>Anthropic’s migration kit gets to the same place from the practical side, with a rule I keep quoting: <em>“you don’t fix the code — you fix the process that produced the code.”</em> See a failure three times and the rule is wrong, so you amend the rule and regenerate everything it touched. Read that as a build system and it’s a <code>make clean</code> on a subtree, run by hand, with a human deciding the blast radius.</p>
+<p>So the missing piece is a dependency edge. Every verified item should point at the version of the rulebook, the fixtures, and the modules it was checked against.</p>
+<p>Two problems with that, and I’d rather name them than pretend.</p>
+<p><strong>The first is who writes those edges.</strong> <code>make</code> invalidates against prerequisites <em>somebody wrote down</em>, which is the closed-world assumption I spent a whole section rejecting, showing up one level higher in a different hat. Under-declare your dependencies and you’re immune to demotion. Over-declare and you can demote whatever you like. That’s the <strong>Authority</strong> row again: the dependency list is itself state, so it needs a write rule like any other state.</p>
+<p>The good news is that build systems stopped trusting declarations decades ago. <code>gcc -M</code>, Bazel, and Nix all capture the <em>observed</em> read set instead — what the build actually touched, not what someone promised it would touch. A sandboxed verifier already has that information. Record what it read.</p>
+<p><strong>The second is that invalidation looks like it breaks the ratchet.</strong> “Unit 412 passed on Tuesday” only gets added. But “unit 412 is currently done” can go backward, and going backward is a retraction — exactly the case CALM says you have to coordinate.</p>
+<p>Except databases solved this in the 1980s, and I nearly missed it. You don’t retract anything. You version the rulebook and ask the question <em>at a version</em>: valid against rulebook v7, 412 of 800. Nothing is ever unsaid; what changes is which snapshot you’re quoting. That’s multi-version concurrency control, older than almost everything else in this post — and it means an honest migration carries <strong>two numbers, not one</strong>:</p>
+<ul>
+<li><strong>ever passed</strong> — append-only, monotone, free to compute, never goes down.</li>
+<li><strong>currently valid</strong> — evaluated against today’s rulebook and today’s dependencies, and it absolutely can go down.</li>
+</ul>
+<p>Watching those two diverge is the most useful signal a long migration has. The gap is the distance between what you’ve done and what still counts.</p>
+<pre><code class="language-mermaid">flowchart LR
+    Q["queued"] --> W["in flight"]
+    W -->|"evidence at a named level"| P["&#x3C;b>passing&#x3C;/b>&#x3C;br/>+ level · + kind · + what it read"]
+    W -->|fails, with the reason| Q
+    P -. "an input changed" .-> S["&#x3C;b>suspect&#x3C;/b>&#x3C;br/>a human sets the blast radius"]
+    S --> Q
+</code></pre>
+<p>That resolves the tension with “irreversible,” I think, and the rule is simple: <strong>demote by dependency, never by opinion.</strong> An agent may never move an item backward because it disagrees with a verdict. An item moves when something it was checked against has changed, and that’s a fact anyone can check rather than a judgement anyone can argue with.</p>
+<p>One caution I owe the human in the loop. Auto-invalidation should mark items <strong>suspect</strong>, not re-queue them. A single rulebook amendment can touch five hundred items, and a ratchet that resets itself five hundred steps has stopped being a ratchet. The machine says what’s stale. A person still decides the blast radius — which is exactly what Anthropic’s kit has a human doing.</p>
+<p>The cost shape falls out of this. You can’t run level 3 on everything on every cycle; that’s the whole reason the cheap levels exist. So run the cheap checks continuously, spend the expensive ones at checkpoints, and let invalidation tell you which expensive checks you actually owe. That’s the same trade as <a href="/blogs/blog/start_at_the_cheap_end/">starting at the cheap end</a> — you’re just spending the budget on the units whose ground moved.</p>
+<p>All of which reduces to one habit, and it’s the habit a long migration lives or dies by: <strong>record not just that something passed, but what it passed against.</strong></p>
+<blockquote>
+<p><strong>Lesson:</strong> you cannot name the steps before you walk them. So declare where the state lives, who may write which part of it, and what makes an entry expire — then let the shape show up while the work runs.</p>
+</blockquote>
+<h2 id="related-to">Related to</h2>
+<ul>
+<li>
+<p><a href="https://tosea.ai/blog/loop-engineering-ai-agents-complete-guide-2026">What Is Loop Engineering? A Complete Guide from Prompt to Harness Engineering</a> - The definition I keep coming back to: designing the system that prompts, checks, remembers, and re-runs an agent — with each layer (prompt → context → harness → loop) wrapping the previous one, not replacing it</p>
+</li>
+<li>
+<p><a href="https://addyosmani.com/blog/loop-engineering/">Loop Engineering</a> - Addy Osmani’s essay: “loop engineering is replacing yourself as the person who prompts the agent” — skeptical about token costs, practical about worktrees, and closing with the right warning: build the loop, stay the engineer</p>
+</li>
+<li>
+<p><a href="https://drive.google.com/file/d/1qzKI4DKnyHRpXK1J3ATPqwaqLc0iNu-M/view?trk=public_post_comment-text">Loop Engineering: The Anthropic Playbook for Designing Systems That Prompt Your Agents</a> - A field study of designing loops that run themselves (PDF on Google Drive)</p>
+</li>
+<li>
+<p><a href="https://www.linkedin.com/posts/andrewyng_loop-engineering-is-a-hot-buzzphrase-after-share-7477753882505338880-dBJ-/?utm_source=share&#x26;utm_medium=member_android&#x26;rcm=ACoAAD9laxkBsmkcAipJMc2HAVrKjjkg5sWujiY">3 Key Loops for Building 0-to-1 Products with AI Agents</a> - Andrew Ng’s LinkedIn post — “loop engineering is a hot buzzphrase” — naming the three key loops for building 0-to-1 products with AI agents</p>
+</li>
+<li>
+<p><a href="https://www.langchain.com/blog/the-art-of-loop-engineering">The Art of Loop Engineering</a> - LangChain’s four-loop stack, from the core agent loop up to the hill-climbing loop that improves the harness from production traces — their take on swyx’s “loopcraft”</p>
+</li>
+<li>
+<p><a href="https://claude.ai/public/artifacts/11bdc800-3d82-4cd1-8a05-a82ae516f8cb">Claude Code Loops</a> - An applied coursebook on Claude Code loops, published as a public Claude artifact</p>
+</li>
+<li>
+<p><a href="https://walkinglabs.github.io/learn-harness-engineering/en/">Learn Harness Engineering</a> - A multilingual course on the engineering of AI coding agents — thirteen lectures, each named after a failure mode, plus hands-on projects and copy-ready templates; its core line: a harness doesn’t make the model smarter, it builds a closed-loop working system around it</p>
+</li>
+<li>
+<p><a href="https://goonnguyen.substack.com/p/harness-engineering-la-gi">Harness Engineering là gì?</a> - A Vietnamese explainer by Duy /zuey/ with the best metaphor of the bunch: prompt engineering is writing the email, context engineering is attaching the right file, harness engineering is designing the whole office</p>
+</li>
+<li>
+<p><a href="https://openai.com/index/harness-engineering/">Harness engineering: leveraging Codex in an agent-first world</a> - OpenAI’s field report on building a product from an empty repo to a million lines of code with agents writing every line — “humans steer, agents execute”; the discipline moves out of the code and into the scaffolding</p>
+</li>
+<li>
+<p><a href="https://huggingface.co/learn/context-course/unit0/introduction">The Context Course</a> - Hugging Face’s free six-unit course on context engineering for code agents — skills, MCP, plugins, sub-agents, hooks, and a bonus unit where you build a minimal agent loop from scratch. The structural twin of the harness course</p>
+</li>
+<li>
+<p><a href="https://www.langchain.com/blog/context-engineering-for-agents">Context Engineering</a> - LangChain’s write / select / compress / isolate taxonomy. Four verbs that most later writing on the subject is a reshuffle of</p>
+</li>
+<li>
+<p><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Effective context engineering for AI agents</a> - Anthropic’s guide to treating context as a finite resource — find “the smallest possible set of high-signal tokens that maximize the likelihood of some desired outcome”</p>
+</li>
+<li>
+<p><a href="https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus">Context Engineering for AI Agents: Lessons from Building Manus</a> - Six lessons from shipping a real one, including the least obvious idea in the field: keep the failed actions in the context, because the model learns from them</p>
+</li>
+<li>
+<p><a href="https://www.trychroma.com/research/context-rot">Context Rot</a> - Chroma’s study of every frontier model they could get hold of: all of them degrade as input grows, and the degradation starts long before the window is full. The receipt behind “context is finite”</p>
+</li>
+<li>
+<p><a href="https://arxiv.org/abs/2507.13334">A Survey of Context Engineering for Large Language Models</a> - A very long survey of the whole field, with a taxonomy separating foundational components from system implementations. The reference, when you want depth rather than a blog post</p>
+</li>
+<li>
+<p><a href="https://arxiv.org/abs/2510.04618">Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models</a> - The ACE paper: instead of fine-tuning weights, the context itself becomes an evolving artifact that the model keeps improving</p>
+</li>
+<li>
+<p><a href="https://www.promptingguide.ai/">Prompt Engineering Guide</a> - The reference guide where this all started — and which has since grown whole sections on agents and context engineering, which tells you something about how these rungs relate</p>
+</li>
+</ul>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2026 Locch. All rights reserved.
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.PX8piWpJ.js"></script> </body> </html>
