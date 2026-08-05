@@ -7,9 +7,9 @@ tags: ["languages", "ai", "llm"]
 draft: false
 ---
 
-## Overview
+## Writing systems, and how Japanese ended up with four
 
-### Fundamentals
+### What writing is made of
 
 Before comparing scripts I had to get the vocabulary straight, because I kept
 using "letter," "character," and "symbol" as if they meant the same thing. They
@@ -157,7 +157,7 @@ and they sit at opposite ends. That is a property of the *spelling rules*, not o
 the symbols — and it is why sounding out a new word works so well in one and so
 badly in the other.
 
-### History
+### Where the four came from
 
 Japanese had no writing at all until Chinese characters arrived. Every script
 below exists to patch the mismatch between a writing system built for Chinese
@@ -328,7 +328,7 @@ So katakana teaches Japanese vocabulary, not English. Learn "computer" as
 コンピューター and an English speaker may not recognize it — a problem common
 enough to have its own name, カタカナ英語.
 
-## Terms
+## Sounding out — four languages, four answers
 
 Four languages, three kinds of script, one comparison worth making: Vietnamese,
 English, Japanese, Chinese.
@@ -369,7 +369,7 @@ system, maybe older than the first drawn sign. It was the first way people
 found to take a thing they couldn't see, a concept, and hand it to someone
 else anyway.
 
-## Nihongo
+## The trap runs both ways
 
 Romaji is a trap, the same way pinyin is a trap for Chinese. It's easy to
 lean on it forever — typing sounds in Latin letters instead of ever reading
@@ -425,12 +425,12 @@ in after a lesson and the app already knows what was covered, and only asks
 you to loop on that. It makes the discipline of coming back every single day
 much easier to keep.
 
-**Entry fee, running cost** — the same trade from the Overview above applies
+**Entry fee, running cost** — the same trade from the top of this post applies
 to *learning* the script, not just writing it. Every hiragana you learn is
 paid once; every word you read with it afterward gets cheaper, and stays
 cheaper, forever.
 
-## LLM
+## The same trade, one level down
 
 Months into paying that entry fee — memorizing hiragana, then katakana, then a
 slow trickle of kanji — I noticed the same trade shows up one level down,
@@ -488,7 +488,7 @@ tokenizer roughly 2.6× more token-efficient than the general-purpose one
 it replaced. Neither one starts over. Both extend what already exists,
 aimed at a single language.
 
-That's the same trade from the Overview, in different clothes. A bigger
+That's the same trade from the top of this post, in different clothes. A bigger
 vocabulary is a bigger **entry fee** — more subwords stored, a wider
 embedding matrix, more parameters, paid once, at training time. In return
 it buys a lower **running cost** — fewer tokens per sentence, paid on
