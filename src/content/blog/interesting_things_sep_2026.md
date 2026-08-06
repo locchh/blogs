@@ -8,3 +8,9 @@ draft: true
 ---
 
 https://github.com/cloudflare/computer
+
+https://github.com/firecrawl/anydoc
+
+https://www.testsprite.com/
+
+https://github.com/langchain-ai/openwiki
