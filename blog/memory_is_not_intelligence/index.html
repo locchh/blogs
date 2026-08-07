@@ -1,0 +1,243 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg"><link rel="icon" href="/blogs/favicon.ico"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.2"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/memory_is_not_intelligence/"><!-- Primary Meta Tags --><title>Memory Is Not Intelligence</title><meta name="title" content="Memory Is Not Intelligence"><meta name="description" content="A line going around says memory is intelligence. I think it's backwards — and Google's own memory papers say so. Storage is the raw material. The real question is the ordering: must you understand a thing before you can hold it, or can you hold it first and understand it later? Plus why the semantic/episodic/procedural table every agent builder uses is missing its arrows."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/memory_is_not_intelligence/"><meta property="og:title" content="Memory Is Not Intelligence"><meta property="og:description" content="A line going around says memory is intelligence. I think it's backwards — and Google's own memory papers say so. Storage is the raw material. The real question is the ordering: must you understand a thing before you can hold it, or can you hold it first and understand it later? Plus why the semantic/episodic/procedural table every agent builder uses is missing its arrows."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/memory_is_not_intelligence/"><meta property="twitter:title" content="Memory Is Not Intelligence"><meta property="twitter:description" content="A line going around says memory is intelligence. I think it's backwards — and Google's own memory papers say so. Storage is the raw material. The real question is the ordering: must you understand a thing before you can hold it, or can you hold it first and understand it later? Plus why the semantic/episodic/procedural table every agent builder uses is missing its arrows."><link rel="stylesheet" href="/blogs/_astro/about.CJd3ivxT.css">
+<style>main[data-astro-cid-bvzihdzo]{width:calc(100% - 2em);max-width:100%;margin:0}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:720px;max-width:calc(100% - 2em);margin:auto;padding:1em;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/blogs/" data-astro-cid-3ef6ksr2>Locch&#39;s Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/blogs/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blogs/blog/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/blogs/about/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo>  </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2026-08-08T00:00:00.000Z"> Aug 8, 2026 </time>  </div> <h1 data-astro-cid-bvzihdzo>Memory Is Not Intelligence</h1> <hr data-astro-cid-bvzihdzo> </div>  <p>While reading the <a href="/blogs/blog/what_comes_after_transformer/">Google memory papers</a> — Titans, Hope, and the sleep paper — I kept meeting the same line in the commentary around them: <strong>memory ability is intelligence</strong>. Build a model that remembers more, and you get a model that thinks better.</p>
+<p>I think that’s backwards. And the papers themselves say so, if you read what they actually do instead of what people say about them.</p>
+<p>Here’s the thought that started this post. Some people hold information for a long time without understanding it yet. They keep it raw, reuse it as-is, and turn it into knowledge much later — sometimes years later. Other people can’t do that at all. They have to understand something before it will stay in their head. Same task, opposite order.</p>
+<p>So the real question isn’t “is memory intelligence?” It’s an <strong>ordering</strong> question:</p>
+<blockquote>
+<p>Does understanding have to come <em>before</em> storage, or can storage come first and the structure arrive later?</p>
+</blockquote>
+<p>Both answers turn out to be defensible. Working out <em>when</em> each one is right is what this post is about.</p>
+<hr>
+<h2 id="the-man-who-could-not-forget">The man who could not forget</h2>
+<p>Start with the strongest counter-example, because it settles the headline claim in one move.</p>
+<p>In 1942 Borges published <a href="https://en.wikipedia.org/wiki/Funes_the_Memorious">“Funes the Memorious”</a>. Ireneo Funes falls from a horse and wakes up unable to forget anything. Every leaf of every tree he has ever seen. Every shape of every cloud, and the memory of remembering it. He can reconstruct a whole day — but reconstructing it takes him a whole day.</p>
+<p>And Funes cannot think. Borges is blunt about why:</p>
+<blockquote>
+<p>“To think is to forget differences, generalize, make abstractions.”</p>
+</blockquote>
+<p>Funes is annoyed that the word <em>dog</em> covers both the dog seen from the side at 3:14 and the dog seen from the front at 3:15. To him those are plainly two different things. He is right, in a way. And being right that way makes thought impossible. <strong>A mind that keeps every difference can never form a category.</strong></p>
+<p>That’s fiction, but it has a real counterpart. In <a href="https://en.wikipedia.org/wiki/Solomon_Shereshevsky"><em>The Mind of a Mnemonist</em></a> (1968), the neuropsychologist Alexander Luria describes thirty years of studying a man known as S. — Solomon Shereshevsky — whose memory had no measurable limit. Luria could never find the edge of it. Shereshevsky had extreme synesthesia: every word arrived with a taste, a color, a texture. That was the storage mechanism, and it worked terrifyingly well.</p>
+<p>He also struggled badly with abstraction, categorizing, metaphor, and generalizing. The concrete images were so vivid that they crowded out the point. He remembered everything and grasped less than the people testing him.</p>
+<p>Two men, one imagined and one real, with the thing the headline says is intelligence. Neither could think.</p>
+<blockquote>
+<p><strong>Lesson:</strong> perfect storage isn’t a superpower with the thinking added on. It’s a missing step.</p>
+</blockquote>
+<hr>
+<h2 id="memory-science-had-to-invent-meaningless-words">Memory science had to invent meaningless words</h2>
+<p>Here’s the detail I find most telling, and it’s from the very beginning of the field.</p>
+<p>When Hermann Ebbinghaus set out to measure memory scientifically in <strong>1885</strong>, he started with fragments of poetry. It didn’t work. The poetry kept triggering associations — meaning, rhythm, images he already had — and those made some lines far easier to learn than others. His measurements were contaminated by everything he already knew.</p>
+<p>So he invented the <strong>nonsense syllable</strong>: WUX, CAZ, BOK. Meaningless by construction. Only then could he get clean numbers, and get the forgetting curve we still teach.</p>
+<p>Sit with that. <strong>To study memory at all, the founder of memory science first had to strip out meaning</strong> — because when meaning is present, you are no longer measuring memory. You’re measuring knowledge doing the memory’s work. He noticed the size of the gap too. Meaningful material — a poem — was far easier for him to learn than his own nonsense lists. The figure usually repeated from his work is about <strong>ten times</strong> easier; I’ve only ever seen it second-hand, so take the number loosely and the direction seriously.</p>
+<p>Two later results say the same thing in sharper form.</p>
+<p><strong><a href="https://psychclassics.yorku.ca/Miller/">Miller, 1956</a>.</strong> The famous “seven, plus or minus two” is the part everyone quotes, and it’s the least interesting part. Miller’s real point was a distinction: immediate memory is limited by the <strong>number of chunks</strong>, not the amount of information. And a chunk can hold as much as you can pack into it. <code>FBICIAIBM</code> is nine letters if you don’t know the acronyms, three chunks if you do. The span never changed. <strong>Your knowledge changed what fits in a slot.</strong> Miller called this recoding, and treated it as the main way humans beat the limit.</p>
+<p><strong><a href="https://www.sciencedirect.com/science/article/abs/pii/0010028573900042">Chase &#x26; Simon, 1973</a>.</strong> Building on de Groot’s earlier work: show a chess master a real game position for five seconds and they can rebuild it almost perfectly. A novice can’t get close. This is the classic evidence for “experts have amazing memory.” Then comes the twist — <strong>scramble the pieces into a random arrangement, and most of the master’s advantage disappears.</strong> Same board, same pieces, same five seconds. The memory was never a bigger container. It was structure, and the structure only fires on positions that could actually happen.</p>
+<p>The honest counter, and it matters: <a href="https://link.springer.com/article/10.3758/BF03200937">Gobet &#x26; Simon (1996)</a> found strong players do keep a <em>small</em> edge even on random boards, because a random board still contains a few accidental fragments that look like chess. The effect is smaller than the story usually told, not absent.</p>
+<blockquote>
+<p><strong>Lesson:</strong> most of what looks like a big memory is a good structure wearing a memory’s clothes.</p>
+</blockquote>
+<hr>
+<h2 id="so-which-comes-first">So which comes first?</h2>
+<p>Now the ordering question, with a serious argument on each side.</p>
+<p><strong>Understanding first.</strong> The clearest statement is David Ausubel’s, from 1968:</p>
+<blockquote>
+<p>“The most important single factor influencing learning is what the learner already knows. Ascertain this and teach him accordingly.”</p>
+</blockquote>
+<p>His distinction is between <strong>rote</strong> learning and <strong>meaningful</strong> learning. Meaningful learning attaches a new idea to a structure you already have. Rote learning attaches it to nothing, so it sits there alone and decays. This matches Ebbinghaus’s ten-to-one, Miller’s chunks, and Chase &#x26; Simon’s chess masters. It also matches ordinary experience: the fact you understand is the fact you don’t have to memorize.</p>
+<p><strong>Storage first.</strong> But the brain plainly does the opposite, and we’ve known the design for thirty years. <a href="https://pubmed.ncbi.nlm.nih.gov/7624455/">McClelland, McNaughton &#x26; O’Reilly (1995)</a> asked why we have two memory systems instead of one, and answered: because one system can’t do both jobs. The <strong>hippocampus</strong> writes fast, keeps individual episodes separate, and doesn’t care whether they mean anything yet. The <strong>neocortex</strong> learns slowly, blending across many episodes to pull out the pattern that runs through them. Fast raw capture first. Structure extracted later, gradually, mostly offline.</p>
+<p>Why split it? Because if you wrote every new episode straight into the slow structure at full strength, you’d wreck what’s already there. That’s <strong>catastrophic forgetting</strong>, and the two-system design exists to dodge it. Storing raw isn’t laziness. It’s the safe holding area.</p>
+<p>And neural networks show the same order, visibly. In <a href="https://arxiv.org/abs/2201.02177">grokking</a> (Power, Burda, Edwards, Babuschkin &#x26; Misra, 2022), a small network is trained on algorithmic tasks like modular arithmetic. It memorizes the training set completely — perfect training accuracy — while performing at chance on held-out data. It sits there, an obvious overfit, for a very long time. Then, long <em>past</em> the point where any sane person would have stopped training, held-out accuracy suddenly climbs to near perfect. It generalizes. <strong>The memorization came first, and the understanding arrived much later out of the same weights.</strong></p>
+<p>So both sides have real evidence. The resolution, I think, is that they’re answering under different conditions:</p>
+<ul>
+<li><strong>When you already have the structure, understand first.</strong> It’s cheaper. The new fact snaps into a slot that exists, and it costs you almost nothing to keep.</li>
+<li><strong>When you don’t have the structure yet, you have no choice but to store first.</strong> A new field, a new language, a new codebase. You cannot abstract from one example. The pattern only becomes visible across a pile of cases, so you have to be <em>holding</em> the pile before the pattern can show up.</li>
+</ul>
+<p>Which means what looks like two kinds of people is closer to two <strong>phases</strong>, and people differ in which phase they can tolerate sitting in. Some are comfortable carrying material they don’t understand yet, trusting it will resolve. Others find that unbearable and refuse to hold anything until it makes sense.</p>
+<p>Each style has its own failure, and both are common:</p>
+<ul>
+<li><strong>Store-first fails when consolidation never comes.</strong> The pile just grows. This is the wall I ran into writing about <a href="/blogs/blog/how_to_build_knowledgebase/">knowledge bases</a>: storage without inference is dead data. A memory that only ever adds becomes a junk drawer, and a junk drawer feels like wealth right up until you need something out of it.</li>
+<li><strong>Understand-first fails when it refuses the pile.</strong> If you only keep what you can already explain, you never accumulate the raw cases the next abstraction has to be built from. You stay fluent inside the structure you have and can’t grow a new one.</li>
+</ul>
+<blockquote>
+<p><strong>Lesson:</strong> understanding first is cheaper when you already have the structure. Storing first is the only option when you don’t. The mistake is picking one and using it everywhere.</p>
+</blockquote>
+<hr>
+<h2 id="the-machines-make-exactly-this-mistake">The machines make exactly this mistake</h2>
+<p>The confusion isn’t only about people. Look at how we judge models.</p>
+<p>In <a href="https://arxiv.org/abs/1611.03530"><em>Understanding deep learning requires rethinking generalization</em></a> (Zhang, Bengio, Hardt, Recht &#x26; Vinyals, ICLR 2017), the authors took standard image networks and trained them on <strong>randomly shuffled labels</strong>. The networks fit them perfectly. Then they replaced the images with pure noise. The networks fit that too. There is no pattern in random labels — nothing to understand — and capacity alone drove training error to zero anyway.</p>
+<p>That’s Funes, in a network. <strong>The ability to store is effectively unlimited and tells you nothing about whether anything was understood.</strong></p>
+<p>Which is why the way we score models keeps embarrassing us:</p>
+<ul>
+<li><strong>Benchmarks.</strong> A model that has seen the test set answers it beautifully. I wrote about a piece of this in <a href="/blogs/blog/why_model_hallucinate/">why models hallucinate</a> — when the test becomes the target, it stops measuring. Contamination turns memory into a score and the score gets reported as reasoning.</li>
+<li><strong>Long context.</strong> The popular “needle in a haystack” test hides a sentence in a million tokens and asks the model to find it. That measures <strong>retrieval</strong>. It gets read as intelligence. They aren’t the same claim, and the second one doesn’t follow.</li>
+<li><strong>What actually ships.</strong> Nearly every production system today keeps the weights frozen and bolts a store on the outside — retrieval, notes, scratchpads, memory files. That’s the honest summary of the whole <a href="/blogs/blog/what_comes_after_transformer/">frozen-model landscape</a>: we shipped the storage half and left the transform half in the lab. When an agent “learns” today, it almost always means it <strong>took better notes</strong>.</li>
+</ul>
+<blockquote>
+<p><strong>Lesson:</strong> capacity to store proves nothing. Every interesting property lives in the transform.</p>
+</blockquote>
+<hr>
+<h2 id="what-google-actually-said">What Google actually said</h2>
+<p>Now back to the claim that started this. Read the Google memory line for what its mechanisms <em>do</em>, and the pattern is impossible to miss — almost none of it is about storing more.</p>
+<ul>
+<li><strong><a href="https://arxiv.org/abs/2501.00663">Titans</a></strong> writes to long-term memory based on <strong>surprise</strong> — how badly the input violated the model’s expectation. That’s a filter. It exists to <em>not</em> store most things. And it pairs with a <strong>decay gate</strong>, deliberate forgetting, because a memory that only adds eventually drowns.</li>
+<li><strong><a href="https://arxiv.org/abs/2512.24695">Nested Learning / Hope</a></strong> points out that a transformer has only two update speeds: every token, or never again. Its proposal is to fill in the middle with many update frequencies. That’s not more capacity. That’s a schedule for <strong>converting</strong> fast memory into slow structure.</li>
+<li><strong><a href="https://arxiv.org/abs/2606.03979">The sleep paper</a></strong> makes it explicit. Its NREM stage <strong>distills</strong> what’s sitting in fast memory into the model’s own weights. Its REM stage has the model generate its own practice data and train on the useful parts. Both stages take material that is already stored and turn it into something else.</li>
+</ul>
+<p>Every one of those is a <strong>transform step, not a storage step</strong>. Surprise-gating decides what’s worth keeping. Decay throws things away. Consolidation converts episodes into weights. If memory alone were intelligence, none of this machinery would need to exist — you’d just make the buffer bigger.</p>
+<p>The biology agrees about forgetting being a feature rather than a defect. <a href="https://www.cell.com/neuron/fulltext/S0896-6273(17)30365-3">Richards &#x26; Frankland (2017)</a> argue that forgetting is there on purpose: dropping detail keeps old information from dominating current decisions, and stops the system overfitting to specific past events. Forgetting <em>promotes</em> generalization. Funes’s condition, in one sentence of neuroscience.</p>
+<p>So the papers and the commentary say opposite things. The commentary says memory is intelligence. The papers say memory is the raw material, and spend all their design effort on what happens to it afterward.</p>
+<hr>
+<h2 id="the-taxonomy-everyone-uses-has-no-arrows">The taxonomy everyone uses has no arrows</h2>
+<p>If you build agents, you’ve met this table. It’s from the <a href="https://docs.langchain.com/oss/python/concepts/memory">LangChain memory docs</a>, and the split comes from <a href="https://arxiv.org/abs/2309.02427">CoALA</a> (Sumers, Yao, Narasimhan &#x26; Griffiths, 2023), which borrowed it from cognitive science:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Memory type</th><th>What is stored</th><th>Human example</th><th>Agent example</th></tr></thead><tbody><tr><td>Semantic</td><td>Facts</td><td>Things I learned in school</td><td>Facts about a user</td></tr><tr><td>Episodic</td><td>Experiences</td><td>Things I did</td><td>Past agent actions</td></tr><tr><td>Procedural</td><td>Instructions</td><td>Instincts or motor skills</td><td>Agent system prompt</td></tr></tbody></table>
+<p>It’s a good table, and the categories are real ones — Tulving separated episodic from semantic memory back in 1972. But look at what kind of table it is. It classifies memory by <strong>what is stored</strong>. Three boxes and no arrows. Nothing in it says how an experience turns into a fact, or how a fact turns into an instinct.</p>
+<p>In people, those three are not three boxes. They are <strong>one thing at three ages.</strong></p>
+<p><strong>Episodic becomes semantic.</strong> That’s consolidation — the hippocampus-to-neocortex transform from earlier in this post. You know that Paris is the capital of France, and you have no memory of learning it. That fact used to be an episode. The episode wore away and left the fact behind.</p>
+<p><strong>Semantic becomes procedural.</strong> That’s practice. <a href="https://www.semanticscholar.org/paper/Acquisition-of-cognitive-skill.-Anderson/eb324f42d42dc29d9f89e044a76516227e4e2c66">John Anderson’s account</a> (1982), built on Fitts &#x26; Posner’s three stages of skill learning (1967): a skill starts as declarative facts you rehearse to yourself — <em>clutch in, then first gear</em> — passes through what he calls <strong>knowledge compilation</strong>, and comes out procedural. Fast, automatic, and no longer able to explain itself. The information didn’t move to a different drawer. It changed form, and paid for the speed by losing its words.</p>
+<div align="center">
+<pre><code class="language-mermaid">graph LR
+    E["Episodic&#x3C;br/>what happened"] -->|"consolidation&#x3C;br/>blend many cases into one"| S["Semantic&#x3C;br/>what is true"]
+    S -->|"knowledge compilation&#x3C;br/>repeat until automatic"| P["Procedural&#x3C;br/>what I just do"]
+</code></pre>
+</div>
+<p>That these really are separate systems has one piece of evidence nobody forgets. After surgery in 1953 removed much of his hippocampus, the patient known as <strong>H.M.</strong> could form almost no new lasting memories. In 1962 Brenda Milner sat him down to trace a five-pointed star while seeing only its reflection in a mirror — an awkward task nobody is good at first. He improved within each session, and he improved across days, eventually finishing far faster than on his first attempt. And every single day, Milner had to introduce herself again and explain the task from scratch. <strong>The skill was being learned while the record of learning it never formed.</strong></p>
+<p>Put the two men side by side and you have the argument in full. Funes stored everything and could form nothing. H.M. stored nothing and still learned. Whatever intelligence is, it isn’t the size of the store.</p>
+<p>Now look at the agent column again. In almost every agent I’ve built or read, all three rows are <strong>written by hand or appended by a tool, and nothing ever moves between them.</strong> And to be clear about what I’m complaining about: the pile of episodes is fine. That’s phase one, and this post already argued you can’t skip it. The problem is that phase two never runs. Episodes pile up in a log. Facts get pulled out by a summarizing prompt that runs once, on one conversation. The system prompt is edited by a human being, on purpose, in a text editor. There’s no job that reads a thousand episodes and writes down the one rule that covers them, and no loop that turns a rule the agent has to <em>read</em> into behavior it just <em>has</em>.</p>
+<p>The fair counter: this is starting to change. Prompt-optimizing memory layers — LangMem is the clearest example — let an agent rewrite its own system prompt from accumulated experience, which is exactly the semantic-to-procedural arrow. It’s the most interesting thing in that stack, and it’s still the exception. The other arrow, many episodes slowly blending into one fact, is mostly still a prompt that says “summarize this conversation,” which is a summary, not a consolidation. Summarizing one episode compresses it. Consolidation needs many episodes compared against each other, and that’s the part nobody runs.</p>
+<blockquote>
+<p><strong>Lesson:</strong> the three memory types aren’t three boxes, they’re one thing at three ages. Every agent memory I’ve built had the boxes and none of the arrows.</p>
+</blockquote>
+<hr>
+<h2 id="the-two-things-side-by-side">The two things, side by side</h2>
+<div align="center">
+<pre><code class="language-mermaid">graph TD
+    E["Experience&#x3C;br/>everything arriving"] --> G{"Write gate&#x3C;br/>is this surprising?"}
+    G -->|"no"| X["Dropped"]
+    G -->|"yes"| M["Raw memory&#x3C;br/>fast, episodic, not understood yet"]
+    M --> C["Consolidation&#x3C;br/>offline, replay, compare across cases"]
+    C --> K["Knowledge&#x3C;br/>slow, structured, generalizes"]
+    M --> D["Decay&#x3C;br/>forgetting as a feature"]
+    K --> U["Use&#x3C;br/>chunks, categories, judgment"]
+    U -.->|"changes what counts as surprising"| G
+</code></pre>
+</div>
+<p>The dotted line is the part people miss. What you already understand decides what is worth storing next — which is Ausubel’s sentence, drawn as a loop.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>Memory</th><th>Knowledge</th></tr></thead><tbody><tr><td>What it holds</td><td>Specific cases, as they happened</td><td>The pattern running across cases</td></tr><tr><td>Cost to add one</td><td>Cheap — just write it</td><td>Expensive — has to be integrated</td></tr><tr><td>Good at</td><td>Exact recall, detail, reuse as-is</td><td>Categories, transfer, judgment on new cases</td></tr><tr><td>Fails by</td><td>Piling up until nothing can be found</td><td>Smoothing away the detail that mattered</td></tr><tr><td>In the brain</td><td>Hippocampus — fast, keeps episodes apart</td><td>Neocortex — slow, blends across episodes</td></tr><tr><td>In machines today</td><td>Retrieval stores, notes, context files</td><td>The frozen weights, set at training time</td></tr><tr><td>The gap between them</td><td>-</td><td>Consolidation — and it mostly runs offline</td></tr></tbody></table>
+<hr>
+<h2 id="what-i-actually-do-with-this">What I actually do with this</h2>
+<p><strong>For learning.</strong> Taking notes is not learning; it’s the staging area. The step that counts is the one where you go back over the pile and ask what runs through it — and that step needs its own time on the calendar, because nothing forces it. This is why re-reading feels productive and does so little. It’s also permission to hold things you don’t understand yet, which I used to treat as failure. It isn’t. It’s phase one, and when the structure doesn’t exist yet, phase one is the only way in. (More on the mechanics in <a href="/blogs/blog/how_to_learn/">how I learn</a>.)</p>
+<p><strong>For agents.</strong> Almost every agent memory I’ve seen is append-only, and append-only is the junk drawer. If Titans is right about the shape, a real agent memory needs four parts, and storage is the easy one: a <strong>write gate</strong> so only surprising things get in, a <strong>decay rule</strong> so stale entries lose weight, a <strong>background consolidation job</strong> that turns many episodes into one rule — the missing arrow from the section above — and only then retrieval. I argued for the same four from the brain’s side in the <a href="/blogs/blog/how_to_build_knowledgebase/">knowledge base post</a> before I knew Google was building them into the weights.</p>
+<p>The uncomfortable version: <strong>an agent that remembers everything from every session is not smarter. It’s Funes.</strong> More recall, more retrieved noise, more confident wrong context. I’ve watched a memory feature make an agent worse, and this is why.</p>
+<hr>
+<h2 id="where-this-leaves-us">Where this leaves us</h2>
+<p>Memory is not intelligence. But there is no intelligence without it, and that’s the part the slogan gets half-right.</p>
+<p>Funes had the storage and nothing else, and it paralyzed him. Ausubel described the structure, but structure can’t start from nothing — you need a pile of unexplained cases before there’s anything to abstract. Neither end works alone. What we call understanding is the machine that runs between them: a gate that decides what’s worth keeping, a decay that lets go, and a slow process that turns a heap of specific events into one rule that covers all of them.</p>
+<p>That process is the expensive part. It’s the part we haven’t shipped. And it mostly runs while nothing else is happening — which is a strange thing to learn from a paper about making language models sleep.</p>
+<hr>
+<h2 id="sources">Sources</h2>
+<p><strong>Perfect memory, no thought:</strong></p>
+<ul>
+<li>Jorge Luis Borges, <a href="https://en.wikipedia.org/wiki/Funes_the_Memorious">“Funes the Memorious”</a> (<em>La Nación</em>, 1942; collected in <em>Ficciones</em>, 1944)</li>
+<li>A. R. Luria, <em>The Mind of a Mnemonist</em> (1968) — the case of <a href="https://en.wikipedia.org/wiki/Solomon_Shereshevsky">Solomon Shereshevsky</a></li>
+</ul>
+<p><strong>Memory is structure:</strong></p>
+<ul>
+<li>Hermann Ebbinghaus, <em>Über das Gedächtnis</em> (1885) — nonsense syllables and the forgetting curve</li>
+<li>George Miller, <a href="https://psychclassics.yorku.ca/Miller/">The Magical Number Seven, Plus or Minus Two</a> (<em>Psychological Review</em>, 1956) — chunks, not bits</li>
+<li>Chase &#x26; Simon, <a href="https://www.sciencedirect.com/science/article/abs/pii/0010028573900042">Perception in Chess</a> (<em>Cognitive Psychology</em>, 1973) · the counter: Gobet &#x26; Simon, <a href="https://link.springer.com/article/10.3758/BF03200937">Recall of random and distorted chess positions</a> (<em>Memory &#x26; Cognition</em>, 1996)</li>
+</ul>
+<p><strong>Which comes first:</strong></p>
+<ul>
+<li>David Ausubel, <em>Educational Psychology: A Cognitive View</em> (1968) — meaningful vs. rote learning</li>
+<li>McClelland, McNaughton &#x26; O’Reilly, <a href="https://pubmed.ncbi.nlm.nih.gov/7624455/">Why there are complementary learning systems in the hippocampus and neocortex</a> (<em>Psychological Review</em>, 1995)</li>
+<li>Power, Burda, Edwards, Babuschkin &#x26; Misra, <a href="https://arxiv.org/abs/2201.02177">Grokking: Generalization Beyond Overfitting on Small Algorithmic Datasets</a> (2022)</li>
+</ul>
+<p><strong>The three memory types, and the arrows between them:</strong></p>
+<ul>
+<li>Endel Tulving, “Episodic and Semantic Memory,” in <em>Organization of Memory</em> (1972) — the original split</li>
+<li>Sumers, Yao, Narasimhan &#x26; Griffiths, <a href="https://arxiv.org/abs/2309.02427">Cognitive Architectures for Language Agents (CoALA)</a> (2023) · the taxonomy as agent builders meet it: <a href="https://docs.langchain.com/oss/python/concepts/memory">LangChain memory docs</a></li>
+<li>Brenda Milner’s mirror-drawing studies of <a href="https://en.wikipedia.org/wiki/Henry_Molaison">patient H.M.</a> (1962) — skill learning with no memory of learning</li>
+<li>John Anderson, <a href="https://www.semanticscholar.org/paper/Acquisition-of-cognitive-skill.-Anderson/eb324f42d42dc29d9f89e044a76516227e4e2c66">Acquisition of Cognitive Skill</a> (<em>Psychological Review</em>, 1982) — knowledge compilation, building on Fitts &#x26; Posner (1967)</li>
+</ul>
+<p><strong>Machines:</strong></p>
+<ul>
+<li>Zhang, Bengio, Hardt, Recht &#x26; Vinyals, <a href="https://arxiv.org/abs/1611.03530">Understanding deep learning requires rethinking generalization</a> (ICLR 2017)</li>
+<li>Behrouz et al., <a href="https://arxiv.org/abs/2501.00663">Titans</a> (2024) · <a href="https://arxiv.org/abs/2512.24695">Nested Learning</a> (NeurIPS 2025) · <a href="https://arxiv.org/abs/2606.03979">Language Models Need Sleep</a> (2026)</li>
+<li>Richards &#x26; Frankland, <a href="https://www.cell.com/neuron/fulltext/S0896-6273(17)30365-3">The Persistence and Transience of Memory</a> (<em>Neuron</em>, 2017)</li>
+</ul>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2026 Locch. All rights reserved.
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.370YoETn.js"></script> </body> </html>
