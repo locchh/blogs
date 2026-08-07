@@ -4,7 +4,7 @@ description: "Not about tech this time. Convenience and comfort refuse to live i
 pubDate: "2026-08-08"
 author: "locchh"
 tags: ["life", "city", "thoughts", "2026"]
-draft: true
+draft: false
 ---
 
 Not about tech this time. This one is a thought I can't put down.
