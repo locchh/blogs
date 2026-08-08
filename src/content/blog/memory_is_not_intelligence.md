@@ -7,9 +7,9 @@ tags: ["memory", "learning", "knowledge", "continual-learning", "titans", "grokk
 draft: false
 ---
 
-While reading the [Google memory papers](/blogs/blog/what_comes_after_transformer/) — Titans, Hope, and the sleep paper — I kept meeting the same line in the commentary around them: **memory ability is intelligence**. Build a model that remembers more, and you get a model that thinks better.
+A line has been going around for a while now: **memory ability is intelligence**. Build a model that remembers more, and you get a model that thinks better.
 
-I think that's backwards. And the papers themselves say so, if you read what they actually do instead of what people say about them.
+I think that's backwards. And the [Google memory papers](/blogs/blog/what_comes_after_transformer/) — Titans, Hope, and the sleep paper — say so themselves, if you read what they actually do.
 
 Here's the thought that started this post. Some people hold information for a long time without understanding it yet. They keep it raw, reuse it as-is, and turn it into knowledge much later — sometimes years later. Other people can't do that at all. They have to understand something before it will stay in their head. Same task, opposite order.
 
@@ -115,9 +115,9 @@ Which is why the way we score models keeps embarrassing us:
 
 ---
 
-## What Google actually said
+## What Google's papers actually build
 
-Now back to the claim that started this. Read the Google memory line for what its mechanisms *do*, and the pattern is impossible to miss — almost none of it is about storing more.
+Now back to the claim that started this. Read Google's memory papers for what their mechanisms *do*, and the pattern is impossible to miss — almost none of it is about storing more.
 
 - **[Titans](https://arxiv.org/abs/2501.00663)** writes to long-term memory based on **surprise** — how badly the input violated the model's expectation. That's a filter. It exists to *not* store most things. And it pairs with a **decay gate**, deliberate forgetting, because a memory that only adds eventually drowns.
 - **[Nested Learning / Hope](https://arxiv.org/abs/2512.24695)** points out that a transformer has only two update speeds: every token, or never again. Its proposal is to fill in the middle with many update frequencies. That's not more capacity. That's a schedule for **converting** fast memory into slow structure.
@@ -127,7 +127,7 @@ Every one of those is a **transform step, not a storage step**. Surprise-gating 
 
 The biology agrees about forgetting being a feature rather than a defect. [Richards & Frankland (2017)](https://www.cell.com/neuron/fulltext/S0896-6273(17)30365-3) argue that forgetting is there on purpose: dropping detail keeps old information from dominating current decisions, and stops the system overfitting to specific past events. Forgetting *promotes* generalization. Funes's condition, in one sentence of neuroscience.
 
-So the papers and the commentary say opposite things. The commentary says memory is intelligence. The papers say memory is the raw material, and spend all their design effort on what happens to it afterward.
+So the papers and the slogan say opposite things. The slogan says memory is intelligence. The papers say memory is the raw material, and spend all their design effort on what happens to it afterward.
 
 ---
 
