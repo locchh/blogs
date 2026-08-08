@@ -11,7 +11,7 @@ You are a developer. You have ten years of experience. Now look honestly at your
 
 There's an old saying about this: some people have ten years of experience, and some have one year of experience, repeated ten times.
 
-So what do the fast growers actually get for their years? I've been watching the seniors around me, and I don't think the difference is stored facts. It's **what they see**. Same code, same ticket, same design meeting — and different things are visible to them. Here are five of those things.
+So what do the fast growers actually get for their years? I've been watching the seniors around me, and I don't think the difference is stored facts. It's **what they see**. Same code, same ticket, same design meeting — and different things are visible to them. Here are six of those things.
 
 ---
 
@@ -119,9 +119,31 @@ How do seniors actually handle a trade-off? Three moves, as far as I can watch a
 
 ---
 
+## 6. They see that the bottleneck is now them
+
+The first five are about the work. This one is about you, and it only appears after you level up.
+
+Section 3 asked the Amdahl question: which part of this cannot be split? Get senior enough and the answer changes. It's you. Requests, meetings, design arguments, the final call — they all route to one desk. Agents write the code now; what they can't do is be the person accountable for the decision. So you become the serial fraction of your own team, and Amdahl's ceiling stops being a fact about machines and becomes a fact about your calendar.
+
+Here is the part I had backwards. Time stopped feeling scarce — I can buy more of it, a Claude Code or Codex subscription, a second and third and sixteenth worker for a flat monthly fee. So why does the day feel worse?
+
+Because I bought the wrong thing. Every agent I add raises how much *arrives*. None of them raises how fast I can *decide*. [Little's Law](https://en.wikipedia.org/wiki/Little%27s_law) (1961) puts it plainly: how long work waits equals the amount in progress divided by the rate you finish it. My finish rate is one seat, and it doesn't move. So doubling what's in flight doesn't double output. It doubles the wait. I didn't buy time. I bought **inventory**, sitting on my desk, going stale.
+
+Which is why the scarce resource was never time. It's **focus** — one problem at a time, and about twenty minutes of tax before your head is really inside a new one. I wrote out the mechanism in [you can't fork yourself](/blogs/blog/you_cant_fork_yourself/): the agent can fork a second reasoner and you can't.
+
+And now read Little's Law backwards, because that's where the rule comes from. You cannot raise the finish rate — that's the one seat. So the only number left to touch is the one in front of it. **WIP = 1.** Not because finishing one thing is virtuous, but because a shorter queue is the only speed-up available to a fixed server. You don't get faster. The waiting gets shorter. And by section 5's rule, name what it costs: starting less means saying no to work that was genuinely worth doing. That's the trade-off in this one, and it's the least comfortable of the six.
+
+The same reversal fixes the question I ask about my week. Not *how do I keep up with all of this?* — that question has no answer, and chasing it is how you end up busy and behind. The reversed one does: *what should never reach me at all?* Every good answer is a subtraction. And it's the only honest measure of a senior — not how much flows through you, but how much stopped needing to.
+
+> **Lesson:** you can buy more workers. You cannot buy a second seat to decide from. So don't ask how to keep up. Ask what should stop arriving.
+
+---
+
 ## One year, ten times
 
-Five sections, one skill: seniors see **structure** where juniors see surface. The path under the unfamiliar codebase. The errors under the happy path. The balance under the scaling request. The spectrum under the tool debate. The cost under every benefit.
+Six sections, one skill: seniors see **structure** where juniors see surface. The path under the unfamiliar codebase. The errors under the happy path. The balance under the scaling request. The spectrum under the tool debate. The cost under every benefit. The queue under your own busy week.
+
+There's also one move underneath all six. Every section here is the normal question, turned around. Not code first but purpose first. Not the happy path but the errors. Not how many machines but what can't be split. Not which tool is best but where the problem lives. Not what you gain but what you give up. Not how do I keep up but what should never arrive. The mathematician [Carl Jacobi](https://en.wikipedia.org/wiki/Carl_Gustav_Jacob_Jacobi) gave his students one line of advice: *invert, always invert*. That's the sixth thing, and it's really the first — seniors don't have better answers than you. They turn the question around before they start answering it.
 
 And none of it is talent. Each of these ways of seeing is a pile of solved problems, pressed by repetition into instinct — which is exactly why the trap of peaceful days is so expensive. No new problems means no new shapes, and the eye stops developing while the years keep counting. That's the whole difference between ten years of experience and one year repeated ten times.
 
@@ -135,5 +157,7 @@ The eye is built, not given. So take the slightly-too-big problem. Stay hungry.
 - Joe Armstrong, [Making reliable distributed systems in the presence of software errors](https://erlang.org/download/armstrong_thesis_2003.pdf) (PhD thesis, 2003) — Erlang and "let it crash"
 - Gene Amdahl, [Validity of the single processor approach to achieving large scale computing capabilities](https://www3.cs.stonybrook.edu/~rezaul/Spring-2012/CSE613/reading/Amdahl-1967.pdf) (AFIPS, 1967)
 - Fred Brooks, [No Silver Bullet](https://en.wikipedia.org/wiki/No_Silver_Bullet) (1986)
+- John Little, [Little's Law](https://en.wikipedia.org/wiki/Little%27s_law) (1961) — wait time is work-in-progress divided by finish rate, which is where WIP = 1 comes from
+- Carl Gustav Jacob Jacobi, [*man muss immer umkehren*](https://en.wikipedia.org/wiki/Carl_Gustav_Jacob_Jacobi) — "invert, always invert"
 - Benchmarks for "how smart" and "how long": [SWE-bench](https://arxiv.org/abs/2310.06770) (2023) · [Humanity's Last Exam](https://arxiv.org/abs/2501.14249) (2025) · METR, [Measuring AI Ability to Complete Long Tasks](https://arxiv.org/abs/2503.14499) (2025)
 - The small model in the example: [DistilBERT base uncased, fine-tuned on SST-2](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english)
