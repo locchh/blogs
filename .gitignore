@@ -30,3 +30,7 @@ pnpm-debug.log*
 .claude/
 .mcp.json
 .playwright-mcp
+
+# Temporary files, folders
+*PLAN.md
+*PROMPT.md

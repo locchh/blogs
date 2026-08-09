@@ -11,57 +11,91 @@ You are a developer. You have ten years of experience. Now look honestly at your
 
 There's an old saying about this: some people have ten years of experience, and some have one year of experience, repeated ten times.
 
-So what do the fast growers actually get for their years? I've been watching the seniors around me, and I don't think the difference is stored facts. It's **what they see**. Same code, same ticket, same design meeting — and different things are visible to them. Here are six of those things.
+So what do the fast growers actually get for their years? I've been watching the seniors around me, and I don't think the difference is stored facts. It's **what they see**. Same code, same ticket, same design meeting — and different things are visible to them. Here are eight of those things.
 
 ---
 
-## 1. They see the path before the code
+## 1. They see the requirement behind the task
 
-Watch a senior open a codebase they have never seen. Different framework. A language they can barely write. They are not lost. They carry a **thread** in their head, and the thread doesn't depend on the language:
+Most developers receive a requirement only after it has been cut down several times. The business asks for an outcome. An architect turns that into a system. A lead turns the system into a feature. By the time it reaches the board, all that remains is "add a type check" or "create a function that does X." The task may be clear enough to code and still be too small to understand.
+
+A senior tries to climb back up the stack:
 
 <div align="center">
 
 ```mermaid
 graph TD
-    A["Purpose<br/>what is this service for?"] --> B["Main workflow<br/>how does one request travel end to end?"]
-    B --> C["Core components<br/>which parts matter, and what role does each play?"]
-    C --> D["Details<br/>the methods, attributes, and behaviors each part must have"]
+    A["Business requirement<br/>what outcome or value do we need?"] --> B["Technical requirement<br/>what must the solution guarantee?"]
+    B --> C["Module or feature requirement<br/>which part owns the behavior?"]
+    C --> D["Task<br/>what can be delivered and verified now?"]
 ```
 
 </div>
 
-Notice where the coding details sit: at the **end** of the thread, not the start. At the "purpose" step you don't need to care about the code at all. Most juniors — me included, for years — start at the bottom, opening file after file, and drown.
+The top layer talks about value: revenue earned, cost avoided, risk reduced, or a capability unlocked. The next layer turns that value into technical qualities such as performance, security, traceability, and failure handling. Only then do we reach the behavior of a particular module and the task-sized change that somebody can estimate and finish.
+
+Consider this requirement:
+
+> A national insurance company is deploying an FM-powered claims assistant on Amazon Bedrock. Internal auditors and external regulators require end-to-end lineage for training and inference data, documented model behavior and limitations, attribution for every data source, and a centralized audit trail of major model decisions and outputs. The engineering team must automate this compliance framework without creating a large operational burden.
+
+That sounds like solution-architect work because the requirement has not yet been cut into tickets. It forces you to connect business risk to data lineage, model documentation, source attribution, logging, operations, and cost. If requirements at that altitude feel unfamiliar, look for them on purpose. Practice decomposing them before the opportunity arrives. Otherwise you may become excellent at completing tasks while never learning how the tasks are born.
+
+The same habit works when a senior opens a codebase they have never seen. Different framework. A language they can barely write. They are not lost, because they follow the requirement back down: what is this service for, how does one request travel through it, which components own that path, and only then which methods and attributes implement it. Coding details sit at the **end** of the thread, not the start.
 
 This difference was measured, forty years ago. [Soloway and Ehrlich (1984)](https://www.ics.uci.edu/~redmiles/inf233-FQ07/oldpapers/SollowayEhrlich.pdf) studied how expert programmers read code. Experts don't read line by line. They carry **programming plans** — standard shapes like "loop that searches for a value" — and match code against them. The proof is the twist in the study: when the researchers wrote code that deliberately broke those standard shapes, the experts' advantage mostly disappeared. They fell back toward novice performance. Same eyes, same code — the shapes were gone.
 
-> **Lesson:** a senior doesn't read faster. They match code against shapes they already own, and skip what the shape already tells them.
+> **Lesson:** a senior doesn't see a task as an isolated instruction. They trace it upward to its purpose and downward to the code that fulfills it.
 
 ---
 
-## 2. Error-first
+## 2. Business first
 
-Data-first? AI-first? No — **error-first**.
+I used to say **error-first**. I still believe it, but there is one question that comes before the errors: what business job is this code here to do?
+
+A function, class, feature, module, or whole codebase exists inside a business boundary. That boundary tells you what its inputs mean, which failures matter, and what a correct output actually is. Without it, clean code can solve the wrong problem perfectly.
+
+The order I now use is:
+
+```text
+Business -> Errors -> Data -> Code
+```
+
+Start with the business rule. Then ask what can fail, which failures are normal business outcomes, how each one should be handled, logged, and traced, and what a useful error must say. Next define the data coming in and going out, including the invariants at each boundary. Only then should you — or an AI agent — implement the code.
+
+Imagine a function named `approve_claim`. If you begin with its parameters and return type, you can write it without knowing whether approval means "eligible for human review," "legally accepted," or "ready for payment." Those are different businesses, different errors, and probably different data models. The function signature is downstream of the meaning.
+
+This order matters even more with AI coding. Generating the last step is becoming cheap. Discovering the correct first step is not. A precise prompt cannot rescue a misunderstood business rule; it only produces the wrong thing more efficiently.
+
+> **Lesson:** code is the final expression of a business decision. Understand the decision before polishing the expression.
+
+---
+
+## 3. Then, error-first
+
+Business comes first because it defines what success means. Once that is clear, think **error-first**: identify what can go wrong before designing the happy path.
 
 The junior habit (mine too) is to build the happy path first and treat errors as cleanup for later. The senior habit is the opposite, because the happy path is the easy 20%. The errors are the design.
 
 Not all errors are one thing, and each kind wants a different answer:
 
-| Kind of error | Example | The senior question |
-|---|---|---|
-| Connection | API down, rate limit hit, resources exhausted | Retry, back off, or fail fast? |
-| Validation | Input is not what we expected | Reject at the border, with a clear message |
-| Coding | A real bug in our own logic | Crash loudly. Never hide it. |
-| Business | The rule says no — this order can't ship | Not an exception at all. A normal outcome to model. |
+| Kind of error | Example | The senior question | Where do we meet it? |
+|---|---|---|---|
+| Coding | A real bug in our own logic | Crash loudly. Never hide it. | Catch as much as possible while coding: types, linters, builds, and unit tests. |
+| Validation | Input is not what we expected | Reject at the border, with a clear message. | At every boundary where data enters the system. |
+| Connection | API down, rate limit hit, resources exhausted | Retry, back off, or fail fast? | Integration tests and staging reveal some cases; production must still be designed to survive them. |
+| Business | The rule says no — this order can't ship | Not an exception at all. A normal outcome to model. | In the domain logic, where the rule can be named and explained. |
+
+Errors happen all the time, so the goal is not to pretend we can remove all of them. The goal is to control **where we discover them and how many people they can affect**. Catch coding mistakes before they leave the laptop. Run the build and tests in CI. Put the feature in staging, where the pieces meet. Then, after it passes, route a small percentage of real traffic to the new version before releasing it to everyone. Each step accepts that the previous one could miss something while making the next failure cheaper and easier to reverse.
 
 Then three questions to ask of any system. How is each kind handled? Are the errors **meaningful** — a good error says what failed, with what input, and what to do next? And can you **trace** one failing request through the logs after it's gone wrong?
 
 The strongest version of error-first thinking is old. Erlang was built at Ericsson for telephone switches that were not allowed to stop, and Joe Armstrong's thesis title says the whole philosophy: [*Making reliable distributed systems in the presence of software errors*](https://erlang.org/download/armstrong_thesis_2003.pdf) (2003). Not "without errors" — *in the presence of* them. The famous rule, **"let it crash,"** sounds reckless and is the opposite: don't defend every line against every failure; build the system so a part can die and a supervisor restarts it clean. Error handling designed first, at the architecture level — not sprinkled on at the end.
 
-> **Lesson:** juniors handle errors where they happen. Seniors decide where errors are *allowed* to happen.
+> **Lesson:** business defines what correct means. Error-first designs the boundaries and failure behavior around it.
 
 ---
 
-## 3. They see scale as a balance, not a bigger machine
+## 4. They see scale as a balance, not a bigger machine
 
 Here is how I've come to think about scaling. It is a **balance between two numbers**: the power of one working unit — how much RAM, CPU, and disk each container gets — and how many units run in parallel. Get the balance wrong in either direction and you pay. Make one unit very powerful while the workload is a flood of small, simple tasks, and you're paying for muscle that stands idle. Make the units tiny while each task is heavy, and they thrash and fail.
 
@@ -73,7 +107,7 @@ And the oldest result in parallel computing says why the balance can't be escape
 
 ---
 
-## 4. They think in spectrums, not favorites
+## 5. They think in spectrums, not favorites
 
 The junior question is "which tool is best?" The senior sees a **spectrum**, and the position on it matters more than the name on the box.
 
@@ -105,35 +139,65 @@ So before building anything AI-related, two questions: **how smart does this tas
 
 ---
 
-## 5. They see the trade-off inside every choice
+## 6. They see the trade-off inside every choice
 
-Look back at the four sections above. Every one was secretly about a trade-off: detail against overview, safety against speed of writing, unit power against unit count, model ability against model cost. That's not an accident. Fred Brooks made the general claim in [*No Silver Bullet*](https://en.wikipedia.org/wiki/No_Silver_Bullet) (1986): there is no single technique coming that makes the hard parts of software an order of magnitude easier. Everything real costs something. So when someone offers you a choice with no downside, they haven't removed the cost. They've hidden it.
+Look back at the five sections above. Every one was secretly about a trade-off: purpose against immediate progress, safety against speed of writing, unit power against unit count, model ability against model cost. That's not an accident. Fred Brooks made the general claim in [*No Silver Bullet*](https://en.wikipedia.org/wiki/No_Silver_Bullet) (1986): there is no single technique coming that makes the hard parts of software an order of magnitude easier. Everything real costs something. So when someone offers you a choice with no downside, they haven't removed the cost. They've hidden it.
 
 How do seniors actually handle a trade-off? Three moves, as far as I can watch and copy:
 
 1. **Name what you're giving up.** Out loud, in the design doc. If you can't state the downside of your own choice, you haven't found the trade-off yet — you've found marketing.
-2. **Decide for *this* problem, not in general.** "Postgres vs Pinecone" has no answer. "Postgres vs Pinecone for our 50k documents and one search box" has an obvious one. The spectrum from section 4 is how you locate the question; the trade-off is how you pay for the answer.
+2. **Decide for *this* problem, not in general.** "Postgres vs Pinecone" has no answer. "Postgres vs Pinecone for our 50k documents and one search box" has an obvious one. The spectrum from section 5 is how you locate the question; the trade-off is how you pay for the answer.
 3. **Write the decision down with its reason.** What we chose, what we gave up, and what would make us revisit. One short note. Future maintainers then inherit not just the decision but the *why* — and they'll know when the why has expired.
 
 > **Lesson:** a senior never says "X is better than Y." They say "X is better *here*, and this is what it costs."
 
 ---
 
-## 6. They see that the bottleneck is now them
+## 7. They reverse the question
 
-The first five are about the work. This one is about you, and it only appears after you level up.
+There is a move underneath almost every section in this article: turn the normal question around.
 
-Section 3 asked the Amdahl question: which part of this cannot be split? Get senior enough and the answer changes. It's you. Requests, meetings, design arguments, the final call — they all route to one desk. Agents write the code now; what they can't do is be the person accountable for the decision. So you become the serial fraction of your own team, and Amdahl's ceiling stops being a fact about machines and becomes a fact about your calendar.
+Not *what code should I write?* but *what business outcome produced this task?* Not *how do I make the happy path work?* but *where may failure happen safely?* Not *how many machines should I add?* but *which part cannot be split?* Not *which tool is best?* but *where on the spectrum does this problem live?* The mathematician [Carl Jacobi](https://en.wikipedia.org/wiki/Carl_Gustav_Jacob_Jacobi) gave his students one line of advice: *invert, always invert*.
 
-Here is the part I had backwards. Time stopped feeling scarce — I can buy more of it, a Claude Code or Codex subscription, a second and third and sixteenth worker for a flat monthly fee. So why does the day feel worse?
+Reverse thinking matters now because the obvious path through a busy world is usually an invitation to consume without limit. Suppose you have one month to prepare for the [AWS Certified Generative AI Developer – Professional exam](https://docs.aws.amazon.com/aws-certification/latest/ai-professional-01.html). The forward approach says: AWS has hundreds of services, so start reading everything. That plan is impossible before it begins.
 
-Because I bought the wrong thing. Every agent I add raises how much *arrives*. None of them raises how fast I can *decide*. [Little's Law](https://en.wikipedia.org/wiki/Little%27s_law) (1961) puts it plainly: how long work waits equals the amount in progress divided by the rate you finish it. My finish rate is one seat, and it doesn't move. So doubling what's in flight doesn't double output. It doubles the wait. I didn't buy time. I bought **inventory**, sitting on my desk, going stale.
+Turn it around. Start with the outcome and work backward:
 
-Which is why the scarce resource was never time. It's **focus** — one problem at a time, and about twenty minutes of tax before your head is really inside a new one. I wrote out the mechanism in [you can't fork yourself](/blogs/blog/you_cant_fork_yourself/): the agent can fork a second reasoner and you can't.
+1. Read the official exam guide and its weighted domains.
+2. Take a timed practice test early, before you feel ready, to expose the gap.
+3. Collect the recurring concepts and in-scope services behind the questions you missed.
+4. For each service, answer two questions first: **what problem does it solve, and what is its core feature?**
+5. Study the weak domains, test again, and repeat.
 
-And now read Little's Law backwards, because that's where the rule comes from. You cannot raise the finish rate — that's the one seat. So the only number left to touch is the one in front of it. **WIP = 1.** Not because finishing one thing is virtuous, but because a shorter queue is the only speed-up available to a fixed server. You don't get faster. The waiting gets shorter. And by section 5's rule, name what it costs: starting less means saying no to work that was genuinely worth doing. That's the trade-off in this one, and it's the least comfortable of the six.
+This is not a shortcut around learning. It is a way to aim the learning. Passing an exam may give you confidence and a map of the field, but hands-on experiments create the value: build the retrieval pipeline, break its permissions, inspect its traces, and watch what happens to cost and latency. The reversed question gets you to practice sooner.
 
-The same reversal fixes the question I ask about my week. Not *how do I keep up with all of this?* — that question has no answer, and chasing it is how you end up busy and behind. The reversed one does: *what should never reach me at all?* Every good answer is a subtraction. And it's the only honest measure of a senior — not how much flows through you, but how much stopped needing to.
+Once you notice this move, you can use it everywhere. Instead of asking how to remember more, ask what you keep forgetting and why. Instead of asking how to make a project move faster, ask what keeps making it wait. Sometimes upside-down is simply the shortest route to the real problem.
+
+> **Lesson:** when the obvious question produces an impossible answer, invert it and work backward from the outcome.
+
+---
+
+## 8. They see that the bottleneck is now them
+
+The first seven are about the work. This one is about you, and it only appears after you level up.
+
+Section 4 asked the Amdahl question: which part of this cannot be split? Get senior enough and the answer changes. It's you. Requests, meetings, design arguments, and final calls all route to one desk. Agents can write the code; what they cannot do is be the person accountable for the decision. You become the serial fraction of your own team, and Amdahl's ceiling stops being a fact about machines and becomes a fact about your calendar.
+
+Here is the part I had backwards. Time stopped feeling scarce. I can buy more of it: a Claude Code or Codex subscription, then a second, third, or sixteenth worker for a flat monthly fee. So why does the day feel worse?
+
+Because I bought the wrong thing. Every agent I add raises how much work arrives. None of them raises how fast I can decide. [Little's Law](https://en.wikipedia.org/wiki/Little%27s_law) puts it plainly:
+
+```text
+Time in the system = Work in progress / Finish rate
+```
+
+Suppose I can properly review two changes per day. With four changes in progress, each spends about two days in the system. With twenty, it becomes ten days. Doubling what is in flight does not double output when the finish rate stays fixed. It doubles the wait. I did not buy time. I bought **inventory**, sitting on my desk and going stale.
+
+The scarce resource was never time. It is **focus**: one problem at a time, with a switching tax every time your head has to enter a new one. As I wrote in [you can't fork yourself](/blogs/blog/you_cant_fork_yourself/), an agent can fork another reasoner; you cannot. **Stay on the seat, holding a map.**
+
+Now read Little's Law backward. You cannot easily raise the finish rate; you still have one seat. So reduce the number above it: **WIP = 1**. A shorter queue is the only immediate speed-up available to a fixed server. You do not get faster. The waiting gets shorter.
+
+By section 6's rule, name the cost: starting less means saying no to work that may be worth doing. That is the uncomfortable trade-off. But the reversed question helps. Do not ask, *how do I keep up with all of this?* Ask, *what should never reach me at all?* Every good answer is a subtraction. Seniority is not measured by how much flows through you, but by how much stopped needing to.
 
 > **Lesson:** you can buy more workers. You cannot buy a second seat to decide from. So don't ask how to keep up. Ask what should stop arriving.
 
@@ -141,9 +205,9 @@ The same reversal fixes the question I ask about my week. Not *how do I keep up 
 
 ## One year, ten times
 
-Six sections, one skill: seniors see **structure** where juniors see surface. The path under the unfamiliar codebase. The errors under the happy path. The balance under the scaling request. The spectrum under the tool debate. The cost under every benefit. The queue under your own busy week.
+Eight sections, one skill: seniors see **structure** where juniors see surface. The requirement behind the ticket. The business behind the code. The errors behind the happy path. The balance behind the scaling request. The spectrum behind the tool debate. The cost behind every benefit. The better question behind the obvious one. The queue behind your own busy week.
 
-There's also one move underneath all six. Every section here is the normal question, turned around. Not code first but purpose first. Not the happy path but the errors. Not how many machines but what can't be split. Not which tool is best but where the problem lives. Not what you gain but what you give up. Not how do I keep up but what should never arrive. The mathematician [Carl Jacobi](https://en.wikipedia.org/wiki/Carl_Gustav_Jacob_Jacobi) gave his students one line of advice: *invert, always invert*. That's the sixth thing, and it's really the first — seniors don't have better answers than you. They turn the question around before they start answering it.
+These are not eight tricks to memorize. They are eight ways to move away from the visible task and find the system producing it. Seniors do not always have a better answer ready. They are more likely to pause, turn the question around, and discover that the first answer would have solved the wrong problem.
 
 And none of it is talent. Each of these ways of seeing is a pile of solved problems, pressed by repetition into instinct — which is exactly why the trap of peaceful days is so expensive. No new problems means no new shapes, and the eye stops developing while the years keep counting. That's the whole difference between ten years of experience and one year repeated ten times.
 
@@ -159,5 +223,6 @@ The eye is built, not given. So take the slightly-too-big problem. Stay hungry.
 - Fred Brooks, [No Silver Bullet](https://en.wikipedia.org/wiki/No_Silver_Bullet) (1986)
 - John Little, [Little's Law](https://en.wikipedia.org/wiki/Little%27s_law) (1961) — wait time is work-in-progress divided by finish rate, which is where WIP = 1 comes from
 - Carl Gustav Jacob Jacobi, [*man muss immer umkehren*](https://en.wikipedia.org/wiki/Carl_Gustav_Jacob_Jacobi) — "invert, always invert"
+- AWS, [AWS Certified Generative AI Developer – Professional exam guide](https://docs.aws.amazon.com/aws-certification/latest/ai-professional-01.html) — exam domains, scope, and in-scope services for AIP-C01
 - Benchmarks for "how smart" and "how long": [SWE-bench](https://arxiv.org/abs/2310.06770) (2023) · [Humanity's Last Exam](https://arxiv.org/abs/2501.14249) (2025) · METR, [Measuring AI Ability to Complete Long Tasks](https://arxiv.org/abs/2503.14499) (2025)
 - The small model in the example: [DistilBERT base uncased, fine-tuned on SST-2](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english)
