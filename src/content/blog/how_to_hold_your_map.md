@@ -117,6 +117,38 @@ That requires consolidation: compare episodes, remove accidents, extract the inv
 
 ---
 
+## The art of spending focus
+
+None of this works if you cannot think. A map is held by focus, and focus is the one resource in the whole system that does not copy — that was the point of [You Can't Fork Yourself](/blogs/blog/you_cant_fork_yourself/). So the last skill is not drawing or placing. It is protecting the hand that holds the map.
+
+My day looks like a broker's desk. People ping me all day. Each message is small, polite, and reasonable, and together they make deep thought impossible. For a long time I treated this as a discipline problem — my discipline. It is a design problem, and computing solved it in the 1950s.
+
+The earliest computers **polled**: the processor asked every device, again and again, "do you need anything?" — and wasted itself asking. The **interrupt** fixed that. A device could now tap the processor on the shoulder. It also created a new disease: the interrupt storm, a machine that spends all its cycles being tapped and none of them working. That is a broker's desk. So every operating system since ships the same three defenses, and they translate directly:
+
+- **Priority.** Not every device may preempt the processor. Decide in advance, in writing, the short list that may break your deep work. Production down: yes. "Quick question": no.
+- **Masking.** Inside a critical section, the kernel switches interrupts off, because a delicate thing half-done is corruption. Your critical section is the hour you hold the map. Go dark for it, visibly. Messages queue; they do not evaporate.
+- **Batching.** A network card does not raise one interrupt per packet; it collects a burst and raises one. Answer your queue in batches, at hours you chose. Twenty pings handled at 11:00 cost one switch. Twenty pings handled on arrival cost twenty.
+
+```mermaid
+flowchart LR
+    P[Ping] --> Q{May it preempt?}
+    Q -->|"short list"| I[Interrupt now]
+    Q -->|"everything else"| W[Queue]
+    W --> B[One batch,<br/>at your hour]
+```
+
+That is control. Distribution is the other half, and it has the same shape. With agents running across several codebases, the question is not whether you can switch — you must — but what a switch costs. When an operating system pauses a process, the switch is cheap for one reason: nothing lives in the processor. The process's whole position sits in a small record — the process control block — and resuming is loading it back.
+
+Your switches are expensive because your position lives in your head. The fix is this entire post: **the map is your process control block.** Before leaving a codebase, write your position onto its map — where we are, the open question, the next step. Re-entry becomes reading, not remembering. That is what makes several codebases and a handful of agents possible for one head.
+
+And hold the agents to the same interrupt discipline as people: they report at boundaries — done, blocked, or surprised — never for progress. Many things may run at once. Only one may be in your hands.
+
+This is not office advice. It is the same art at every scale. A single conversation is a stream of tiny interrupts — that was "do not follow the tokens." A day is a stream of pings. A season is a stream of codebases. The same three moves each time: choose what may preempt, mask while you hold the map, batch the rest.
+
+> **Lesson:** focus is not a mood; it is a scheduler. Decide what may preempt you, mask the rest, handle the queue in batches — and write your position on the map, so a switch costs a read instead of a rebuild.
+
+---
+
 ## How to hold it
 
 Before the work, draw the smallest useful map: the outcome, the components, the boundaries, and the current path.
