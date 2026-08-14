@@ -137,6 +137,17 @@ flowchart LR
     W --> B[One batch,<br/>at your hour]
 ```
 
+On a loud day this is literal for me. When urgent requests pile up, I stop answering in arrival order. Each one goes on a sticky note. I sort the notes into the order that matters, then solve exactly one while the rest wait. And about every thirty minutes I look up and recheck the list: did the order change, did something arrive that truly may preempt?
+
+That last habit is older than it looks. An operating system keeps one interrupt it never masks: the clock. A tick fires on a fixed schedule, so the machine always gets a moment to re-decide what should run next. The thirty-minute recheck is my clock tick. Arrival order is not importance order, and the tick is when I am allowed to change my mind.
+
+Some days are not noise but a real storm: everything urgent, all at once. Systems people have answers for that too, and none of them is "work harder":
+
+- **Take the interrupt line away.** When one device fires too often, the kernel stops listening to its interrupts and switches it to polling: it visits the device on a schedule instead. Linux does exactly this with a busy network card. Do it with a person who pings you hourly — give them one fixed slot a day, and nothing in between.
+- **Answer once, in public.** Five people asking the same question means your answer has no cache. Write it where the next asker will find it: a doc, a pinned note, a README. Every answer you publish deletes a future interrupt.
+- **Shed load, honestly.** When requests arrive faster than you can serve them, a growing queue is not patience — it is a promise you are already breaking. Saying "not this week" on arrival is cheaper for everyone than saying it after three switches.
+- **Run a small postmortem.** After the storm, ask why it happened. This is the missing path from the last section again: the pings are episodes. If the same storm returns every month, something semantic is missing — a document, a permission, a tool, an owner. Build it, and that ping never arrives again.
+
 That is control. Distribution is the other half, and it has the same shape. With agents running across several codebases, the question is not whether you can switch — you must — but what a switch costs. When an operating system pauses a process, the switch is cheap for one reason: nothing lives in the processor. The process's whole position sits in a small record — the process control block — and resuming is loading it back.
 
 Your switches are expensive because your position lives in your head. The fix is this entire post: **the map is your process control block.** Before leaving a codebase, write your position onto its map — where we are, the open question, the next step. Re-entry becomes reading, not remembering. That is what makes several codebases and a handful of agents possible for one head.
