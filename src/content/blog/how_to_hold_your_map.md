@@ -121,42 +121,105 @@ That requires consolidation: compare episodes, remove accidents, extract the inv
 
 None of this works if you cannot think. A map is held by focus, and focus is the one resource in the whole system that does not copy — that was the point of [You Can't Fork Yourself](/blogs/blog/you_cant_fork_yourself/). So the last skill is not drawing or placing. It is protecting the hand that holds the map.
 
-My day looks like a broker's desk. People ping me all day. Each message is small, polite, and reasonable, and together they make deep thought impossible. For a long time I treated this as a discipline problem — my discipline. It is a design problem, and computing solved it in the 1950s.
+I used to describe a busy day as a computer handling interrupts. People ping; I prioritize, mask, batch, and periodically poll the queue. The metaphor was useful, but I carried it too far. I am not a processor, and repeatedly asking *is there something more important now?* is not focus. It is a reliable way to make my own mind generate an interrupt storm.
 
-The earliest computers **polled**: the processor asked every device, again and again, "do you need anything?" — and wasted itself asking. The **interrupt** fixed that. A device could now tap the processor on the shoulder. It also created a new disease: the interrupt storm, a machine that spends all its cycles being tapped and none of them working. That is a broker's desk. So every operating system since ships the same three defenses, and they translate directly:
+Before discussing priority, I need to separate two kinds of focus:
 
-- **Priority.** Not every device may preempt the processor. Decide in advance, in writing, the short list that may break your deep work. Production down: yes. "Quick question": no.
-- **Masking.** Inside a critical section, the kernel switches interrupts off, because a delicate thing half-done is corruption. Your critical section is the hour you hold the map. Go dark for it, visibly. Messages queue; they do not evaporate.
-- **Batching.** A network card does not raise one interrupt per packet; it collects a burst and raises one. Answer your queue in batches, at hours you chose. Twenty pings handled at 11:00 cost one switch. Twenty pings handled on arrival cost twenty.
+- **Intentional focus:** work I chose because it moves an outcome I care about. I enter it with a map.
+- **Requested focus:** work that arrives from another person. It may matter, but it arrives carrying their intention, not mine.
+
+Both require the same single seat, but they should not enter through the same door. Intentional work owns my attention by default. An outside request is not automatically a task, and a task is not automatically an interrupt. It is first a candidate asking for admission.
 
 ```mermaid
 flowchart LR
-    P[Ping] --> Q{May it preempt?}
-    Q -->|"short list"| I[Interrupt now]
-    Q -->|"everything else"| W[Queue]
-    W --> B[One batch,<br/>at your hour]
+    G[My outcome] --> I[Intentional work]
+    R[Someone's request] --> A{Admission gate}
+    A -->|admitted| Q[Requested work]
+    A -->|not admitted| N[Clarify, redirect,<br/>decline, or discard]
+    I --> F[One focus]
+    Q --> F
 ```
 
-On a loud day this is literal for me. When urgent requests pile up, I stop answering in arrival order. Each one goes on a sticky note. I sort the notes into the order that matters, then solve exactly one while the rest wait. And about every thirty minutes I look up and recheck the list: did the order change, did something arrive that truly may preempt?
+### The gate before priority
 
-That last habit is older than it looks. An operating system keeps one interrupt it never masks: the clock. A tick fires on a fixed schedule, so the machine always gets a moment to re-decide what should run next. The thirty-minute recheck is my clock tick. Arrival order is not importance order, and the tick is when I am allowed to change my mind.
+The most important gate comes before the preemption decision. It protects me from work that feels urgent without yet being real: FOMO, a vague message, an unowned problem, or a request that gains weight only because I know the person asking.
 
-Some days are not noise but a real storm: everything urgent, all at once. Systems people have answers for that too, and none of them is "work harder":
+I ask:
 
-- **Take the interrupt line away.** When one device fires too often, the kernel stops listening to its interrupts and switches it to polling: it visits the device on a schedule instead. Linux does exactly this with a busy network card. Do it with a person who pings you hourly — give them one fixed slot a day, and nothing in between.
-- **Answer once, in public.** Five people asking the same question means your answer has no cache. Write it where the next asker will find it: a doc, a pinned note, a README. Every answer you publish deletes a future interrupt.
-- **Shed load, honestly.** When requests arrive faster than you can serve them, a growing queue is not patience — it is a promise you are already breaking. Saying "not this week" on arrival is cheaper for everyone than saying it after three switches.
-- **Run a small postmortem.** After the storm, ask why it happened. This is the missing path from the last section again: the pings are episodes. If the same storm returns every month, something semantic is missing — a document, a permission, a tool, an owner. Build it, and that ping never arrives again.
+1. **Is there a clean request?** What outcome is wanted, what does done mean, and when is it actually needed? "Can you take a quick look?" is not clean enough to prioritize.
+2. **Does it belong to me?** Knowing the sender does not make me the owner. If another person has the context, authority, or responsibility, route it there.
+3. **What happens if it waits?** Urgency needs a concrete consequence: harm continues, a fixed deadline is lost, production remains broken, or several people stay blocked. Anxiety and visibility are not consequences.
+4. **Is it worth displacing the work already in my hands?** Starting the request does not create free time. It spends the position I have built in the current task.
 
-That is control. Distribution is the other half, and it has the same shape. With agents running across several codebases, the question is not whether you can switch — you must — but what a switch costs. When an operating system pauses a process, the switch is cheap for one reason: nothing lives in the processor. The process's whole position sits in a small record — the process control block — and resuming is loading it back.
+```mermaid
+flowchart TD
+    R[Incoming request] --> C{Clear outcome,<br/>owner, and done?}
+    C -->|no| CL[Clarify or park]
+    C -->|yes| O{Does it belong<br/>to me?}
+    O -->|no| RT[Redirect or decline]
+    O -->|yes| F{Real consequence<br/>if it waits?}
+    F -->|no / only FOMO| L[Normal queue]
+    F -->|yes| D{Cost of waiting greater<br/>than cost of switching?}
+    D -->|no| L
+    D -->|yes| P[May preempt]
+```
 
-Your switches are expensive because your position lives in your head. The fix is this entire post: **the map is your process control block.** Before leaving a codebase, write your position onto its map — where we are, the open question, the next step. Re-entry becomes reading, not remembering. That is what makes several codebases and a handful of agents possible for one head.
+This gate is deliberately unfriendly to vagueness. A vague request cannot prove that it is urgent, because I cannot compare an unknown outcome with the known work it would replace. Clarifying it is not bureaucracy. It is how I prevent someone else's uncertainty from becoming my emergency.
 
-And hold the agents to the same interrupt discipline as people: they report at boundaries — done, blocked, or surprised — never for progress. Many things may run at once. Only one may be in your hands.
+### The priority mechanism
 
-This is not office advice. It is the same art at every scale. A single conversation is a stream of tiny interrupts — that was "do not follow the tokens." A day is a stream of pings. A season is a stream of codebases. The same three moves each time: choose what may preempt, mask while you hold the map, batch the rest.
+Priority is not a property that arrives attached to a message. It is a comparison between the consequences of two choices: **continue what I intended, or stop it for this request?**
 
-> **Lesson:** focus is not a mood; it is a scheduler. Decide what may preempt you, mask the rest, handle the queue in batches — and write your position on the map, so a switch costs a read instead of a rebuild.
+My mechanism is asymmetric. Intentional work keeps the foreground unless the outside task crosses a high bar. I compare requests in this order:
+
+1. **Immediate harm or irreversible loss.** Is a person, production system, security boundary, or fixed deadline currently at risk?
+2. **Time sensitivity.** Will acting now materially change the outcome, or will the request be just as solvable at the next review point?
+3. **People blocked.** Is one person waiting for convenience, or is a whole path of work unable to move?
+4. **Existing commitment.** What did I already promise, and to whom?
+5. **Value and direction.** Which task contributes more to the outcome that matters?
+6. **Switching cost.** How much context and unfinished structure will be destroyed by leaving the current task now?
+
+The first meaningful difference decides the order. Arrival time, message volume, seniority of the sender, and whether I know them are not priority signals by themselves.
+
+```mermaid
+flowchart LR
+    IT[Current intended task] --> CMP{Compare consequences}
+    OT[Admitted outside task] --> CMP
+    CMP -->|waiting causes greater<br/>and time-sensitive harm| PRE[Checkpoint current map<br/>then preempt]
+    CMP -->|switching costs more<br/>or waiting is safe| KEEP[Keep current focus<br/>queue the request]
+```
+
+Most admitted requests do not preempt. They wait for a boundary I chose: after the current unit is complete, at a review window, or when I plan the next day. This is how I balance intended and outside work. My intention owns the schedule; legitimate external work gets a place on it; only a true emergency takes the schedule away.
+
+### When urgent becomes a mode
+
+Sometimes there is not one urgent request but a pile of them. My old answer was to keep working while looking up every thirty minutes to see whether the order had changed. That keeps every task half-present in my head. The queue becomes the work, and nothing finishes.
+
+My current answer is simpler: **stop all intentional work and enter urgent mode.** First I write the position of the intended task on its map — where I stopped, what remains open, and the next step. Then every admitted urgent item goes onto one visible todo list. I order the list by immediate harm, time sensitivity, people blocked, and commitment. Then I finish exactly one item.
+
+New requests may join the list, but they do not enter my head. I reconsider the order when an item is finished, not every few minutes. Only a new request involving greater immediate harm may interrupt the urgent item already in progress.
+
+```mermaid
+stateDiagram-v2
+    [*] --> IntentionalMode
+    IntentionalMode --> UrgentMode: true urgent work accumulates
+    UrgentMode --> SaveMap: checkpoint intended work
+    SaveMap --> BuildQueue: collect and order urgent todo
+    BuildQueue --> DoOne: choose highest priority item
+    DoOne --> BuildQueue: finished; urgent items remain
+    DoOne --> RestoreMap: urgent queue is empty
+    RestoreMap --> IntentionalMode
+```
+
+Urgent mode is not multitasking with a more serious name. It is still WIP = 1. The difference is that I have consciously changed which queue I am serving. When the urgent queue is empty, I reload the saved map and return to the intentional task instead of drifting toward whatever message happens to arrive next.
+
+After a storm, I still ask why it formed. Repeated requests may reveal a missing document, permission, tool, decision, or owner. Fixing that cause turns episodes into knowledge and prevents the next storm. But prevention happens after the urgent work is finished; it should not become another live thread during the storm.
+
+The same rule applies to agents. They should report at meaningful boundaries — done, blocked, or genuinely surprised — not continuously ask for attention. Many things may run at once. Only one may be in my hands.
+
+The map is what makes all of this possible. Before I switch, I write where I am, the open question, and the next step. Re-entry becomes reading rather than reconstructing. The goal is not to behave more like a machine. It is to stop forcing a human mind to poll, rehearse, and remember every competing demand.
+
+> **Lesson:** protect intentional focus with an admission gate. Make outside work become clear before it becomes important, and make it prove the cost of waiting before it may preempt. When real urgency piles up, freeze the intended queue, write down your position, order the urgent work, and finish one thing at a time.
 
 ---
 
