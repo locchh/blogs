@@ -2,6 +2,7 @@
 title: "How to build a knowledge base"
 description: "Storage is not knowledge. On the inference layer a real knowledge base needs, where to put it, how to assemble knowledge like packages, and how to grade it."
 pubDate: "2026-07-11"
+updatedDate: "2026-10-20"
 author: "locchh"
 tags: ["knowledge-base", "vector-db", "graph-db", "dikw", "agent-memory", "inference", "knowledge-hub", "hebbian-learning"]
 draft: false
@@ -318,6 +319,16 @@ A `kb.lock` that pins pack versions and content hashes buys something wild: a **
 Two notes before I oversell it. First, you don't always want to *download*. Sometimes you want to **link** — leave the pack on someone else's server and query it over MCP when a question comes. That's federation, and it's the eager-vs-lazy choice again: download-and-merge is *eager* (fast, offline, private, but it goes stale and you pay the merge); linking is *lazy* (always fresh, no merge, but slower, and your questions leak to someone else's server). Same axis as before — pick per pack.
 
 Second, a hub of knowledge is a **supply chain**, and supply chains get poisoned. One bad pack — malicious or just wrong — makes your agent confidently, consistently wrong in everything downstream of the merge. Signatures and per-fact provenance are the bare minimum (that's what `kb why` is for). But the real question is: how do you *grade* a pack you didn't build, before you let it into your agent's head? That's the next section. Score every pack on the dimensions that matter and stamp the profile on it, the way an npm package wears its test badge. A hub is a registry of **graded** knowledge — or it's a registry of confident lies.
+
+### October update: XERJ Corpus Hub
+
+Since writing this in July, I found **[XERJ Corpus Hub](https://hub.xerj.org/)**, which puts much of the distribution idea above into practice. It has domain collections of public reference material — database code, API specifications, security rules, operations runbooks, and more — prepared for agents to search. I included it in my [September roundup](/blogs/blog/new_things_sep_2026/#3-finding-things--memory-documents-code), but it belongs here too. Someone curates a body of material, publishes it as a reusable corpus, and the next agent starts from that preparation. The reference library can outlive any particular model or session.
+
+The [Hub overview](https://hub.xerj.org/whats-this/) describes sources pinned to a specific revision, recorded licence reviews, and signed search packs that the client verifies. Agents can search a downloaded pack locally and cite passages by file and line. Contributors receive attribution, and agent reviews record usefulness, whether an answer was found, and freshness. These are concrete pieces of the package and provenance machinery I sketched above. A signature establishes which publisher supplied the artifact; the source pin tells you which revision it contains. Whether the material supports a particular claim still needs checking.
+
+The evaluation is especially relevant to the next section. Its [agent guide](https://hub.xerj.org/llms.txt) defines **G7** as a retrieval spot check using five pre-registered queries and grading their top five results. It separately reports **agent A/B** comparisons on the same tasks with and without a corpus. The [boringtun corpus page](https://hub.xerj.org/corpus/boringtun), for example, exposes both kinds of result alongside its source commit and licence review. That distinguishes finding a passage from completing a task with it — exactly why I want to grade both an answer and its consequences. These are small checks, published by the project, and many catalogue entries are marked ungraded. They are a starting point for an evaluation profile, with freshness, contradiction handling, and abstention still needing their own evidence.
+
+The part I would build next is the **merge through inference**. Suppose my private store says a service runs Postgres 14, and a public corpus documents behavior specific to that version. An agent can retrieve both and reason about whether the behavior affects my service. My proposal asks the store to preserve the resulting claim, link it to both sources, and revisit it when the service upgrades. The Hub's description establishes a way to distribute and retrieve the evidence; it does not establish that this inference and revision happen automatically when corpora meet. That gives the proposal a practical next step: **start with reusable source packs, then make the conclusions reusable too.**
 
 ## How to evaluate
 

@@ -1,9 +1,10 @@
 ---
 title: "Interesting Things I Found — Sep 2026"
-description: "Seventeen finds, and the biggest story is a new kind of model: one that doesn't talk, it decides. Several teams shipped the same idea at about the same time, the fast 'System One' brain beside the slow reasoning one. Plus a harness that learns, a memory that forgets, models that read bytes, and the machines, searches, and teams around them."
+description: "Nineteen finds, and the biggest story is a new kind of model: one that doesn't talk, it decides. Several teams shipped the same idea at about the same time, the fast 'System One' brain beside the slow reasoning one. Plus a harness that learns, a memory that forgets, a hub of reusable reference packs, models that read bytes, and the machines and teams around them."
 pubDate: "2026-10-18"
+updatedDate: "2026-10-20"
 author: "locchh"
-tags: ["ai-agents", "decision-models", "system-one", "harness", "memory", "retrieval", "sandbox", "tooling", "2026"]
+tags: ["ai-agents", "decision-models", "system-one", "harness", "memory", "retrieval", "knowledge-hub", "sandbox", "tooling", "2026"]
 draft: false
 ---
 
@@ -13,19 +14,23 @@ Most of them use the same name for it: **System One**. It's the old idea from ps
 
 So that's where this post starts. After that comes a harness that learns from its own runs, a memory that forgets on purpose, and models that read raw bytes. Then the machines, searches, and teams around all of it.
 
-Seventeen links, six groups.
+Nineteen finds, six groups.
 
 ---
 
 ## 1. The fast brain — models that decide instead of talk
 
-Six links in five entries here. The surprising part is how much they agree.
+Seven links in six entries here. The surprising part is how much they agree.
 
 - **[CLM — Contrastive Language Models](https://github.com/Contrastive-LM/CLM)** — the most "under the hood" of the batch. CLM doesn't generate an answer. It **embeds the state and each candidate action separately**, then scores how well they match. A softmax over those scores gives you a distribution. Each encoder is a **frozen LLM backbone with a small trainable head** on top. Training is contrastive: pull the right state-action pairs together, push the wrong ones apart. Because states and actions are embedded apart, you can **cache** them. A state you've seen before is cheap to ask about again. It can also rank free-form candidates, like best-of-N answers or tool names. There's a script to fine-tune the heads on your own data. Code and weights are Apache 2.0. Honest notes: it's text-only, and the default context is short, so longer states get cut. The benchmark numbers are the project's own, and the scaling write-up lives in a blog post, not a peer-reviewed paper. *Best for:* seeing how a decision model is actually built.
 
 - **[TypeSafe AI](https://docs.typesafe.ai/introduction)** and its **[agent skill](https://github.com/typesafe-ai/skills/blob/main/skills/typesafe-ai/SKILL.md)** — the product version of the same idea, built around their main model, **Jev**. You send **state** (your data, as text or JSON) and a list of **typed questions**. Three types cover most needs. **Choice** picks one from a set. **Noul** answers yes or no, as a probability. **Score** places the state on a scale you describe. Every question is answered in parallel and on its own, against the same state, so one question can't leak into another. Answers come back as values your code can branch on. No text, no parsing.
 
   The skill file is worth reading even if you never use the product. It's really **a design guide for this new kind of AI feature**. Work backward from what the app will *do*. Keep rules, math, and exact lookups in code, and ask the model only for the judgment. Ask one narrow question per dimension. Always include a no-match option, because the model can't pick an answer you didn't list. And one warning I liked: high confidence means the answers are concentrated on one option. It does **not** mean your whole workflow is right. So set thresholds on your own data. Honest note: the docs read like marketing. And when you split a decision into small questions, you have to write the logic that combines them yourself. *Best for:* turning a fragile prompt-and-parse step into a typed decision.
+
+- **[Laya](https://github.com/NandhaKishorM/laya)** — a local decision engine with the same three question types: **choice**, **noul**, and **score**. Its `Router` selects a checkpoint for the request, including a multilingual one advertised for 100+ languages. Imagine a support ticket saying, "You charged me twice; refund it or I'll cancel." One call can pick the department, rate the urgency, and estimate cancellation risk. Your application gets values it can act on without asking a chat model to write and then parsing its answer. It supports batches and schema-shaped output too. The [project benchmarks](https://github.com/NandhaKishorM/laya/blob/main/BENCHMARKS.md) report about **33 ms for one question on a T4**. That's one measured GPU setup; the higher typed-decisions accuracy also belongs to a fine-tuned checkpoint, rather than the base English model.
+
+  The lesson I liked most is in its failures. The English checkpoint can be **confidently wrong on non-English text**. A confidence threshold alone won't catch that; choosing the appropriate checkpoint has to come first. The README also acknowledges overconfidence in the shipped probabilities and truncation of long inputs unless you handle them explicitly. So the practical loop is: route, evaluate on your own labeled decisions, calibrate, then choose which answers may trigger an action. Returning a valid option solves the output-format problem. Measuring when that option is right is still your job. Apache 2.0. *Best for:* trying typed decisions locally, especially across languages.
 
 - **[Strands Decider](https://strandsagents.com/blog/introducing-strands-decider/)** — the open, local version. It's a small open-source decision model from the Strands team, with code, training data, and weights all published. The build is simple to explain. Take a pretrained LLM, **cut off the part that writes text**, and put a tiny "pointer head" in its place. That head scores each option you offer, all in one parallel pass. Because it can't write, it **always returns one of your options**. It can't wander off. The blog is honest about the trade: no coding, no chat, no summaries, and weaker than reasoning models on multi-step problems.
 
@@ -40,6 +45,7 @@ Six links in five entries here. The surprising part is how much they agree.
 | | Yes / no | Pick one | Rate on a scale |
 |---|---|---|---|
 | TypeSafe | Noul | Choice | Score |
+| Laya | noul | choice | score |
 | OpenAI Decisions | predicate | choice | score |
 | Strands Decider | noul | choice | *(not shown in the launch post)* |
 | CLM | Noul | Choice | Score |
@@ -69,6 +75,12 @@ The paper learns *how* to edit a harness. The tool gives you the loop to do it. 
 - **[PageIndex](https://github.com/VectifyAI/PageIndex)** — retrieval with **no vectors and no chunks**. It builds a tree index of each long document, like a table of contents. Then an LLM **reasons its way down the tree** to the right section. The core argument is short: *similarity is not relevance*. Two chunks can look alike, and only one answers your question. You get answers you can trace, with page references. Local mode runs on your machine with your own key. A cloud mode adds OCR, images, and finer citations. Honest notes: local mode needs text-based PDFs, many extras are cloud-only, and the benchmarks are the vendor's own, mostly simple lookup questions. *Best for:* long, structured professional documents like reports, filings, and manuals, where the layout already tells you where things are. Read it next to the paper above. Both say that **keeping the document's own shape** often beats cutting it into pieces. It's [the inference layer a knowledge base needs](/blogs/blog/how_to_build_knowledgebase/), done as a walk down a tree.
 
 - **[tgrep](https://github.com/microsoft/tgrep)** — from Microsoft: grep, but with an index. It breaks every file into overlapping **three-character pieces (trigrams)**. A regex search then only opens files that *could* match, and checks those in parallel. Run it as a server and the index stays current while you work. Most flags copy ripgrep. It ships MCP tools and hooks for coding agents, and it already powers search inside GitHub's Copilot CLI. Why it matters for agents: an agent greps far more often than a person does. On a big repo, every slow grep costs time and tokens. Honest notes: patterns with no useful trigrams still scan everything, and the index can fall behind your edits. Big files and binary files are skipped by default, and the regex engine isn't PCRE2. MIT. *Best for:* agents working in large repos.
+
+- **[XERJ](https://github.com/xerj-org/xerj)** — a local Rust search engine, with a **Corpus Hub** that makes it more interesting than another search tool. The engine indexes code, docs, logs, tables, and PDFs; code keeps its symbols and line references. It offers BM25, vector, and hybrid search through a CLI, MCP, and an Elasticsearch-compatible API. Its reference-coding workflow is simple: retrieve how an unfamiliar project solves a problem before writing your own implementation. A small [project-run study](https://xerj.org/case-studies/reference-coding) reports **2.7× fewer output tokens than a grep-driven agent**, with both solving 16/16 runs across eight tasks. The README says the gains depend on unfamiliar material; retrieval can add cost on libraries the model already knows. Apache 2.0.
+
+  But **[XERJ Corpus Hub](https://hub.xerj.org/)** is the part I want to keep watching. In July I wrote about [a hub of knowledge](/blogs/blog/how_to_build_knowledgebase/#a-hub-of-knowledge): people prepare domain packs once, publish them, and let agents bring them into their own stores. XERJ gives that idea a concrete home. Browse sources by domain, from database implementations to API specifications and operations runbooks. Its [overview](https://hub.xerj.org/whats-this/) describes pinned sources, licence reviews, signed search packs, and local queries that return passages with file and line references. The work of choosing and preparing reference material becomes something the next agent can reuse. You can change the model and keep the reference library.
+
+  There is an evaluation story too. The [agent guide](https://hub.xerj.org/llms.txt) distinguishes **retrieval spot checks** from **agent A/B results**: can search find useful passages, and does the same agent do better with the corpus than without it? Many entries remain ungraded, and a handful of test queries cannot establish expertise across a domain. Still, publishing the evidence is the right move. The next step from my July sketch is **composition**: when public reference material meets your private project facts, derive the connections, settle conflicting versions, and keep the result with its sources. A searchable pack supplies evidence for that work. I want the useful conclusions to survive the session too. *Best for:* reusable reference libraries for agents, and a working example of how a knowledge hub could begin.
 
 ---
 
@@ -100,7 +112,7 @@ The paper learns *how* to edit a harness. The tool gives you the loop to do it. 
 
 Line the groups up and one idea runs through most of them: **stop paying the slow brain for fast work**.
 
-The decision models in group 1 are the clearest case. But once you look, it's everywhere. Jev-Mem keeps the reasoning model out of the memory's way. Cua has a small model for bounded clicks. tgrep stops an agent from reading every file to find one line. Selective Forgetting shows you can drop a tenth of a memory and barely notice. Even the harness paper fits: instead of a bigger model, it improves the cheaper program around it. Each one moves a routine judgment out of the expensive, open-ended model and into something smaller, faster, and **bounded**.
+The decision models in group 1 are the clearest case. But once you look, it's everywhere. Jev-Mem keeps the reasoning model out of the memory's way. Cua has a small model for bounded clicks. tgrep stops an agent from reading every file to find one line, while XERJ brings back the passage it needs from an unfamiliar codebase. Selective Forgetting shows you can drop a tenth of a memory and barely notice. Even the harness paper fits: instead of a bigger model, it improves the cheaper program around it. Each one moves a routine judgment out of the expensive, open-ended model and into something smaller, faster, and **bounded**.
 
 PageIndex is the honest exception. It spends *more* model thinking at search time, not less. But it fits the other half of the lesson: use the slow brain where judgment really matters, like deciding which section answers your question.
 
