@@ -1,8 +1,8 @@
 ---
 title: "Interesting Things I Found — Sep 2026"
-description: "Nineteen finds, and the biggest story is a new kind of model: one that doesn't talk, it decides. Several teams shipped the same idea at about the same time, the fast 'System One' brain beside the slow reasoning one. Plus a harness that learns, a memory that forgets, a hub of reusable reference packs, models that read bytes, and the machines and teams around them."
+description: "Nineteen finds, and the biggest story is a new kind of model: one that doesn't talk, it decides. Several teams shipped the same idea at about the same time, the fast 'System One' brain beside the slow reasoning one. Plus a harness that learns, a memory that forgets, a hub of reusable reference packs, models that read bytes, and the machines and teams around them. And a postscript: OpenSpec vs. Spec Kit, two ways to write the spec before the code."
 pubDate: "2026-10-18"
-updatedDate: "2026-10-20"
+updatedDate: "2026-10-22"
 author: "locchh"
 tags: ["ai-agents", "decision-models", "system-one", "harness", "memory", "retrieval", "knowledge-hub", "sandbox", "tooling", "2026"]
 draft: false
@@ -119,3 +119,30 @@ PageIndex is the honest exception. It spends *more* model thinking at search tim
 I keep saying the model is the rented part and the system around it is the job. This month added one more rule: **not every part of the system should be the big model**. Some of it should be a fast brain that says *yes, no, this one*. And it should know when to say *I'm not sure, ask the slow one*.
 
 Here's the question I'll leave open: if the fast brain decides which calls reach the slow brain, who's really running the agent?
+
+---
+
+## Postscript: specs before code
+
+One more crossed my desk after this was written, and it belongs next to the fast brain. Decision models make the small calls cheap. But an agent still needs to know **what to build** in the first place. That's the job of a spec, and there are now two popular open tools for it.
+
+- **[OpenSpec](https://openspec.dev/)** ([repo](https://github.com/Fission-AI/OpenSpec/)) — a light **spec-driven development** layer for coding agents. You and the agent agree on what to build, in writing, before any code. The flow is a few slash commands: **explore** the problem and the codebase, **propose** a change, **apply** it, optionally **verify** it against the spec, and **archive** it. The design choice I like is the split between two folders. `changes/` holds work in progress: a proposal (why and what), the spec changes, a design, and a task list. `specs/` holds the **living source of truth**. When a change is done and archived, its spec changes are merged into `specs/`. So the spec isn't a document you write once and forget. It grows with the code, one change at a time. Requirements are plain Markdown, written as "SHALL" statements with WHEN/THEN scenarios. It works with many coding agents, and it's built for existing codebases as well as new ones. There's also a beta "stores" feature that keeps specs in a separate repo, so a platform team can own specs that product teams only read. MIT. Honest notes: it needs Node, it sends anonymous usage data by default (you can turn it off), and the adoption numbers on its site are its own. *Best for:* adding specs to a codebase you already have, one change at a time.
+
+- **[Spec Kit](https://github.com/github/spec-kit)** — GitHub's toolkit, the one OpenSpec compares itself to. Same goal, heavier structure. You start with a **constitution**: a one-time file of project principles, like code quality and testing rules. Then a feature moves through clear phases: **specify** (what and why), **plan** (how), **tasks**, **implement**, and **converge**. You repeat implement and converge until the work matches the spec. Each phase is reviewed before the next. It has also grown past features. Extensions add a **bug** flow, which assesses, fixes, and tests, and only a *verified* verdict counts as fixed. An **idea assessment** flow ends in *go*, *needs clarification*, or *kill*. There are presets, workflows, private catalogs, and offline use for bigger teams. MIT. Honest notes: it needs Python and uv, its main examples are new projects (existing code has its own guides), and community extensions aren't audited, so read them before you run them. *Best for:* teams that want firm phase gates and a shared process.
+
+**OpenSpec vs. Spec Kit:**
+
+| | OpenSpec | Spec Kit |
+|---|---|---|
+| Feel | Light and flexible | Thorough, with phase gates |
+| Unit of work | A **change**, merged into living specs | A **feature**, carried through phases |
+| Starting point | Explore the existing code | Write a constitution first |
+| Strongest on | Existing codebases | New projects and team process |
+| Beyond features | Shared spec stores (beta) | Bug and idea-assessment flows |
+| Checking the work | Optional verify step | Converge loop, *verified* bug verdict |
+| Setup | Node | Python and uv |
+| License | MIT | MIT |
+
+A fair warning about this table: the "light vs. heavy" framing comes from OpenSpec's own README, so it's one side's view. Spec Kit's extra steps are the point if your team needs them.
+
+**My pick:** I'd start with **OpenSpec** for a codebase I already have. Its change-then-merge model matches how real work arrives: one change at a time, on code that already exists. I'd pick **Spec Kit** when a team needs the same process for everyone, with firm gates and a constitution everyone signs up to. Either way, the lesson is the same as the rest of this post. When code is cheap, the spec is the expensive part. It's what tells the agent what "right" means, and it's what you check the work against.
