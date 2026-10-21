@@ -11,3 +11,13 @@ draft: true
 - Orchestration system: https://openrig.dev/
 - Routing system: https://ccflare.com/
 - Monitoring system
+
+## References
+
+Official docs for the coding agents:
+
+- Claude Code: https://code.claude.com/docs/en/overview
+- Codex: https://developers.openai.com/codex
+- GitHub Copilot: https://docs.github.com/en/copilot
+    - Copilot CLI: https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/overview
+- OpenCode: https://opencode.ai/docs
