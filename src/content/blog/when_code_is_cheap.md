@@ -34,10 +34,40 @@ draft: true
 
     - Most teams track cost, time, token burn, and ticket burndown, and talk about governance and transparency. Few check whether the output is right. Verify the intermediate output (specs, code, tests, docs) with automated checks, and keep human judgment for the decisions that matter
 
+    - An AI application engineer today has two core jobs:
+
+        - Make the agent system work longer, durable, efficient, and powerful. One key part: make the agent's target verifiable. Only then can you make the work shorter and cheaper, and prove the result stayed the same
+
+        - Build the context system around it: Jira, OneDrive, Slack, Teams, Azure DevOps, etc. The information the agent gets must be consistent, on time, and just right
+
+            - The context system (with memory and knowledge base) grows with the organization, and the hard part changes at each level:
+
+            - Solo dev: the repo, a CLAUDE.md or AGENTS.md, a folder of notes. Hard part: the discipline to write things down
+
+            - Small business: a few shared tools (Slack, Drive, Jira). Hard part: knowledge lives in people's heads, so you need one shared source of truth
+
+            - Manufacturer with 1,000 people: office tools plus ERP, machine data, and SOPs, often on paper or scans. Hard part: the documents say one thing and the factory floor does another, and many workers aren't at a desk
+
+            - Enterprise: many teams, many tools. Hard part: permissions. The agent must see only what the person asking is allowed to see, and pick the right version among many copies
+
+            - Corporate (many business units): each unit has its own systems and its own meaning for the same word ("customer", "order"). Hard part: shared meaning across units
+
+            - Global corporate: many languages, regions, and laws. Hard part: data must stay where the law says it must, and context must work across languages and time zones
+
+            - The pattern: the amount of data grows, but the real change is the hard problem. It moves from discipline → shared truth → the gap between documents and reality → permissions → shared meaning → law and language
+
+    - Example: OpenAI's bulk release of 722 AI-written math papers (Oct 2026). Proofs were cheap, checking was not: some Lean proofs proved weaker claims, papers were withdrawn within a day, and experts carry the review load. Terence Tao: AI should serve human understanding. https://en.wikipedia.org/wiki/OpenAI_bulk_release_of_mathematical_papers
+
+        - Tao's point: mass AI solving leaves math "less fertile". The answers exist, but the people who move on don't do the follow-up work (new methods, new questions, seminars) that a hard problem usually sparks. He blames the incentive, not the tool. https://officechai.com/ai/terence-tao-hints-openai-wasnt-behaving-responsibly-by-simultaneously-releasing-300-math-proofs-says-its-making-math-less-fertile/
+
+        - My speculation (not Tao's): a model works from patterns it has seen, so it can solve a lot without anything sparking inside it. It doesn't ask "what if?" on its own. When it asks a question, the question is an output, because asking was the task. A human is different: when we read, questions spark even when we aren't trying. So the follow-up questions still have to come from us
+
 
 https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/plan
 
 https://microsoft.github.io/Microsoft-AI-Decision-Framework/
+
+https://learn.microsoft.com/vi-vn/credentials/certifications/agentic-ai-business-solutions-architect/
 
 https://ghuntley.com/agency/
 
