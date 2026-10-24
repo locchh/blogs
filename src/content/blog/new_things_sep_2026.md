@@ -1,8 +1,8 @@
 ---
 title: "Interesting Things I Found — Sep 2026"
-description: "Nineteen finds, and the biggest story is a new kind of model: one that doesn't talk, it decides. Several teams shipped the same idea at about the same time, the fast 'System One' brain beside the slow reasoning one. Plus a harness that learns, a memory that forgets, a hub of reusable reference packs, models that read bytes, and the machines and teams around them. And a postscript: OpenSpec vs. Spec Kit, two ways to write the spec before the code."
+description: "Twenty finds, and the biggest story is a new kind of model: one that doesn't talk, it decides. Several teams shipped the same idea at about the same time, the fast 'System One' brain beside the slow reasoning one. Plus a harness that learns, a memory that forgets, a hub of reusable reference packs, models that read bytes, and the machines and teams around them. And a postscript: OpenSpec vs. Spec Kit, two ways to write the spec before the code."
 pubDate: "2026-10-18"
-updatedDate: "2026-10-22"
+updatedDate: "2026-10-24"
 author: "locchh"
 tags: ["ai-agents", "decision-models", "system-one", "harness", "memory", "retrieval", "knowledge-hub", "sandbox", "tooling", "2026"]
 draft: false
@@ -14,7 +14,7 @@ Most of them use the same name for it: **System One**. It's the old idea from ps
 
 So that's where this post starts. After that comes a harness that learns from its own runs, a memory that forgets on purpose, and models that read raw bytes. Then the machines, searches, and teams around all of it.
 
-Nineteen finds, six groups.
+Twenty finds, six groups.
 
 ---
 
@@ -42,13 +42,13 @@ Seven links in six entries here. The surprising part is how much they agree.
 
 **The shared shape.** Put them side by side and they've ended up with almost the same interface. Look at the question types:
 
-| | Yes / no | Pick one | Rate on a scale |
-|---|---|---|---|
-| TypeSafe | Noul | Choice | Score |
-| Laya | noul | choice | score |
-| OpenAI Decisions | predicate | choice | score |
-| Strands Decider | noul | choice | *(not shown in the launch post)* |
-| CLM | Noul | Choice | Score |
+|                  | Yes / no  | Pick one | Rate on a scale                  |
+| ---------------- | --------- | -------- | -------------------------------- |
+| TypeSafe         | Noul      | Choice   | Score                            |
+| Laya             | noul      | choice   | score                            |
+| OpenAI Decisions | predicate | choice   | score                            |
+| Strands Decider  | noul      | choice   | *(not shown in the launch post)* |
+| CLM              | Noul      | Choice   | Score                            |
 
 Part of this agreement has one source. CLM serves itself behind a TypeSafe-compatible API, Strands tests itself on JevBench (named after TypeSafe's model), and Jev-Mem is built on Jev. OpenAI uses the same three shapes too, and its guide doesn't mention the others. I can't tell if they got there alone or not. Either way, the biggest vendor shipped the same three building blocks. That's a strong hint these three are the right ones.
 
@@ -98,6 +98,8 @@ The paper learns *how* to edit a harness. The tool gives you the loop to do it. 
 
 - **[llmfit](https://github.com/AlexsJones/llmfit)** — one command that looks at your CPU, RAM, GPU, and memory, and tells you **which open models will actually run well** on your machine. It scores each model on fit, estimated speed, quality, and context. It shows the inputs behind every estimate, so you can check it. You can benchmark your real speed, and your numbers replace the estimates. It has a terminal UI, a CLI, a web dashboard, a REST API, and JSON output for scripts and agents. MIT. Honest note: speeds are estimates from specs until you benchmark, and the community data is only as good as what people submit. *Best for:* [starting at the cheap end](/blogs/blog/start_at_the_cheap_end/). Before you rent a model, know what you can already run for free.
 
+- **[LLM Stats](https://llm-stats.com/)** — a place to compare the models themselves: **benchmark scores, API pricing, output speed, and context windows**, with side-by-side comparisons and filters for open-weight models. It fits next to llmfit. One asks what your machine can run; the other helps you compare what those models offer against the ones you can rent. The useful part is seeing quality, speed, and cost together, because the highest-scoring model isn't automatically the right one for every step of an agent. Honest note: a leaderboard is a shortlist, and public benchmarks don't tell you how a model will perform on your own tasks. *Best for:* narrowing the models to test before committing to a provider or a local setup.
+
 ---
 
 ## 6. Teams and reach
@@ -132,17 +134,75 @@ One more crossed my desk after this was written, and it belongs next to the fast
 
 **OpenSpec vs. Spec Kit:**
 
-| | OpenSpec | Spec Kit |
-|---|---|---|
-| Feel | Light and flexible | Thorough, with phase gates |
-| Unit of work | A **change**, merged into living specs | A **feature**, carried through phases |
-| Starting point | Explore the existing code | Write a constitution first |
-| Strongest on | Existing codebases | New projects and team process |
-| Beyond features | Shared spec stores (beta) | Bug and idea-assessment flows |
-| Checking the work | Optional verify step | Converge loop, *verified* bug verdict |
-| Setup | Node | Python and uv |
-| License | MIT | MIT |
+|                   | OpenSpec                               | Spec Kit                              |
+| ----------------- | -------------------------------------- | ------------------------------------- |
+| Feel              | Light and flexible                     | Thorough, with phase gates            |
+| Unit of work      | A **change**, merged into living specs | A **feature**, carried through phases |
+| Starting point    | Explore the existing code              | Write a constitution first            |
+| Strongest on      | Existing codebases                     | New projects and team process         |
+| Beyond features   | Shared spec stores (beta)              | Bug and idea-assessment flows         |
+| Checking the work | Optional verify step                   | Converge loop, *verified* bug verdict |
+| Setup             | Node                                   | Python and uv                         |
+| License           | MIT                                    | MIT                                   |
 
 A fair warning about this table: the "light vs. heavy" framing comes from OpenSpec's own README, so it's one side's view. Spec Kit's extra steps are the point if your team needs them.
 
 **My pick:** I'd start with **OpenSpec** for a codebase I already have. Its change-then-merge model matches how real work arrives: one change at a time, on code that already exists. I'd pick **Spec Kit** when a team needs the same process for everyone, with firm gates and a constitution everyone signs up to. Either way, the lesson is the same as the rest of this post. When code is cheap, the spec is the expensive part. It's what tells the agent what "right" means, and it's what you check the work against.
+
+## References
+
+- [CLM — Contrastive Language Models](https://github.com/Contrastive-LM/CLM) - Code and documentation for scoring state-action pairs with contrastive models.
+
+- [TypeSafe AI introduction](https://docs.typesafe.ai/introduction) - Typed decision questions and the Jev model.
+
+- [TypeSafe AI agent skill](https://github.com/typesafe-ai/skills/blob/main/skills/typesafe-ai/SKILL.md) - Guidance for designing typed decisions in applications.
+
+- [Laya](https://github.com/NandhaKishorM/laya) - A local engine for choice, yes/no, and score decisions.
+
+- [Laya benchmarks](https://github.com/NandhaKishorM/laya/blob/main/BENCHMARKS.md) - The project's performance and accuracy measurements.
+
+- [Introducing Strands Decider](https://strandsagents.com/blog/introducing-strands-decider/) - An introduction to the decision model and its use in agent workflows.
+
+- [OpenAI Decisions guide](https://developers.openai.com/api/docs/guides/decisions) - API documentation for predicate, choice, and score questions.
+
+- [Jev-Mem](https://arxiv.org/pdf/2609.23986) - Research on separating fast memory decisions from slower reasoning.
+
+- [Harness Learning Enables Generalizable Test-Time Adaptation](https://arxiv.org/pdf/2609.35738) - Research on learning to revise an agent's harness from execution feedback.
+
+- [prime-agent](https://github.com/PrimeIntellect-ai/prime-agent) - A coding agent with a continual harness and run-based refinement.
+
+- [Selective Forgetting](https://arxiv.org/pdf/2608.28978) - Research on graph memory, retrieval quality, and pruning memories.
+
+- [PageIndex](https://github.com/VectifyAI/PageIndex) - Document retrieval through reasoning over a tree index.
+
+- [tgrep](https://github.com/microsoft/tgrep) - Indexed text search with a trigram filter.
+
+- [XERJ](https://github.com/xerj-org/xerj) - A local search engine for code and reference material.
+
+- [XERJ reference-coding study](https://xerj.org/case-studies/reference-coding) - The project's comparison of retrieval-assisted and grep-driven coding runs.
+
+- [XERJ Corpus Hub](https://hub.xerj.org/) - A catalog of reusable reference corpora for agents.
+
+- [XERJ Corpus Hub overview](https://hub.xerj.org/whats-this/) - How sources are prepared, packaged, and queried locally.
+
+- [XERJ Corpus Hub agent guide](https://hub.xerj.org/llms.txt) - Guidance on using corpora and interpreting their evaluations.
+
+- [Breaking the Token Ceiling](https://arxiv.org/pdf/2609.12303) - Research comparing distilled token-level and byte-level models.
+
+- [forkd](https://github.com/deeplethe/forkd) - Forkable microVM sandboxes for agent execution.
+
+- [Cua](https://github.com/trycua/cua) - Desktop environments, tools, and models for computer-use agents.
+
+- [llmfit](https://github.com/AlexsJones/llmfit) - Local model selection based on hardware fit and estimated performance.
+
+- [LLM Stats](https://llm-stats.com/) - Model comparisons covering benchmarks, pricing, speed, and context windows.
+
+- [OpenRig](https://openrig.dev/) - Orchestration for long-lived teams of coding agents.
+
+- [REA — Reverse Engineer Anything](https://github.com/morluto/rea) - An MCP server for examining software and related artifacts.
+
+- [OpenSpec](https://openspec.dev/) - An overview of its spec-driven development workflow.
+
+- [OpenSpec repository](https://github.com/Fission-AI/OpenSpec/) - Source code and documentation for managing changes and living specs.
+
+- [Spec Kit](https://github.com/github/spec-kit) - GitHub's toolkit for spec-driven development.
