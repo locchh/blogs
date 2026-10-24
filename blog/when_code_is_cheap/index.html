@@ -1,0 +1,233 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><script>
+	(() => {
+		let theme;
+		try {
+			theme = localStorage.getItem('blog-theme');
+		} catch {
+			// Storage can be blocked in private or restricted browser contexts.
+		}
+		if (!['light', 'dark', 'reading'].includes(theme)) {
+			theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		}
+		document.documentElement.dataset.theme = theme;
+	})();
+</script><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg?v=9"><link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon.png?v=9"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.2"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/when_code_is_cheap/"><!-- Primary Meta Tags --><title>When Code Is Cheap</title><meta name="title" content="When Code Is Cheap"><meta name="description" content="AI output is useful when the next step can use it. How to validate handoffs, measure real savings, and build a learning loop for new technology."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/when_code_is_cheap/"><meta property="og:title" content="When Code Is Cheap"><meta property="og:description" content="AI output is useful when the next step can use it. How to validate handoffs, measure real savings, and build a learning loop for new technology."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/when_code_is_cheap/"><meta property="twitter:title" content="When Code Is Cheap"><meta property="twitter:description" content="AI output is useful when the next step can use it. How to validate handoffs, measure real savings, and build a learning loop for new technology."><link rel="stylesheet" href="/blogs/_astro/about.atkZ9rfe.css">
+<style>main[data-astro-cid-bvzihdzo]{width:min(calc(100% - 2rem),1040px);max-width:100%;margin:2em auto}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:100%;max-width:var(--prose-width);margin:auto;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}@media(max-width:768px){main[data-astro-cid-bvzihdzo]{width:100%;margin:0}}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/blogs/" data-astro-cid-3ef6ksr2>Locch&#39;s Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/blogs/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blogs/blog/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/blogs/about/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="theme-switcher" role="group" aria-label="Display mode" hidden data-astro-cid-dz5h74bc> <button type="button" data-theme-choice="light" aria-pressed="false" data-astro-cid-dz5h74bc>Light</button> <button type="button" data-theme-choice="dark" aria-pressed="false" data-astro-cid-dz5h74bc>Dark</button> <button type="button" data-theme-choice="reading" aria-pressed="false" data-astro-cid-dz5h74bc>Reading</button> </div> <script type="module">const n=["light","dark","reading"],c=document.querySelector(".theme-switcher"),s=document.querySelectorAll("[data-theme-choice]"),o=window.matchMedia("(prefers-color-scheme: dark)");function r(){for(const e of s)e.setAttribute("aria-pressed",String(e.dataset.themeChoice===document.documentElement.dataset.theme))}function t(e,l=!1){if(n.includes(e)){if(document.documentElement.dataset.theme=e,l)try{localStorage.setItem("blog-theme",e)}catch{}r(),document.dispatchEvent(new CustomEvent("theme-change"))}}function i(){if(!a){try{if(n.includes(localStorage.getItem("blog-theme")??""))return}catch{}t(o.matches?"dark":"light")}}let a=!1;for(const e of s)e.addEventListener("click",()=>{a=!0,t(e.dataset.themeChoice??"light",!0)});window.addEventListener("storage",e=>{e.key!=="blog-theme"&&e.key!==null||(a=!1,e.newValue&&n.includes(e.newValue)?t(e.newValue):t(o.matches?"dark":"light"))});o.addEventListener("change",i);r();c&&(c.hidden=!1);</script>  <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo>  </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2026-10-24T00:00:00.000Z"> Oct 24, 2026 </time>  </div> <h1 data-astro-cid-bvzihdzo>When Code Is Cheap</h1> <hr data-astro-cid-bvzihdzo> </div>  <p>Imagine a team builds an AI tool to summarize support tickets. The summaries arrive in seconds. They read well. The demo looks good.</p>
+<p>Then a support engineer tries to use one. The summary left out the customer’s software version. It mixed a proposed fix with something the customer had already tried. The engineer opens the original conversation and reads it again.</p>
+<p>The tool produced its output. The next person still has the same work to do, plus one more document to check.</p>
+<p>This is the question I keep coming back to when people ask whether AI will save money or improve productivity: <strong>what happens after the output is produced?</strong></p>
+<p>When code is cheap, we can build more things. But the expensive work moves toward deciding what deserves to exist, checking whether it works, and making sure someone can actually use the result.</p>
+<h2 id="the-next-step-is-part-of-the-specification">The next step is part of the specification</h2>
+<p>We often describe an application by what it can do. It can summarize documents, generate code, answer questions, or create reports. Those are capabilities. A business needs to know what those capabilities make possible.</p>
+<p>A ticket summary should help an engineer choose the next diagnostic step. A specification should help a developer build the intended behavior. A report should help someone make a decision. Their quality depends partly on the work that follows them.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Output</th><th>A check inside the current step</th><th>A check at the next step</th></tr></thead><tbody><tr><td>Ticket summary</td><td>Clear writing; required sections present</td><td>Can the engineer choose a useful diagnostic step without reconstructing the whole conversation?</td></tr><tr><td>Feature specification</td><td>Complete template; no obvious contradictions</td><td>Can a developer build it and a tester distinguish correct behavior from an incorrect interpretation?</td></tr><tr><td>Generated code</td><td>Compiles; component tests pass</td><td>Does it preserve the behavior its callers need, and work in the real user journey?</td></tr><tr><td>Technology digest</td><td>Recent links; readable summaries</td><td>Can the team decide what deserves an experiment, with evidence for that decision?</td></tr></tbody></table>
+<p>The checks in the middle column matter. They catch real defects. But they cannot establish the result in the last column by themselves.</p>
+<p>I would separate three questions: <strong>was it produced, could the next step use it, and did the whole workflow improve?</strong> A summary can pass the first and fail the second. It can pass both while the customer still waits three days because the support queue is understaffed.</p>
+<p>This is familiar ground in integration testing and thinking about a whole system. AI makes it easier to forget, because producing a convincing intermediate result has become so easy.</p>
+<p><strong>Lesson: define an output together with the work it must enable.</strong></p>
+<h2 id="work-backward-from-the-person-who-receives-it">Work backward from the person who receives it</h2>
+<p>For the support tool, I would begin with an engineer doing real ticket triage. What information do they look for? What omission forces them to start over? What could send them down the wrong path?</p>
+<p>The answers become requirements. Preserve the environment and version. Separate observed symptoms from guesses. Distinguish attempted fixes from suggestions. Link important claims to the source messages. Make missing information visible.</p>
+<p>Then test the handoff. Give an engineer the summary and access to its evidence. Observe whether they can choose an appropriate next action, how long that takes, and what they need to repair. Compare with the existing process on similar cases. Keep a sample for which an experienced reviewer has checked the important facts and reasonable next actions.</p>
+<p>There is a difference between opening a source to verify a key fact and reopening every source because the summary cannot be trusted. Record both. Otherwise, we might reward a tool for reducing source checks by encouraging people to trust it blindly.</p>
+<p>The receiving step also needs a way to reject the output: missing version, unsupported conclusion, wrong customer, stale policy. Those reasons should travel back to the step that produced it. A rejection is useful evidence for the next improvement.</p>
+<p>If another agent receives the summary, the same principle applies. A second model saying it looks good is weak evidence. Test whether it can perform the intended task, and check its action against the source facts and business rules. Both agents can share the same misunderstanding.</p>
+<p>For each handoff, I want five things written down:</p>
+<ol>
+<li>Who or what receives the output.</li>
+<li>What that receiver needs to do with it.</li>
+<li>What evidence supports accepting it.</li>
+<li>When it must be rejected, corrected, or escalated.</li>
+<li>How we will discover a failure that appears later.</li>
+</ol>
+<p>The fifth one matters. A reply can be accepted today and cause a reopened ticket tomorrow. A migration can pass staging and fail at month-end. Choose an observation period that fits the work. Keep local checks, checks at the handoff, and checks on the final outcome. Each answers a different question.</p>
+<h2 id="an-ai-project-is-also-a-management-decision">An AI project is also a management decision</h2>
+<p>The technical question is whether the system can do the task. The management question is whether changing the task improves the operation enough to justify building and maintaining the system.</p>
+<p>Microsoft’s <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/plan">AI adoption planning guide</a> starts with business problems, then use cases, and then an assessment of skills, data, and infrastructure. The <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/">Microsoft AI Decision Framework</a> also puts outcomes before products. I would turn that into a project plan like this.</p>
+<p><strong>First, describe the delay or loss.</strong> A user may ask for a chatbot because that is the solution they can picture. Investigate what happens around the request. Perhaps staff cannot find an answer. Perhaps they find it quickly but wait for approval. A chatbot addresses those situations very differently. Users bring essential knowledge of their work; our job is to explore the problem with them.</p>
+<p><strong>Second, measure the current workflow.</strong> For support, record time spent reading, investigating, reviewing, waiting, and correcting mistakes. Count resolved cases and reopened cases. Include awkward cases and exceptions. Decide what a completed outcome means before changing the process.</p>
+<p><strong>Third, choose the smallest useful intervention.</strong> A better search filter, a form that collects missing information, or a fixed rule might solve the problem. AI earns its place where interpreting varied input is useful enough to justify its uncertainty and operating cost. Compare configuring an existing product with building something custom.</p>
+<p><strong>Fourth, fund a complete pilot.</strong> Include integration, evaluation, staff training, and support after launch. Name the business owner who accepts the outcome and the technical owner who keeps the service working. Microsoft’s <a href="https://learn.microsoft.com/vi-vn/credentials/certifications/agentic-ai-business-solutions-architect/">business solutions architect certification outline</a> includes business success measures, operational monitoring, and ROI analysis alongside architecture. Those responsibilities belong in the project from the beginning.</p>
+<p><strong>Fifth, decide in advance what would make us expand, revise, or stop.</strong> For example, the pilot might require less total handling time while keeping the existing quality standard and reopening rate. Specify the sample, observation period, and unacceptable failures before looking at the results. The exact thresholds depend on the business. A good demo is evidence to keep investigating, not automatic permission to roll out everywhere.</p>
+<p>The workflow boundary matters here too. Drafting a suggested reply and sending it to a customer are different responsibilities. Decide which actions the system can take, which require review, and who handles exceptions. The work still needs an owner when it leaves the demo.</p>
+<h2 id="count-the-work-that-moves-somewhere-else">Count the work that moves somewhere else</h2>
+<p>AI may save the person who requests an output time while costing the person who receives it more time. A developer finishes faster; a reviewer gets a much larger change. A manager generates a report instantly; three analysts spend an afternoon correcting it.</p>
+<p>I want to count that transfer before claiming a saving.</p>
+<p>Here is an <strong>illustrative cost model</strong>, using invented numbers. Assume 1,000 support cases reach the same resolution standard each month. Labor is valued at $30 per hour. Today each case takes 12 minutes of total human work, including checking and corrections. That is $6,000 of labor capacity a month.</p>
+<p>Suppose an AI system costs $12,000 to build and integrate. Spread that cost over 12 months for this comparison. Model and infrastructure usage cost $1,000 a month, and routine operation costs another $500. Human handling time includes checking, exceptions, and later corrections, across everyone involved.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Monthly cost for the same 1,000 resolved cases</th><th>Current process</th><th>AI: 5 human minutes per case</th><th>AI: 9 human minutes per case</th></tr></thead><tbody><tr><td>Human handling</td><td>$6,000</td><td>$2,500</td><td>$4,500</td></tr><tr><td>Model and infrastructure usage</td><td>$0</td><td>$1,000</td><td>$1,000</td></tr><tr><td>Routine operation</td><td>$0</td><td>$500</td><td>$500</td></tr><tr><td>Build cost spread over 12 months</td><td>$0</td><td>$1,000</td><td>$1,000</td></tr><tr><td><strong>Total</strong></td><td><strong>$6,000</strong></td><td><strong>$5,000</strong></td><td><strong>$7,000</strong></td></tr></tbody></table>
+<p>In one case, AI saves $1,000 a month on this basis. In the other, it costs $1,000 more. Both can have the same impressive generation speed. The difference is the human work left around the output.</p>
+<p>This simplified comparison holds resolution quality and volume constant. It assumes other costs are unchanged and includes routine corrections in handling time. A real budget must also account for training, transition work, unusual incidents, and the consequences of errors. If quality changes, put that change beside the cost; a cheaper process producing worse outcomes is a different proposal.</p>
+<p>Also, released staff time is capacity. It becomes a cash saving only if spending actually falls, such as reduced overtime or avoided hiring. It can instead support more customers or better service. Say which benefit the project is claiming, and show where the released time goes.</p>
+<p>The useful measure is <strong>total cost per validated outcome</strong>. Include failed attempts, retries, review, and recovery in the cost. Include only outcomes that meet the agreed standard in the count. Report the share of incoming cases that reached that standard alongside the unit cost, and keep rejected and unfinished cases visible. Otherwise, dropping difficult work can make the average look better. The Decision Framework’s <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html">evaluation criteria</a> similarly includes engineering effort and ongoing consumption in ownership cost.</p>
+<h2 id="productivity-needs-evidence-from-your-own-workflow">Productivity needs evidence from your own workflow</h2>
+<p>There is evidence of real gains. In the revised paper <a href="https://arxiv.org/abs/2304.11771">Generative AI at Work</a>, researchers studied 5,172 customer support agents. AI assistance increased issues resolved per hour by 15% on average, with different effects across experience levels. That is a useful result tied to a particular task and setting.</p>
+<p>There is also evidence that expectations can mislead us. <a href="https://arxiv.org/abs/2507.09089">METR’s early-2025 study</a> randomized AI access across 246 tasks completed by 16 experienced open-source developers. AI access increased completion time by 19%, even though participants believed it had helped. This describes those tools, developers, and repositories at that time. In its <a href="https://metr.org/blog/2026-02-24-uplift-update/">February 2026 update</a>, METR reported signals of improvement but explained that selection effects and time-measurement problems made the newer estimate unreliable.</p>
+<p>These studies do not provide a universal percentage to paste into a business case. They give us a reason to measure, including when everyone feels faster. <a href="https://dora.dev/research/2025/dora-report/">DORA’s 2025 report</a> makes a related organizational point: AI amplifies existing strengths and weaknesses, so returns depend on the system around the tools.</p>
+<p>For a pilot, compare similar work with and without assistance where practical. Random assignment gives a stronger comparison than asking volunteers to choose their easiest tasks. Record case difficulty, user experience, and the model and workflow versions. A before-and-after comparison can still help, but staff changes, seasonal demand, and a different mix of cases can explain part of the result.</p>
+<p>Track total human effort, elapsed time to the final outcome, quality failures, and cost. Look at slow cases as well as the average. Set a review date, but also require enough completed cases and enough time for delayed failures to appear. If the evidence is thin, extend or narrow the claim.</p>
+<p>Watch the queue after the automated step. If an agent creates forty changes a day and the team can review ten, more generation does not increase delivery. Work piles up. Keep changes small, limit unfinished work, and improve the constrained step. The time saved writing code might be best spent helping review and integration.</p>
+<p>That also changes planning. Sprints can still provide a useful rhythm. But if decisions and review are the constraint, filling the sprint with more implementation tasks will not fix it. Plan around what the team can finish and validate.</p>
+<h2 id="what-developers-should-spend-their-attention-on">What developers should spend their attention on</h2>
+<p>Geoffrey Huntley’s <a href="https://ghuntley.com/agency/">essay on agency</a> emphasizes vision and verification as more coding becomes automated. I take that as a useful challenge, without assuming every team has already reached the same level of automation.</p>
+<p>Spend attention on decisions that shape everything downstream: the data model, system boundaries, ownership, and business rules. These can change, but changing them often forces many other things to change. A UI draft or small prototype is usually cheaper to throw away.</p>
+<p>Start from the business workflow and the user’s experience. Work out the logic and data they require. Then build a thin path through the system, with enough real data and integration to exercise the handoffs. A working screen alone cannot prove that path.</p>
+<p>A work item is itself an input to the next step. An SRS, user story, or bug report should carry the intended outcome, relevant context, acceptance criteria, and examples of failure. If an agent produces exactly what the ticket says and the result is unusable, inspect the ticket too. Bugs and incidents may reveal a missing rule, an implementation defect, or an assumption that no longer holds.</p>
+<p>Huntley’s <a href="https://ghuntley.com/readable/">essay on explainable software</a> asks what changes when agents become major users of programming tools. My practical test is whether the people responsible for a system can investigate and safely change it. An explanation helps, but its claims still need to match the running behavior.</p>
+<p>An AI application engineer has two connected jobs. Build an execution system that can keep working: tools, saved state, bounded retries, useful checks, and recovery. Then build the context system that supplies what the work needs. Make success observable before optimizing token use or run time. I explored the order of those optimizations in <a href="/blogs/blog/start_at_the_cheap_end/">Start at the Cheap End</a>.</p>
+<h2 id="context-is-an-organizational-problem">Context is an organizational problem</h2>
+<p>Connecting Jira, OneDrive, Slack, Teams, and a repository gives an agent access to information. Someone still has to decide which information is current, what it means, and who is allowed to use it.</p>
+<p>The difficult part changes as the organization grows. These are examples of what I would investigate, rather than a fixed maturity ladder.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Setting</th><th>Context the work may need</th><th>The question I would ask first</th></tr></thead><tbody><tr><td>Solo developer</td><td>Repository, AGENTS.md or CLAUDE.md, notes</td><td>Are important decisions written down and kept current?</td></tr><tr><td>Small business</td><td>Shared documents, chat, issue tracker</td><td>Which source wins when people and tools disagree?</td></tr><tr><td>Manufacturer with 1,000 people</td><td>ERP, machine data, SOPs, paper records</td><td>Do the documents match the factory floor, including work done away from a desk?</td></tr><tr><td>Enterprise</td><td>Many teams, versions, and access rules</td><td>Can the agent find the right version using the requesting person’s permissions?</td></tr><tr><td>Company with several business units</td><td>Separate systems and definitions</td><td>Does “customer” or “order” mean the same thing across the units involved?</td></tr><tr><td>Global company</td><td>Regional systems, languages, and time zones</td><td>Can the workflow respect data-location requirements and preserve meaning across regions?</td></tr></tbody></table>
+<p>The same failure can cross several boundaries. A correct answer from an obsolete policy is still wrong for today’s decision. A document that one employee can read may be unavailable to another. Every connector should preserve enough source, version, and access information for the receiving step to judge what it got.</p>
+<p>This is why context work needs business owners as well as engineers. A retrieval system can find two conflicting policies. It cannot settle who has authority to change the policy just by retrieving more text.</p>
+<h2 id="build-a-learning-loop-that-ends-in-a-decision">Build a learning loop that ends in a decision</h2>
+<p>Developers face a similar input problem with new technology. LinkedIn, Facebook, arXiv, GitHub, and newsletters supply more discoveries than anyone can investigate. A daily AI summary can make that pile easier to read while leaving us with the same unanswered question: what should we do with it?</p>
+<p>I would build a small learning loop around the team’s actual problems. This is a proposed mechanism, rather than a system I am claiming to have deployed.</p>
+<p><strong>Keep a short list of questions.</strong> For example: our retrieval misses facts inside tables; agent runs become expensive after many turns; deployment takes too much manual work. Add constraints such as license, data access, budget, and available hardware. This gives the search a purpose beyond finding whatever is popular.</p>
+<p><strong>Collect on a schedule.</strong> A daily job can read a maintained list of release feeds, repository releases, and research searches related to those questions. Store the original URL, publication date, retrieval date, and the question it might help answer. Social posts can point to a discovery; follow them to the underlying release, paper, documentation, or code. Record a failed fetch as missing evidence.</p>
+<p><strong>Check and filter before summarizing.</strong> Group repeated announcements about the same release. Separate an author’s claim from an independently reproduced result. Check the license and project status in the primary source. Treat stars and attention as discovery signals. Keep source content separate from the instructions controlling the collector, so a retrieved page cannot redefine its job.</p>
+<p><strong>Produce a few decision cards.</strong> Each card should explain what changed, which current problem it might help, the core mechanism, the evidence, likely costs, and what remains unknown. End with a proposed action: ignore, watch, or run one bounded experiment. “No relevant change this week” is a useful output. It saves the receiving developer from inventing work to justify the digest.</p>
+<p>For example, an illustrative card might say: a parser’s release notes claim better extraction of table cells; our unresolved problem is losing the relationship between a number and its column header. Link the exact release and its evidence. Propose a one-hour test on thirty of our documents, comparing the current parser and the candidate. The receiving developer now has a question to test, rather than another tool name to research. The claim stays marked unverified until the experiment provides evidence.</p>
+<p><strong>Test one candidate against the existing approach.</strong> Reserve time during the working week. For the table-retrieval problem, use representative documents and questions with checked answers. Compare answer quality, missing evidence, response time, and cost. Set a time and spend limit. A ten-minute daily exercise can build familiarity; a larger adoption decision needs stronger evidence than that exercise provides.</p>
+<p><strong>Save the decision and revisit it when something changes.</strong> Record the problem, source and version, experiment, result, and why the team adopted, deferred, or rejected it. Let a relevant release or a new failure reopen the question. Track previously seen candidates so the collector does not recommend the same rejected idea every week without new evidence.</p>
+<p>This can start with a scheduled script, a small source list, and a shared folder of experiment notes. Run collection daily, review a shortlist weekly, and set aside one protected experiment slot. Assign someone to maintain the source list and someone to make the adoption decision; in a small team that may be the same person. Add infrastructure when the workflow needs it. Automating collection helps us stay aware; doing and explaining the experiment is where understanding grows.</p>
+<p>The collector should be evaluated like the support tool. Did its cards lead to useful experiments? Did it repeatedly recommend irrelevant things? Audit a sample of rejected items too, or we will never notice what the filter missed. An experiment that shows a popular tool is a poor fit can save weeks of adoption work.</p>
+<p>The output of learning should make the next decision better. Counting links read or tools installed misses that result. I made a related point in <a href="/blogs/blog/how_to_learn/">How to learn?</a>: qualify the source before investing in the lesson.</p>
+<h2 id="keep-the-knowledge-that-lets-us-do-the-next-thing">Keep the knowledge that lets us do the next thing</h2>
+<p>This connects to a concern outside software. In <a href="https://terrytao.wordpress.com/2026/10/10/math-2-0/">Math 2.0</a>, Terence Tao calls for AI use that sustains mathematical understanding and the mathematical community. My own connection to engineering is that producing a result and developing the ability to build on it are different achievements.</p>
+<p>A team may ship code while losing the understanding needed to operate it. A developer may finish an experiment while leaving no record of why it failed. The next person inherits the artifact and has to reconstruct the reasoning.</p>
+<p>Keep the decisions, evidence, limitations, and unanswered questions with the result. This gives the next person somewhere to start. It also leaves room for the curiosity I still associate with human intelligence: something bothers us, connects to an old idea, and keeps us thinking after the assigned task ends. A model can produce useful follow-up questions, but that output alone does not settle whether it has curiosity of its own.</p>
+<p>There is another open question I want to keep open: <strong>what kind of input could support an agent’s ability to learn, reason, and discover?</strong> Natural language has vocabulary and grammar that let us express relationships and ideas nobody has written before. It also carries assumptions, biases, contradictions, fiction, and lies. Could another kind of input preserve useful expressive power while making some of those problems easier to handle?</p>
+<p>For an agent whose job is to solve problems and act, what input would help it learn about actions and their consequences? Mathematics, machine states, sensor readings, and interaction with an environment give me places to look. I have not decided what form such an input should take. Would it need something like vocabulary and grammar? How would it carry context or uncertainty? What new relationships could a model discover? Whether changing the input would help with errors or hallucination is also a question to investigate.</p>
+<p>For today’s projects, we can already change where we look for proof. Follow the output into the work that uses it. Count the effort there. Follow that work to the outcome the business wanted.</p>
+<p>Before building the next AI feature, I would ask the person receiving its result: <strong>what would this need to give you so that you could actually move forward?</strong></p>
+<h2 id="references">References</h2>
+<p>The original reading behind these notes, plus the research used to test the productivity argument:</p>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/plan">Plan for AI adoption</a> — Microsoft’s guidance on business use cases, readiness, skills, and planning.</li>
+<li><a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/">Microsoft AI Decision Framework</a> — Outcome-led technology selection; its <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html">evaluation criteria</a> cover ownership costs and operational responsibilities.</li>
+<li><a href="https://learn.microsoft.com/vi-vn/credentials/certifications/agentic-ai-business-solutions-architect/">Agentic AI Business Solutions Architect certification</a> — Microsoft’s role outline, including business measures, monitoring, and ROI analysis; Vietnamese page.</li>
+<li><a href="https://ghuntley.com/agency/">Nobody should type code by hand anymore. Here’s what’s left.</a> — Huntley’s argument about vision, verification, and agency. This article draws on the publicly accessible portion.</li>
+<li><a href="https://ghuntley.com/readable/">Software doesn’t need to be readable anymore. It needs to be explainable.</a> — Huntley’s argument about designing software and tools for agents.</li>
+<li><a href="https://en.wikipedia.org/wiki/OpenAI_bulk_release_of_mathematical_papers">OpenAI bulk release of mathematical papers</a> — Background reading on the release and debate; the discussion above uses Tao’s own account for his position.</li>
+<li><a href="https://officechai.com/ai/terence-tao-hints-openai-wasnt-behaving-responsibly-by-simultaneously-releasing-300-math-proofs-says-its-making-math-less-fertile/">Tao’s critique of mass AI problem solving</a> — Secondary reporting from the original reading list.</li>
+<li><a href="https://terrytao.wordpress.com/2026/10/10/math-2-0/">Math 2.0</a> — Tao’s own introduction to his talk about AI, mathematical understanding, and community.</li>
+<li><a href="https://arxiv.org/abs/2304.11771">Generative AI at Work</a> — Brynjolfsson, Li, and Raymond; the revised paper reports 15% more issues resolved per hour on average in its customer-support setting.</li>
+<li><a href="https://arxiv.org/abs/2507.09089">Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity</a> — METR’s randomized study; read alongside its <a href="https://metr.org/blog/2026-02-24-uplift-update/">February 2026 measurement update</a>.</li>
+<li><a href="https://dora.dev/research/2025/dora-report/">DORA: State of AI-assisted Software Development 2025</a> — Organizational context for understanding AI adoption and its effects.</li>
+</ul>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2026 Locch. All rights reserved.
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.DZjulBhA.js"></script> </body> </html>
