@@ -1,6 +1,7 @@
 ---
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
+import ThemeSwitcher from './ThemeSwitcher.astro';
 ---
 
 <header>
@@ -11,6 +12,7 @@ import HeaderLink from './HeaderLink.astro';
 			<HeaderLink href="/blogs/blog/">Blog</HeaderLink>
 			<HeaderLink href="/blogs/about/">About</HeaderLink>
 		</div>
+		<ThemeSwitcher />
 		<div class="social-links">
 			<a href="https://m.webtoo.ls/@astro" target="_blank">
 				<span class="sr-only">Follow Astro on Mastodon</span>
@@ -44,9 +46,21 @@ import HeaderLink from './HeaderLink.astro';
 </header>
 <style>
 	header {
+		/* Navigation stays consistent while the content changes display mode. */
+		--accent: #1a1a1a;
+		--black: 0, 0, 0;
+		--gray: 80, 80, 80;
+		--paper: 246, 247, 249;
+		--surface: 255, 255, 255;
+		--border-color: 220, 220, 220;
+		color-scheme: light;
+		color: rgb(var(--black));
+		font-size: 18px;
+		line-height: 1.8;
+		letter-spacing: 0.01em;
 		margin: 0;
 		padding: 0 1em;
-		background: white;
+		background: rgb(var(--surface));
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
 	}
 	h2 {
@@ -62,10 +76,14 @@ import HeaderLink from './HeaderLink.astro';
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		gap: 1rem;
+		max-width: 1200px;
+		margin: 0 auto;
+		flex-wrap: wrap;
 	}
 	nav a {
 		padding: 1em 0.5em;
-		color: var(--black);
+		color: rgb(var(--black));
 		border-bottom: 4px solid transparent;
 		text-decoration: none;
 	}
@@ -78,6 +96,21 @@ import HeaderLink from './HeaderLink.astro';
 		display: flex;
 	}
 	@media (max-width: 720px) {
+		header {
+			font-size: 16px;
+		}
+		nav {
+			justify-content: center;
+			gap: 0.25rem 1rem;
+			padding-bottom: 0.75rem;
+		}
+		nav h2 {
+			flex-basis: 100%;
+			text-align: center;
+		}
+		nav a {
+			padding: 0.6em 0.5em;
+		}
 		.social-links {
 			display: none;
 		}

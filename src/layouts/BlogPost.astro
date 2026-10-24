@@ -16,9 +16,9 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<BaseHead title={title} description={description} />
 		<style>
 			main {
-				width: calc(100% - 2em);
+				width: min(calc(100% - 2rem), 1040px);
 				max-width: 100%;
-				margin: 0;
+				margin: 2em auto;
 			}
 			.hero-image {
 				width: 100%;
@@ -30,10 +30,9 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				box-shadow: var(--box-shadow);
 			}
 			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
+				width: 100%;
+				max-width: var(--prose-width);
 				margin: auto;
-				padding: 1em;
 				color: rgb(var(--gray-dark));
 			}
 			.title {
@@ -51,6 +50,12 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			}
 			.last-updated-on {
 				font-style: italic;
+			}
+			@media (max-width: 768px) {
+				main {
+					width: 100%;
+					margin: 0;
+				}
 			}
 		</style>
 	</head>
@@ -83,30 +88,40 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		</main>
 		<Footer />
 		<script>
-			document.addEventListener('DOMContentLoaded', async () => {
-				const { default: mermaid } = await import('mermaid');
-				mermaid.initialize({ startOnLoad: false, theme: 'default' });
-
-				document.querySelectorAll('pre > code.language-mermaid').forEach((block) => {
-					const pre = block.parentElement!;
-					const container = document.createElement('div');
-					container.classList.add('mermaid');
-					container.textContent = block.textContent ?? '';
-					pre.replaceWith(container);
-				});
-
-				await mermaid.run();
-
-				// Center diagrams; let them scroll horizontally only if they
-				// genuinely exceed the column (rare for compact diagrams).
-				document.querySelectorAll<HTMLElement>('.mermaid').forEach((container) => {
-					const svg = container.querySelector('svg');
-					if (!svg) return;
-					svg.style.height = 'auto';
-					container.style.textAlign = 'center';
-					container.style.overflowX = 'auto';
-				});
+			const diagrams = Array.from(document.querySelectorAll('pre > code.language-mermaid'), (block) => {
+				const container = document.createElement('div');
+				container.classList.add('mermaid');
+				const source = block.textContent ?? '';
+				block.parentElement!.replaceWith(container);
+				return { container, source };
 			});
+
+			if (diagrams.length) {
+				let rendering = Promise.resolve();
+				const renderDiagrams = () => {
+					// Serialize renders so switching modes cannot race Mermaid's shared state.
+					rendering = rendering.then(async () => {
+						const { default: mermaid } = await import('mermaid');
+						mermaid.initialize({
+							startOnLoad: false,
+							theme: document.documentElement.dataset.theme === 'dark' ? 'dark' : 'default',
+						});
+						for (const { container, source } of diagrams) {
+							container.removeAttribute('data-processed');
+							container.textContent = source;
+						}
+						await mermaid.run({ nodes: diagrams.map(({ container }) => container) });
+						for (const { container } of diagrams) {
+							const svg = container.querySelector('svg');
+							if (svg) svg.style.height = 'auto';
+							container.style.textAlign = 'center';
+							container.style.overflowX = 'auto';
+						}
+					}).catch((error) => console.error('Unable to render diagrams:', error));
+				};
+				document.addEventListener('theme-change', renderDiagrams);
+				renderDiagrams();
+			}
 		</script>
 	</body>
 </html>

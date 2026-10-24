@@ -1,0 +1,101 @@
+<div class="theme-switcher" role="group" aria-label="Display mode" hidden>
+	<button type="button" data-theme-choice="light" aria-pressed="false">Light</button>
+	<button type="button" data-theme-choice="dark" aria-pressed="false">Dark</button>
+	<button type="button" data-theme-choice="reading" aria-pressed="false">Reading</button>
+</div>
+
+<script>
+	const modes = ['light', 'dark', 'reading'];
+	const switcher = document.querySelector<HTMLElement>('.theme-switcher');
+	const buttons = document.querySelectorAll<HTMLButtonElement>('[data-theme-choice]');
+	const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+	function updateButtons() {
+		for (const button of buttons) {
+			button.setAttribute('aria-pressed', String(button.dataset.themeChoice === document.documentElement.dataset.theme));
+		}
+	}
+
+	function applyTheme(theme: string, save = false) {
+		if (!modes.includes(theme)) return;
+		document.documentElement.dataset.theme = theme;
+		if (save) {
+			try {
+				localStorage.setItem('blog-theme', theme);
+			} catch {
+				// The mode still works when browser storage is unavailable.
+			}
+		}
+		updateButtons();
+		document.dispatchEvent(new CustomEvent('theme-change'));
+	}
+
+	function followSystemTheme() {
+		if (hasLocalChoice) return;
+		try {
+			if (modes.includes(localStorage.getItem('blog-theme') ?? '')) return;
+		} catch {
+			// Use the system preference when browser storage is unavailable.
+		}
+		applyTheme(systemTheme.matches ? 'dark' : 'light');
+	}
+
+	let hasLocalChoice = false;
+	for (const button of buttons) {
+		button.addEventListener('click', () => {
+			hasLocalChoice = true;
+			applyTheme(button.dataset.themeChoice ?? 'light', true);
+		});
+	}
+	window.addEventListener('storage', (event) => {
+		if (event.key !== 'blog-theme' && event.key !== null) return;
+		hasLocalChoice = false;
+		if (event.newValue && modes.includes(event.newValue)) {
+			applyTheme(event.newValue);
+		} else {
+			applyTheme(systemTheme.matches ? 'dark' : 'light');
+		}
+	});
+	systemTheme.addEventListener('change', followSystemTheme);
+	updateButtons();
+	if (switcher) switcher.hidden = false;
+</script>
+
+<style>
+	.theme-switcher {
+		display: flex;
+		gap: 0.2rem;
+		padding: 0.25rem;
+		border: 1px solid rgb(var(--border-color));
+		border-radius: 999px;
+		background: rgb(var(--paper));
+		font-family: 'Atkinson', system-ui, sans-serif;
+		font-size: 0.8rem;
+		line-height: 1;
+	}
+	.theme-switcher[hidden] {
+		display: none;
+	}
+	button {
+		min-height: 2.5rem;
+		padding: 0.5rem 0.8rem;
+		border: 0;
+		border-radius: 999px;
+		background: transparent;
+		color: rgb(var(--gray));
+		font: inherit;
+		cursor: pointer;
+	}
+	button:hover {
+		color: rgb(var(--black));
+		background: rgb(var(--surface));
+	}
+	button[aria-pressed='true'] {
+		background: var(--accent);
+		color: rgb(var(--surface));
+	}
+	button:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 3px;
+	}
+</style>

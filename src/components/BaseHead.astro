@@ -19,6 +19,21 @@ const { title, description, image } = Astro.props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="color-scheme" content="light dark" />
+<script is:inline>
+	(() => {
+		let theme;
+		try {
+			theme = localStorage.getItem('blog-theme');
+		} catch {
+			// Storage can be blocked in private or restricted browser contexts.
+		}
+		if (!['light', 'dark', 'reading'].includes(theme)) {
+			theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		}
+		document.documentElement.dataset.theme = theme;
+	})();
+</script>
 <link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg?v=9" />
 <link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon.png?v=9" />
 <link rel="sitemap" href="/blogs/sitemap-index.xml" />
