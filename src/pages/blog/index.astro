@@ -69,6 +69,11 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
 			ul a:hover img {
 				box-shadow: var(--box-shadow);
 			}
+			@media (max-width: 768px) {
+				main {
+					width: 100%;
+				}
+			}
 			@media (max-width: 720px) {
 				ul {
 					gap: 0.5em;
