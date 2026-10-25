@@ -46,14 +46,7 @@ import ThemeSwitcher from './ThemeSwitcher.astro';
 </header>
 <style>
 	header {
-		/* Navigation stays consistent while the content changes display mode. */
-		--accent: #1a1a1a;
-		--black: 0, 0, 0;
-		--gray: 80, 80, 80;
-		--paper: 246, 247, 249;
-		--surface: 255, 255, 255;
-		--border-color: 220, 220, 220;
-		color-scheme: light;
+		/* Inherit the current palette without changing navigation geometry. */
 		color: rgb(var(--black));
 		font-size: 18px;
 		line-height: 1.8;
@@ -61,7 +54,12 @@ import ThemeSwitcher from './ThemeSwitcher.astro';
 		margin: 0;
 		padding: 0 1em;
 		background: rgb(var(--surface));
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		border-bottom: 1px solid rgb(var(--border-color));
+		box-shadow: var(--box-shadow);
+	}
+	:global(html[data-theme='reading']) header {
+		--surface: 248, 237, 207;
+		--paper: 239, 228, 208;
 	}
 	h2 {
 		margin: 0;
@@ -94,6 +92,11 @@ import ThemeSwitcher from './ThemeSwitcher.astro';
 	.social-links,
 	.social-links a {
 		display: flex;
+	}
+	@media (max-width: 960px) {
+		.social-links {
+			display: none;
+		}
 	}
 	@media (max-width: 720px) {
 		header {
