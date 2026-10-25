@@ -212,8 +212,6 @@ The output of learning should make the next decision better. Counting links read
 
 **Keep some of the saved time for understanding.** A cheaper implementation can be a chance to investigate why something works, explain a decision to a teammate, or pursue a question that the next ticket will never ask.
 
-This connects to a concern outside software. In [Math 2.0](https://terrytao.wordpress.com/2026/10/10/math-2-0/), Terence Tao calls for AI use that sustains mathematical understanding and the mathematical community. My own connection to engineering is that producing a result and developing the ability to build on it are different achievements.
-
 A team may ship code while losing the understanding needed to operate it. A developer may finish an experiment while leaving no record of why it failed. The next person inherits the artifact and has to reconstruct the reasoning.
 
 Keep the decisions, evidence, limitations, and unanswered questions with the result. This gives the next person somewhere to start. When an agent can draft the next implementation quickly, our understanding is what helps us judge whether to use it, adapt it, or throw it away.
@@ -231,6 +229,32 @@ Afterward, I would look for the new delay. Is the team waiting on review, missin
 This does not require every developer to become a manager. It requires us to take responsibility for more of the chain our code belongs to.
 
 **When code is cheap, move toward the decisions that make it useful.** Choose the problem, shape the durable parts, prove the result through the work that uses it next, and help the team deliver it.
+
+The practical changes above leave me with two further questions about intelligence itself.
+
+## Extra thought: LLM intelligence still feels different from human intelligence
+
+In [Math 2.0](https://terrytao.wordpress.com/2026/10/10/math-2-0/), Terence Tao calls for AI use that sustains mathematical understanding and the mathematical community. His concern made me think about a separate question: what do we mean by intelligence beyond producing a correct solution?
+
+My own reflection, not Tao's claim: when I read or work on something, questions sometimes appear without anyone asking me to produce them. Something bothers me, connects to an old idea, or makes me wonder what would happen if I changed an assumption. I may keep thinking about it after the task is finished. That curiosity is part of what I mean by human intelligence.
+
+An LLM can solve a difficult problem and generate useful follow-up questions. Those outputs alone do not settle whether it has curiosity of its own. Asking a model to act curious can produce good questions, but I still wonder about the difference between answering the question in front of you and finding something you want to understand after nobody is asking.
+
+How could we investigate that difference? What observations would distinguish useful question generation from curiosity? I do not have an answer. This is a question about the nature of intelligence that I want to understand better.
+
+## Extra thought: what kind of input could an agent learn from?
+
+Natural language is a rich input. A vocabulary and grammar let us express facts, logic, relationships, and ideas nobody has written before. That makes me wonder how much the form of the input matters to what a model can learn and create.
+
+The same input carries assumptions, biases, contradictions, fiction, and lies. Could another kind of input preserve useful expressive power while making some of those problems easier to handle? I have not decided what form that input should take, or whether it should resemble a language at all.
+
+An autonomous agent's main job is to solve problems and act. Conversation helps it work with people. But what kinds of input would help it learn about the problems it needs to solve and the effects of its actions?
+
+Mathematics, machine states, sensor readings, and interactions with an environment give me places to look. What could a model learn from each? What relationships could it discover? Could it combine what it learns to handle something it has not encountered before?
+
+Does a useful input need something like vocabulary and grammar? How would it carry relationships, context, or uncertainty? Could it support the discovery of new ideas? Whether changing the input would help with errors or hallucination is also something to investigate.
+
+The open question is **what kind of input could support an agent's ability to learn, reason, and discover?** I am still exploring the question.
 
 ## References
 
