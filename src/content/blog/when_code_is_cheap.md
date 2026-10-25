@@ -153,19 +153,33 @@ Track total human effort, elapsed time to the final outcome, quality failures, a
 
 For a developer, this means helping build the measurement as well as the feature. Keep the comparison repeatable so that the next model, prompt, or workflow change has to earn its place against the same standard.
 
-## Move toward improving the delivery system
-
 When implementation is the slowest step, speeding it up can help the whole team. Once another step becomes slower, the best use of a developer's time changes again.
 
 Watch the queue after the automated step. If an agent creates forty changes a day and the team can review ten, more generation does not increase delivery. Work piles up. Keep changes small, limit unfinished work, and improve the constrained step. The time saved writing code might be best spent helping review and integration.
 
 That also changes planning. Sprints can still provide a useful rhythm. But if decisions and review are the constraint, filling the sprint with more implementation tasks will not fix it. Plan around what the team can finish and validate.
 
-An AI application engineer has two connected jobs. Build an execution system that can keep working: tools, saved state, bounded retries, useful checks, and recovery. Then build the context system that supplies what the work needs. Make success observable before optimizing token use or run time. I explored the order of those optimizations in [Start at the Cheap End](/blogs/blog/start_at_the_cheap_end/).
+## Build the agent and the context system around it
 
-Connecting Jira, OneDrive, Slack, Teams, and a repository gives an agent access to information. Someone still has to decide which information is current, what it means, and who is allowed to use it.
+An AI application engineer has two connected jobs: **build an agent that can keep working reliably**, and **build the context system that gives it the right information**. As writing the application code gets cheaper, these are two places where engineering effort can make a larger difference.
 
-The difficult part changes as the organization grows. These are examples of what I would investigate, rather than a fixed maturity ladder.
+### Make the agent work longer and better
+
+Build the execution loop around the model: instructions, tools, saved state, checks, and recovery. The agent needs a clear target and a way to check its progress. It should be able to resume interrupted work, handle a failed tool call, and stop when it cannot make progress.
+
+Put limits on retries and spending. Measure verified results alongside time and token use. Then improve efficiency while checking that the result still meets the same standard. I explored the order of those optimizations in [Start at the Cheap End](/blogs/blog/start_at_the_cheap_end/).
+
+### Build the context system around the agent
+
+The agent also needs information that is **consistent, current, relevant, and allowed for the person using it**. That information may come from Jira, OneDrive, Slack, Teams, repositories, a knowledge base, or memory from earlier work.
+
+Connecting those tools is a starting point. The context system needs to preserve where information came from, when it was valid, which version applies, and who can access it. It also needs a way to handle missing or conflicting information.
+
+Imagine an agent preparing a maintenance instruction. It finds an old SOP in a shared folder, a newer procedure in the ERP, and a technician's message about a temporary machine fault. Retrieving all three is useful. The harder work is establishing which procedure applies to this machine now, what the observation changes, and what remains uncertain.
+
+### How complex does the context system become?
+
+A solo developer may manage with a repository, an instruction file, and notes. A larger organization introduces more sources, owners, permissions, and meanings. These examples show how the difficult question changes; they are not a fixed maturity ladder.
 
 | Setting | Context the work may need | The question I would ask first |
 | --- | --- | --- |
@@ -176,47 +190,29 @@ The difficult part changes as the organization grows. These are examples of what
 | Company with several business units | Separate systems and definitions | Does “customer” or “order” mean the same thing across the units involved? |
 | Global company | Regional systems, languages, and time zones | Can the workflow respect data-location requirements and preserve meaning across regions? |
 
-The same failure can cross several boundaries. A correct answer from an obsolete policy is still wrong for today's decision. A document that one employee can read may be unavailable to another. Every connector should preserve enough source, version, and access information for the receiving step to judge what it got.
+The complexity grows through the connections between sources. For one person, the main challenge may be writing things down. A team needs shared truth. A factory must reconcile documents with physical conditions. An enterprise adds access rules and competing versions. Several business units add different meanings for the same term. A global company adds languages, regions, and time zones.
 
-This is why context work needs business owners as well as engineers. A retrieval system can find two conflicting policies. It cannot settle who has authority to change the policy just by retrieving more text.
+That means different engineering work at each level: maintaining notes, tracking sources and updates, connecting live observations, enforcing permissions, and mapping meanings across systems. Adding more documents to a search index does not settle all of those questions.
 
-These are engineering tasks worth moving toward: make the workflow easier to finish, give the agent reliable context, and make failures recoverable. A faster generator needs a delivery system that can use what it produces.
+**Building the agent and building its context system are separate responsibilities that have to work together.** The execution loop determines what the agent can do; the context system shapes what it knows about the situation it is acting in. Both need checks.
 
-## Move toward learning that improves the next project
+## Keep learning
 
-Cheaper implementation also changes how we learn. We can use small experiments to investigate a new idea sooner, then spend more attention on its mechanism, limits, and fit. Learning another tool's syntax is only part of that work.
+Tools change quickly. Learn the core idea, how it works, and its limits. That understanding helps you judge the next tool built on a similar idea.
 
-Developers face a similar input problem with new technology. LinkedIn, Facebook, arXiv, GitHub, and newsletters supply more discoveries than anyone can investigate. A daily AI summary can make that pile easier to read while leaving us with the same unanswered question: what should we do with it?
+I would keep the learning habit simple:
 
-I would build a small learning loop around the team's actual problems. This is a proposed mechanism, rather than a system I am claiming to have deployed.
+1. **Choose one question.** Give yourself something small enough to investigate in 10–15 minutes.
+2. **Find the original source.** Start with official documentation, the paper, or the project's code. Social posts can help you discover an idea; follow their links before trusting the summary.
+3. **Check the evidence.** Who made the claim? What did they actually test? Check the date, version, and limitations. Several posts copying one announcement are still one source.
+4. **Try a small example.** Run it, inspect the code, or work through the reasoning. Compare the result with something you can check.
+5. **Write down what you understood.** Explain the mechanism in your own words, keep the source link, and separate what you verified from what remains uncertain.
 
-**Keep a short list of questions.** For example: our retrieval misses facts inside tables; agent runs become expensive after many turns; deployment takes too much manual work. Add constraints such as license, data access, budget, and available hardware. This gives the search a purpose beyond finding whatever is popular.
+A published paper, an official page, or a popular repository can still contain mistakes. When sources disagree, inspect their evidence and assumptions. Leave the question open if you cannot resolve it.
 
-**Collect on a schedule.** A daily job can read a maintained list of release feeds, repository releases, and research searches related to those questions. Store the original URL, publication date, retrieval date, and the question it might help answer. Social posts can point to a discovery; follow them to the underlying release, paper, documentation, or code. Record a failed fetch as missing evidence.
+Use a small weekly digest of documentation updates, papers, and repository releases to discover what to study. Keep time for fundamentals and questions that simply make you curious.
 
-**Check and filter before summarizing.** Group repeated announcements about the same release. Separate an author's claim from an independently reproduced result. Check the license and project status in the primary source. Treat stars and attention as discovery signals. Keep source content separate from the instructions controlling the collector, so a retrieved page cannot redefine its job.
-
-**Produce a few decision cards.** Each card should explain what changed, which current problem it might help, the core mechanism, the evidence, likely costs, and what remains unknown. End with a proposed action: ignore, watch, or run one bounded experiment. “No relevant change this week” is a useful output. It saves the receiving developer from inventing work to justify the digest.
-
-For example, an illustrative card might say: a parser's release notes claim better extraction of table cells; our unresolved problem is losing the relationship between a number and its column header. Link the exact release and its evidence. Propose a one-hour test on thirty of our documents, comparing the current parser and the candidate. The receiving developer now has a question to test, rather than another tool name to research. The claim stays marked unverified until the experiment provides evidence.
-
-**Test one candidate against the existing approach.** Reserve time during the working week. For the table-retrieval problem, use representative documents and questions with checked answers. Compare answer quality, missing evidence, response time, and cost. Set a time and spend limit. A ten-minute daily exercise can build familiarity; a larger adoption decision needs stronger evidence than that exercise provides.
-
-**Save the decision and revisit it when something changes.** Record the problem, source and version, experiment, result, and why the team adopted, deferred, or rejected it. Let a relevant release or a new failure reopen the question. Track previously seen candidates so the collector does not recommend the same rejected idea every week without new evidence.
-
-This can start with a scheduled script, a small source list, and a shared folder of experiment notes. Run collection daily, review a shortlist weekly, and set aside one protected experiment slot. Assign someone to maintain the source list and someone to make the adoption decision; in a small team that may be the same person. Add infrastructure when the workflow needs it. Automating collection helps us stay aware; doing and explaining the experiment is where understanding grows.
-
-The collector should be evaluated like the support tool. Did its cards lead to useful experiments? Did it repeatedly recommend irrelevant things? Audit a sample of rejected items too, or we will never notice what the filter missed. An experiment that shows a popular tool is a poor fit can save weeks of adoption work.
-
-The output of learning should make the next decision better. Counting links read or tools installed misses that result. I made a related point in [How to learn?](/blogs/blog/how_to_learn/): qualify the source before investing in the lesson.
-
-**Keep some of the saved time for understanding.** A cheaper implementation can be a chance to investigate why something works, explain a decision to a teammate, or pursue a question that the next ticket will never ask.
-
-A team may ship code while losing the understanding needed to operate it. A developer may finish an experiment while leaving no record of why it failed. The next person inherits the artifact and has to reconstruct the reasoning.
-
-Keep the decisions, evidence, limitations, and unanswered questions with the result. This gives the next person somewhere to start. When an agent can draft the next implementation quickly, our understanding is what helps us judge whether to use it, adapt it, or throw it away.
-
-The time saved coding gives us room to build that understanding. Make it part of the work: explain what the prototype taught us, document the decision, and leave the next developer able to challenge it.
+As I wrote in [How to learn?](/blogs/blog/how_to_learn/), **qualify what you learn before you learn it**. A habit of checking and understanding is worth more than a long list of tools you recognize.
 
 ## Put the saved time somewhere useful
 
