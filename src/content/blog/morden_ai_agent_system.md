@@ -8,6 +8,8 @@ draft: true
 
 ## The building blocks
 
+I think we will analyze characteristics of each block: why they need to exist in an mordern agent system.
+
 - Memory system and memory hub: [XERJ](https://xerj.org/).
 
 - Agent hub: [Claude Code Templates](https://www.aitmpl.com/).
