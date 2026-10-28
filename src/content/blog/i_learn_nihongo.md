@@ -2,6 +2,7 @@
 title: "I learn Nihongo!"
 description: "Some thoughts about Nihongo"
 pubDate: "2026-08-03"
+updatedDate: "2026-10-28"
 author: "locchh"
 tags: ["languages", "ai", "llm"]
 draft: false
@@ -399,6 +400,28 @@ close to what 19th-century language teachers called the direct method: tie
 meaning straight to the sound of the target language, with no translation
 sitting in between. And it's how Japanese speakers learned before romaji ever
 existed.
+
+Here is the core of it, as I experience it. When I learn a new word, I do not
+hold the shape of it. I hold the **sound**, in my head, and when I need to
+write it I turn the sound back into text. Reading runs the same way. The first
+kana starts the word playing in my head, and the rest of the characters only
+confirm what I already hear. I do not need to look at every one. This is not
+a trick I invented. Baddeley and Hitch showed in 1974 that working memory
+keeps language as sound in what they called the
+[**phonological loop**](https://en.wikipedia.org/wiki/Baddeley%27s_model_of_working_memory):
+even text you read silently gets turned into an inner voice to be held. Sound
+is the storage format, and the script is just how you get it onto the page.
+That is also why the shape-reading of 図書館 from the top of this post is not
+a contradiction. Perfetti and Zhang found in 1995 that even for Chinese
+characters, the
+[sound fires early and on its own](https://doi.org/10.1037/0278-7393.21.1.24),
+before the meaning arrives. You stop noticing it. It does not stop happening.
+And the proof is already in the table above: `nihongo` → にほんご → 日本語.
+Every Japanese writer types the sound and lets the machine produce the text.
+One honest limit. Sound to text is lossless for kana, because kana is shallow.
+It is not lossless for kanji. One sound often has several kanji, which is why
+the keyboard shows candidates and you pick. Sound gets you to the word. Kanji
+needs one more step.
 
 That's the idea behind [my-nihongo-rho.vercel.app](https://my-nihongo-rho.vercel.app/),
 a small site I built for myself. Mazii and the other big Japanese learning
