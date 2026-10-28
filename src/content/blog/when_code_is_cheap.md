@@ -1,269 +1,139 @@
 ---
 title: "When Code Is Cheap"
-description: "When implementation gets cheaper, where should developers move? Toward problem framing, lasting design decisions, proof, delivery, and learning that improves the next project."
+description: "An agent writes the first version in twenty minutes. The question on a senior's desk is no longer how to build it, but whether a project should use AI at all, and what it will cost to own. Seven questions I ask before saying yes."
 pubDate: "2026-10-24"
+updatedDate: "2026-10-28"
 author: "locchh"
 draft: false
 ---
 
-When writing the first version of a feature takes an afternoon, we plan around that afternoon. We estimate the coding, choose a framework, and assign the implementation.
+A feature that used to take an afternoon now takes an agent twenty minutes. For a few years that was my problem to enjoy. Now it is a different problem. People bring me a project and ask whether we should put AI in it. I have to say yes or no, and then live with the answer.
 
-Now imagine an agent can produce that first version in twenty minutes. What should the developer do with the time that was released?
+Fred Brooks saw this coming in 1986. In [No Silver Bullet](https://worrydream.com/refs/Brooks_1986_-_No_Silver_Bullet.pdf) he split software work into the **essence**, the ideas and rules a program must get right, and the **accident**, the labor of typing those ideas into a machine. Then he said which part is hard: "the specification, design, and testing of this conceptual construct, not the labor of representing it." Agents made the labor cheap. The essence is now the whole job. And the first piece of it is the one he called hardest: "deciding precisely what to build."
 
-There is an easy answer: ask it to build more features. But somebody still has to decide which features matter, settle the business rules, check the behavior, integrate the changes, and keep the result working. Faster implementation does not make those jobs disappear.
+Below are the seven questions I ask before I say yes to AI in a project. Each one has a reason from the fundamentals, and each one has a reason from Microsoft's own guidance for people who make this decision. I keep the list short because I want to use it, not admire it.
 
-That is the spirit of **when code is cheap**. The developer's attention moves toward the work that decides whether the code is worth having.
+## 1. What is the problem, before AI?
 
-I mean cheaper to produce and revise, rather than free to trust or operate. The size of the saving varies by task and team. But wherever implementation becomes cheaper, the useful question changes: **which part of the work now deserves more of my judgment?**
+Microsoft's [planning guide](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/plan) opens with a sentence I wish every request came with: start with business problems, and look for where results miss expectations "before you consider AI at all."
 
-My answer is to move closer to the problem, the lasting design decisions, the evidence, and the people who use the result. Here is what that means in practice.
+Most requests arrive as a solution. Someone asks for a chatbot because a chatbot is the solution they can picture. Go and watch the work first. Maybe staff cannot find the answer. Maybe they find it in seconds and then wait a day for a manager's approval. A chatbot fixes one of those and does nothing for the other. The people doing the work know where the delay is. Our job is to go and look with them.
 
-## Move toward choosing the right problem
+Then measure the work as it is today: how long each case takes, how many are finished, how many come back. Without that number there is nothing to compare against later, and every result will look like success.
 
-Cheaper implementation makes it easier to build the wrong thing quickly. Choosing the problem deserves more attention because the cost of trying a solution has fallen, while the cost of pursuing an irrelevant goal can still be months of everyone's work.
+> **Lesson:** describe the delay or the loss before you describe the tool. If you cannot name what gets better, you are not ready to build.
 
-A developer can move upstream: observe the workflow, ask why the request exists, and help define the result before the ticket becomes an instruction to an agent. This brings engineering into the management decision about what deserves investment.
+## 2. Does it need AI at all, and does something already exist?
 
-Microsoft's [AI adoption planning guide](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/plan) starts with business problems, then use cases, and then an assessment of skills, data, and infrastructure. The [Microsoft AI Decision Framework](https://microsoft.github.io/Microsoft-AI-Decision-Framework/) also puts outcomes before products. For a developer taking more responsibility for the outcome, I would turn that into a project plan like this.
+The [Microsoft AI Decision Framework](https://microsoft.github.io/Microsoft-AI-Decision-Framework/) has a rule I now repeat in every meeting: ["never lead with a product."](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/decision-framework.html) Result first, then the situation, then how the system should behave. The technology comes last.
 
-**First, describe the delay or loss.** A user may ask for a chatbot because that is the solution they can picture. Investigate what happens around the request. Perhaps staff cannot find an answer. Perhaps they find it quickly but wait for approval. A chatbot addresses those situations very differently. Users bring essential knowledge of their work; our job is to explore the problem with them.
+It also asks a checkpoint question before any of that: does this need an agent? If the steps are fixed and the input is structured, ordinary code is cheaper and more reliable. If people just need to find a document, that is search. And for numbers, the [scenarios page](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/scenarios.html) is blunt: "if the problem has a numerically correct answer, an LLM is the wrong tool for producing it." A model is good at reading messy input. It is not a calculator and not a database.
 
-**Second, measure the current workflow.** For support, record time spent reading, investigating, reviewing, waiting, and correcting mistakes. Count resolved cases and reopened cases. Include awkward cases and exceptions. Decide what a completed outcome means before changing the process.
+Then it gives a ladder: use something that exists, configure it, extend it, and build only at the top. The honest part is the rule for climbing. You must be able to explain why each rung below failed. If you cannot, you are not building because you need to. You are building because building got cheap. One more line from the same page is worth keeping: "Audition the soloist before you hire the orchestra." One agent with good tools, before any talk of several.
 
-**Third, choose the smallest useful intervention.** A better search filter, a form that collects missing information, or a fixed rule might solve the problem. AI earns its place where interpreting varied input is useful enough to justify its uncertainty and operating cost. Compare configuring an existing product with building something custom.
+> **Lesson:** explain why plain code, search, and an existing product all failed before you fund a model.
 
-**Fourth, fund a complete pilot.** Include integration, evaluation, staff training, and support after launch. Name the business owner who accepts the outcome and the technical owner who keeps the service working. Microsoft's [business solutions architect certification outline](https://learn.microsoft.com/vi-vn/credentials/certifications/agentic-ai-business-solutions-architect/) includes business success measures, operational monitoring, and ROI analysis alongside architecture. Those responsibilities belong in the project from the beginning.
+## 3. What will it cost to own, not to build?
 
-**Fifth, decide in advance what would make us expand, revise, or stop.** For example, the pilot might require less total handling time while keeping the existing quality standard and reopening rate. Specify the sample, observation period, and unacceptable failures before looking at the results. The exact thresholds depend on the business. A good demo is evidence to keep investigating, not automatic permission to roll out everywhere.
+Here is the trap inside the word "cheap." In 1865 the economist William Jevons watched steam engines become far more efficient while everyone around him expected England to burn less coal. It burned more, and he explained why: cheaper coal found more uses. His line still applies: ["It is a confusion of ideas to suppose that the economical use of fuel is equivalent to diminished consumption."](https://en.wikipedia.org/wiki/Jevons_paradox)
 
-The workflow boundary matters here too. Drafting a suggested reply and sending it to a customer are different responsibilities. Decide which actions the system can take, which require review, and who handles exceptions. The work still needs an owner when it leaves the demo.
+Code behaves like coal. When a feature costs twenty minutes, we ask for twenty features, and every one still has to be read, run, kept working, and understood. Dijkstra said in 1988 that we count lines of code [on the wrong side of the ledger](https://www.cs.utexas.edu/~EWD/transcriptions/EWD10xx/EWD1036.html): they are not "lines produced" but "lines spent." The framework's [capability model](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/capability-model.html) puts it in four words: "Building got cheap. Owning didn't."
 
-The shift is practical: spend some of the time saved implementing a request on finding out whether it is the right request. That investigation can end with a smaller feature, a different workflow, or a decision to leave the system alone.
+The same page pictures every agent as a coin. One side is the demo: visible, interactive, easy to show in a meeting. The other side runs in the background with nobody at the keyboard, and that side is what changes the operating cost. The demo gets the project approved. The other side is what you own. So I budget the two separately, and I include the cost of checking the output, because a metered system quietly tempts you to measure less.
 
-## Move toward decisions that outlive the code
+The number I want is simple: the total cost of one outcome that met the agreed standard, with the checking and the fixing included. Count only the cases that met the standard. Keep the rejected and unfinished ones visible, or dropping the hard cases will make the average look good. And remember that staff time freed by AI is capacity, not cash. It becomes a saving only if spending actually falls, or if someone names what the freed hours will now do.
 
-Geoffrey Huntley's [essay on agency](https://ghuntley.com/agency/) emphasizes vision and verification as more coding becomes automated. I take that as a useful challenge, without assuming every team has already reached the same level of automation.
+> **Lesson:** price the side of the coin nobody watches. Cost per good outcome, checking included.
 
-When we can generate several implementations cheaply, the particular implementation becomes easier to replace. Spend more attention on decisions that shape everything downstream: the data model, system boundaries, ownership, and business rules. These can change, but changing them often forces many other things to change. A UI draft or small prototype is usually cheaper to throw away.
+## 4. How much may it do alone, and who answers for it?
 
-Start from the business workflow and the user's experience. Work out the logic and data they require. Then build a thin path through the system, with enough real data and integration to exercise the handoffs. A working screen alone cannot prove that path.
+The capability model separates three levels of trust: the system **recommends**, it **acts within set limits**, or it **owns the outcome**. The line between the first two is where accountability changes hands, and that line is the real design decision. The page says it in one sentence: "Capability is a demo. Authority is a liability."
 
-A work item is itself an input to the next step. An SRS, user story, or bug report should carry the intended outcome, relevant context, acceptance criteria, and examples of failure. If an agent produces exactly what the ticket says and the result is unusable, inspect the ticket too. Bugs and incidents may reveal a missing rule, an implementation defect, or an assumption that no longer holds.
+So I decide, per action, what the system may do. Reading can be logged. Writing needs a person to confirm. Anything destructive needs approval through a separate channel, from someone who owns the process. Drafting a reply to a customer and sending it are different jobs, and I treat them as different jobs. Every production duty gets a [named owner](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html): one for the business result and one for keeping the service alive. The decision page gives the test I use at the end: "An agent you cannot see, attribute, or switch off is not in production."
 
-Huntley's [essay on explainable software](https://ghuntley.com/readable/) asks what changes when agents become major users of programming tools. My practical test is whether the people responsible for a system can investigate and safely change it. An explanation helps, but its claims still need to match the running behavior.
+None of this is a limit on the technology. It is how the project survives its first bad week. AI informs. Humans commit.
 
-Use cheaper code to buy evidence. Build two small prototypes when they would answer a design question better than a long debate. Check them against the same real workflow. Throw away the one that loses. Keep the data and business boundaries clear enough that a disposable prototype does not quietly become a permanent dependency.
+> **Lesson:** decide which actions it may take alone, which need a person, and who is named when it goes wrong. Before launch, not after.
 
-The developer's contribution is choosing what the experiment needs to teach us, then making the decision from what happened. Generating three alternatives is easy compared with knowing which tradeoff the business can live with.
+## 5. Who will check the output, and is that capacity planned?
 
-## Move toward defining and proving done
+Dijkstra, 1969: ["Testing shows the presence, not the absence of bugs."](https://en.wikiquote.org/wiki/Edsger_W._Dijkstra) That was true when a human wrote every line. It matters more now, because an agent can pass every check we thought to write and still miss the reason the ticket exists. The scenarios page says it in one breath: "Generation got cheap. Verification did not." Geoffrey Huntley, asked [what is left](https://ghuntley.com/agency/) when nobody types code by hand, answers: vision, verification, and agency. Two of the three are about checking.
 
-As implementation speeds up, deciding what counts as finished becomes a larger part of the developer's job. An agent can satisfy the wording of a ticket while missing the reason the ticket exists.
+My test for "done" is simple: the next person can do their job with the output. Say we build a tool that summarizes support tickets. The summaries are clear and complete. Then an engineer notices one left out the customer's software version and mixed up a fix that was tried with one that was only suggested. So they reread the whole conversation. We shipped a feature, and the workflow gained one more document to check. So "done" is decided by whoever receives the output, not by whoever produces it. Build the proof there, with the receiver, on real cases.
 
-Imagine we use that new speed to build a support-ticket summarizer. It produces clear summaries in seconds. Then a support engineer finds that a summary omitted the customer's software version and mixed an attempted fix with a suggestion. They reread the whole conversation. We built the feature quickly, but the workflow gained another document to check.
+Then plan the checking as work, with people and hours. If an agent opens forty changes a day and the team can honestly review ten, the extra thirty are a pile going stale in a queue. I did that arithmetic in [Through a Senior's Eyes](/blogs/blog/through_a_seniors_eyes/): more workers do not make the one person who decides any faster.
 
-**The next step is part of the specification.**
+And watch for the slow failure. Diane Vaughan studied the Challenger disaster and named it the [normalization of deviance](https://en.wikipedia.org/wiki/Normalization_of_deviance): each time a check is skipped and nothing goes wrong, skipping becomes a little more normal. An agent that has been right ten times is the perfect setup. The eleventh review is the one you will want to skip.
 
-We often describe an application by what it can do. It can summarize documents, generate code, answer questions, or create reports. Those are capabilities. A business needs to know what those capabilities make possible.
+> **Lesson:** define done by what the next person can do with it. Budget the review. Keep reviewing after it has been right ten times.
 
-A ticket summary should help an engineer choose the next diagnostic step. A specification should help a developer build the intended behavior. A report should help someone make a decision. Their quality depends partly on the work that follows them.
+## 6. Who will understand it in a year?
 
-| Output | A check inside the current step | A check at the next step |
-| --- | --- | --- |
-| Ticket summary | Clear writing; required sections present | Can the engineer choose a useful diagnostic step without reconstructing the whole conversation? |
-| Feature specification | Complete template; no obvious contradictions | Can a developer build it and a tester distinguish correct behavior from an incorrect interpretation? |
-| Generated code | Compiles; component tests pass | Does it preserve the behavior its callers need, and work in the real user journey? |
-| Technology digest | Recent links; readable summaries | Can the team decide what deserves an experiment, with evidence for that decision? |
+In 1985 Peter Naur wrote [Programming as Theory Building](https://pages.cs.wisc.edu/~remzi/Naur.pdf). His claim is that the program is not the code. It is the **theory** in the heads of the people who built it: the knowledge that lets them explain it and change it without breaking it. Then the definition I cannot forget: "The death of a program happens when the programmer team possessing its theory is dissolved." A dead program keeps running. You find out when someone asks for a change and nobody can answer.
 
-The checks in the middle column matter. They catch real defects. But they cannot establish the result in the last column by themselves.
+When an agent writes the code, nobody holds the theory by default. Geoffrey Huntley argues that software [no longer needs to be readable, only explainable](https://ghuntley.com/readable/) by a model on demand. I think that is half right. An explanation on request is useful. It is not a person who understands the system and answers for it. The instruction files we now write for agents, a CLAUDE.md or an AGENTS.md, are the theory partly written down: what the system is for, which decisions were made and why, which source wins when two disagree. That is the most valuable document a team can write today. It is still not the whole theory. Someone has to hold the rest, and that person's time is part of the cost in question 3.
 
-I would separate three questions: **was it produced, could the next step use it, and did the whole workflow improve?** A summary can pass the first and fail the second. It can pass both while the customer still waits three days because the support queue is understaffed.
+> **Lesson:** name the person who will still understand this system in a year, and give them the time to keep understanding it.
 
-This is familiar ground in integration testing and thinking about a whole system. AI makes it easier to forget, because producing a convincing intermediate result has become so easy.
+## 7. How will we know it worked?
 
-**Lesson: define an output together with the work it must enable.**
+If AI made the work cheaper, we should be able to show where the time went. Usually we cannot, because we trust how it feels.
 
-For the support tool, I would begin with an engineer doing real ticket triage. What information do they look for? What omission forces them to start over? What could send them down the wrong path?
+In early 2025, [METR](https://arxiv.org/abs/2507.09089) randomly assigned real tasks to experienced open-source developers, with and without AI. They finished about a fifth slower with AI. They believed they had been about a fifth faster. Same people, same work, opposite numbers. In its [February 2026 update](https://metr.org/blog/2026-02-24-uplift-update/), METR says developers likely get more help from AI than they did in early 2025, but its new numbers still show no clear speedup, and it calls its own data "only very weak evidence."
 
-The answers become requirements. Preserve the environment and version. Separate observed symptoms from guesses. Distinguish attempted fixes from suggestions. Link important claims to the source messages. Make missing information visible.
+The other side exists too. A study of over five thousand [customer support workers](https://arxiv.org/abs/2304.11771) found AI help raised issues resolved per hour, with the gain going mostly to the newest workers. So for individuals AI can be a leveler. For teams, [DORA's 2025 report](https://dora.dev/research/2025/dora-report/) calls it an amplifier: a strong system gets stronger, a weak one is exposed. The two findings do not agree, and that is the point.
 
-Then test the handoff. Give an engineer the summary and access to its evidence. Observe whether they can choose an appropriate next action, how long that takes, and what they need to repair. Compare with the existing process on similar cases. Keep a sample for which an experienced reviewer has checked the important facts and reasonable next actions.
+None of these is a number to paste into a business case. Together they are one instruction: measure in your own setting. Decide before the pilot what would make you expand it, change it, or stop it. Compare similar cases with and without the tool. Look at the slow cases, not just the average. Give delayed failures time to appear. A good demo is a reason to keep testing, not a permission to roll out.
 
-There is a difference between opening a source to verify a key fact and reopening every source because the summary cannot be trusted. Record both. Otherwise, we might reward a tool for reducing source checks by encouraging people to trust it blindly.
+> **Lesson:** faster is a measurement, not a mood. Write down what "stop" looks like before you start.
 
-The receiving step also needs a way to reject the output: missing version, unsupported conclusion, wrong customer, stale policy. Those reasons should travel back to the step that produced it. A rejection is useful evidence for the next improvement.
+## The list, to come back to
 
-If another agent receives the summary, the same principle applies. A second model saying it looks good is weak evidence. Test whether it can perform the intended task, and check its action against the source facts and business rules. Both agents can share the same misunderstanding.
+| Question | What I want to see before I say yes |
+| --- | --- |
+| What is the problem, before AI? | The delay or loss, named and measured as it is today |
+| Does it need AI, and does something exist? | Why plain code, search, and an existing product each failed |
+| What will it cost to own? | Cost per good outcome, checking included, build and run budgeted apart |
+| How much may it do alone? | Which actions need a person, and the named owners |
+| Who checks it? | Done defined by the receiver, and review hours planned |
+| Who understands it in a year? | A named person, with time, and the theory written down |
+| How will we know it worked? | A comparison planned in advance, with a stop condition |
 
-For each handoff, I want five things written down:
+**When code is cheap, the senior's job is to pay for what stayed expensive: deciding, owning, checking, and understanding.** Brooks described that job in 1986. The agent just made it impossible to hide behind the typing.
 
-1. Who or what receives the output.
-2. What that receiver needs to do with it.
-3. What evidence supports accepting it.
-4. When it must be rejected, corrected, or escalated.
-5. How we will discover a failure that appears later.
+## Two questions I cannot answer yet
 
-The fifth one matters. A reply can be accepted today and cause a reopened ticket tomorrow. A migration can pass staging and fail at month-end. Choose an observation period that fits the work. Keep local checks, checks at the handoff, and checks on the final outcome. Each answers a different question.
+The practical list above leaves me with two questions about intelligence itself.
 
-This is a concrete place for a developer to move: work with the receiver to define acceptance, build checks that exercise the handoff, and follow failures back into the specification. Cheap code makes the iteration faster. It does not choose the right evidence for us.
+### Is curiosity part of intelligence?
 
-## Move toward the economics of the whole project
+This month an AI lab [released 722 papers](https://en.wikipedia.org/wiki/OpenAI_bulk_release_of_mathematical_papers) claiming results on major open problems in mathematics. Three were withdrawn within a day, and experts expect checking the rest to take months. The same week, Terence Tao gave a talk he had planned long before, [Math 2.0](https://terrytao.wordpress.com/2026/10/10/math-2-0/). It is not about whether these proofs are correct. He describes the present as shaped by "the excessive emphasis on automated solving of open problems by AI," and he asks for a future where AI is used to support the mathematical community and the understanding that connects mathematics to the real world. His [slides](https://teorth.github.io/tao-web/slides/math-2-0-caltech-2026.pdf) pose a thought experiment: an AI finds a cancer cure that passes its clinical trial and comes with a machine-checked certificate, but nobody knows how it was found. Would you want at least one human expert who understands the mechanism, even partially, before the injection? That is Naur's question again, asked about a whole field.
 
-Once writing the code gets cheaper, coding hours tell us less about whether the project is worthwhile. A developer needs to see the work and cost around the implementation, including what other people inherit.
+His concern made me notice something about my own work. When I read or build something, questions show up that nobody asked for. Something bothers me, connects to an old idea, or makes me wonder what happens if I change an assumption. I keep thinking about it after the task is done. That is part of what I mean by human intelligence.
 
-AI may save the person who requests an output time while costing the person who receives it more time. A developer finishes faster; a reviewer gets a much larger change. A manager generates a report instantly; three analysts spend an afternoon correcting it.
+A model can solve a hard problem and produce good follow-up questions. Asking it to act curious produces more of them. But those outputs alone do not tell me whether it has curiosity of its own. What could I observe that would separate producing useful questions from wanting to understand something when nobody is asking? **I do not know how to test that yet.**
 
-I want to count that transfer before claiming a saving.
+### What could an agent learn from, besides language?
 
-Here is an **illustrative cost model**, using invented numbers. Assume 1,000 support cases reach the same resolution standard each month. Labor is valued at $30 per hour. Today each case takes 12 minutes of total human work, including checking and corrections. That is $6,000 of labor capacity a month.
+Natural language is a rich input. A vocabulary and a grammar let us express facts, logic, relationships, and ideas nobody has written before. The same input carries assumptions, biases, contradictions, fiction, and lies. Could another kind of input keep the expressive power while making some of those problems easier to handle? I have not decided what form it should take, or whether it should look like a language at all.
 
-Suppose an AI system costs $12,000 to build and integrate. Spread that cost over 12 months for this comparison. Model and infrastructure usage cost $1,000 a month, and routine operation costs another $500. Human handling time includes checking, exceptions, and later corrections, across everyone involved.
-
-| Monthly cost for the same 1,000 resolved cases | Current process | AI: 5 human minutes per case | AI: 9 human minutes per case |
-| --- | --- | --- | --- |
-| Human handling | $6,000 | $2,500 | $4,500 |
-| Model and infrastructure usage | $0 | $1,000 | $1,000 |
-| Routine operation | $0 | $500 | $500 |
-| Build cost spread over 12 months | $0 | $1,000 | $1,000 |
-| **Total** | **$6,000** | **$5,000** | **$7,000** |
-
-In one case, AI saves $1,000 a month on this basis. In the other, it costs $1,000 more. Both can have the same impressive generation speed. The difference is the human work left around the output.
-
-This simplified comparison holds resolution quality and volume constant. It assumes other costs are unchanged and includes routine corrections in handling time. A real budget must also account for training, transition work, unusual incidents, and the consequences of errors. If quality changes, put that change beside the cost; a cheaper process producing worse outcomes is a different proposal.
-
-Also, released staff time is capacity. It becomes a cash saving only if spending actually falls, such as reduced overtime or avoided hiring. It can instead support more customers or better service. Say which benefit the project is claiming, and show where the released time goes.
-
-The useful measure is **total cost per validated outcome**. Include failed attempts, retries, review, and recovery in the cost. Include only outcomes that meet the agreed standard in the count. Report the share of incoming cases that reached that standard alongside the unit cost, and keep rejected and unfinished cases visible. Otherwise, dropping difficult work can make the average look better. The Decision Framework's [evaluation criteria](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html) similarly includes engineering effort and ongoing consumption in ownership cost.
-
-Bring these numbers into the design discussion. A more expensive model might be worthwhile if it removes substantial review work. A simpler form might beat both model choices. The engineering decision is about the whole cost of a useful result.
-
-## Move toward measuring the improvement
-
-If we claim coding has become cheaper in our project, we should be able to show where the time went. Producing code quickly is one observation. Shipping a useful change with less total effort is the result we need to establish.
-
-There is evidence of real gains. In the revised paper [Generative AI at Work](https://arxiv.org/abs/2304.11771), researchers studied 5,172 customer support agents. AI assistance increased issues resolved per hour by 15% on average, with different effects across experience levels. That is a useful result tied to a particular task and setting.
-
-There is also evidence that expectations can mislead us. [METR's early-2025 study](https://arxiv.org/abs/2507.09089) randomized AI access across 246 tasks completed by 16 experienced open-source developers. AI access increased completion time by 19%, even though participants believed it had helped. This describes those tools, developers, and repositories at that time. In its [February 2026 update](https://metr.org/blog/2026-02-24-uplift-update/), METR reported signals of improvement but explained that selection effects and time-measurement problems made the newer estimate unreliable.
-
-These studies do not provide a universal percentage to paste into a business case. They give us a reason to measure, including when everyone feels faster. [DORA's 2025 report](https://dora.dev/research/2025/dora-report/) makes a related organizational point: AI amplifies existing strengths and weaknesses, so returns depend on the system around the tools.
-
-For a pilot, compare similar work with and without assistance where practical. Random assignment gives a stronger comparison than asking volunteers to choose their easiest tasks. Record case difficulty, user experience, and the model and workflow versions. A before-and-after comparison can still help, but staff changes, seasonal demand, and a different mix of cases can explain part of the result.
-
-Track total human effort, elapsed time to the final outcome, quality failures, and cost. Look at slow cases as well as the average. Set a review date, but also require enough completed cases and enough time for delayed failures to appear. If the evidence is thin, extend or narrow the claim.
-
-For a developer, this means helping build the measurement as well as the feature. Keep the comparison repeatable so that the next model, prompt, or workflow change has to earn its place against the same standard.
-
-When implementation is the slowest step, speeding it up can help the whole team. Once another step becomes slower, the best use of a developer's time changes again.
-
-Watch the queue after the automated step. If an agent creates forty changes a day and the team can review ten, more generation does not increase delivery. Work piles up. Keep changes small, limit unfinished work, and improve the constrained step. The time saved writing code might be best spent helping review and integration.
-
-That also changes planning. Sprints can still provide a useful rhythm. But if decisions and review are the constraint, filling the sprint with more implementation tasks will not fix it. Plan around what the team can finish and validate.
-
-## Build the agent and the context system around it
-
-An AI application engineer has two connected jobs: **build an agent that can keep working reliably**, and **build the context system that gives it the right information**. As writing the application code gets cheaper, these are two places where engineering effort can make a larger difference.
-
-### Make the agent work longer and better
-
-Build the execution loop around the model: instructions, tools, saved state, checks, and recovery. The agent needs a clear target and a way to check its progress. It should be able to resume interrupted work, handle a failed tool call, and stop when it cannot make progress.
-
-Put limits on retries and spending. Measure verified results alongside time and token use. Then improve efficiency while checking that the result still meets the same standard. I explored the order of those optimizations in [Start at the Cheap End](/blogs/blog/start_at_the_cheap_end/).
-
-### Build the context system around the agent
-
-The agent also needs information that is **consistent, current, relevant, and allowed for the person using it**. That information may come from Jira, OneDrive, Slack, Teams, repositories, a knowledge base, or memory from earlier work.
-
-Connecting those tools is a starting point. The context system needs to preserve where information came from, when it was valid, which version applies, and who can access it. It also needs a way to handle missing or conflicting information.
-
-Imagine an agent preparing a maintenance instruction. It finds an old SOP in a shared folder, a newer procedure in the ERP, and a technician's message about a temporary machine fault. Retrieving all three is useful. The harder work is establishing which procedure applies to this machine now, what the observation changes, and what remains uncertain.
-
-### How complex does the context system become?
-
-A solo developer may manage with a repository, an instruction file, and notes. A larger organization introduces more sources, owners, permissions, and meanings. These examples show how the difficult question changes; they are not a fixed maturity ladder.
-
-| Setting | Context the work may need | The question I would ask first |
-| --- | --- | --- |
-| Solo developer | Repository, AGENTS.md or CLAUDE.md, notes | Are important decisions written down and kept current? |
-| Small business | Shared documents, chat, issue tracker | Which source wins when people and tools disagree? |
-| Manufacturer with 1,000 people | ERP, machine data, SOPs, paper records | Do the documents match the factory floor, including work done away from a desk? |
-| Enterprise | Many teams, versions, and access rules | Can the agent find the right version using the requesting person's permissions? |
-| Company with several business units | Separate systems and definitions | Does “customer” or “order” mean the same thing across the units involved? |
-| Global company | Regional systems, languages, and time zones | Can the workflow respect data-location requirements and preserve meaning across regions? |
-
-The complexity grows through the connections between sources. For one person, the main challenge may be writing things down. A team needs shared truth. A factory must reconcile documents with physical conditions. An enterprise adds access rules and competing versions. Several business units add different meanings for the same term. A global company adds languages, regions, and time zones.
-
-That means different engineering work at each level: maintaining notes, tracking sources and updates, connecting live observations, enforcing permissions, and mapping meanings across systems. Adding more documents to a search index does not settle all of those questions.
-
-**Building the agent and building its context system are separate responsibilities that have to work together.** The execution loop determines what the agent can do; the context system shapes what it knows about the situation it is acting in. Both need checks.
-
-## Keep learning
-
-Tools change quickly. Learn the core idea, how it works, and its limits. That understanding helps you judge the next tool built on a similar idea.
-
-I would keep the learning habit simple:
-
-1. **Choose one question.** Give yourself something small enough to investigate in 10–15 minutes.
-2. **Find the original source.** Start with official documentation, the paper, or the project's code. Social posts can help you discover an idea; follow their links before trusting the summary.
-3. **Check the evidence.** Who made the claim? What did they actually test? Check the date, version, and limitations. Several posts copying one announcement are still one source.
-4. **Try a small example.** Run it, inspect the code, or work through the reasoning. Compare the result with something you can check.
-5. **Write down what you understood.** Explain the mechanism in your own words, keep the source link, and separate what you verified from what remains uncertain.
-
-A published paper, an official page, or a popular repository can still contain mistakes. When sources disagree, inspect their evidence and assumptions. Leave the question open if you cannot resolve it.
-
-Use a small weekly digest of documentation updates, papers, and repository releases to discover what to study. Keep time for fundamentals and questions that simply make you curious.
-
-As I wrote in [How to learn?](/blogs/blog/how_to_learn/), **qualify what you learn before you learn it**. A habit of checking and understanding is worth more than a long list of tools you recognize.
-
-## Put the saved time somewhere useful
-
-On the next feature, I would start by writing down the business result and the person or system that receives the output. Then I would identify the decisions that would be costly to reverse: data meaning, ownership, boundaries, and business rules.
-
-I would let an agent draft the parts that are easy to replace, while I prepare the examples and checks that tell us whether the result is useful. I would review a thin path through the real workflow before asking it to generate more.
-
-Afterward, I would look for the new delay. Is the team waiting on review, missing context, an unclear decision, or deployment? That is where I would spend the next hour saved by faster coding. I would also keep one bounded learning experiment in the week, with its result written down.
-
-This does not require every developer to become a manager. It requires us to take responsibility for more of the chain our code belongs to.
-
-**When code is cheap, move toward the decisions that make it useful.** Choose the problem, shape the durable parts, prove the result through the work that uses it next, and help the team deliver it.
-
-The practical changes above leave me with two further questions about intelligence itself.
-
-## Extra thought: LLM intelligence still feels different from human intelligence
-
-In [Math 2.0](https://terrytao.wordpress.com/2026/10/10/math-2-0/), Terence Tao calls for AI use that sustains mathematical understanding and the mathematical community. His concern made me think about a separate question: what do we mean by intelligence beyond producing a correct solution?
-
-My own reflection, not Tao's claim: when I read or work on something, questions sometimes appear without anyone asking me to produce them. Something bothers me, connects to an old idea, or makes me wonder what would happen if I changed an assumption. I may keep thinking about it after the task is finished. That curiosity is part of what I mean by human intelligence.
-
-An LLM can solve a difficult problem and generate useful follow-up questions. Those outputs alone do not settle whether it has curiosity of its own. Asking a model to act curious can produce good questions, but I still wonder about the difference between answering the question in front of you and finding something you want to understand after nobody is asking.
-
-How could we investigate that difference? What observations would distinguish useful question generation from curiosity? I do not have an answer. This is a question about the nature of intelligence that I want to understand better.
-
-## Extra thought: what kind of input could an agent learn from?
-
-Natural language is a rich input. A vocabulary and grammar let us express facts, logic, relationships, and ideas nobody has written before. That makes me wonder how much the form of the input matters to what a model can learn and create.
-
-The same input carries assumptions, biases, contradictions, fiction, and lies. Could another kind of input preserve useful expressive power while making some of those problems easier to handle? I have not decided what form that input should take, or whether it should resemble a language at all.
-
-An autonomous agent's main job is to solve problems and act. Conversation helps it work with people. But what kinds of input would help it learn about the problems it needs to solve and the effects of its actions?
-
-Mathematics, machine states, sensor readings, and interactions with an environment give me places to look. What could a model learn from each? What relationships could it discover? Could it combine what it learns to handle something it has not encountered before?
-
-Does a useful input need something like vocabulary and grammar? How would it carry relationships, context, or uncertainty? Could it support the discovery of new ideas? Whether changing the input would help with errors or hallucination is also something to investigate.
-
-The open question is **what kind of input could support an agent's ability to learn, reason, and discover?** I am still exploring the question.
+An agent's job is to solve problems and act. Conversation helps it work with people. But what would help it learn about the problems themselves and the effects of its actions? Mathematics, machine states, sensor readings, and interaction with an environment give me places to look. Would such an input need something like vocabulary and grammar? How would it carry context or uncertainty? Would it help with errors and made-up answers? **What kind of input could support an agent's ability to learn, reason, and discover?** I am still exploring the question.
 
 ## References
 
-The original reading behind these notes, plus the research used to test the productivity argument:
-
-- [Plan for AI adoption](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/plan) — Microsoft's guidance on business use cases, readiness, skills, and planning.
-- [Microsoft AI Decision Framework](https://microsoft.github.io/Microsoft-AI-Decision-Framework/) — Outcome-led technology selection; its [evaluation criteria](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html) cover ownership costs and operational responsibilities.
-- [Agentic AI Business Solutions Architect certification](https://learn.microsoft.com/vi-vn/credentials/certifications/agentic-ai-business-solutions-architect/) — Microsoft's role outline, including business measures, monitoring, and ROI analysis; Vietnamese page.
-- [Nobody should type code by hand anymore. Here's what's left.](https://ghuntley.com/agency/) — Huntley's argument about vision, verification, and agency. This article draws on the publicly accessible portion.
-- [Software doesn't need to be readable anymore. It needs to be explainable.](https://ghuntley.com/readable/) — Huntley's argument about designing software and tools for agents.
-- [OpenAI bulk release of mathematical papers](https://en.wikipedia.org/wiki/OpenAI_bulk_release_of_mathematical_papers) — Background reading on the release and debate; the discussion above uses Tao's own account for his position.
-- [Tao's critique of mass AI problem solving](https://officechai.com/ai/terence-tao-hints-openai-wasnt-behaving-responsibly-by-simultaneously-releasing-300-math-proofs-says-its-making-math-less-fertile/) — Secondary reporting from the original reading list.
-- [Math 2.0](https://terrytao.wordpress.com/2026/10/10/math-2-0/) — Tao's own introduction to his talk about AI, mathematical understanding, and community.
-- [Generative AI at Work](https://arxiv.org/abs/2304.11771) — Brynjolfsson, Li, and Raymond; the revised paper reports 15% more issues resolved per hour on average in its customer-support setting.
-- [Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity](https://arxiv.org/abs/2507.09089) — METR's randomized study; read alongside its [February 2026 measurement update](https://metr.org/blog/2026-02-24-uplift-update/).
-- [DORA: State of AI-assisted Software Development 2025](https://dora.dev/research/2025/dora-report/) — Organizational context for understanding AI adoption and its effects.
+- Microsoft, [Plan for AI adoption](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/plan). Start with business problems before considering AI; measure readiness; run a focused proof of concept.
+- Microsoft AI Decision Framework: [overview](https://microsoft.github.io/Microsoft-AI-Decision-Framework/), [decision method](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/decision-framework.html) ("never lead with a product", the ladder), [capability model](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/capability-model.html) (the coin, the three levels of trust), [scenarios](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/scenarios.html) ("Generation got cheap. Verification did not."), [evaluation criteria](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html) (cost of owning, action risk, named owners), and [engineering with agents](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/agentic-engineering.html).
+- Microsoft, [Agentic AI Business Solutions Architect certification](https://learn.microsoft.com/en-us/credentials/certifications/agentic-ai-business-solutions-architect/). The role puts measuring results, monitoring, and return on investment beside architecture.
+- Fred Brooks, [No Silver Bullet: Essence and Accident in Software Engineering](https://worrydream.com/refs/Brooks_1986_-_No_Silver_Bullet.pdf) (1986).
+- William Stanley Jevons, [The Coal Question](https://en.wikipedia.org/wiki/Jevons_paradox) (1865). Efficiency raises consumption.
+- Edsger Dijkstra, [On the cruelty of really teaching computing science](https://www.cs.utexas.edu/~EWD/transcriptions/EWD10xx/EWD1036.html) (1988). "Lines spent."
+- Edsger Dijkstra, ["Testing shows the presence, not the absence of bugs"](https://en.wikiquote.org/wiki/Edsger_W._Dijkstra) (1969 NATO conference report; restated in Notes on Structured Programming, 1970).
+- Peter Naur, [Programming as Theory Building](https://pages.cs.wisc.edu/~remzi/Naur.pdf) (1985).
+- Diane Vaughan, [The Challenger Launch Decision](https://en.wikipedia.org/wiki/Normalization_of_deviance) (1996). Normalization of deviance.
+- Geoffrey Huntley, [Nobody should type code by hand anymore. Here's what's left.](https://ghuntley.com/agency/) Vision, verification, and agency. I only had access to the public part of this essay.
+- Geoffrey Huntley, [Software doesn't need to be readable anymore. It needs to be explainable.](https://ghuntley.com/readable/)
+- Terence Tao, [Math 2.0](https://terrytao.wordpress.com/2026/10/10/math-2-0/) (October 2026), with the [slides](https://teorth.github.io/tao-web/slides/math-2-0-caltech-2026.pdf). Tao's own framing of his talk.
+- [OpenAI bulk release of mathematical papers](https://en.wikipedia.org/wiki/OpenAI_bulk_release_of_mathematical_papers). Background on the release and the debate around it.
+- Brynjolfsson, Li, and Raymond, [Generative AI at Work](https://arxiv.org/abs/2304.11771). Customer support; gains concentrated in the newest workers.
+- METR, [Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity](https://arxiv.org/abs/2507.09089), with its [February 2026 update](https://metr.org/blog/2026-02-24-uplift-update/).
+- [DORA: State of AI-assisted Software Development 2025](https://dora.dev/research/2025/dora-report/). AI as an amplifier.
