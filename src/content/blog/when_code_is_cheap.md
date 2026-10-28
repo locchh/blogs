@@ -1,6 +1,6 @@
 ---
 title: "When Code Is Cheap"
-description: "An agent writes the first version in twenty minutes. The question on a senior's desk is no longer how to build it, but whether a project should use AI at all, what it will cost to own, how to pilot it, and how to keep it safe and good. Twelve questions, with the sources to go deeper."
+description: "An agent writes the first version in twenty minutes. The question on a senior's desk is no longer how to build it, but whether a project should use AI at all, what it will cost to own, how to pilot it, and how to keep it safe and good. Ten questions with the sources to go deeper, and two personal notes."
 pubDate: "2026-10-24"
 updatedDate: "2026-10-28"
 author: "locchh"
@@ -23,7 +23,7 @@ graph LR
 
 </div>
 
-This post is the list I keep for that job. Twelve questions I ask before and after I say yes to AI in a project. The first ten each have a reason from the fundamentals of our field and a reason from Microsoft's own guidance for people who make this decision, with links to go deeper. The last two are my own, and they lean on older thinkers instead. I wrote it to use, not to admire. If you only have five minutes, read the table near the end.
+This post is the list I keep for that job. Ten questions I ask before and after I say yes to AI in a project. Each has a reason from the fundamentals of our field and a reason from Microsoft's own guidance for people who make this decision, with links to go deeper. I wrote it to use, not to admire. If you only have five minutes, read the table near the end. After the list come two personal notes, on understanding and on learning, and two questions I cannot answer yet.
 
 <div align="center">
 
@@ -33,7 +33,6 @@ graph LR
     P2 --> P3["Running the pilot<br/>5. the pilot<br/>6. did it work?"]
     P3 --> P4["Controlling risk<br/>7. authority<br/>8. safety"]
     P4 --> P5["Controlling quality<br/>9. who checks<br/>10. after launch"]
-    P5 --> P6["Understanding and learning<br/>11. who understands<br/>12. keep learning"]
 ```
 
 </div>
@@ -310,9 +309,28 @@ Go deeper:
 - [Observability in generative AI](https://learn.microsoft.com/en-us/azure/foundry/concepts/observability). Evaluation, monitoring, and tracing across the lifecycle.
 - [Operations for AI workloads](https://learn.microsoft.com/en-us/azure/well-architected/ai/operations) and [MLOps and GenAIOps](https://learn.microsoft.com/en-us/azure/well-architected/ai/mlops-genaiops). The operating rhythm around a model.
 
-## Part six: understanding and learning
+## The list, to come back to
 
-### 11. Who will understand it in a year?
+| Question | What I want to see before I say yes |
+| --- | --- |
+| 1. What is the problem, before AI? | The delay or loss, named and measured as it is today |
+| 2. Does it need AI, and does something exist? | Why plain code, search, and an existing product each failed |
+| 3. Which decisions are hard to undo? | Data meaning, boundaries, owners, and rules decided by people, not by the agent |
+| 4. What will it cost to own? | Cost per good outcome, checking included, build and run budgeted apart |
+| 5. How do we run the pilot? | The hardest step, on real cases, with expand, change, and stop conditions written first |
+| 6. How will we know it worked? | A comparison planned in advance, and output checked, not just the bill |
+| 7. How much may it do alone? | Which actions need a person, the risk tier, and the named owners |
+| 8. How do we keep it safe? | Least privilege, an identity per agent, a written data boundary, a switch |
+| 9. Who checks it? | Done defined by the receiver, a test set, and review hours planned |
+| 10. How do we keep it good? | Tests rerun on every change, drift watched, rejections fed back |
+
+**When code is cheap, the senior's job is to pay for what stayed expensive: deciding, owning, checking, and understanding.** Brooks described that job in 1986. The agent just made it impossible to hide behind the typing.
+
+## Two personal notes
+
+The ten questions above are the job. These two are mine. They are about what the job does to the person doing it, and they lean on older thinkers than the Microsoft pages.
+
+### Who will understand it in a year?
 
 In 1985 Peter Naur wrote [Programming as Theory Building](https://pages.cs.wisc.edu/~remzi/Naur.pdf). His claim is that the program is not the code. It is the **theory** in the heads of the people who built it: the knowledge that lets them explain it and change it without breaking it. Then the definition I cannot forget: "The death of a program happens when the programmer team possessing its theory is dissolved." A dead program keeps running. You find out when someone asks for a change and nobody can answer.
 
@@ -343,7 +361,7 @@ Go deeper:
 - [The Tacit Dimension](https://en.wikipedia.org/wiki/Tacit_knowledge). Polanyi, 1966. Why the written theory is always smaller than the one in the head.
 - [How to Build a Knowledgebase](/blogs/blog/how_to_build_knowledgebase/). My longer piece on why storage is not knowledge.
 
-### 12. How do we keep learning?
+### How do we keep learning?
 
 Tools change every month. Problems and patterns do not. When I learn the core idea behind a tool, how it is built, and its limits, I can judge the next ten tools built on the same idea without trying them all.
 
@@ -361,28 +379,9 @@ Go deeper:
 - [How to learn?](/blogs/blog/how_to_learn/). My own notes on qualifying a source before learning from it.
 - [Through a Senior's Eyes](/blogs/blog/through_a_seniors_eyes/). What changes in how you see a problem, not what you know.
 
-## The list, to come back to
-
-| Question | What I want to see before I say yes |
-| --- | --- |
-| 1. What is the problem, before AI? | The delay or loss, named and measured as it is today |
-| 2. Does it need AI, and does something exist? | Why plain code, search, and an existing product each failed |
-| 3. Which decisions are hard to undo? | Data meaning, boundaries, owners, and rules decided by people, not by the agent |
-| 4. What will it cost to own? | Cost per good outcome, checking included, build and run budgeted apart |
-| 5. How do we run the pilot? | The hardest step, on real cases, with expand, change, and stop conditions written first |
-| 6. How will we know it worked? | A comparison planned in advance, and output checked, not just the bill |
-| 7. How much may it do alone? | Which actions need a person, the risk tier, and the named owners |
-| 8. How do we keep it safe? | Least privilege, an identity per agent, a written data boundary, a switch |
-| 9. Who checks it? | Done defined by the receiver, a test set, and review hours planned |
-| 10. How do we keep it good? | Tests rerun on every change, drift watched, rejections fed back |
-| 11. Who understands it in a year? | A named person, with time, and the theory written down |
-| 12. How do we keep learning? | The idea behind the tool, from a checked source, a little every day |
-
-**When code is cheap, the senior's job is to pay for what stayed expensive: deciding, owning, checking, and understanding.** Brooks described that job in 1986. The agent just made it impossible to hide behind the typing.
-
 ## Two questions I cannot answer yet
 
-The practical list above leaves me with two questions about intelligence itself.
+The notes above leave me with two questions about intelligence itself.
 
 ### Is curiosity part of intelligence?
 
