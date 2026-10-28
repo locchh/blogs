@@ -1,8 +1,8 @@
 ---
 title: "Interesting Things I Found — Sep 2026"
-description: "Twenty finds, and the biggest story is a new kind of model: one that doesn't talk, it decides. Several teams shipped the same idea at about the same time, the fast 'System One' brain beside the slow reasoning one. Plus a harness that learns, a memory that forgets, a hub of reusable reference packs, models that read bytes, and the machines and teams around them. And a postscript: OpenSpec vs. Spec Kit, two ways to write the spec before the code."
+description: "Twenty-one finds, and the biggest story is a new kind of model: one that doesn't talk, it decides. Several teams shipped the same idea at about the same time, the fast 'System One' brain beside the slow reasoning one. Plus a harness that learns, one that has grown into an operating system, a memory that forgets, a hub of reusable reference packs, models that read bytes, and the machines and teams around them. And a postscript: OpenSpec vs. Spec Kit, two ways to write the spec before the code."
 pubDate: "2026-10-18"
-updatedDate: "2026-10-24"
+updatedDate: "2026-10-28"
 author: "locchh"
 tags: ["ai-agents", "decision-models", "system-one", "harness", "memory", "retrieval", "knowledge-hub", "sandbox", "tooling", "2026"]
 draft: false
@@ -14,7 +14,7 @@ Most of them use the same name for it: **System One**. It's the old idea from ps
 
 So that's where this post starts. After that comes a harness that learns from its own runs, a memory that forgets on purpose, and models that read raw bytes. Then the machines, searches, and teams around all of it.
 
-Twenty finds, six groups.
+Twenty-one finds, six groups.
 
 ---
 
@@ -64,7 +64,13 @@ One honest caveat for the whole section, borrowed from a project in group 5. Cua
 
 - **[prime-agent](https://github.com/PrimeIntellect-ai/prime-agent)** — a revisit. I covered it [last month](/blogs/blog/interesting_things_august_2026/) for its recursive design and its continual harness. It's back because it's the **shipped, untrained version of the paper above**. Its `/refine` command reviews a run and makes small edits to the harness, each backed by evidence from that run. It edits the extra prompts, memories, and skill descriptions. It takes snapshots so you can roll back, and it never touches the base system prompt. The README also points to their own arXiv paper on the continual harness, and lists tools for long tasks: `/goal` objectives, heartbeats and schedules, and automatic compaction. The same warning still applies. It runs model-written Python with your permissions, and it is **not a sandbox**. *Best for:* trying harness learning today, by hand, before anyone trains it.
 
-The paper learns *how* to edit a harness. The tool gives you the loop to do it. Put them together, and the [state I keep arguing for](/blogs/blog/state-engineering/) isn't just carried between runs anymore. It's **improved** between runs.
+- **[ECC](https://github.com/affaan-m/ecc)** — the biggest harness project I know of. It began as "Everything Claude Code", one person's folder of configs. Now it calls itself **the agent harness operating system**: dozens of agents, hundreds of skills, hooks, rules, a shared memory format, and a scanner for your own agent config. Claude Code first, with adapters for a dozen other coding agents behind it. Its motto could be the headline of this blog: *"Optimize the context window. Persist everything else."* The pitch is an agent that "plans before it builds, verifies changes with tests, reviews its own work from a fresh context, remembers what matters, and turns repeated wins into reusable skills and workflows." That fresh-context reviewer is [the watcher](/blogs/blog/the_seat_needs_a_watcher/) again: a second agent that never saw the first one's reasoning.
+
+  The part that belongs here is its **continuous learning** loop. Hooks record every tool call, because a hook always fires and a skill asked to observe only sometimes does. A small model reads the log in the background and looks for three things: moments you corrected the agent, errors it fixed, and workflows it repeats. Each becomes an **instinct**: one trigger, one action, the evidence behind it, and a **confidence score**. Confidence rises when the pattern repeats and you don't object. It falls when you correct it, when it hasn't shown up for a long time, or when new evidence contradicts it. At session start only a few of the most confident instincts are loaded. They stay inside their project by default and get promoted to global when the same one appears in two or more projects. `/evolve` groups related ones into a skill, a command, or an agent. In August I complained that the usual memory table had [three boxes and no arrows](/blogs/blog/memory_is_not_intelligence/). This is the arrows. Observations are the episodes, instincts are the rules, evolved skills are the habits. And the decay is the *revise* step I asked for in [the lesson library](/blogs/blog/start_at_the_cheap_end/): a stale rule is worse than no rule.
+
+  Honest notes: the observer is **off by default**, so most installs get a very large library of skills and hooks, not the learning loop. Past a confidence of 0.7 an instinct is auto-approved, so the agent follows rules it taught itself with no human sign-off. The README admits the full plugin advertises its whole catalog to the model and tells you to install only the parts you need when context matters. That's a real tension for a project whose motto starts with the context window. Nothing in the repo measures whether the instincts help. Only Claude Code gets the full feature set, the observer gets killed on native Windows, and hooks run shell commands, so read them. Install only from the official sources; the project says copies elsewhere may carry malware. MIT, with a paid hosted app on the side. *Best for:* seeing harness learning run continuously, today, and seeing how big a harness gets when it only ever adds.
+
+The paper learns *how* to edit a harness. prime-agent gives you the loop to do it by hand. ECC runs a version of the loop in the background, every session, if you switch it on. Put them together, and the [state I keep arguing for](/blogs/blog/state-engineering/) isn't just carried between runs anymore. It's **improved** between runs.
 
 ---
 
@@ -114,7 +120,7 @@ The paper learns *how* to edit a harness. The tool gives you the loop to do it. 
 
 Line the groups up and one idea runs through most of them: **stop paying the slow brain for fast work**.
 
-The decision models in group 1 are the clearest case. But once you look, it's everywhere. Jev-Mem keeps the reasoning model out of the memory's way. Cua has a small model for bounded clicks. tgrep stops an agent from reading every file to find one line, while XERJ brings back the passage it needs from an unfamiliar codebase. Selective Forgetting shows you can drop a tenth of a memory and barely notice. Even the harness paper fits: instead of a bigger model, it improves the cheaper program around it. Each one moves a routine judgment out of the expensive, open-ended model and into something smaller, faster, and **bounded**.
+The decision models in group 1 are the clearest case. But once you look, it's everywhere. Jev-Mem keeps the reasoning model out of the memory's way. Cua has a small model for bounded clicks. tgrep stops an agent from reading every file to find one line, while XERJ brings back the passage it needs from an unfamiliar codebase. Selective Forgetting shows you can drop a tenth of a memory and barely notice. Even the harness paper fits: instead of a bigger model, it improves the cheaper program around it. ECC's observer is the same move: a small model reads the logs in the background while the big one works. Each one moves a routine judgment out of the expensive, open-ended model and into something smaller, faster, and **bounded**.
 
 PageIndex is the honest exception. It spends *more* model thinking at search time, not less. But it fits the other half of the lesson: use the slow brain where judgment really matters, like deciding which section answers your question.
 
@@ -170,6 +176,10 @@ A fair warning about this table: the "light vs. heavy" framing comes from OpenSp
 - [Harness Learning Enables Generalizable Test-Time Adaptation](https://arxiv.org/pdf/2609.35738) - Research on learning to revise an agent's harness from execution feedback.
 
 - [prime-agent](https://github.com/PrimeIntellect-ai/prime-agent) - A coding agent with a continual harness and run-based refinement.
+
+- [ECC](https://github.com/affaan-m/ecc) - A harness layer of agents, skills, hooks, rules, and memory for coding agents.
+
+- [ECC continuous learning v2](https://github.com/affaan-m/ECC/blob/main/skills/continuous-learning-v2/SKILL.md) - How hooks, the background observer, instincts, and confidence scoring work.
 
 - [Selective Forgetting](https://arxiv.org/pdf/2608.28978) - Research on graph memory, retrieval quality, and pruning memories.
 
