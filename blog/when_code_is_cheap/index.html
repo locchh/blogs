@@ -11,63 +11,408 @@
 		}
 		document.documentElement.dataset.theme = theme;
 	})();
-</script><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg?v=9"><link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon.png?v=9"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.2"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/when_code_is_cheap/"><!-- Primary Meta Tags --><title>When Code Is Cheap</title><meta name="title" content="When Code Is Cheap"><meta name="description" content="An agent writes the first version in twenty minutes. The question on a senior's desk is no longer how to build it, but whether a project should use AI at all, and what it will cost to own. Seven questions I ask before saying yes."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/when_code_is_cheap/"><meta property="og:title" content="When Code Is Cheap"><meta property="og:description" content="An agent writes the first version in twenty minutes. The question on a senior's desk is no longer how to build it, but whether a project should use AI at all, and what it will cost to own. Seven questions I ask before saying yes."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/when_code_is_cheap/"><meta property="twitter:title" content="When Code Is Cheap"><meta property="twitter:description" content="An agent writes the first version in twenty minutes. The question on a senior's desk is no longer how to build it, but whether a project should use AI at all, and what it will cost to own. Seven questions I ask before saying yes."><link rel="stylesheet" href="/blogs/_astro/about.CUAELPAi.css">
+</script><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg?v=9"><link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon.png?v=9"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.2"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/when_code_is_cheap/"><!-- Primary Meta Tags --><title>When Code Is Cheap</title><meta name="title" content="When Code Is Cheap"><meta name="description" content="An agent writes the first version in twenty minutes. The question on a senior's desk is no longer how to build it, but whether a project should use AI at all, what it will cost to own, how to pilot it, and how to keep it safe and good. Twelve questions, with the sources to go deeper."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/when_code_is_cheap/"><meta property="og:title" content="When Code Is Cheap"><meta property="og:description" content="An agent writes the first version in twenty minutes. The question on a senior's desk is no longer how to build it, but whether a project should use AI at all, what it will cost to own, how to pilot it, and how to keep it safe and good. Twelve questions, with the sources to go deeper."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/when_code_is_cheap/"><meta property="twitter:title" content="When Code Is Cheap"><meta property="twitter:description" content="An agent writes the first version in twenty minutes. The question on a senior's desk is no longer how to build it, but whether a project should use AI at all, what it will cost to own, how to pilot it, and how to keep it safe and good. Twelve questions, with the sources to go deeper."><link rel="stylesheet" href="/blogs/_astro/about.CUAELPAi.css">
 <style>main[data-astro-cid-bvzihdzo]{width:min(calc(100% - 2rem),1040px);max-width:100%;margin:2em auto}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:100%;max-width:var(--prose-width);margin:auto;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}@media(max-width:768px){main[data-astro-cid-bvzihdzo]{width:100%;margin:0}}
 </style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/blogs/" data-astro-cid-3ef6ksr2>Locch&#39;s Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/blogs/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blogs/blog/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/blogs/about/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="theme-switcher" role="group" aria-label="Display mode" hidden data-astro-cid-dz5h74bc> <button type="button" data-theme-choice="light" aria-pressed="false" data-astro-cid-dz5h74bc>Light</button> <button type="button" data-theme-choice="dark" aria-pressed="false" data-astro-cid-dz5h74bc>Dark</button> <button type="button" data-theme-choice="reading" aria-pressed="false" data-astro-cid-dz5h74bc>Reading</button> </div> <script type="module">const n=["light","dark","reading"],c=document.querySelector(".theme-switcher"),s=document.querySelectorAll("[data-theme-choice]"),o=window.matchMedia("(prefers-color-scheme: dark)");function r(){for(const e of s)e.setAttribute("aria-pressed",String(e.dataset.themeChoice===document.documentElement.dataset.theme))}function t(e,l=!1){if(n.includes(e)){if(document.documentElement.dataset.theme=e,l)try{localStorage.setItem("blog-theme",e)}catch{}r(),document.dispatchEvent(new CustomEvent("theme-change"))}}function i(){if(!a){try{if(n.includes(localStorage.getItem("blog-theme")??""))return}catch{}t(o.matches?"dark":"light")}}let a=!1;for(const e of s)e.addEventListener("click",()=>{a=!0,t(e.dataset.themeChoice??"light",!0)});window.addEventListener("storage",e=>{e.key!=="blog-theme"&&e.key!==null||(a=!1,e.newValue&&n.includes(e.newValue)?t(e.newValue):t(o.matches?"dark":"light"))});o.addEventListener("change",i);r();c&&(c.hidden=!1);</script>  <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo>  </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2026-10-24T00:00:00.000Z"> Oct 24, 2026 </time> <div class="last-updated-on" data-astro-cid-bvzihdzo>
 Last updated on <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time> </div> </div> <h1 data-astro-cid-bvzihdzo>When Code Is Cheap</h1> <hr data-astro-cid-bvzihdzo> </div>  <p>A feature that used to take an afternoon now takes an agent twenty minutes. For a few years that was my problem to enjoy. Now it is a different problem. People bring me a project and ask whether we should put AI in it. I have to say yes or no, and then live with the answer.</p>
 <p>Fred Brooks saw this coming in 1986. In <a href="https://worrydream.com/refs/Brooks_1986_-_No_Silver_Bullet.pdf">No Silver Bullet</a> he split software work into the <strong>essence</strong>, the ideas and rules a program must get right, and the <strong>accident</strong>, the labor of typing those ideas into a machine. Then he said which part is hard: “the specification, design, and testing of this conceptual construct, not the labor of representing it.” Agents made the labor cheap. The essence is now the whole job. And the first piece of it is the one he called hardest: “deciding precisely what to build.”</p>
-<p>Below are the seven questions I ask before I say yes to AI in a project. Each one has a reason from the fundamentals, and each one has a reason from Microsoft’s own guidance for people who make this decision. I keep the list short because I want to use it, not admire it.</p>
-<h2 id="1-what-is-the-problem-before-ai">1. What is the problem, before AI?</h2>
+<div align="center">
+<pre><code class="language-mermaid">graph LR
+    F["Building a feature"] --> A["Accident&#x3C;br/>typing, syntax, build, glue code"]
+    F --> E["Essence&#x3C;br/>deciding what to build, design, checking, owning"]
+    A --> A2["Got cheap&#x3C;br/>an agent does it in minutes"]
+    E --> E2["Did not get cheap&#x3C;br/>still a person's job"]
+</code></pre>
+</div>
+<p>This post is the list I keep for that job. Twelve questions I ask before and after I say yes to AI in a project. The first ten each have a reason from the fundamentals of our field and a reason from Microsoft’s own guidance for people who make this decision, with links to go deeper. The last two are my own, and they lean on older thinkers instead. I wrote it to use, not to admire. If you only have five minutes, read the table near the end.</p>
+<div align="center">
+<pre><code class="language-mermaid">graph LR
+    P1["Before you say yes&#x3C;br/>1. the problem&#x3C;br/>2. does it need AI?&#x3C;br/>3. hard to undo"] --> P2["Counting the cost&#x3C;br/>4. cost to own"]
+    P2 --> P3["Running the pilot&#x3C;br/>5. the pilot&#x3C;br/>6. did it work?"]
+    P3 --> P4["Controlling risk&#x3C;br/>7. authority&#x3C;br/>8. safety"]
+    P4 --> P5["Controlling quality&#x3C;br/>9. who checks&#x3C;br/>10. after launch"]
+    P5 --> P6["Understanding and learning&#x3C;br/>11. who understands&#x3C;br/>12. keep learning"]
+</code></pre>
+</div>
+<p>One honesty note before the list. Two kinds of Microsoft sources appear here. The <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/strategy">Cloud Adoption Framework</a>, the <a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/">Well-Architected Framework</a>, and the <a href="https://learn.microsoft.com/en-us/agents/">Agents hub</a> are official documentation. The <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/">Microsoft AI Decision Framework</a> is a practitioner’s guide published on Microsoft’s GitHub. It says itself that Microsoft’s AI products change weekly and that production decisions should be checked against official sources. I quote it because its sentences are the sharpest, and I say which is which.</p>
+<h2 id="part-one-before-you-say-yes">Part one: before you say yes</h2>
+<h3 id="1-what-is-the-problem-before-ai">1. What is the problem, before AI?</h3>
 <p>Microsoft’s <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/plan">planning guide</a> opens with a sentence I wish every request came with: start with business problems, and look for where results miss expectations “before you consider AI at all.”</p>
-<p>Most requests arrive as a solution. Someone asks for a chatbot because a chatbot is the solution they can picture. Go and watch the work first. Maybe staff cannot find the answer. Maybe they find it in seconds and then wait a day for a manager’s approval. A chatbot fixes one of those and does nothing for the other. The people doing the work know where the delay is. Our job is to go and look with them.</p>
-<p>Then measure the work as it is today: how long each case takes, how many are finished, how many come back. Without that number there is nothing to compare against later, and every result will look like success.</p>
+<p>Most requests arrive as a solution. Someone asks for a chatbot because a chatbot is the solution they can picture. Users know what they want. They rarely know what their problem is. So go and watch the work first. Maybe staff cannot find the answer. Maybe they find it in seconds and then wait a day for a manager’s approval. A chatbot fixes one of those and does nothing for the other. The people doing the work know where the delay is.</p>
+<p>Then measure the work as it is today: how long each case takes, how many are finished, how many come back. Without that number there is nothing to compare against later, and every result will look like success. The <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai-agents/business-strategy-plan">business plan guidance for agents</a> says the same thing in one line: record today’s performance to create a baseline, before any development begins.</p>
 <blockquote>
 <p><strong>Lesson:</strong> describe the delay or the loss before you describe the tool. If you cannot name what gets better, you are not ready to build.</p>
 </blockquote>
-<h2 id="2-does-it-need-ai-at-all-and-does-something-already-exist">2. Does it need AI at all, and does something already exist?</h2>
-<p>The <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/">Microsoft AI Decision Framework</a> has a rule I now repeat in every meeting: <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/decision-framework.html">“never lead with a product.”</a> Result first, then the situation, then how the system should behave. The technology comes last.</p>
-<p>It also asks a checkpoint question before any of that: does this need an agent? If the steps are fixed and the input is structured, ordinary code is cheaper and more reliable. If people just need to find a document, that is search. And for numbers, the <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/scenarios.html">scenarios page</a> is blunt: “if the problem has a numerically correct answer, an LLM is the wrong tool for producing it.” A model is good at reading messy input. It is not a calculator and not a database.</p>
-<p>Then it gives a ladder: use something that exists, configure it, extend it, and build only at the top. The honest part is the rule for climbing. You must be able to explain why each rung below failed. If you cannot, you are not building because you need to. You are building because building got cheap. One more line from the same page is worth keeping: “Audition the soloist before you hire the orchestra.” One agent with good tools, before any talk of several.</p>
+<p>Go deeper:</p>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/plan">Plan for AI adoption</a>. Business problems first, then use cases, then an honest look at skills and data.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai-agents/business-strategy-plan">Business plan for AI agents</a>. When not to use an agent, how to score ideas, how to set a baseline.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/strategy">AI adoption overview</a>. The executive view: where AI creates value and whether that value justifies the investment.</li>
+</ul>
+<h3 id="2-does-it-need-ai-at-all-and-does-something-already-exist">2. Does it need AI at all, and does something already exist?</h3>
+<p>The Decision Framework has a rule I now repeat in every meeting: <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/decision-framework.html">“never lead with a product.”</a> Result first, then the situation, then how the system should behave. The technology comes last.</p>
+<p>It also asks a checkpoint question before any of that: does this need an agent? If the steps are fixed and the input is structured, ordinary code is cheaper and more reliable. If people just need to find a document, that is search. For numbers, the <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/scenarios.html">scenarios page</a> is blunt about language models, or an LLM in its words: “if the problem has a numerically correct answer, an LLM is the wrong tool for producing it.” A model is good at reading messy input. It is not a calculator and not a database. Microsoft’s official <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai-agents/business-strategy-plan">agent business plan</a> draws the same line: agents earn their place when the task needs multistep decisions, many tools in a flexible order, or messy input that must be interpreted.</p>
+<p>Then there is a ladder, roughly: use something that exists, configure it, extend it, and build only at the top. The honest part is the rule for climbing. You must be able to explain why each rung below failed. If you cannot, you are not building because you need to. You are building because building got cheap. One more line from the same page is worth keeping: “Audition the soloist before you hire the orchestra.” One agent with good tools, before any talk of several.</p>
+<div align="center">
+<pre><code class="language-mermaid">graph BT
+    U["Use what already exists"] --> C["Configure it"]
+    C --> X["Extend it"]
+    X --> B["Build your own"]
+    R["The rule for climbing:&#x3C;br/>explain why the rung below failed"] -.-> C
+    R -.-> X
+    R -.-> B
+</code></pre>
+</div>
 <blockquote>
 <p><strong>Lesson:</strong> explain why plain code, search, and an existing product all failed before you fund a model.</p>
 </blockquote>
-<h2 id="3-what-will-it-cost-to-own-not-to-build">3. What will it cost to own, not to build?</h2>
-<p>Here is the trap inside the word “cheap.” In 1865 the economist William Jevons watched steam engines become far more efficient while everyone around him expected England to burn less coal. It burned more, and he explained why: cheaper coal found more uses. His line still applies: <a href="https://en.wikipedia.org/wiki/Jevons_paradox">“It is a confusion of ideas to suppose that the economical use of fuel is equivalent to diminished consumption.”</a></p>
-<p>Code behaves like coal. When a feature costs twenty minutes, we ask for twenty features, and every one still has to be read, run, kept working, and understood. Dijkstra said in 1988 that we count lines of code <a href="https://www.cs.utexas.edu/~EWD/transcriptions/EWD10xx/EWD1036.html">on the wrong side of the ledger</a>: they are not “lines produced” but “lines spent.” The framework’s <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/capability-model.html">capability model</a> puts it in four words: “Building got cheap. Owning didn’t.”</p>
-<p>The same page pictures every agent as a coin. One side is the demo: visible, interactive, easy to show in a meeting. The other side runs in the background with nobody at the keyboard, and that side is what changes the operating cost. The demo gets the project approved. The other side is what you own. So I budget the two separately, and I include the cost of checking the output, because a metered system quietly tempts you to measure less.</p>
-<p>The number I want is simple: the total cost of one outcome that met the agreed standard, with the checking and the fixing included. Count only the cases that met the standard. Keep the rejected and unfinished ones visible, or dropping the hard cases will make the average look good. And remember that staff time freed by AI is capacity, not cash. It becomes a saving only if spending actually falls, or if someone names what the freed hours will now do.</p>
+<p>Go deeper:</p>
+<ul>
+<li><a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/decision-framework.html">Decision method</a>. The intake questions, the ladder, and the nine questions that sort a problem before any product is named.</li>
+<li><a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/capability-model.html">Capability model</a>. Outcomes, then behavior, then platform. The five parts of any agent: model, instructions, retrieval, actions, memory.</li>
+<li><a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/scenarios.html">Scenarios</a>. Eleven common situations and the signal that tells you which way to go.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai-agents/">AI agent adoption</a>. Official definitions of agent types, from retrieval to action to automation.</li>
+</ul>
+<h3 id="3-which-decisions-will-be-hard-to-undo">3. Which decisions will be hard to undo?</h3>
+<p>Here is the point from my own notes that survived every rewrite. The real solution is rarely the framework or the hosting service. It is the part that is hard to change later: the data model, the boundaries between systems, who owns what, and the business rules. Tools can be swapped. Those cannot.</p>
+<p>David Parnas said this in 1972, in the paper that gave us <a href="https://en.wikipedia.org/wiki/Information_hiding">information hiding</a>. Split a system around the design decisions most likely to change. Hide each one behind a stable boundary. Then changing one decision does not force everything else to change. That is still the best advice I know for deciding where a senior’s attention goes. Spend it on decisions that are hard to undo. Let the agent produce the cheap, throwaway parts: screen drafts, glue code, prototypes.</p>
+<p>My working order is design top-down and build bottom-up. Start from the business workflow, then the user’s experience, then the logic, then the data. Build the other way, in thin slices: data, then logic, then screen, with enough real data and real connections to test where one piece hands work to the next. A working screen alone proves nothing.</p>
+<p>Work items are now the agent’s input. A user story or a task with clear acceptance criteria is something an agent can build and a person can check. When the agent produces exactly what the ticket says and the result is useless, inspect the ticket. Bugs, change requests, and incidents are the signal that the specification was wrong.</p>
 <blockquote>
-<p><strong>Lesson:</strong> price the side of the coin nobody watches. Cost per good outcome, checking included.</p>
+<p><strong>Lesson:</strong> spend your attention on what is expensive to reverse. Let the agent spend its tokens on what is cheap to throw away.</p>
 </blockquote>
-<h2 id="4-how-much-may-it-do-alone-and-who-answers-for-it">4. How much may it do alone, and who answers for it?</h2>
+<p>Go deeper:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Information_hiding">Information hiding</a>. Parnas, 1972. Modules around the decisions likely to change.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/design-principles">Design principles for AI workloads</a>. Microsoft’s official list across reliability, security, cost, operations, and performance.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/grounding-data-design">Grounding data design</a>. The data decisions that outlive the model.</li>
+</ul>
+<h2 id="part-two-counting-the-cost">Part two: counting the cost</h2>
+<h3 id="4-what-will-it-cost-to-own-not-to-build">4. What will it cost to own, not to build?</h3>
+<p>Here is the trap inside the word “cheap.” In 1865 the economist William Jevons watched steam engines become far more efficient while everyone around him expected England to burn less coal. It burned more, and he explained why: cheaper coal found more uses. His line still applies: <a href="https://en.wikipedia.org/wiki/Jevons_paradox">“It is a confusion of ideas to suppose that the economical use of fuel is equivalent to diminished consumption.”</a></p>
+<p>Code behaves like coal. When a feature costs twenty minutes, we ask for twenty features, and every one still has to be read, run, kept working, and understood. Dijkstra said in 1988 that we count lines of code <a href="https://www.cs.utexas.edu/~EWD/transcriptions/EWD10xx/EWD1036.html">on the wrong side of the ledger</a>: they are not “lines produced” but “lines spent.” The Decision Framework’s <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/capability-model.html">capability model</a> puts it in four words: “Building got cheap. Owning didn’t.”</p>
+<p>The same page pictures every agent as a coin. One side is the demo: visible, interactive, easy to show in a meeting. The other side runs in the background with nobody at the keyboard, and that side is what changes the operating cost. The demo gets the project approved. The other side is what you own. So I budget the two separately. The <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html">evaluation criteria</a> page adds two warnings I had not thought of: a system that charges per call quietly tempts you to test less, so budget the testing as its own line, and an agent in a loop can spend a month’s budget in a few hours, so set spending caps before launch.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>The side you see</th><th>The side you own</th></tr></thead><tbody><tr><td>The demo in the meeting</td><td>The job that runs with nobody at the keyboard</td></tr><tr><td>One happy case</td><td>The odd cases, retries, and exceptions</td></tr><tr><td>The cost to build</td><td>The cost to run: usage, checking, fixing, and the owner’s time</td></tr><tr><td>“It works”</td><td>The cost of one outcome that met the standard</td></tr></tbody></table>
+<p>The number I want is simple: the total cost of one outcome that met the agreed standard, with the checking and the fixing included. Count only the cases that met the standard. Keep the rejected and unfinished ones visible, or dropping the hard cases will make the average look good. The official <a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/design-principles">design principles</a> name what drives the cost: how much data, how many questions, how much load at once, and the hidden cost of the services you depend on. And remember that staff time freed by AI is capacity, not cash. It becomes a saving only if spending actually falls, or if someone names what the freed hours will now do.</p>
+<blockquote>
+<p><strong>Lesson:</strong> price the side of the coin nobody watches. Cost per good outcome, checking included, build and run budgeted apart.</p>
+</blockquote>
+<p>Go deeper:</p>
+<ul>
+<li><a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html">Evaluation criteria</a>. Cost of owning across licenses, usage, and engineering hours. Build and run as separate budgets. Caps and alerts.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/manage#manage-ai-costs">Manage AI: costs</a>. Official guidance on usage monitoring, thresholds, and budget alerts.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/design-principles#cost-optimization">Design principles: cost</a>. “Pay for what you intend to use. Use what you pay for.”</li>
+<li><a href="/blogs/blog/start_at_the_cheap_end/">Start at the Cheap End</a>. My own ordering of the ways to make an agent cheaper and better, cheapest first.</li>
+</ul>
+<h2 id="part-three-running-the-pilot">Part three: running the pilot</h2>
+<h3 id="5-how-do-we-run-the-pilot">5. How do we run the pilot?</h3>
+<p>A pilot is not a demo. A demo shows that something can work once. A pilot finds out what it costs to work every day. The official <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/plan">planning guide</a> gives the shape I follow: pick a high-value case that matches the skills you actually have, start with internal work that does not face customers, and use what the pilot teaches you to estimate the real timeline. It also says to add a buffer for learning and surprises, and I have never regretted that line.</p>
+<p>The <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai-agents/business-strategy-plan">agent business plan</a> adds the rule I now treat as the whole point of a pilot: “Pilot the hardest steps.” If the agent succeeds there, the easy steps will follow. If you pilot the easy steps, you learn nothing you did not already know. The same page says to use business numbers to decide, at each stage, whether to go on or stop, and to make that choice “based on the data, not assumptions or optimism.”</p>
+<p>So before the pilot starts, I write three things down. What result would make us expand. What would make us change the design. What would make us stop. Which cases we test, how long we watch, and which failures we will not accept are all decided before anyone looks at results. Then the pilot runs on real cases, including the awkward ones, and the people who will own it afterwards are in the room from the first week.</p>
+<p>The Decision Framework’s <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/implementation-patterns.html">implementation patterns</a> make one more point I like. Most real systems start in one shape and move to another as the requirements settle. Plan the move. A pilot that cannot grow into the real thing teaches you less than it seems.</p>
+<blockquote>
+<p><strong>Lesson:</strong> pilot the hardest step, on real cases, with the stop condition written before you start.</p>
+</blockquote>
+<p>Go deeper:</p>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/plan#create-ai-proof-of-concepts">Plan for AI adoption: proof of concept</a>. Pick the case, start internal, use the results to estimate.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai-agents/business-strategy-plan#define-success-metrics">Business plan for AI agents: success metrics</a>. Baseline, decision gates, measurement after launch.</li>
+<li><a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/implementation-patterns.html">Implementation patterns</a>. Common starting shapes and the signals that tell you to move.</li>
+</ul>
+<h3 id="6-how-will-we-know-it-worked">6. How will we know it worked?</h3>
+<p>If AI made the work cheaper, we should be able to show where the time went. Usually we cannot, because we trust how it feels.</p>
+<p>In early 2025, <a href="https://arxiv.org/abs/2507.09089">METR</a> randomly assigned real tasks to experienced open-source developers, with and without AI. They finished about a fifth slower with AI. They believed they had been about a fifth faster. Same people, same work, opposite numbers. In its <a href="https://metr.org/blog/2026-02-24-uplift-update/">February 2026 update</a>, METR says developers likely get more help from AI than they did in early 2025. Its new numbers lean toward a speedup but are too noisy to be sure, and it calls its own data “only very weak evidence” for how large the change is.</p>
+<p>The other side exists too. A study of over five thousand <a href="https://arxiv.org/abs/2304.11771">customer support workers</a> found AI help raised issues resolved per hour, with the gain going mostly to the newest workers. So for individuals AI can be a leveler. For organizations, <a href="https://dora.dev/research/2025/dora-report/">DORA’s 2025 report</a> calls it an amplifier: a strong system gets stronger, a weak one is exposed. The two findings do not agree, and that is the point.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Study</th><th>Who was measured</th><th>What it found</th><th>What I take from it</th></tr></thead><tbody><tr><td><a href="https://arxiv.org/abs/2507.09089">METR, early 2025</a></td><td>Experienced open-source developers on their own projects, tasks assigned at random</td><td>About a fifth slower with AI, while believing they were a fifth faster</td><td>Feelings are not measurement</td></tr><tr><td><a href="https://metr.org/blog/2026-02-24-uplift-update/">METR, February 2026</a></td><td>A larger group, same design</td><td>Leans toward a speedup, but too noisy to be sure: “only very weak evidence”</td><td>When people refuse to work without AI, the measurement itself breaks</td></tr><tr><td><a href="https://arxiv.org/abs/2304.11771">Generative AI at Work</a></td><td>Over five thousand customer support workers</td><td>More issues resolved per hour, with the gain mostly for the newest workers</td><td>For individuals, AI can be a leveler</td></tr><tr><td><a href="https://dora.dev/research/2025/dora-report/">DORA 2025</a></td><td>Software organizations</td><td>AI amplifies what is already there</td><td>For teams, the system around the tool decides the result</td></tr></tbody></table>
+<p>None of these is a number to paste into a business case. Together they are one instruction: measure in your own setting. Compare against the baseline from question 1: similar cases, with and without the tool. Look at the slow cases, not just the average. Give delayed failures time to appear. Count total human effort, time to the final outcome, quality failures, and cost. And here is the habit from my own notes that I think matters most: most teams track cost, time, token use, and tickets closed. Few check whether the output is right. Check the progress, not just the bill.</p>
+<blockquote>
+<p><strong>Lesson:</strong> faster is a measurement, not a mood. If you cannot show where the saved time went, you have not saved it yet.</p>
+</blockquote>
+<p>Go deeper:</p>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/govern#4-monitor-ai-organizational-risks">Govern AI: monitor risks</a>. An official measurement plan that mixes numbers with what users and reviewers say.</li>
+<li><a href="https://learn.microsoft.com/en-us/agents/agent-evaluation/evaluation-checklist">Agent evaluation checklist</a>. Its test for success: you can answer with specifics “instead of saying: ‘The agent seems okay.’”</li>
+<li><a href="https://dora.dev/research/2025/dora-report/">DORA 2025</a>. Why the same tool helps one team and hurts another.</li>
+</ul>
+<h2 id="part-four-controlling-risk">Part four: controlling risk</h2>
+<h3 id="7-how-much-may-it-do-alone-and-who-answers-for-it">7. How much may it do alone, and who answers for it?</h3>
 <p>The capability model separates three levels of trust: the system <strong>recommends</strong>, it <strong>acts within set limits</strong>, or it <strong>owns the outcome</strong>. The line between the first two is where accountability changes hands, and that line is the real design decision. The page says it in one sentence: “Capability is a demo. Authority is a liability.”</p>
-<p>So I decide, per action, what the system may do. Reading can be logged. Writing needs a person to confirm. Anything destructive needs approval through a separate channel, from someone who owns the process. Drafting a reply to a customer and sending it are different jobs, and I treat them as different jobs. Every production duty gets a <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html">named owner</a>: one for the business result and one for keeping the service alive. The decision page gives the test I use at the end: “An agent you cannot see, attribute, or switch off is not in production.”</p>
+<p>The official <a href="https://learn.microsoft.com/en-us/agents/center-of-excellence/govern-agents-risk">agent governance guide</a> draws the same line and gives it a name: the assist-to-execute line. An agent that drafts a reply assists a person who stays in charge. An agent that sends the reply, updates a record, or moves money makes a change in a system the business treats as the truth. “Sort every agent by what it does, not by how impressive it looks.” It then sets three risk tiers. Low risk needs a named owner, basic monitoring, and a release checklist. Medium risk adds an expert who confirms the answers are right and a formal gate before going live. High risk adds a process owner, a security and responsible-AI review, written decision rights about what the agent may decide alone, and an incident plan.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Risk tier</th><th>What the agent does</th><th>What it needs before it ships</th></tr></thead><tbody><tr><td>Low</td><td>Summarizes, drafts, or searches for one person or a small team</td><td>A named owner, basic monitoring, a release checklist</td></tr><tr><td>Medium</td><td>Answers domain questions or runs an internal service where a wrong answer misleads people</td><td>All of the above, plus an expert who confirms the answers, monitoring of the knowledge it reads, and a formal gate before going live</td></tr><tr><td>High</td><td>Sits in a core process, faces customers, or takes consequential actions</td><td>All of the above, plus a process owner, a security and responsible-AI review, written decision rights, an incident plan, and a regular review</td></tr></tbody></table>
+<p>So I decide, per action, what the system may do. Reading can be logged. Writing needs a person to confirm. Anything destructive needs approval through a separate channel, from someone who owns the process. Every production duty gets a <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html">named owner</a>. I split it in two: one for the business result and one for keeping the service alive. The decision page gives the test I use at the end: “An agent you cannot see, attribute, or switch off is not in production.”</p>
+<div align="center">
+<pre><code class="language-mermaid">graph LR
+    subgraph Assist
+        R1["Recommends&#x3C;br/>drafts, summarizes, suggests"]
+    end
+    subgraph Execute
+        R2["Acts within set limits&#x3C;br/>updates a record, sends a reply"] --> R3["Owns the outcome&#x3C;br/>decides and acts alone"]
+    end
+    R1 -- "accountability changes hands here" --> R2
+    R1 --- L1["Read: log it"]
+    R2 --- L2["Write: a person confirms"]
+    R3 --- L3["Destructive: separate approval&#x3C;br/>from the process owner"]
+</code></pre>
+</div>
+<p>This is also where leadership comes in, and the official <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/strategy">strategy page</a> keeps it to three moves. Leaders say what AI is for and how they will measure it. One central group writes the rules that apply to everyone, so each team does not invent its own. Everyone gets access, plus training, because the people doing the work are the ones who will spot where AI helps. The <a href="https://learn.microsoft.com/en-us/agents/center-of-excellence/">Center of Excellence guide</a> names the three ways that central group fails: the gatekeeper who reviews everything and enables nothing, the ghost that exists on paper only, and the perfectionist who will not let anyone ship until governance is complete. The same guide’s <a href="https://learn.microsoft.com/en-us/agents/center-of-excellence/govern-agents-risk">risk page</a> answers: “Governance is never finished. Compliance is continuous.” Publish the guardrails, let teams build inside them, and refine as you learn.</p>
 <p>None of this is a limit on the technology. It is how the project survives its first bad week. AI informs. Humans commit.</p>
 <blockquote>
 <p><strong>Lesson:</strong> decide which actions it may take alone, which need a person, and who is named when it goes wrong. Before launch, not after.</p>
 </blockquote>
-<h2 id="5-who-will-check-the-output-and-is-that-capacity-planned">5. Who will check the output, and is that capacity planned?</h2>
+<p>Go deeper:</p>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/agents/center-of-excellence/govern-agents-risk">Govern agents by risk</a>. The three tiers and their controls, in plain words.</li>
+<li><a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/capability-model.html">Capability model: the agent framework</a>. Recommend, act within bounds, own the outcome.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/center-of-excellence">Establish an AI Center of Excellence</a>. Who sets standards, who runs pilots, and when the group should step back to an advisory role.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/responsible-ai-policies">Responsible AI policies</a>. How to tell users they are talking to AI, and how to let them challenge a decision.</li>
+</ul>
+<h3 id="8-how-do-we-keep-it-safe">8. How do we keep it safe?</h3>
+<p>The oldest security rule still carries the most weight. In 1974 Jerome Saltzer wrote that every program and every privileged user should operate with the <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege">least amount of privilege necessary</a>. An agent is a program that acts on behalf of a person. It must see only what that person may see, and do only what that person may do. The Decision Framework separates two things that get confused: an agent’s attribution, meaning who it acts for, and its data access, meaning what it may reach. They are different problems. Solve both.</p>
+<p>Microsoft’s official <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/secure">security guidance</a> starts where I would: with the list of attacks you already defend against, checked against the AI-specific attack lists that <a href="https://atlas.mitre.org/">MITRE ATLAS</a> and the <a href="https://genai.owasp.org/">OWASP generative AI project</a> maintain. The new attacks have names worth learning. Prompt injection, where a document or a message the agent reads carries instructions it was never meant to follow. Data leakage through the answer. Model inversion, where an attacker pulls training data back out of the model. The page’s advice is to red-team the system, meaning attack it on purpose before someone else does, and to repeat that as models and usage change.</p>
+<p>Then the questions a manager must be able to answer. Is there an inventory of every agent, with an owner? Does each agent have its own identity, so an action can be traced to it? Are the data boundaries written down, so the agent cannot reach what the requesting person cannot? Who can switch it off, and how fast? The <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/govern">governance page</a> turns Microsoft’s six responsible-AI principles into six risk questions, and I find the accountability one the sharpest: where could it be unclear who is responsible?</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Principle</th><th>The question to ask about this project</th></tr></thead><tbody><tr><td>Privacy and security</td><td>Where could it handle sensitive data, or be attacked through what it reads?</td></tr><tr><td>Reliability and safety</td><td>When could it fail to work safely, or give an answer nobody should trust?</td></tr><tr><td>Fairness</td><td>How could it treat some people worse than others?</td></tr><tr><td>Inclusiveness</td><td>Who could be left out by how it is built or used?</td></tr><tr><td>Transparency</td><td>Which of its decisions would a user find hard to understand?</td></tr><tr><td>Accountability</td><td>Where is it unclear who is responsible?</td></tr></tbody></table>
+<p>The business plan page has the line I use to close this conversation: “If you can’t name the risks, you can’t manage them.” Pause until you can.</p>
+<blockquote>
+<p><strong>Lesson:</strong> least privilege, an identity per agent, a written data boundary, and a switch someone is allowed to pull. Name the risks or do not ship.</p>
+</blockquote>
+<p>Go deeper:</p>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/secure">Secure AI</a>. Threat discovery, data boundaries, red teaming, incident response.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/govern">Govern AI</a>. Risk assessment built on the NIST AI Risk Management Framework, and the six principles turned into risk questions.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/responsible-ai">Responsible AI in workloads</a>. Content safety on the way in and out, feedback and the right to contest a decision, escape hatches for agents.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/red-teaming">Red teaming for language model applications</a>. How to attack your own system.</li>
+<li><a href="https://www.microsoft.com/en-us/ai/principles-and-approach">Microsoft’s responsible AI principles</a>. Fairness, reliability and safety, privacy and security, inclusiveness, transparency, accountability.</li>
+</ul>
+<h2 id="part-five-controlling-quality">Part five: controlling quality</h2>
+<h3 id="9-who-checks-the-output-and-is-that-capacity-planned">9. Who checks the output, and is that capacity planned?</h3>
 <p>Dijkstra, 1969: <a href="https://en.wikiquote.org/wiki/Edsger_W._Dijkstra">“Testing shows the presence, not the absence of bugs.”</a> That was true when a human wrote every line. It matters more now, because an agent can pass every check we thought to write and still miss the reason the ticket exists. The scenarios page says it in one breath: “Generation got cheap. Verification did not.” Geoffrey Huntley, asked <a href="https://ghuntley.com/agency/">what is left</a> when nobody types code by hand, answers: vision, verification, and agency. Two of the three are about checking.</p>
 <p>My test for “done” is simple: the next person can do their job with the output. Say we build a tool that summarizes support tickets. The summaries are clear and complete. Then an engineer notices one left out the customer’s software version and mixed up a fix that was tried with one that was only suggested. So they reread the whole conversation. We shipped a feature, and the workflow gained one more document to check. So “done” is decided by whoever receives the output, not by whoever produces it. Build the proof there, with the receiver, on real cases.</p>
-<p>Then plan the checking as work, with people and hours. If an agent opens forty changes a day and the team can honestly review ten, the extra thirty are a pile going stale in a queue. I did that arithmetic in <a href="/blogs/blog/through_a_seniors_eyes/">Through a Senior’s Eyes</a>: more workers do not make the one person who decides any faster.</p>
-<p>And watch for the slow failure. Diane Vaughan studied the Challenger disaster and named it the <a href="https://en.wikipedia.org/wiki/Normalization_of_deviance">normalization of deviance</a>: each time a check is skipped and nothing goes wrong, skipping becomes a little more normal. An agent that has been right ten times is the perfect setup. The eleventh review is the one you will want to skip.</p>
+<p>The official <a href="https://learn.microsoft.com/en-us/agents/agent-evaluation/evaluation-checklist">evaluation checklist</a> gives this a shape I can hand to a team. Start with one test case per key scenario, each with a prompt, an expected answer, and a written rule for what passes. Run it, record the pass rate and the version, and dig into every failure: is the test wrong, or is the agent wrong? Then widen the set to cover rephrased questions, edge cases, and the things the agent must refuse. Because outputs vary, run the set several times and aim for a realistic pass rate rather than a perfect one. The Well-Architected <a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/test">testing page</a> adds a distinction I had been blurring: evaluation finds the best model during development, and testing checks the whole system every time anything changes. Both need a trusted set of examples, checked by humans, that the page calls the golden dataset.</p>
+<p>Then plan the checking as work, with people and hours. If an agent opens forty changes a day and the team can honestly review ten, the extra thirty are a pile going stale in a queue. I did that arithmetic in <a href="/blogs/blog/through_a_seniors_eyes/">Through a Senior’s Eyes</a>: more workers do not make the one person who decides any faster. Sprints assumed building was the slow part. If review and decisions are now the slow part, plan the sprint around what the team can finish and check, not around how much the agent can generate.</p>
+<p>And watch for the slow failure. Diane Vaughan studied the Challenger disaster and named it the <a href="https://en.wikipedia.org/wiki/Normalization_of_deviance">normalization of deviance</a>: each time a check is skipped and nothing goes wrong, skipping becomes a little more normal. An agent that has been right ten times is the perfect setup. The eleventh review is the one you will want to skip. Microsoft’s page on <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/agentic-engineering.html">engineering with agents</a> names the same risk and reduces the whole debate to one question: “can you prove it works?”</p>
 <blockquote>
 <p><strong>Lesson:</strong> define done by what the next person can do with it. Budget the review. Keep reviewing after it has been right ten times.</p>
 </blockquote>
-<h2 id="6-who-will-understand-it-in-a-year">6. Who will understand it in a year?</h2>
+<p>Go deeper:</p>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/agents/agent-evaluation/evaluation-checklist">Agent evaluation checklist</a>. Four stages, from a first test set to continuous evaluation.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/test">Test and evaluate AI workloads</a>. Evaluation versus testing, golden datasets, how to test agents that call tools.</li>
+<li><a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/agentic-engineering.html">Engineering with agents</a>. Verification over reading, and how to split review when no engineer is in the loop.</li>
+<li><a href="https://ghuntley.com/readable/">Software should be explainable, not readable</a>. Huntley on types as back pressure and “porting is easy when the end result is easy to verify.”</li>
+</ul>
+<h3 id="10-how-do-we-keep-it-good-after-launch">10. How do we keep it good after launch?</h3>
+<p>Meir Lehman wrote down in 1974 what every operations team learns the hard way. A system that is used must be continually adapted, or it becomes <a href="https://en.wikipedia.org/wiki/Lehman%27s_laws_of_software_evolution">progressively less satisfactory</a>. In 1996 he added a second law: its quality appears to decline unless it is rigorously maintained. He was writing about ordinary software. AI systems obey his laws faster, because the world the model learned from keeps moving and the model does not.</p>
+<p>The Well-Architected <a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/test">testing page</a> names the two ways this happens. Data drift: the inputs change, so a model trained on last year’s cases misreads this year’s. Concept drift: the world changes, so the right answer changes while the model keeps giving the old one. Either way, the system that passed its pilot is slowly becoming a different system.</p>
+<p>So launch is where the measuring starts, not where it ends. The official <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/manage">management guide</a> asks for four things. Know what good looked like at launch. Keep the golden dataset current and rerun it on a schedule. Make every new model version pass a check before it reaches production. Keep a calendar of model retirement dates so a vendor change does not surprise you. The <a href="https://learn.microsoft.com/en-us/agents/agent-evaluation/evaluation-checklist">evaluation checklist</a> lists the events that should trigger a full rerun of the test set: a model change, a major update to the knowledge the agent reads, a new tool or connection, and any production incident. Microsoft’s <a href="https://learn.microsoft.com/en-us/azure/foundry/concepts/observability">observability guidance</a> adds checking a sample of real production answers and scheduled red teaming, so you find the drift before the users do.</p>
+<div align="center">
+<pre><code class="language-mermaid">graph LR
+    T["Build a test set&#x3C;br/>one case per key scenario"] --> B["Record a baseline&#x3C;br/>pass rate and version"]
+    B --> W["Widen it&#x3C;br/>rephrasings, edge cases, refusals"]
+    W --> L["Launch&#x3C;br/>sample real traffic"]
+    L --> E["A trigger fires&#x3C;br/>model change, knowledge update,&#x3C;br/>new tool, incident, rejection"]
+    E --> T
+</code></pre>
+</div>
+<p>The receiving step also needs a way to reject the output: missing version, unsupported conclusion, wrong customer, stale policy. Those reasons should travel back to the step that produced it. A rejection is the cheapest signal of drift you will ever get. And the people who use the system need a one-click way to say the answer was wrong and a real way to contest a decision that affected them.</p>
+<blockquote>
+<p><strong>Lesson:</strong> the system you launched is not the system you will be running in a year. Rerun the tests on every change, and listen to the rejections.</p>
+</blockquote>
+<p>Go deeper:</p>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/manage">Manage AI</a>. Baselines, golden datasets, quality gates, retirement dates, cost alerts, recovery drills.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/foundry/concepts/observability">Observability in generative AI</a>. Evaluation, monitoring, and tracing across the lifecycle.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/operations">Operations for AI workloads</a> and <a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/mlops-genaiops">MLOps and GenAIOps</a>. The operating rhythm around a model.</li>
+</ul>
+<h2 id="part-six-understanding-and-learning">Part six: understanding and learning</h2>
+<h3 id="11-who-will-understand-it-in-a-year">11. Who will understand it in a year?</h3>
 <p>In 1985 Peter Naur wrote <a href="https://pages.cs.wisc.edu/~remzi/Naur.pdf">Programming as Theory Building</a>. His claim is that the program is not the code. It is the <strong>theory</strong> in the heads of the people who built it: the knowledge that lets them explain it and change it without breaking it. Then the definition I cannot forget: “The death of a program happens when the programmer team possessing its theory is dissolved.” A dead program keeps running. You find out when someone asks for a change and nobody can answer.</p>
-<p>When an agent writes the code, nobody holds the theory by default. Geoffrey Huntley argues that software <a href="https://ghuntley.com/readable/">no longer needs to be readable, only explainable</a> by a model on demand. I think that is half right. An explanation on request is useful. It is not a person who understands the system and answers for it. The instruction files we now write for agents, a CLAUDE.md or an AGENTS.md, are the theory partly written down: what the system is for, which decisions were made and why, which source wins when two disagree. That is the most valuable document a team can write today. It is still not the whole theory. Someone has to hold the rest, and that person’s time is part of the cost in question 3.</p>
+<p>When an agent writes the code, nobody holds the theory by default. Geoffrey Huntley argues that software <a href="https://ghuntley.com/readable/">no longer needs to be readable, only explainable</a> by a model on demand. I think that is half right. An explanation on request is useful. It is not a person who understands the system and answers for it. The instruction files we now write for agents, a CLAUDE.md or an AGENTS.md, are the theory partly written down: what the system is for, which decisions were made and why, which source wins when two disagree. That is the most valuable document a team can write today. It is still not the whole theory. Someone has to hold the rest, and that person’s time is part of the cost in question 4.</p>
+<p>Michael Polanyi explained why in 1966, in <a href="https://en.wikipedia.org/wiki/Tacit_knowledge">The Tacit Dimension</a>: “we can know more than we can tell.” You recognize a face without being able to say how. A senior knows which module is fragile and cannot write the full reason down. Every instruction file is the part of the theory that could be told. The part that could not is still in someone’s head, and it is often the part that matters when the system breaks.</p>
+<p>This is also the other half of my own job now. The first half is making the agent itself handle more of the task, more reliably, against a target it can be checked against. The second half is building the <strong>context system</strong> around it: the information the agent gets must be consistent, current, relevant, and something the person asking is allowed to see. Connecting the tools is the starting point. The hard part is knowing where each fact came from, when it was valid, which version applies, and who may see it. The model does not fix bad data. It combines what it is given, and it is very good at that. So most of the engineering is in what it is given. The model is the part you can rent. The context is the part nobody can sell you.</p>
+<p>That context system grows with the organization, and the hard problem changes at each step. This is the pattern I keep coming back to:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Setting</th><th>Where the context lives</th><th>The hard part</th></tr></thead><tbody><tr><td>Solo developer</td><td>The repository, an instruction file, a folder of notes</td><td>The discipline to write things down</td></tr><tr><td>Small business</td><td>A few shared tools: chat, documents, an issue tracker</td><td>Knowledge lives in people’s heads, so you need one shared truth</td></tr><tr><td>Manufacturer with a thousand people</td><td>Office tools plus the plant systems, machine data, and procedures, often on paper</td><td>The documents say one thing and the factory floor does another</td></tr><tr><td>Enterprise</td><td>Many teams, many tools, many copies</td><td>Permissions: the agent must see only what the asking person may see, and pick the right version</td></tr><tr><td>Company with several business units</td><td>Each unit’s own systems and its own meaning for the same word</td><td>Shared meaning: does “customer” mean the same thing everywhere?</td></tr><tr><td>Global company</td><td>Many languages, regions, and laws</td><td>Data must stay where the law says, and meaning must survive translation</td></tr></tbody></table>
+<p>The amount of data grows down that table, but that is not the real change. The hard problem moves: from discipline, to shared truth, to the gap between documents and reality, to permissions, to shared meaning, to law and language. Adding more documents to a search index does not settle any of those. A person who holds the theory does.</p>
 <blockquote>
-<p><strong>Lesson:</strong> name the person who will still understand this system in a year, and give them the time to keep understanding it.</p>
+<p><strong>Lesson:</strong> name the person who will still understand this system in a year, and give them the time to keep understanding it. Write down as much of the theory as you can, for the agent and for the next person.</p>
 </blockquote>
-<h2 id="7-how-will-we-know-it-worked">7. How will we know it worked?</h2>
-<p>If AI made the work cheaper, we should be able to show where the time went. Usually we cannot, because we trust how it feels.</p>
-<p>In early 2025, <a href="https://arxiv.org/abs/2507.09089">METR</a> randomly assigned real tasks to experienced open-source developers, with and without AI. They finished about a fifth slower with AI. They believed they had been about a fifth faster. Same people, same work, opposite numbers. In its <a href="https://metr.org/blog/2026-02-24-uplift-update/">February 2026 update</a>, METR says developers likely get more help from AI than they did in early 2025, but its new numbers still show no clear speedup, and it calls its own data “only very weak evidence.”</p>
-<p>The other side exists too. A study of over five thousand <a href="https://arxiv.org/abs/2304.11771">customer support workers</a> found AI help raised issues resolved per hour, with the gain going mostly to the newest workers. So for individuals AI can be a leveler. For teams, <a href="https://dora.dev/research/2025/dora-report/">DORA’s 2025 report</a> calls it an amplifier: a strong system gets stronger, a weak one is exposed. The two findings do not agree, and that is the point.</p>
-<p>None of these is a number to paste into a business case. Together they are one instruction: measure in your own setting. Decide before the pilot what would make you expand it, change it, or stop it. Compare similar cases with and without the tool. Look at the slow cases, not just the average. Give delayed failures time to appear. A good demo is a reason to keep testing, not a permission to roll out.</p>
+<p>Go deeper:</p>
+<ul>
+<li><a href="https://pages.cs.wisc.edu/~remzi/Naur.pdf">Programming as Theory Building</a>. Naur, 1985. Still the clearest statement of why documentation is not understanding.</li>
+<li><a href="https://en.wikipedia.org/wiki/Tacit_knowledge">The Tacit Dimension</a>. Polanyi, 1966. Why the written theory is always smaller than the one in the head.</li>
+<li><a href="/blogs/blog/how_to_build_knowledgebase/">How to Build a Knowledgebase</a>. My longer piece on why storage is not knowledge.</li>
+</ul>
+<h3 id="12-how-do-we-keep-learning">12. How do we keep learning?</h3>
+<p>Tools change every month. Problems and patterns do not. When I learn the core idea behind a tool, how it is built, and its limits, I can judge the next ten tools built on the same idea without trying them all.</p>
+<p>I pick what to learn with a checklist, in this order: what it does, the core idea, the cost, the license, whether it fits a need I actually have, and only then how popular it is. The useful core often does not look fancy. Then I practice a little every day. One small question, ten to fifteen minutes, like sketching how I would design a system for a requirement I have not seen before. You cannot work on a large codebase every day, but small practice adds up, and it doubles as preparation for the interviews and reviews where someone asks you to think out loud.</p>
+<p>For finding what to study, I use everything: professional networks, paper feeds, repositories, release notes. But I follow the links before I trust the summary. Several posts copying one announcement are still one source. As I wrote in <a href="/blogs/blog/how_to_learn/">How to learn?</a>, <strong>qualify what you learn before you learn it.</strong></p>
+<p>Why so little, so often? Richard Hamming answered that in 1986, in a talk called <a href="https://www.cs.virginia.edu/~robins/YouAndYourResearch.html">You and Your Research</a>. He had spent years at Bell Labs watching which scientists did work that lasted, and asking why most did not. One of his answers was not talent. “Knowledge and productivity are like compound interest.” A person who studies a little more each day does not end up a little ahead. Over a career the gap grows many times over, because each thing you understand makes the next one cheaper to learn. Agents raise the interest rate again. They can summarize anything in seconds, so the only thing that still compounds is your own understanding. The danger is accepting the summary without doing the work of understanding. Hamming also said the people who worked with the door open got interrupted more, but they were the ones who knew what mattered. I take that as permission to read widely and keep the door open, as long as I do the fifteen minutes.</p>
 <blockquote>
-<p><strong>Lesson:</strong> faster is a measurement, not a mood. Write down what “stop” looks like before you start.</p>
+<p><strong>Lesson:</strong> learn the idea, not the tool. Check the source before you learn from it. Fifteen minutes a day beats a long list of names you recognize.</p>
 </blockquote>
+<p>Go deeper:</p>
+<ul>
+<li><a href="https://www.cs.virginia.edu/~robins/YouAndYourResearch.html">You and Your Research</a>. Hamming, 1986. Compound interest, open doors, and important problems.</li>
+<li><a href="/blogs/blog/how_to_learn/">How to learn?</a>. My own notes on qualifying a source before learning from it.</li>
+<li><a href="/blogs/blog/through_a_seniors_eyes/">Through a Senior’s Eyes</a>. What changes in how you see a problem, not what you know.</li>
+</ul>
 <h2 id="the-list-to-come-back-to">The list, to come back to</h2>
 
 
@@ -106,31 +451,77 @@ Last updated on <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time> 
 
 
 
-<table><thead><tr><th>Question</th><th>What I want to see before I say yes</th></tr></thead><tbody><tr><td>What is the problem, before AI?</td><td>The delay or loss, named and measured as it is today</td></tr><tr><td>Does it need AI, and does something exist?</td><td>Why plain code, search, and an existing product each failed</td></tr><tr><td>What will it cost to own?</td><td>Cost per good outcome, checking included, build and run budgeted apart</td></tr><tr><td>How much may it do alone?</td><td>Which actions need a person, and the named owners</td></tr><tr><td>Who checks it?</td><td>Done defined by the receiver, and review hours planned</td></tr><tr><td>Who understands it in a year?</td><td>A named person, with time, and the theory written down</td></tr><tr><td>How will we know it worked?</td><td>A comparison planned in advance, with a stop condition</td></tr></tbody></table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Question</th><th>What I want to see before I say yes</th></tr></thead><tbody><tr><td>1. What is the problem, before AI?</td><td>The delay or loss, named and measured as it is today</td></tr><tr><td>2. Does it need AI, and does something exist?</td><td>Why plain code, search, and an existing product each failed</td></tr><tr><td>3. Which decisions are hard to undo?</td><td>Data meaning, boundaries, owners, and rules decided by people, not by the agent</td></tr><tr><td>4. What will it cost to own?</td><td>Cost per good outcome, checking included, build and run budgeted apart</td></tr><tr><td>5. How do we run the pilot?</td><td>The hardest step, on real cases, with expand, change, and stop conditions written first</td></tr><tr><td>6. How will we know it worked?</td><td>A comparison planned in advance, and output checked, not just the bill</td></tr><tr><td>7. How much may it do alone?</td><td>Which actions need a person, the risk tier, and the named owners</td></tr><tr><td>8. How do we keep it safe?</td><td>Least privilege, an identity per agent, a written data boundary, a switch</td></tr><tr><td>9. Who checks it?</td><td>Done defined by the receiver, a test set, and review hours planned</td></tr><tr><td>10. How do we keep it good?</td><td>Tests rerun on every change, drift watched, rejections fed back</td></tr><tr><td>11. Who understands it in a year?</td><td>A named person, with time, and the theory written down</td></tr><tr><td>12. How do we keep learning?</td><td>The idea behind the tool, from a checked source, a little every day</td></tr></tbody></table>
 <p><strong>When code is cheap, the senior’s job is to pay for what stayed expensive: deciding, owning, checking, and understanding.</strong> Brooks described that job in 1986. The agent just made it impossible to hide behind the typing.</p>
 <h2 id="two-questions-i-cannot-answer-yet">Two questions I cannot answer yet</h2>
 <p>The practical list above leaves me with two questions about intelligence itself.</p>
 <h3 id="is-curiosity-part-of-intelligence">Is curiosity part of intelligence?</h3>
-<p>This month an AI lab <a href="https://en.wikipedia.org/wiki/OpenAI_bulk_release_of_mathematical_papers">released 722 papers</a> claiming results on major open problems in mathematics. Three were withdrawn within a day, and experts expect checking the rest to take months. The same week, Terence Tao gave a talk he had planned long before, <a href="https://terrytao.wordpress.com/2026/10/10/math-2-0/">Math 2.0</a>. It is not about whether these proofs are correct. He describes the present as shaped by “the excessive emphasis on automated solving of open problems by AI,” and he asks for a future where AI is used to support the mathematical community and the understanding that connects mathematics to the real world. His <a href="https://teorth.github.io/tao-web/slides/math-2-0-caltech-2026.pdf">slides</a> pose a thought experiment: an AI finds a cancer cure that passes its clinical trial and comes with a machine-checked certificate, but nobody knows how it was found. Would you want at least one human expert who understands the mechanism, even partially, before the injection? That is Naur’s question again, asked about a whole field.</p>
+<p>This month an AI lab <a href="https://en.wikipedia.org/wiki/OpenAI_bulk_release_of_mathematical_papers">released 722 papers</a> claiming results on major open problems in mathematics. Three were withdrawn within a day, and experts expect checking the rest to take months. The same week, Terence Tao gave a talk he had planned long before, <a href="https://terrytao.wordpress.com/2026/10/10/math-2-0/">Math 2.0</a>. It is not about whether these proofs are correct. He describes the present as shaped by “the excessive emphasis on automated solving of open problems by AI,” and he asks for a future where AI is used to support the mathematical community and the understanding that connects mathematics to the real world. In <a href="https://officechai.com/ai/terence-tao-hints-openai-wasnt-behaving-responsibly-by-simultaneously-releasing-300-math-proofs-says-its-making-math-less-fertile/">earlier remarks</a>, as reported secondhand, he worried that mass solving leaves a field less fertile: the answers exist, but nobody does the follow-up work that a hard problem usually sparks.</p>
+<p>His <a href="https://teorth.github.io/tao-web/slides/math-2-0-caltech-2026.pdf">slides</a> pose a thought experiment: an AI finds a cancer cure that passes its clinical trial and comes with a machine-checked certificate, but nobody knows how it was found. Would you want at least one human expert who understands the mechanism, even partially, before the injection? That is Naur’s question again, asked about a whole field.</p>
 <p>His concern made me notice something about my own work. When I read or build something, questions show up that nobody asked for. Something bothers me, connects to an old idea, or makes me wonder what happens if I change an assumption. I keep thinking about it after the task is done. That is part of what I mean by human intelligence.</p>
 <p>A model can solve a hard problem and produce good follow-up questions. Asking it to act curious produces more of them. But those outputs alone do not tell me whether it has curiosity of its own. What could I observe that would separate producing useful questions from wanting to understand something when nobody is asking? <strong>I do not know how to test that yet.</strong></p>
 <h3 id="what-could-an-agent-learn-from-besides-language">What could an agent learn from, besides language?</h3>
 <p>Natural language is a rich input. A vocabulary and a grammar let us express facts, logic, relationships, and ideas nobody has written before. The same input carries assumptions, biases, contradictions, fiction, and lies. Could another kind of input keep the expressive power while making some of those problems easier to handle? I have not decided what form it should take, or whether it should look like a language at all.</p>
+<p>Here is the shape of what I mean. Compare “the machine seems too hot” with a reading of 105°C against a limit of 90°C from a sensor marked valid. The second says what was measured and what the limit is. The agent still has to decide what to do, but it no longer has to guess what the speaker meant by “too hot.”</p>
 <p>An agent’s job is to solve problems and act. Conversation helps it work with people. But what would help it learn about the problems themselves and the effects of its actions? Mathematics, machine states, sensor readings, and interaction with an environment give me places to look. Would such an input need something like vocabulary and grammar? How would it carry context or uncertainty? Would it help with errors and made-up answers? <strong>What kind of input could support an agent’s ability to learn, reason, and discover?</strong> I am still exploring the question.</p>
 <h2 id="references">References</h2>
+<p><strong>Microsoft, official guidance</strong></p>
 <ul>
-<li>Microsoft, <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/plan">Plan for AI adoption</a>. Start with business problems before considering AI; measure readiness; run a focused proof of concept.</li>
-<li>Microsoft AI Decision Framework: <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/">overview</a>, <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/decision-framework.html">decision method</a> (“never lead with a product”, the ladder), <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/capability-model.html">capability model</a> (the coin, the three levels of trust), <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/scenarios.html">scenarios</a> (“Generation got cheap. Verification did not.”), <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html">evaluation criteria</a> (cost of owning, action risk, named owners), and <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/agentic-engineering.html">engineering with agents</a>.</li>
-<li>Microsoft, <a href="https://learn.microsoft.com/en-us/credentials/certifications/agentic-ai-business-solutions-architect/">Agentic AI Business Solutions Architect certification</a>. The role puts measuring results, monitoring, and return on investment beside architecture.</li>
+<li>Cloud Adoption Framework for AI: <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/strategy">strategy</a>, <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/plan">plan</a>, <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/ready">ready</a>, <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/govern">govern</a>, <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/secure">secure</a>, <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/manage">manage</a>, <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/responsible-ai-policies">responsible AI policies</a>, and <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/center-of-excellence">AI Center of Excellence</a>.</li>
+<li>Cloud Adoption Framework for AI agents: <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai-agents/">overview</a> and <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai-agents/business-strategy-plan">business plan</a>.</li>
+<li>Well-Architected Framework for AI workloads: <a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/">overview</a>, <a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/design-principles">design principles</a>, <a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/test">testing and evaluation</a>, <a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/responsible-ai">responsible AI</a>, <a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/operations">operations</a>, and <a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/mlops-genaiops">MLOps and GenAIOps</a>.</li>
+<li>Agents hub: <a href="https://learn.microsoft.com/en-us/agents/">overview</a>, <a href="https://learn.microsoft.com/en-us/agents/agent-evaluation/evaluation-checklist">agent evaluation checklist</a>, <a href="https://learn.microsoft.com/en-us/agents/center-of-excellence/">agentic Center of Excellence</a>, and <a href="https://learn.microsoft.com/en-us/agents/center-of-excellence/govern-agents-risk">govern agents by risk</a>.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/foundry/concepts/observability">Observability in generative AI</a> and <a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/red-teaming">red teaming for language model applications</a>.</li>
+<li><a href="https://www.microsoft.com/en-us/ai/principles-and-approach">Responsible AI principles and approach</a>.</li>
+</ul>
+<p><strong>Microsoft AI Decision Framework</strong> (a practitioner’s guide on Microsoft’s GitHub; verify against the official pages above)</p>
+<ul>
+<li><a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/">Overview</a>, <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/capability-model.html">capability model</a>, <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/decision-framework.html">decision method</a>, <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/scenarios.html">scenarios</a>, <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html">evaluation criteria</a>, <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/implementation-patterns.html">implementation patterns</a>, <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/quick-reference.html">quick reference</a>, and <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/agentic-engineering.html">engineering with agents</a>.</li>
+</ul>
+<p><strong>Outside Microsoft</strong></p>
+<ul>
+<li><a href="https://www.nist.gov/itl/ai-risk-management-framework">NIST AI Risk Management Framework</a>, <a href="https://atlas.mitre.org/">MITRE ATLAS</a>, and the <a href="https://genai.owasp.org/">OWASP generative AI project</a>. The risk and attack catalogs the Microsoft security pages build on.</li>
+</ul>
+<p><strong>Fundamentals</strong></p>
+<ul>
 <li>Fred Brooks, <a href="https://worrydream.com/refs/Brooks_1986_-_No_Silver_Bullet.pdf">No Silver Bullet: Essence and Accident in Software Engineering</a> (1986).</li>
+<li>David Parnas, <a href="https://en.wikipedia.org/wiki/Information_hiding">On the Criteria To Be Used in Decomposing Systems into Modules</a> (1972). Information hiding.</li>
 <li>William Stanley Jevons, <a href="https://en.wikipedia.org/wiki/Jevons_paradox">The Coal Question</a> (1865). Efficiency raises consumption.</li>
+<li>Jerome Saltzer, <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege">least privilege</a> (1974), developed with Michael Schroeder in “The Protection of Information in Computer Systems” (1975).</li>
+<li>Meir Lehman, <a href="https://en.wikipedia.org/wiki/Lehman%27s_laws_of_software_evolution">laws of software evolution</a> (1974, extended 1996). Continuing change, declining quality.</li>
 <li>Edsger Dijkstra, <a href="https://www.cs.utexas.edu/~EWD/transcriptions/EWD10xx/EWD1036.html">On the cruelty of really teaching computing science</a> (1988). “Lines spent.”</li>
 <li>Edsger Dijkstra, <a href="https://en.wikiquote.org/wiki/Edsger_W._Dijkstra">“Testing shows the presence, not the absence of bugs”</a> (1969 NATO conference report; restated in Notes on Structured Programming, 1970).</li>
 <li>Peter Naur, <a href="https://pages.cs.wisc.edu/~remzi/Naur.pdf">Programming as Theory Building</a> (1985).</li>
+<li>Michael Polanyi, <a href="https://en.wikipedia.org/wiki/Tacit_knowledge">The Tacit Dimension</a> (1966). “We can know more than we can tell.”</li>
+<li>Richard Hamming, <a href="https://www.cs.virginia.edu/~robins/YouAndYourResearch.html">You and Your Research</a> (1986). Knowledge as compound interest.</li>
 <li>Diane Vaughan, <a href="https://en.wikipedia.org/wiki/Normalization_of_deviance">The Challenger Launch Decision</a> (1996). Normalization of deviance.</li>
+</ul>
+<p><strong>Research and reading</strong></p>
+<ul>
 <li>Geoffrey Huntley, <a href="https://ghuntley.com/agency/">Nobody should type code by hand anymore. Here’s what’s left.</a> Vision, verification, and agency. I only had access to the public part of this essay.</li>
 <li>Geoffrey Huntley, <a href="https://ghuntley.com/readable/">Software doesn’t need to be readable anymore. It needs to be explainable.</a></li>
 <li>Terence Tao, <a href="https://terrytao.wordpress.com/2026/10/10/math-2-0/">Math 2.0</a> (October 2026), with the <a href="https://teorth.github.io/tao-web/slides/math-2-0-caltech-2026.pdf">slides</a>. Tao’s own framing of his talk.</li>
+<li><a href="https://officechai.com/ai/terence-tao-hints-openai-wasnt-behaving-responsibly-by-simultaneously-releasing-300-math-proofs-says-its-making-math-less-fertile/">Tao’s critique of mass AI problem solving</a>. Secondhand reporting of his “harvesting” remark, which the reporter summarized as making mathematics less fertile.</li>
 <li><a href="https://en.wikipedia.org/wiki/OpenAI_bulk_release_of_mathematical_papers">OpenAI bulk release of mathematical papers</a>. Background on the release and the debate around it.</li>
 <li>Brynjolfsson, Li, and Raymond, <a href="https://arxiv.org/abs/2304.11771">Generative AI at Work</a>. Customer support; gains concentrated in the newest workers.</li>
 <li>METR, <a href="https://arxiv.org/abs/2507.09089">Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity</a>, with its <a href="https://metr.org/blog/2026-02-24-uplift-update/">February 2026 update</a>.</li>
