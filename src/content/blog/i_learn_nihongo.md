@@ -423,14 +423,6 @@ It is not lossless for kanji. One sound often has several kanji, which is why
 the keyboard shows candidates and you pick. Sound gets you to the word. Kanji
 needs one more step.
 
-That's the idea behind [my-nihongo-rho.vercel.app](https://my-nihongo-rho.vercel.app/),
-a small site I built for myself. Mazii and the other big Japanese learning
-tools test you on everything they know, whether you've learned it yet or
-not. Mine tests you on what I actually know. If I've only learned 15
-hiragana, the flashcards and quizzes stay inside those 15 — no katakana, no
-kanji sprung on me early. The test follows my learning state, not the
-dictionary's.
-
 The other piece is looping. Learning is cheap the first time and expensive
 every time after, if the gap between reviews grows too long. Spend an hour
 learning five characters and never touch them again, and you'll spend
@@ -438,10 +430,10 @@ another hour relearning them later. Come back the next day for just fifteen
 minutes instead, and the same five characters stick for far longer. Hermann
 Ebbinghaus mapped this in 1885 and called it the **forgetting curve**: memory
 drops fastest right after learning, and each well-timed review flattens the
-drop a little more. Building the site let me carry that loop everywhere — a
-phone in a waiting room is enough.
+drop a little more. The loop is easy to carry everywhere — a phone in a
+waiting room is enough.
 
-I think the next step for apps like this is real personalization: not just
+I think the next step for learning apps is real personalization: not just
 spaced repetition, but tracking what a learner has actually been taught, in
 a real class, from a real teacher, and only testing and reviewing that. Log
 in after a lesson and the app already knows what was covered, and only asks
