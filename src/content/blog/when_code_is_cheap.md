@@ -1,6 +1,6 @@
 ---
 title: "When Code Is Cheap"
-description: "An agent writes the first version in twenty minutes. The question on a senior's desk is no longer how to build it, but whether a project should use AI at all, what it will cost to own, how to pilot it, and how to keep it safe and good. Ten questions with the sources to go deeper, and two personal notes."
+description: "An agent writes the first version in twenty minutes. The question on a senior's desk is no longer how to build it, but whether a project should use AI at all, what it will cost to own, how to pilot it, and how to keep it safe and good. Eleven questions with the sources to go deeper, how they apply to five kinds of delivery work, and two personal notes."
 pubDate: "2026-10-24"
 updatedDate: "2026-10-28"
 author: "locchh"
@@ -23,16 +23,16 @@ graph LR
 
 </div>
 
-This post is the list I keep for that job. Ten questions I ask before and after I say yes to AI in a project. Each has a reason from the fundamentals of our field and a reason from Microsoft's own guidance for people who make this decision, with links to go deeper. I wrote it to use, not to admire. If you only have five minutes, read the table near the end. After the list come two personal notes, on understanding and on learning, and two questions I cannot answer yet.
+This post is the list I keep for that job. Eleven questions I ask before and after I say yes to AI in a project. Each has a reason from the fundamentals of our field and a reason from Microsoft's own guidance for people who make this decision, with links to go deeper. I wrote it to use, not to admire. If you only have five minutes, read the table near the end. After the list comes how I apply it to five kinds of delivery work, then two personal notes, on understanding and on learning, and two questions I cannot answer yet.
 
 <div align="center">
 
 ```mermaid
 graph LR
-    P1["Before you say yes<br/>1. the problem<br/>2. does it need AI?<br/>3. hard to undo"] --> P2["Counting the cost<br/>4. cost to own"]
-    P2 --> P3["Running the pilot<br/>5. the pilot<br/>6. did it work?"]
-    P3 --> P4["Controlling risk<br/>7. authority<br/>8. safety"]
-    P4 --> P5["Controlling quality<br/>9. who checks<br/>10. after launch"]
+    P1["Before you say yes<br/>1. the problem<br/>2. does it need AI?<br/>3. shape and complexity<br/>4. hard to undo"] --> P2["Counting the cost<br/>5. cost to own"]
+    P2 --> P3["Running the pilot<br/>6. the pilot<br/>7. did it work?"]
+    P3 --> P4["Controlling risk<br/>8. authority<br/>9. safety"]
+    P4 --> P5["Controlling quality<br/>10. who checks<br/>11. after launch"]
 ```
 
 </div>
@@ -86,9 +86,67 @@ Go deeper:
 - [Decision method](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/decision-framework.html). The intake questions, the ladder, and the nine questions that sort a problem before any product is named.
 - [Capability model](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/capability-model.html). Outcomes, then behavior, then platform. The five parts of any agent: model, instructions, retrieval, actions, memory.
 - [Scenarios](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/scenarios.html). Eleven common situations and the signal that tells you which way to go.
-- [AI agent adoption](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai-agents/). Official definitions of agent types, from retrieval to action to automation.
+- [AI agent adoption](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai-agents/). Official definitions of the three agent types: productivity, action, and automation.
 
-### 3. Which decisions will be hard to undo?
+### 3. What shape should it take, and how hard is it?
+
+Once the answer to question 2 is yes, the next mistake is to build the most impressive shape. Anthropic's guide to [building effective agents](https://www.anthropic.com/engineering/building-effective-agents) puts the rule plainly: "we recommend finding the simplest solution possible, and only increasing complexity when needed." It adds: "This might mean not building agentic systems at all." Microsoft's [Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns) says the same in its own words: "Use the lowest level of complexity that reliably meets your requirements."
+
+Before choosing a shape, split the request three ways: the work the model will own, the work existing systems already own, and the work people must keep. Anthropic's architect course for partners, [Claude Platform Solution Design](https://anthropic-partners.skilljar.com/path/claude-certified-architect-professional/claude-platform-solution-design), starts there. The model's share is usually smaller than the request suggests. Its public outline adds a second check I now use: when an answer depends on the current state of a system, such as a ticket's status or an order in flight, ask the system directly. Searching a copy of last week's documents gives an answer that was true last week.
+
+Then pick the shape. The same course names three, and each costs more than the last.
+
+| Shape | What decides the next step | Good for | What it costs you |
+| --- | --- | --- | --- |
+| Augmented call | Nothing. One model call, with retrieval, examples, or a tool | Classify, summarize, translate, extract, draft | A prompt, a test set, and a check on the output |
+| Workflow | Your code. Anthropic: "systems where LLMs and tools are orchestrated through predefined code paths" | Fixed steps where some need language: triage, reports, release notes | All of the above, plus the code path and a check between steps |
+| Agent | The model. It chooses its own steps and tools | Open-ended work where the number of steps cannot be known in advance | All of the above, plus iteration limits, tool permissions, tracing, and a harder test set |
+
+Inside the agent row there is one more step up. Microsoft calls a single agent with tools "often the right default for enterprise use cases." Several agents are justified only when one agent cannot cope because of prompt size, too many tools, or separate security boundaries. If the agents talk in a shared thread, the same page suggests keeping it to three or fewer.
+
+**How I estimate complexity.** The Decision Framework's [evaluation criteria](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html) sort work into four tiers. Each tier lists the evidence you need before going live. I turn it into six quick questions and let the hardest answer set the tier. That last rule is mine, not the page's: a system is as hard as its hardest part.
+
+1. **Steps:** are they fixed, or discovered along the way?
+2. **Blast radius:** does it only read, write records, or do something that cannot be undone?
+3. **Reach:** how many systems, owners, and security boundaries does it cross?
+4. **Checking:** can a machine tell whether the result is right? A test suite, a matching total, or the old system's behavior all count. If only a person can tell, the review hours in question 10 grow.
+5. **Drift:** how often do the inputs or the right answer change?
+6. **Owners:** who will run it? A team that builds in a low-code tool and a team that runs CI/CD and an on-call rotation are different owners, and the tier must match the team.
+
+| Tier | Typical shape | Example | Evidence before it goes live | Usual time to production |
+| --- | --- | --- | --- | --- |
+| 1. Informational | Augmented call with retrieval | Answer questions from documents, with sources | Citations are right, results are trimmed to what the asker may see, content is fresh | Days |
+| 2. Transactional | Workflow | Classify a request and update a record | Safe to run twice, can be rolled back, someone approves, every action is logged | Weeks |
+| 3. Reasoning | Single agent with tools | Investigate an incident and propose a cause | Tools are called correctly, a failed run can resume, there is a latency budget and a test pass threshold | Weeks to months |
+| 4. Autonomous | Bounded agent or several agents | Run a multi-step change across systems with little supervision | Written limits on autonomy, isolation, stop conditions, escalation, tracing end to end | Months |
+
+The time column comes from the same page, with a warning I agree with: "Products are anchors, not clocks." The data and the approvals decide the date, not the tool.
+
+**Borrow a reference architecture instead of inventing one.** Most requests match a shape that someone has already drawn, tested, and written failure notes for. This is the map I keep. Each row names the pattern and where it is written up.
+
+| If the problem looks like | Start from | Written up in |
+| --- | --- | --- |
+| Answer questions from a body of documents | Retrieval with citations and permission trimming | [Baseline Foundry chat reference architecture](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/architecture/baseline-microsoft-foundry-chat) |
+| Sort incoming requests to the right handler | Routing | [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) |
+| A fixed sequence of steps, some of them language | Prompt chaining with checks between steps, or sequential orchestration | Anthropic guide; [Azure orchestration patterns](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns) |
+| Produce something, then check it against criteria | Evaluator-optimizer, also called maker-checker | Both of the above |
+| Many independent pieces, or several lenses on one input | Parallelization or orchestrator-workers, with an outside judge | Both of the above |
+| Investigate something open-ended | Single agent with tools, an iteration limit, and a person who approves the conclusion | Azure orchestration patterns |
+| The right specialist only becomes clear partway through | Handoff | Azure orchestration patterns |
+| Work that crosses security or ownership boundaries | Several agents, one identity each, with written handoffs | Azure orchestration patterns; question 9 |
+
+The same Azure page lists the mistakes I see most often. One is a complex pattern where a simple sequence would do. Another is adding agents that do not specialize in anything. A third is mismatching the pattern to the work: a fixed pattern for work that is really open-ended, or a free-form agent for work that is really fixed.
+
+> **Lesson:** split the request before you shape it, choose the lowest shape that works, let the hardest of the six answers set the tier, and borrow an architecture someone has already tested.
+
+Go deeper:
+
+- [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents). Anthropic, 2024. The augmented model, five workflow patterns, and when an agent is worth it.
+- [AI agent orchestration patterns](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns). The three levels of complexity, five orchestration patterns, and common mistakes.
+- [Evaluation criteria](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html). The four complexity tiers with the evidence each needs, team profiles, and time to production.
+- [Claude Platform Solution Design](https://anthropic-partners.skilljar.com/path/claude-certified-architect-professional/claude-platform-solution-design). Anthropic's partner course on the four decisions before a build: what the model owns, the shape, the reference architecture, and the model and context strategy. The lessons need a sign-in.
+
+### 4. Which decisions will be hard to undo?
 
 Here is the point from my own notes that survived every rewrite. The real solution is rarely the framework or the hosting service. It is the part that is hard to change later: the data model, the boundaries between systems, who owns what, and the business rules. Tools can be swapped. Those cannot.
 
@@ -108,9 +166,9 @@ Go deeper:
 
 ## Part two: counting the cost
 
-### 4. What will it cost to own, not to build?
+### 5. What will it cost to own, not to build?
 
-Here is the trap inside the word "cheap." In 1865 the economist William Jevons watched steam engines become far more efficient while everyone around him expected England to burn less coal. It burned more, and he explained why: cheaper coal found more uses. His line still applies: ["It is a confusion of ideas to suppose that the economical use of fuel is equivalent to diminished consumption."](https://en.wikipedia.org/wiki/Jevons_paradox)
+Here is the trap inside the word "cheap." In 1865 the economist William Jevons looked back at a century of steam engines that kept getting more efficient, while some experts expected better technology to make England burn less coal. It burned more, and he explained why: cheaper coal found more uses, and demand grew faster than efficiency. His line still applies: ["It is a confusion of ideas to suppose that the economical use of fuel is equivalent to diminished consumption."](https://en.wikipedia.org/wiki/Jevons_paradox)
 
 Code behaves like coal. When a feature costs twenty minutes, we ask for twenty features, and every one still has to be read, run, kept working, and understood. Dijkstra said in 1988 that we count lines of code [on the wrong side of the ledger](https://www.cs.utexas.edu/~EWD/transcriptions/EWD10xx/EWD1036.html): they are not "lines produced" but "lines spent." The Decision Framework's [capability model](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/capability-model.html) puts it in four words: "Building got cheap. Owning didn't."
 
@@ -131,12 +189,12 @@ Go deeper:
 
 - [Evaluation criteria](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html). Cost of owning across licenses, usage, and engineering hours. Build and run as separate budgets. Caps and alerts.
 - [Manage AI: costs](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/manage#manage-ai-costs). Official guidance on usage monitoring, thresholds, and budget alerts.
-- [Design principles: cost](https://learn.microsoft.com/en-us/azure/well-architected/ai/design-principles#cost-optimization). "Pay for what you intend to use. Use what you pay for."
+- [Design principles: cost](https://learn.microsoft.com/en-us/azure/well-architected/ai/design-principles#cost-optimization). "Pay for what you intend to use." And: "Use what you pay for. Minimize waste."
 - [Start at the Cheap End](/blogs/blog/start_at_the_cheap_end/). My own ordering of the ways to make an agent cheaper and better, cheapest first.
 
 ## Part three: running the pilot
 
-### 5. How do we run the pilot?
+### 6. How do we run the pilot?
 
 A pilot is not a demo. A demo shows that something can work once. A pilot finds out what it costs to work every day. The official [planning guide](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/plan) gives the shape I follow: pick a high-value case that matches the skills you actually have, start with internal work that does not face customers, and use what the pilot teaches you to estimate the real timeline. It also says to add a buffer for learning and surprises, and I have never regretted that line.
 
@@ -154,7 +212,7 @@ Go deeper:
 - [Business plan for AI agents: success metrics](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai-agents/business-strategy-plan#define-success-metrics). Baseline, decision gates, measurement after launch.
 - [Implementation patterns](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/implementation-patterns.html). Common starting shapes and the signals that tell you to move.
 
-### 6. How will we know it worked?
+### 7. How will we know it worked?
 
 If AI made the work cheaper, we should be able to show where the time went. Usually we cannot, because we trust how it feels.
 
@@ -181,7 +239,7 @@ Go deeper:
 
 ## Part four: controlling risk
 
-### 7. How much may it do alone, and who answers for it?
+### 8. How much may it do alone, and who answers for it?
 
 The capability model separates three levels of trust: the system **recommends**, it **acts within set limits**, or it **owns the outcome**. The line between the first two is where accountability changes hands, and that line is the real design decision. The page says it in one sentence: "Capability is a demo. Authority is a liability."
 
@@ -226,7 +284,7 @@ Go deeper:
 - [Establish an AI Center of Excellence](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/center-of-excellence). Who sets standards, who runs pilots, and when the group should step back to an advisory role.
 - [Responsible AI policies](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/responsible-ai-policies). How to tell users they are talking to AI, and how to let them challenge a decision.
 
-### 8. How do we keep it safe?
+### 9. How do we keep it safe?
 
 The oldest security rule still carries the most weight. In 1974 Jerome Saltzer wrote that every program and every privileged user should operate with the [least amount of privilege necessary](https://en.wikipedia.org/wiki/Principle_of_least_privilege). An agent is a program that acts on behalf of a person. It must see only what that person may see, and do only what that person may do. The Decision Framework separates two things that get confused: an agent's attribution, meaning who it acts for, and its data access, meaning what it may reach. They are different problems. Solve both.
 
@@ -257,13 +315,13 @@ Go deeper:
 
 ## Part five: controlling quality
 
-### 9. Who checks the output, and is that capacity planned?
+### 10. Who checks the output, and is that capacity planned?
 
 Dijkstra, 1969: ["Testing shows the presence, not the absence of bugs."](https://en.wikiquote.org/wiki/Edsger_W._Dijkstra) That was true when a human wrote every line. It matters more now, because an agent can pass every check we thought to write and still miss the reason the ticket exists. The scenarios page says it in one breath: "Generation got cheap. Verification did not." Geoffrey Huntley, asked [what is left](https://ghuntley.com/agency/) when nobody types code by hand, answers: vision, verification, and agency. Two of the three are about checking.
 
 My test for "done" is simple: the next person can do their job with the output. Say we build a tool that summarizes support tickets. The summaries are clear and complete. Then an engineer notices one left out the customer's software version and mixed up a fix that was tried with one that was only suggested. So they reread the whole conversation. We shipped a feature, and the workflow gained one more document to check. So "done" is decided by whoever receives the output, not by whoever produces it. Build the proof there, with the receiver, on real cases.
 
-The official [evaluation checklist](https://learn.microsoft.com/en-us/agents/agent-evaluation/evaluation-checklist) gives this a shape I can hand to a team. Start with one test case per key scenario, each with a prompt, an expected answer, and a written rule for what passes. Run it, record the pass rate and the version, and dig into every failure: is the test wrong, or is the agent wrong? Then widen the set to cover rephrased questions, edge cases, and the things the agent must refuse. Because outputs vary, run the set several times and aim for a realistic pass rate rather than a perfect one. The Well-Architected [testing page](https://learn.microsoft.com/en-us/azure/well-architected/ai/test) adds a distinction I had been blurring: evaluation finds the best model during development, and testing checks the whole system every time anything changes. Both need a trusted set of examples, checked by humans, that the page calls the golden dataset.
+The official [evaluation checklist](https://learn.microsoft.com/en-us/agents/agent-evaluation/evaluation-checklist) gives this a shape I can hand to a team. Start with one test case per key scenario, each with a prompt, an expected answer where one exists, and a written rule for what passes. Run it, record the pass rate and the version, and dig into every failure: is the test wrong, or is the agent wrong? Then widen the set to cover rephrased questions, edge cases, and the things the agent must refuse. Because outputs vary, run the set several times and aim for a realistic pass rate rather than a perfect one. The checklist suggests 80 to 90 percent, set by what the business needs. The Well-Architected [testing page](https://learn.microsoft.com/en-us/azure/well-architected/ai/test) adds a distinction I had been blurring: evaluation finds the best model during development, and testing checks the whole system every time anything changes. Both need trusted examples checked by humans. The page calls the evaluation set the golden dataset, and it advises keeping the two sets separate.
 
 Then plan the checking as work, with people and hours. If an agent opens forty changes a day and the team can honestly review ten, the extra thirty are a pile going stale in a queue. I did that arithmetic in [Through a Senior's Eyes](/blogs/blog/through_a_seniors_eyes/): more workers do not make the one person who decides any faster. Sprints assumed building was the slow part. If review and decisions are now the slow part, plan the sprint around what the team can finish and check, not around how much the agent can generate.
 
@@ -278,9 +336,9 @@ Go deeper:
 - [Engineering with agents](https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/agentic-engineering.html). Verification over reading, and how to split review when no engineer is in the loop.
 - [Software should be explainable, not readable](https://ghuntley.com/readable/). Huntley on types as back pressure and "porting is easy when the end result is easy to verify."
 
-### 10. How do we keep it good after launch?
+### 11. How do we keep it good after launch?
 
-Meir Lehman wrote down in 1974 what every operations team learns the hard way. A system that is used must be continually adapted, or it becomes [progressively less satisfactory](https://en.wikipedia.org/wiki/Lehman%27s_laws_of_software_evolution). In 1996 he added a second law: its quality appears to decline unless it is rigorously maintained. He was writing about ordinary software. AI systems obey his laws faster, because the world the model learned from keeps moving and the model does not.
+Meir Lehman, with Laszlo Belady, began writing down in 1974 what every operations team learns the hard way. His first law: a system that is used must be continually adapted, or it becomes [progressively less satisfactory](https://en.wikipedia.org/wiki/Lehman%27s_laws_of_software_evolution). By 1996 the list had grown to eight laws, and the seventh says its quality will appear to decline unless it is rigorously maintained. He was writing about ordinary software. AI systems obey his laws faster, because the world the model learned from keeps moving and the model does not.
 
 The Well-Architected [testing page](https://learn.microsoft.com/en-us/azure/well-architected/ai/test) names the two ways this happens. Data drift: the inputs change, so a model trained on last year's cases misreads this year's. Concept drift: the world changes, so the right answer changes while the model keeps giving the old one. Either way, the system that passed its pilot is slowly becoming a different system.
 
@@ -293,7 +351,7 @@ graph LR
     T["Build a test set<br/>one case per key scenario"] --> B["Record a baseline<br/>pass rate and version"]
     B --> W["Widen it<br/>rephrasings, edge cases, refusals"]
     W --> L["Launch<br/>sample real traffic"]
-    L --> E["A trigger fires<br/>model change, knowledge update,<br/>new tool, incident, rejection"]
+    L --> E["A trigger fires<br/>model change, knowledge update,<br/>new tool, incident,<br/>and my addition: a rejection"]
     E --> T
 ```
 
@@ -315,26 +373,210 @@ Go deeper:
 | --- | --- |
 | 1. What is the problem, before AI? | The delay or loss, named and measured as it is today |
 | 2. Does it need AI, and does something exist? | Why plain code, search, and an existing product each failed |
-| 3. Which decisions are hard to undo? | Data meaning, boundaries, owners, and rules decided by people, not by the agent |
-| 4. What will it cost to own? | Cost per good outcome, checking included, build and run budgeted apart |
-| 5. How do we run the pilot? | The hardest step, on real cases, with expand, change, and stop conditions written first |
-| 6. How will we know it worked? | A comparison planned in advance, and output checked, not just the bill |
-| 7. How much may it do alone? | Which actions need a person, the risk tier, and the named owners |
-| 8. How do we keep it safe? | Least privilege, an identity per agent, a written data boundary, a switch |
-| 9. Who checks it? | Done defined by the receiver, a test set, and review hours planned |
-| 10. How do we keep it good? | Tests rerun on every change, drift watched, rejections fed back |
+| 3. What shape, and how hard? | The lowest shape that works, the tier set by the hardest answer, and a reference architecture to start from |
+| 4. Which decisions are hard to undo? | Data meaning, boundaries, owners, and rules decided by people, not by the agent |
+| 5. What will it cost to own? | Cost per good outcome, checking included, build and run budgeted apart |
+| 6. How do we run the pilot? | The hardest step, on real cases, with expand, change, and stop conditions written first |
+| 7. How will we know it worked? | A comparison planned in advance, and output checked, not just the bill |
+| 8. How much may it do alone? | Which actions need a person, the risk tier, and the named owners |
+| 9. How do we keep it safe? | Least privilege, an identity per agent, a written data boundary, a switch |
+| 10. Who checks it? | Done defined by the receiver, a test set, and review hours planned |
+| 11. How do we keep it good? | Tests rerun on every change, drift watched, rejections fed back |
 
 **When code is cheap, the senior's job is to pay for what stayed expensive: deciding, owning, checking, and understanding.** Brooks described that job in 1986. The agent just made it impossible to hide behind the typing.
 
+## Putting it to work: five kinds of delivery work
+
+I work in software services. The eleven questions stay the same from project to project, but their answers do not, because the work is sold in different ways. A dedicated team billed by the hour, a maintenance contract, a fixed-bid project, a migration, and a sales pursuit each get a different answer to the question that decides the rest: **when AI saves an hour, who keeps it?** Whoever keeps the saving is the one who wants to measure it. Whoever carries the risk is the one who has to check the output.
+
+What follows is a pattern, not a report. No customer, project, or person is named, and no internal number is used.
+
+### What ODC, maintenance and support, fixed-bid projects, migration, and presales mean, and how the work flows in each
+
+If you have only built products, these words may be new. Here is each one in plain terms, with the flow of work it usually follows.
+
+**A dedicated team billed by time** is often called an ODC, an offshore development center. The vendor keeps a stable team that works only for one customer, often for years. The customer sets priorities from its backlog, much as it would for its own staff, and pays by hours or by headcount at an agreed rate. This is time and materials: the customer buys effort, not a result. The team gets work, delivers it in short cycles, and reports the hours.
+
+<div align="center">
+
+```mermaid
+graph LR
+    B["Customer backlog"] --> P["Plan the sprint<br/>with the customer"]
+    P --> D["Design, code, test"]
+    D --> R["Review and demo"]
+    R --> A["Customer accepts"]
+    A --> T["Timesheet or headcount<br/>invoiced monthly"]
+    R -- "changes" --> D
+```
+
+</div>
+
+**Maintenance and support**, often called AMS for application maintenance and support, keeps a system running after it goes live. The work arrives as tickets: questions, incidents, and small change requests. A service agreement fixes how fast each kind must be answered and solved. Support is usually split into three levels:
+
+- **Level 1, the service desk.** Receives every request, sorts it, answers known questions from a knowledge base, and passes on what it cannot solve.
+- **Level 2, application support.** Investigates incidents in logs and data, finds a workaround, records the known error, and decides whether code must change.
+- **Level 3, development.** Changes the code: impact analysis, design, fix, test, and release. Change requests from the customer land here too.
+
+<div align="center">
+
+```mermaid
+graph LR
+    U["User or customer"] --> L1["Level 1<br/>receive, sort,<br/>answer known questions"]
+    L1 -- "solved" --> C["Close the ticket"]
+    L1 -- "escalate" --> L2["Level 2<br/>investigate logs,<br/>find a workaround"]
+    L2 -- "solved" --> C
+    L2 -- "needs a code change" --> L3["Level 3<br/>impact analysis, fix,<br/>test, release"]
+    L3 --> C
+    C --> K["Update the knowledge base<br/>and known errors"]
+    K -.-> L1
+```
+
+</div>
+
+**A fixed-bid project**, fixed price and fixed scope, builds an agreed scope for one agreed price and date. The vendor estimates up front and carries the risk: if the work takes longer, the vendor pays the difference. Anything outside the scope becomes a change request with its own price. The work usually follows the familiar sequence of requirements, basic design, detailed design, code, unit test, integration and system test, and acceptance, with a review gate at each step.
+
+<div align="center">
+
+```mermaid
+graph LR
+    S["Agree scope,<br/>estimate, price"] --> RQ["Requirements"]
+    RQ --> BD["Basic design"]
+    BD --> DD["Detailed design"]
+    DD --> CD["Code and unit test"]
+    CD --> IT["Integration and<br/>system test"]
+    IT --> UA["Customer acceptance"]
+    UA --> W["Warranty, then<br/>usually maintenance"]
+    CR["Change request<br/>priced separately"] -.-> RQ
+```
+
+</div>
+
+**A migration** moves an old system to a new platform, language, or architecture while the business keeps running on it. The old system is the specification: whatever it does today, including behavior nobody wrote down, the new one must do or deliberately drop. It runs in units, and each unit is translated, proven to behave like the old one, and switched over. The old system is retired only once the new one has held up in production.
+
+<div align="center">
+
+```mermaid
+graph LR
+    AS["Assess the old system<br/>and its business rules"] --> ST["Choose a strategy<br/>per component"]
+    ST --> SQ["Split into units<br/>and order them"]
+    SQ --> TR["Translate one unit"]
+    TR --> VE{"Behaves like<br/>the old one?"}
+    VE -- "no" --> TR
+    VE -- "yes" --> CO["Switch traffic<br/>to the new unit"]
+    CO --> SQ
+    CO --> RE["Retire the old system<br/>once stable"]
+```
+
+</div>
+
+**Business development and presales** is the work before a contract exists. It finds an opportunity, understands the customer's problem, shapes a solution, estimates it, and writes the proposal. For AI work it often starts with a discovery workshop and a small proof of concept. The output is a promise, which is why it needs the most care.
+
+<div align="center">
+
+```mermaid
+graph LR
+    O["Opportunity"] --> DI["Discovery<br/>the customer's real problem"]
+    DI --> SO["Shape a solution<br/>and a delivery model"]
+    SO --> ES["Estimate and price"]
+    ES --> PR["Proposal and demo<br/>or proof of concept"]
+    PR --> NE["Negotiate"]
+    NE --> CT["Contract, then<br/>one of the four above"]
+```
+
+</div>
+
+The last box matters. Presales decides which of the other four a project becomes, so a promise made there is inherited by everything after it.
+
+### The five compared
+
+| | Dedicated team, billed by time | Maintenance and support | Fixed-bid project | Migration of an old system | Business development and presales |
+| --- | --- | --- | --- | --- | --- |
+| **How it is paid** | Hours or headcount, at a rate | A monthly fee with service levels, sometimes per ticket | One price for an agreed scope | One price per project or per wave of units | Cost of sale, paid by the deals that close |
+| **Who keeps the saved hour** | The customer, through fewer billed hours, unless the contract changes | It depends on the contract | The vendor, who also carries the risk | Mostly the vendor | The vendor |
+| **What can be counted** | Effort per task, throughput | Tickets closed to standard, time to resolve, tickets reopened | Cost per function, rework, defects that escape | Units converted and proven to behave like the old ones | Time to a proposal, win rate |
+| **Where AI helps most** | Code, tests, documents, translation | Sorting tickets, answering from known fixes, investigating, small fixes | Estimation, design drafts, code, test generation | Reading old code, translating units, generating tests, reverse documentation | Discovery, proposal drafts, answers to requirements, demos |
+| **Biggest risk** | Nobody has a reason to measure, and each customer allows different tools | The agent reads text written by outsiders, and the team slowly stops understanding the system | Promising savings in the price before they are proven, and scope that grows because "AI is fast" | Code that compiles but behaves differently, and a new system nobody understands | Promising savings you cannot prove, and customer documents pasted into tools |
+| **Typical shape and tier** | Augmented calls and workflows, tiers 1 to 2 | Workflows for sorting and reports, a single agent for investigation, tiers 1 to 3 | Workflows and checked coding agents, tiers 2 to 3 | Orchestrator with workers and an outside judge, tier 3 | Augmented calls, tier 1 |
+| **Questions that weigh most** | 1, 7, 9 | 2, 9, 10, 11 | 5, 6, 10 | 3, 4, 10 | 1, 7 |
+
+Two patterns come out of that table. First, **the more a machine can check the output, the more work AI can safely take.** A migration has an old system to compare against, so it can use the most. Presales has no test suite for a promise, so it should use the least without a person in the loop. Second, **the activities share their foundations.** One knowledge layer with permissions, workflows for fixed steps, a coding loop with an independent checker, and a way to watch production serve all five. Build those once and each activity is a configuration, not a new project.
+
+### Dedicated teams billed by time
+
+The trap is simple. If the customer pays for hours, every hour AI saves is an hour nobody bills. The vendor has no reason to measure, and the customer has no proof to ask for a better deal. Most teams I see do use AI, but "not measured yet" is the most common status. Question 7 is the bottleneck, not the tool.
+
+- **Split the work before you change the price.** Sort the team's tasks into repetitive work whose output can be counted, semi-structured work measured through engineering signals, and exploratory work whose outcome cannot be defined in advance. Only the first kind can move to pricing by outcome. Saying openly that exploratory work stays on hours is what makes the other definitions believable.
+- **Measure in the shadow first.** Keep invoicing as today and calculate in parallel what the new model would have charged. That gives you the comparison question 7 asks for, at no risk to either side.
+- **Move one step at a time, and write the way back.** Each step up, from committed capacity to shared savings to outcome pricing, is gated by data from the step before. Write in advance when you revert, for example after two quarters of missed targets. That is question 6 applied to a contract.
+- **Treat each customer's AI policy as the data boundary.** One customer allows code, another allows only documents you send them, a third allows nothing yet. Keep the list per project and check it before every new tool (question 9).
+- **Budget the tool quota as a cost of owning.** Teams stall when credits run out mid-month. That belongs in question 5, not in a complaint.
+
+### Maintenance and support
+
+Maintenance is where AI should pay first, because the outcome is already countable: a ticket closed to the agreed standard. The closed tickets are also a free test set.
+
+- **Use the history as the golden dataset.** Mask the personal data in a year of closed tickets and you have real cases with known answers for question 10.
+- **Keep the fixed parts out of the model.** Sorting tickets is a workflow, and so is a monthly service report. The numbers in a report come from a query, never from a model. That is the rule from question 2: if there is a numerically correct answer, a language model is the wrong tool for producing it.
+- **Define done where the work lands.** For sorting, done means the ticket was not re-routed. For an answer, the customer did not ask again. For an investigation, the real cause was in the agent's top three. Those are the receiver-side measures from question 10.
+- **Treat every ticket as untrusted input.** Customer emails, logs, and attachments are exactly where a hidden instruction can enter. Agents that read them start read-only, and every write needs a person (questions 8 and 9).
+- **Pilot the hard step offline.** Replay impact analysis on closed change requests and compare the agent's list of affected parts with what actually changed. It is internal, cheap, and it tests the part that matters (question 6).
+- **Protect the understanding.** Maintenance is where Naur's theory lives. If an agent writes most fixes, ask each fix to explain why, not only what, and rotate people through the hard modules.
+
+### Fixed-bid projects
+
+Here the vendor keeps the saving and carries the risk, so the questions about cost and checking come first.
+
+- **Price only the savings a pilot has proven.** Everything else is a forecast with its assumptions, a confidence level, and a trigger for re-estimating. A price cut based on an unproven saving is a loss the vendor pays for later.
+- **Estimate in three lines.** Building the AI support, running it, and the human hours to review and fix its output. The third line is the one most often forgotten, and it is where a good-looking productivity number turns into a late milestone (questions 5 and 10).
+- **Remember Jevons.** When the customer hears that a feature takes twenty minutes, more features appear. Every out-of-scope request still goes through a change request, however fast the agent is.
+- **Put the review queue on the dashboard.** The first sign of trouble is not a slow agent but a growing pile of output nobody has checked.
+- **Name who will hold the theory after delivery.** A fixed-bid project usually ends in warranty or maintenance. If nobody understands code the agent wrote, the warranty is where the saving is paid back.
+
+### Migrating an old system to a new one
+
+Migration looks like the perfect AI job: a large amount of mechanical translation. I argued in [Migration is a harness](/blogs/blog/migration_is_a_harness/) that the naive version, legacy code in and modern system out, fails. What works is a loop built around the model.
+
+- **Decide per component before you translate anything.** Rehost, replatform, refactor, replace, retire, or retain. Different components get different answers, and that is healthy.
+- **The judge comes first.** The definition of correct is the old system's behavior: an inventory of its business rules, golden outputs, recorded user flows, or a harness that runs old and new through the same surface and compares them. Anthropic's [code migration kit](https://github.com/anthropics/code-migration-kit-with-claude-code) puts it in four words: "No judge, no exit condition." This is question 10 in its strongest form, and it is why migration can carry the most AI.
+- **Move the data before the logic, and strangle unit by unit.** Settle the data model first, then grow the new system around the old one through seams, as in [Martin Fowler's strangler fig](https://martinfowler.com/bliki/StranglerFigApplication.html). These are the hard-to-undo decisions of question 4.
+- **Separate the one who writes from the one who checks.** A planner hands out one unit at a time, an orchestrator runs a generator and an independent evaluator until the unit passes, and each passing unit becomes one commit. A failed attempt is a clean reset away. The public [Bun port to Rust](https://bun.com/blog/bun-in-rust) used the same shape at a million lines, with reviewers that saw only the diff and were told to find what was wrong.
+- **Fix the process, not the file.** A failure seen once gets a fix. A failure seen three times means a rule is wrong, so change the rule and regenerate what it touched.
+- **Count the cost per unit proven equal, not per line produced.** And match the model tier to the role: a cheaper model that needs five loops per unit costs more than a capable one that needs one (question 5).
+- **Watch for modern legacy.** Code-only modernization can produce a new system that nobody understands, which iSAQB calls a [real risk](https://www.isaqb.org/blog/ai-agents-dont-modernize-legacy-code-on-their-own). The understanding has to migrate too.
+
+### Business development and presales
+
+Selling AI is the one activity where the output cannot be tested before the customer reads it, so the questions about honesty matter most.
+
+- **Sell the questions, not the tool.** A discovery workshop that answers questions 1 to 4 with the customer is worth more than a demo, and it is the start of a project you can deliver.
+- **Back every claim with your own measurement.** Do not paste a study's number into a proposal as a promise. Question 7 says the studies disagree. Show what you measured in your own delivery, with and without the tool.
+- **Use governance as evidence.** A customer who is asked to move from hours to outcomes needs to see how the vendor measures, reviews, and switches things off. Dashboards and review discipline are what make outcome pricing believable.
+- **Keep customer material inside the boundary.** Requirement documents and source code shared during a pursuit fall under question 9 like any other data. Drafting a proposal is tier 1 work, but the documents it reads may not be.
+- **Price people by what they can prove.** Selling AI-augmented engineers at a higher rate needs proof of how they check AI output, not a certificate that they used it.
+
+### The same eleven questions, five answers
+
+| Question | Dedicated team | Maintenance | Fixed bid | Migration | Presales |
+| --- | --- | --- | --- | --- | --- |
+| 1. The problem | Where hours go today | Where tickets wait | Where rework comes from | What the old system really does | What the customer actually loses |
+| 3. Shape and tier | Calls and workflows | Workflows, one agent for investigation | Workflows and a checked coding loop | Orchestrator, workers, outside judge | Augmented calls |
+| 5. Cost to own | Tool quota and review hours | Cost per ticket closed to standard | Build, run, and review as three lines | Cost per unit proven equal | Time per proposal |
+| 6. The pilot | Shadow billing on one team | Replay closed tickets and change requests | One module, priced only after proof | The easiest unit first, to build the pipeline | One discovery workshop |
+| 7. Did it work | With and without on similar tasks | Re-routes, repeat questions, root cause in the top three | Escaped defects, review queue | Equivalence rate, loops per unit | Proposals backed by own data |
+| 8. Authority | Suggests; people commit | Reads freely, writes with a person | Opens changes; people merge | Commits only what the judge passed | Drafts; people send |
+| 10. Who checks | Reviewer hours in the plan | The receiver at the next level | Review queue as a metric | The judge and an independent evaluator | A person who signs each claim |
+
+> **Lesson:** ask who keeps the saved hour before you ask which tool. The answer tells you who will measure, who must check, and how much of the work AI can safely carry.
+
 ## Two personal notes
 
-The ten questions above are the job. These two are mine. They are about what the job does to the person doing it, and they lean on older thinkers than the Microsoft pages.
+The eleven questions above are the job. These two are mine. They are about what the job does to the person doing it, and they lean on older thinkers than the Microsoft pages.
 
 ### Who will understand it in a year?
 
 In 1985 Peter Naur wrote [Programming as Theory Building](https://pages.cs.wisc.edu/~remzi/Naur.pdf). His claim is that the program is not the code. It is the **theory** in the heads of the people who built it: the knowledge that lets them explain it and change it without breaking it. Then the definition I cannot forget: "The death of a program happens when the programmer team possessing its theory is dissolved." A dead program keeps running. You find out when someone asks for a change and nobody can answer.
 
-When an agent writes the code, nobody holds the theory by default. Geoffrey Huntley argues that software [no longer needs to be readable, only explainable](https://ghuntley.com/readable/) by a model on demand. I think that is half right. An explanation on request is useful. It is not a person who understands the system and answers for it. The instruction files we now write for agents, a CLAUDE.md or an AGENTS.md, are the theory partly written down: what the system is for, which decisions were made and why, which source wins when two disagree. That is the most valuable document a team can write today. It is still not the whole theory. Someone has to hold the rest, and that person's time is part of the cost in question 4.
+When an agent writes the code, nobody holds the theory by default. Geoffrey Huntley argues that software [no longer needs to be readable, only explainable](https://ghuntley.com/readable/) by a model on demand. I think that is half right. An explanation on request is useful. It is not a person who understands the system and answers for it. The instruction files we now write for agents, a CLAUDE.md or an AGENTS.md, are the theory partly written down: what the system is for, which decisions were made and why, which source wins when two disagree. That is the most valuable document a team can write today. It is still not the whole theory. Someone has to hold the rest, and that person's time is part of the cost in question 5.
 
 Michael Polanyi explained why in 1966, in [The Tacit Dimension](https://en.wikipedia.org/wiki/Tacit_knowledge): "we can know more than we can tell." You recognize a face without being able to say how. A senior knows which module is fragile and cannot write the full reason down. Every instruction file is the part of the theory that could be told. The part that could not is still in someone's head, and it is often the part that matters when the system breaks.
 
@@ -369,7 +611,7 @@ I pick what to learn with a checklist, in this order: what it does, the core ide
 
 For finding what to study, I use everything: professional networks, paper feeds, repositories, release notes. But I follow the links before I trust the summary. Several posts copying one announcement are still one source. As I wrote in [How to learn?](/blogs/blog/how_to_learn/), **qualify what you learn before you learn it.**
 
-Why so little, so often? Richard Hamming answered that in 1986, in a talk called [You and Your Research](https://www.cs.virginia.edu/~robins/YouAndYourResearch.html). He had spent years at Bell Labs watching which scientists did work that lasted, and asking why most did not. One of his answers was not talent. "Knowledge and productivity are like compound interest." A person who studies a little more each day does not end up a little ahead. Over a career the gap grows many times over, because each thing you understand makes the next one cheaper to learn. Agents raise the interest rate again. They can summarize anything in seconds, so the only thing that still compounds is your own understanding. The danger is accepting the summary without doing the work of understanding. Hamming also said the people who worked with the door open got interrupted more, but they were the ones who knew what mattered. I take that as permission to read widely and keep the door open, as long as I do the fifteen minutes.
+Why so little, so often? Richard Hamming answered that in 1986, in a talk called [You and Your Research](https://www.cs.virginia.edu/~robins/YouAndYourResearch.html). He had spent years at Bell Labs watching which scientists did work that lasted, and asking why most did not. One of his answers was not talent. He passed on a line from his colleague Hendrik Bode: "Knowledge and productivity are like compound interest." Hamming's example: of two people with about the same ability, the one who works ten percent more will more than twice outproduce the other. Over a career the gap keeps growing, because each thing you understand makes the next one cheaper to learn. Agents raise the interest rate again. They can summarize anything in seconds, so the only thing that still compounds is your own understanding. The danger is accepting the summary without doing the work of understanding. Hamming also noticed that the people who worked with the door open got interrupted more, but "occasionally" picked up clues about what might be important. He said he could not prove cause and effect, only a good correlation with doing important work. I take that as permission to read widely and keep the door open, as long as I do the fifteen minutes.
 
 > **Lesson:** learn the idea, not the tool. Check the source before you learn from it. Fifteen minutes a day beats a long list of names you recognize.
 
@@ -385,7 +627,7 @@ The notes above leave me with two questions about intelligence itself.
 
 ### Is curiosity part of intelligence?
 
-This month an AI lab [released 722 papers](https://en.wikipedia.org/wiki/OpenAI_bulk_release_of_mathematical_papers) claiming results on major open problems in mathematics. Three were withdrawn within a day, and experts expect checking the rest to take months. The same week, Terence Tao gave a talk he had planned long before, [Math 2.0](https://terrytao.wordpress.com/2026/10/10/math-2-0/). It is not about whether these proofs are correct. He describes the present as shaped by "the excessive emphasis on automated solving of open problems by AI," and he asks for a future where AI is used to support the mathematical community and the understanding that connects mathematics to the real world. In [earlier remarks](https://officechai.com/ai/terence-tao-hints-openai-wasnt-behaving-responsibly-by-simultaneously-releasing-300-math-proofs-says-its-making-math-less-fertile/), as reported secondhand, he worried that mass solving leaves a field less fertile: the answers exist, but nobody does the follow-up work that a hard problem usually sparks.
+This month an AI lab [released 722 papers](https://en.wikipedia.org/wiki/OpenAI_bulk_release_of_mathematical_papers) claiming results on major open problems in mathematics. Three were withdrawn within a day, and experts expect checking the rest to take months. The same week, Terence Tao gave a talk he had planned long before, [Math 2.0](https://terrytao.wordpress.com/2026/10/10/math-2-0/). It is not about whether these proofs are correct. He describes the present as shaped by "the excessive emphasis on automated solving of open problems by AI," and he asks for a future where AI is used to support the mathematical community and the understanding that connects mathematics to the real world. In his [living summary of his views on AI](https://teorth.github.io/tao-web/ai-views.html), and in [earlier remarks reported secondhand](https://officechai.com/ai/terence-tao-hints-openai-wasnt-behaving-responsibly-by-simultaneously-releasing-300-math-proofs-says-its-making-math-less-fertile/), he worries that mass solving leaves a field "much less fertile": the answers exist, but nobody does the follow-up work that a hard problem usually sparks.
 
 His [slides](https://teorth.github.io/tao-web/slides/math-2-0-caltech-2026.pdf) pose a thought experiment: an AI finds a cancer cure that passes its clinical trial and comes with a machine-checked certificate, but nobody knows how it was found. Would you want at least one human expert who understands the mechanism, even partially, before the injection? That is Naur's question again, asked about a whole field.
 
@@ -410,6 +652,7 @@ An agent's job is to solve problems and act. Conversation helps it work with peo
 - Well-Architected Framework for AI workloads: [overview](https://learn.microsoft.com/en-us/azure/well-architected/ai/), [design principles](https://learn.microsoft.com/en-us/azure/well-architected/ai/design-principles), [testing and evaluation](https://learn.microsoft.com/en-us/azure/well-architected/ai/test), [responsible AI](https://learn.microsoft.com/en-us/azure/well-architected/ai/responsible-ai), [operations](https://learn.microsoft.com/en-us/azure/well-architected/ai/operations), and [MLOps and GenAIOps](https://learn.microsoft.com/en-us/azure/well-architected/ai/mlops-genaiops).
 - Agents hub: [overview](https://learn.microsoft.com/en-us/agents/), [agent evaluation checklist](https://learn.microsoft.com/en-us/agents/agent-evaluation/evaluation-checklist), [agentic Center of Excellence](https://learn.microsoft.com/en-us/agents/center-of-excellence/), and [govern agents by risk](https://learn.microsoft.com/en-us/agents/center-of-excellence/govern-agents-risk).
 - [Observability in generative AI](https://learn.microsoft.com/en-us/azure/foundry/concepts/observability) and [red teaming for language model applications](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/red-teaming).
+- Azure Architecture Center: [AI agent orchestration patterns](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns) and the [baseline Foundry chat reference architecture](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/architecture/baseline-microsoft-foundry-chat).
 - [Responsible AI principles and approach](https://www.microsoft.com/en-us/ai/principles-and-approach).
 
 **Microsoft AI Decision Framework** (a practitioner's guide on Microsoft's GitHub; verify against the official pages above)
@@ -418,7 +661,10 @@ An agent's job is to solve problems and act. Conversation helps it work with peo
 
 **Outside Microsoft**
 
-- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework), [MITRE ATLAS](https://atlas.mitre.org/), and the [OWASP generative AI project](https://genai.owasp.org/). The risk and attack catalogs the Microsoft security pages build on.
+- Anthropic, [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) (2024). The augmented model, five workflow patterns, and when an agent is worth it.
+- Anthropic, [Claude Platform Solution Design](https://anthropic-partners.skilljar.com/path/claude-certified-architect-professional/claude-platform-solution-design), part of the Claude Certified Architect partner course. The four decisions before a build. I used only its public outline; the lessons need a sign-in.
+
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework), [MITRE ATLAS](https://atlas.mitre.org/), and the [OWASP generative AI project](https://genai.owasp.org/). The risk management framework and the attack catalogs that the Microsoft governance and security pages build on.
 
 **Fundamentals**
 
@@ -426,20 +672,29 @@ An agent's job is to solve problems and act. Conversation helps it work with peo
 - David Parnas, [On the Criteria To Be Used in Decomposing Systems into Modules](https://en.wikipedia.org/wiki/Information_hiding) (1972). Information hiding.
 - William Stanley Jevons, [The Coal Question](https://en.wikipedia.org/wiki/Jevons_paradox) (1865). Efficiency raises consumption.
 - Jerome Saltzer, [least privilege](https://en.wikipedia.org/wiki/Principle_of_least_privilege) (1974), developed with Michael Schroeder in "The Protection of Information in Computer Systems" (1975).
-- Meir Lehman, [laws of software evolution](https://en.wikipedia.org/wiki/Lehman%27s_laws_of_software_evolution) (1974, extended 1996). Continuing change, declining quality.
+- Meir Lehman, [laws of software evolution](https://en.wikipedia.org/wiki/Lehman%27s_laws_of_software_evolution) (with Laszlo Belady, from 1974; eight laws by 1996). Law I, continuing change; law VII, declining quality.
 - Edsger Dijkstra, [On the cruelty of really teaching computing science](https://www.cs.utexas.edu/~EWD/transcriptions/EWD10xx/EWD1036.html) (1988). "Lines spent."
-- Edsger Dijkstra, ["Testing shows the presence, not the absence of bugs"](https://en.wikiquote.org/wiki/Edsger_W._Dijkstra) (1969 NATO conference report; restated in Notes on Structured Programming, 1970).
+- Edsger Dijkstra, ["Testing shows the presence, not the absence of bugs"](https://en.wikiquote.org/wiki/Edsger_W._Dijkstra) (said at the 1969 NATO conference, report published 1970; also in Notes on Structured Programming, first circulated 1969).
 - Peter Naur, [Programming as Theory Building](https://pages.cs.wisc.edu/~remzi/Naur.pdf) (1985).
 - Michael Polanyi, [The Tacit Dimension](https://en.wikipedia.org/wiki/Tacit_knowledge) (1966). "We can know more than we can tell."
-- Richard Hamming, [You and Your Research](https://www.cs.virginia.edu/~robins/YouAndYourResearch.html) (1986). Knowledge as compound interest.
+- Richard Hamming, [You and Your Research](https://www.cs.virginia.edu/~robins/YouAndYourResearch.html) (1986). Knowledge as compound interest, a line he credits to Hendrik Bode.
 - Diane Vaughan, [The Challenger Launch Decision](https://en.wikipedia.org/wiki/Normalization_of_deviance) (1996). Normalization of deviance.
 
 **Research and reading**
 
 - Geoffrey Huntley, [Nobody should type code by hand anymore. Here's what's left.](https://ghuntley.com/agency/) Vision, verification, and agency. I only had access to the public part of this essay.
 - Geoffrey Huntley, [Software doesn't need to be readable anymore. It needs to be explainable.](https://ghuntley.com/readable/)
+- Terence Tao, [living summary of his views on AI](https://teorth.github.io/tao-web/ai-views.html). His own wording on proof abundance and "less fertile" fields.
+
+**Migration**
+
+- [Migration is a harness](/blogs/blog/migration_is_a_harness/). My longer piece on the loop around the model: planner, orchestrator, generator, evaluator, and one commit per verified unit.
+- Anthropic, [code migration kit with Claude Code](https://github.com/anthropics/code-migration-kit-with-claude-code). Rulebook, judge, and queues on disk. "No judge, no exit condition."
+- Martin Fowler, [Strangler Fig Application](https://martinfowler.com/bliki/StranglerFigApplication.html). Grow the new system around the old one.
+- Jarred Sumner, [Bun in Rust](https://bun.com/blog/bun-in-rust). A million-line port with implementer agents, adversarial reviewers, and the test suite as judge.
+- Markus Harrer, [AI agents don't modernize legacy code on their own](https://www.isaqb.org/blog/ai-agents-dont-modernize-legacy-code-on-their-own) (iSAQB). Seams, characterization tests, and fitness functions as guardrails.
 - Terence Tao, [Math 2.0](https://terrytao.wordpress.com/2026/10/10/math-2-0/) (October 2026), with the [slides](https://teorth.github.io/tao-web/slides/math-2-0-caltech-2026.pdf). Tao's own framing of his talk.
-- [Tao's critique of mass AI problem solving](https://officechai.com/ai/terence-tao-hints-openai-wasnt-behaving-responsibly-by-simultaneously-releasing-300-math-proofs-says-its-making-math-less-fertile/). Secondhand reporting of his "harvesting" remark, which the reporter summarized as making mathematics less fertile.
+- [Tao's critique of mass AI problem solving](https://officechai.com/ai/terence-tao-hints-openai-wasnt-behaving-responsibly-by-simultaneously-releasing-300-math-proofs-says-its-making-math-less-fertile/). Secondhand reporting of his "harvesting" remark. Tao's own wording is in his [living summary of his views on AI](https://teorth.github.io/tao-web/ai-views.html).
 - [OpenAI bulk release of mathematical papers](https://en.wikipedia.org/wiki/OpenAI_bulk_release_of_mathematical_papers). Background on the release and the debate around it.
 - Brynjolfsson, Li, and Raymond, [Generative AI at Work](https://arxiv.org/abs/2304.11771). Customer support; gains concentrated in the newest workers.
 - METR, [Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity](https://arxiv.org/abs/2507.09089), with its [February 2026 update](https://metr.org/blog/2026-02-24-uplift-update/).
