@@ -1,7 +1,7 @@
 ---
 title: "Modern AI Agent System"
 description: "What comes after one developer with a coding agent: a fleet of agents that works for a whole organization, on every kind of work, while nobody watches. Six building blocks, one hub, and why it all depends on work that can be checked."
-pubDate: "2026-11-01"
+pubDate: "2026-11-02"
 author: "locchh"
 draft: false
 ---
