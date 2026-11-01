@@ -7,4 +7,14 @@ tags: ["state", "agent-architecture", "2026"]
 draft: true
 ---
 
-The characteristics of state, and what we can do with it?
+I think the state of the object or a work can be hidden from what we can see. And what is see can be not true or don't reflect the real state underneath.
+
+I am also curious about these questions:
+
+- The characteristics of state, and what manipulations we can do with it?
+
+- How does state transition from one step to the next, and what triggers each move?
+
+- How we can maintain state of work cross sessions, agents, and machines?
+
+- Snapshot and replay: can we save state, roll it back, and run it again?
