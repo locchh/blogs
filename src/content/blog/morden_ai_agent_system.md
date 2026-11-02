@@ -12,6 +12,23 @@ Today most people meet AI agents in one shape: one person with one coding agent.
 
 Each block below exists because something specific breaks when it is missing. That gives a simple test for any new tool in this space: which failure does it remove? If nobody can name the failure, the tool is not a building block yet.
 
+```mermaid
+flowchart TB
+  MEM["1. memory + memory hub<br/>without it: every run relearns the same things"]
+  HUBA["2. agent hub<br/>without it: machines set up by hand drift apart"]
+  ORC["3. orchestration + supervisor<br/>without it: a crashed run sits unnoticed"]
+  AG(("agent<br/>model + pack"))
+  RT["4. provider + routing<br/>without it: one limit or outage stops the run"]
+  MON["5. monitoring<br/>without it: nobody can say why a run failed"]
+  ENV["6. sandbox + special runtime<br/>without it: the agent acts on the real system,<br/>or cannot run the work at all"]
+  MEM <-->|"reads, writes lessons"| AG
+  HUBA -->|"installs the pack"| AG
+  ORC -->|"assigns, starts, restarts"| AG
+  AG -->|"model calls"| RT
+  AG -->|"logs and traces"| MON
+  AG -->|"acts inside"| ENV
+```
+
 1. **Memory system and memory hub.** A model forgets everything when its session ends. Without memory, every run pays again to learn the same things: where things live, which tool is slow, which rule failed last time. Memory keeps what one run learned for the next one. The hub goes one step further and shares it across agents and machines, so a lesson learned on one machine is read on all of them. [XERJ](https://xerj.org/) is one example of the memory part: a search engine built for agents that also keeps a separate memory for each agent. Sharing across machines is still the hub's job. Memory is also where the agent system meets the context system, which has its own section below.
 
 2. **Agent hub.** An agent is more than a model. Around the model sit a profile, its standing rules, and its skills. Call that bundle a **pack**. Without a hub, every machine is set up by hand, and the machines slowly drift apart. A hub stores packs the way a package registry stores libraries: versioned, installable, and the same on every machine. [Claude Code Templates](https://www.aitmpl.com/) is a catalog of ready-made agents, commands, skills, and hooks, each installed with one command. [ECC](https://github.com/affaan-m/ecc) bundles skills, instincts, and memory into one pack that installs into several coding agents. Both serve coding agents today. The hub I have in mind serves every kind of agent.
@@ -22,7 +39,7 @@ Each block below exists because something specific breaks when it is missing. Th
 
 5. **Monitoring system.** When nobody watches the run, its logs and traces are the only witnesses. Without them, nobody can say why a run failed, what it cost, or which step wasted the most turns. The person who improves the system then has nothing to read. [Langfuse](https://langfuse.com/) traces agent runs so they can be evaluated and improved. [OpenTelemetry](https://opentelemetry.io/) is the open standard for collecting traces, metrics, and logs from any service.
 
-6. **Sandbox and runtime environment.** An agent acts, and its actions need a place where they are safe and can be checked. That place depends on the work. Code runs in a sandbox, and [E2B](https://e2b.dev/) gives every agent session its own small virtual machine. A mobile app needs a phone or an emulator, and a tool like [Appium](https://appium.io/) drives the app on it. Some work needs a copy of a whole system that nobody may touch for real. [GIBSON](https://offensivesec.org/GIBSON) simulates an IBM mainframe, and it is vulnerable on purpose, so people can learn mainframe security without attacking a real one. An agent doing security work needs the same kind of practice lab. Without this block, the agent practices on the real thing.
+6. **Sandbox and special runtime environment.** An agent acts, and a normal machine is often the wrong place for it to act. First, its actions need a sandbox: a safe, throwaway place where they can be checked before they touch anything real. [E2B](https://e2b.dev/) gives every agent session its own small virtual machine for this. Second, some work only runs in a special environment that a normal machine cannot provide. Code for a mainframe needs a mainframe, or a faithful copy of one, to build, run, and test. Without this block, the agent either practices on the real system or cannot do the work at all.
 
 ## One hub, many machines
 
@@ -45,9 +62,9 @@ flowchart TB
     MN["machine n<br/>supervisor + agent"]
   end
   subgraph ENV["runtime environments"]
-    E1["code sandbox"]
-    E2["phone or emulator"]
-    EN["security test lab, browser, ..."]
+    E1["sandbox<br/>a safe place to act"]
+    E2["mainframe<br/>or a faithful copy of one"]
+    EN["other platforms a normal<br/>machine cannot run"]
   end
   RT["router<br/>picks the model, spreads the load"]
   BL -->|"open items"| HUB
@@ -65,9 +82,9 @@ flowchart TB
   SOR -->|"checker result"| BL
 ```
 
-The **hub** holds the packs, assigns one item to one machine, and collects every machine's logs. Each machine runs one supervisor and one agent. Next to them sits a runtime environment that fits the work: a code sandbox on one machine, a phone on another, a security test lab on a third. Three things stay outside and are rented: the work queue, the system of record where finished work lands, and the model provider. Next to the system of record sits a **checker**, the part that says whether the work is right. For code it is the tests and CI. For back-office work it is business rules or reconciliation. The knowledge base is different. It is the one part nobody can sell you, and every machine both reads it and writes lessons back.
+The **hub** holds the packs, assigns one item to one machine, and collects every machine's logs. Each machine runs one supervisor and one agent. Next to them sits a runtime environment that fits the work: a sandbox on most machines, and a mainframe or a copy of one where the work needs it. Three things stay outside and are rented: the work queue, the system of record where finished work lands, and the model provider. Next to the system of record sits a **checker**, the part that says whether the work is right. For code it is the tests and CI. For back-office work it is business rules or reconciliation. The knowledge base is different. It is the one part nobody can sell you, and every machine both reads it and writes lessons back.
 
-The diagram is the building-block list drawn out. The hub and the supervisors are orchestration, and the hub is also the agent hub. The router is the routing system. The knowledge base is memory. The logs are monitoring. The runtime environments are the sandboxes.
+The diagram is the building-block list drawn out. The hub and the supervisors are orchestration, and the hub is also the agent hub. The router is the routing system. The knowledge base is memory. The logs are monitoring. The runtime environments are the sandboxes and the special platforms.
 
 ## Where the context system fits
 
@@ -134,8 +151,6 @@ Coding harnesses matured first because code has the strongest built-in checker: 
 - [Langfuse](https://langfuse.com/). Open-source tracing and evaluation for agent runs.
 - [OpenTelemetry](https://opentelemetry.io/). The vendor-neutral standard for collecting traces, metrics, and logs and sending them to any backend.
 - [E2B](https://e2b.dev/). Cloud sandboxes that give each agent session its own isolated virtual machine.
-- [Appium](https://appium.io/). Open-source automation for apps on phones, browsers, and desktops, run on devices or emulators you provide.
-- [GIBSON](https://offensivesec.org/GIBSON). A free IBM mainframe simulator, vulnerable on purpose, for learning mainframe security.
 
 **Coding agents today**
 
