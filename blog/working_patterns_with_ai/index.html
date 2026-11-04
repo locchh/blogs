@@ -297,6 +297,58 @@
 <p>The leading builders show where every pattern is heading. Read the patterns in order, and the check mostly moves up. With suggestions, you check each line. With delegation, you check against a test. With agents on servers, you check a short report. Nobody chose this. It is forced by speed. When AI writes code faster than you can read it, reading stops. <a href="/blogs/blog/state-engineering/">State Engineering</a> names where that ends: <strong>cognitive surrender</strong>, when you stop reading the code at all.</p>
 <p>Speed also fools the person who feels it. In 2025, the research group <a href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/">METR timed experienced open-source developers</a> on real issues in projects they knew well. With AI tools, their tasks took 19% longer. Afterward, they still believed AI had made them 20% faster. A <a href="https://metr.org/blog/2026-02-24-uplift-update/">2026 follow-up</a> pointed toward a speedup, but METR calls that signal unreliable, partly because many developers now run several agents at once, which makes their time hard to measure. So “it feels fast” is not a check either.</p>
 <p>You can’t read fast enough, and you can’t trust how fast it feels. So the answer is not to read faster. <strong>You can’t verify every line the AI writes, but you can verify what the lines are for.</strong> The check moves to two places. The first is what the code should do, written down before the work starts as specs and tests that the human owns. The second is evidence that it works: open staging and watch the feature run end to end, the way a user would. State Engineering calls this the highest level of verification: does it behave right at the boundary a human touches? It won’t tell you the code is clean. It tells you the feature works, and that is a check that still fits in a human day.</p>
-<p>This has limits, and I should name them. Someone still has to judge whether the tests are right, and that means reading them. And in regulated work, like card payments or banking, a named person must still review the code itself. As the leading builders show, checking behavior moves most of the reading up a level. It doesn’t remove all of it.</p>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+<p>This has limits, and I should name them. Someone still has to judge whether the tests are right, and that means reading them. And in regulated work, like card payments or banking, a named person must still review the code itself. As the leading builders show, checking behavior moves most of the reading up a level. It doesn’t remove all of it.</p>
+<h2 id="my-own-working-modes">My own working modes</h2>
+<p>I am a developer, and I am still a learner, so my workflow is a little strange. I don’t stay in one pattern. I switch between four modes, and I gave each one a name so I can tell myself which one I’m in.</p>
+<p><strong>Coach mode.</strong> I describe what I want and my design. Then I ask the AI to break it into steps I can build. For each step, it coaches me from the overview down to the details and suggests code, until I finish the step myself. If I give up on a step, it can finish it for me, and then we move on. I loop like this until the work is done. The check is my own understanding, step by step.</p>
+<pre><code class="language-mermaid">flowchart LR
+  D["I describe the goal&#x3C;br/>and my design"] --> S["AI breaks it into&#x3C;br/>steps I can build"]
+  S --> C["AI coaches me:&#x3C;br/>overview, then details,&#x3C;br/>then code ideas"]
+  C --> Y{{"I finish the step:&#x3C;br/>do I understand it?"}}
+  Y -->|"I give up"| F["AI finishes&#x3C;br/>the step"]
+  F --> N["next step"]
+  Y -->|"done"| N
+  N -.->|"loop until done"| C
+  class Y check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p><strong>Plan-first mode.</strong> When I don’t want to type, I give a work item to the agent and ask: what is your plan, and what is your coding flow? It writes the plan down. I adjust it, approve it, and only then does it run. The check sits before any code exists, which is the cheapest place to catch a wrong idea.</p>
+<pre><code class="language-mermaid">flowchart LR
+  W["I give a&#x3C;br/>work item"] --> P["agent writes its plan&#x3C;br/>and coding flow"]
+  P --> A{{"I adjust&#x3C;br/>and approve"}}
+  A -->|"not yet"| P
+  A -->|"approved"| E["agent executes&#x3C;br/>the plan"]
+  class A check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p><strong>Walkthrough mode.</strong> Sometimes the AI has already made something. Before I accept it, I ask it to give me its coding flow and explain what it did, step by step. If I can’t follow the story, I don’t accept the code. The check is after the code, but before it becomes mine.</p>
+<pre><code class="language-mermaid">flowchart LR
+  M["AI has already&#x3C;br/>made a change"] --> X["AI explains its coding flow,&#x3C;br/>step by step"]
+  X --> U{{"I check:&#x3C;br/>can I follow it?"}}
+  U -->|"yes"| K["I accept it"]
+  U -->|"no"| Q["I ask more,&#x3C;br/>or reject it"]
+  class U check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p><strong>Docs-first mode.</strong> This is where I want to grow. I aim at the high-level work: architecture, the data model, frameworks, and third-party services. So I spend my time in <code>docs/</code>, not in <code>src/</code>. Once the docs are clear enough to build from, I ask the AI to break them into an implementation plan, with phases and tasks. Then it builds the tasks one by one, with a commit for each. My check moves up to the design: if the docs are right, each task only has to match them.</p>
+<pre><code class="language-mermaid">flowchart LR
+  D{{"I write docs/:&#x3C;br/>architecture, data model,&#x3C;br/>frameworks, third parties"}} --> P["AI breaks the docs into&#x3C;br/>phases and tasks"]
+  P --> T["AI builds&#x3C;br/>one task"]
+  T --> V{{"I check the task&#x3C;br/>against the docs"}}
+  V --> C["commit"]
+  C -.->|"next task"| T
+  class D,V check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p><strong>One habit across all four: unstaged changes are my review area.</strong> I keep the new work unstaged until I’ve checked it. My editor highlights every unstaged line, so I see at a glance what is new, and anything wrong is one revert away. I can focus on just the unstaged part. Only after I’ve checked it do I let it become a commit. In git, the unstaged changes are my “still being checked” zone, and a commit means “I have looked at this.”</p>
+<pre><code class="language-mermaid">flowchart LR
+  A["AI or I&#x3C;br/>change the code"] --> U["changes stay&#x3C;br/>unstaged"]
+  U --> R{{"I review the highlighted lines:&#x3C;br/>what is new?"}}
+  R -->|"wrong"| X["revert&#x3C;br/>the unstaged part"]
+  X -.-> A
+  R -->|"verified"| C["commit"]
+  class R check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
 &copy; 2026 Locch. All rights reserved.
 <div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.wEuZSMGf.js"></script> </body> </html>
