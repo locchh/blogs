@@ -1,0 +1,306 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><script>
+	(() => {
+		let theme;
+		try {
+			theme = localStorage.getItem('blog-theme');
+		} catch {
+			// Storage can be blocked in private or restricted browser contexts.
+		}
+		if (!['light', 'dark', 'reading'].includes(theme)) {
+			theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		}
+		document.documentElement.dataset.theme = theme;
+	})();
+</script><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg?v=9"><link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon.png?v=9"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.2"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/what_can_we_do_with_state/"><!-- Primary Meta Tags --><title>What Can We Do With State?</title><meta name="title" content="What Can We Do With State?"><meta name="description" content="The characteristics of state, and what we can do with it."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/what_can_we_do_with_state/"><meta property="og:title" content="What Can We Do With State?"><meta property="og:description" content="The characteristics of state, and what we can do with it."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/what_can_we_do_with_state/"><meta property="twitter:title" content="What Can We Do With State?"><meta property="twitter:description" content="The characteristics of state, and what we can do with it."><link rel="stylesheet" href="/blogs/_astro/about.CUAELPAi.css">
+<style>main[data-astro-cid-bvzihdzo]{width:min(calc(100% - 2rem),1040px);max-width:100%;margin:2em auto}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:100%;max-width:var(--prose-width);margin:auto;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}@media(max-width:768px){main[data-astro-cid-bvzihdzo]{width:100%;margin:0}}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/blogs/" data-astro-cid-3ef6ksr2>Locch&#39;s Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/blogs/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blogs/blog/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/blogs/about/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="theme-switcher" role="group" aria-label="Display mode" hidden data-astro-cid-dz5h74bc> <button type="button" data-theme-choice="light" aria-pressed="false" data-astro-cid-dz5h74bc>Light</button> <button type="button" data-theme-choice="dark" aria-pressed="false" data-astro-cid-dz5h74bc>Dark</button> <button type="button" data-theme-choice="reading" aria-pressed="false" data-astro-cid-dz5h74bc>Reading</button> </div> <script type="module">const n=["light","dark","reading"],c=document.querySelector(".theme-switcher"),s=document.querySelectorAll("[data-theme-choice]"),o=window.matchMedia("(prefers-color-scheme: dark)");function r(){for(const e of s)e.setAttribute("aria-pressed",String(e.dataset.themeChoice===document.documentElement.dataset.theme))}function t(e,l=!1){if(n.includes(e)){if(document.documentElement.dataset.theme=e,l)try{localStorage.setItem("blog-theme",e)}catch{}r(),document.dispatchEvent(new CustomEvent("theme-change"))}}function i(){if(!a){try{if(n.includes(localStorage.getItem("blog-theme")??""))return}catch{}t(o.matches?"dark":"light")}}let a=!1;for(const e of s)e.addEventListener("click",()=>{a=!0,t(e.dataset.themeChoice??"light",!0)});window.addEventListener("storage",e=>{e.key!=="blog-theme"&&e.key!==null||(a=!1,e.newValue&&n.includes(e.newValue)?t(e.newValue):t(o.matches?"dark":"light"))});o.addEventListener("change",i);r();c&&(c.hidden=!1);</script>  <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo>  </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time>  </div> <h1 data-astro-cid-bvzihdzo>What Can We Do With State?</h1> <hr data-astro-cid-bvzihdzo> </div>  <p>I think the state of the object or a work can be hidden from what we can see. And what is see can be not true or don’t reflect the real state underneath.</p>
+<ul>
+<li><em><strong>Seen state versus real state.</strong> An agent never holds the real state, only a belief about it (<a href="https://people.smp.uq.edu.au/YoniNazarathy/Control4406_2014/resources/KaelblingLittmanCassandra1998.pdf">Kaelbling, Littman &#x26; Cassandra 1998</a>, POMDP belief state). Even the model’s reasoning text can leave out what really drove its answer (<a href="https://arxiv.org/abs/2305.04388">Turpin et al. 2023</a>). Insight: treat every status as an estimate, and record where it came from.</em>
+<ul>
+<li>The most likely state “is not sufficient in general.” A belief is a probability over states, and an agent that is lost “might” take “sensing actions,” like reading a map.</li>
+<li>In Turpin’s study, only 1 of 426 explanations for biased answers mentioned the bias. So an agent’s own report is never proof. Only a check that someone else runs counts.</li>
+<li>Checking has a price. It pays only when knowing is worth more than the check costs, so run cheap checks often and expensive ones when it matters.</li>
+<li>A good summary is enough. Kaelbling calls a well-computed belief “a sufficient statistic for the past history,” so the next agent needs the summary, not the whole log.</li>
+<li>Limit: the paper’s belief is exact only with a correct model of the world and one agent. Use it as a way to think, not as machinery to run.</li>
+</ul>
+</li>
+</ul>
+<p>I am also curious about these questions:</p>
+<ul>
+<li>
+<p>The characteristics of state, and what manipulations we can do with it?</p>
+<ul>
+<li><em><strong>The verbs of state.</strong> Read, write, fork, merge, snapshot, rollback, replay. Each verb needs a different guarantee. For merge, link back to <a href="/blogs/blog/state-engineering/">State Engineering</a> instead of repeating it.</em></li>
+<li><strong>Read</strong> comes from a view that says how sure it is. A “no” from an old snapshot is already out of date.</li>
+<li><strong>Write</strong> only adds facts, and each kind of fact has one kind of writer. The agent proposes, and something else decides. GitHub Agentic Workflows writes this into its spec: “Assignment input, a successful Actions run, or an output artifact alone cannot establish authority or Result.”</li>
+<li><strong>Fork</strong> makes a new item with a link to its parent. <strong>Merge</strong> follows the write rules, and a collision becomes a conflict for a human.</li>
+<li><strong>Snapshot, rollback, and replay</strong> belong to the last question below.</li>
+<li>Insight: most of these verbs are safe only because facts are never edited.</li>
+</ul>
+</li>
+<li>
+<p>How does state transition from one step to the next, and what triggers each move?</p>
+<ul>
+<li><em><strong>What triggers a transition.</strong> An event, a guard condition, a timer, or a new observation (<a href="https://web.archive.org/web/2015/http://www.inf.ed.ac.uk/teaching/courses/seoc/2006_2007/resources/statecharts.pdf">Harel 1987, statecharts</a>: states with hierarchy, concurrency, communication). Insight: a move without a named trigger is only an agent’s opinion. This echoes “demote by dependency, never by opinion” in State Engineering.</em></li>
+<li>Harel’s rule: “when event α occurs in state A, if condition C is true at the time, the system transfers to state B.” The condition is checked only when the event arrives. If it is false, the event is simply dropped. So every gate needs an explicit trigger and an explicit fail branch.</li>
+<li>Harel splits instant actions from activities that “take some time.” The agent’s work is an activity that the runner starts and stops, and the agent’s “I’m done” must come back as an event.</li>
+<li>A timeout belongs to the state. It can be a limit (give up after two hours) or a minimum wait.</li>
+<li>Careful with two words. In a statechart, depth means one exit that covers all the inner states, not “call a child runbook.” And history means pause and resume, not crash recovery.</li>
+</ul>
+</li>
+<li>
+<p>How we can maintain state of work cross sessions, agents, and machines?</p>
+<ul>
+<li><em><strong>One state across sessions, agents, and machines.</strong> No one can read a distributed system all at one instant. <a href="https://www.cs.princeton.edu/courses/archive/fall17/cos418/papers/chandy_lamport.pdf">Chandy &#x26; Lamport 1985</a> record a global state that may never have existed at one moment. It is still consistent with the order of messages, and that is enough for checkpoints.</em></li>
+<li>It is also enough for <strong>stable properties</strong>: “once a stable property becomes true it remains true thereafter.” So “has this ever passed?” is safe to read from a snapshot, but “is this still valid now?” needs a fresh check. This is the same split as “ever passed” and “currently valid” in State Engineering.</li>
+<li>The snapshot must “run concurrently with, but not alter” the work. A dashboard should never pause the agents to look at them.</li>
+<li>Messages in flight are part of the state. An item being handed between agents must be counted once: held by one agent, in transit, or held by the next.</li>
+<li>Insight: state belongs to the work, not the session. Yegge says the same about Gas Town: “an agent is not a session.”</li>
+</ul>
+</li>
+<li>
+<p>Snapshot and replay: can we save state, roll it back, and run it again?</p>
+<ul>
+<li><em><strong>Snapshot and replay with an unpredictable worker.</strong> You can’t re-run an LLM and get the same output twice. Durable execution (<a href="https://docs.temporal.io/workflows">Temporal</a>) records each call’s result and replays the history instead of calling again. Insight: replay the record, not the model. Rollback is cheap for files (git) and hard for side effects like a sent email.</em></li>
+<li>Temporal calls its event history “the source of truth,” and it “doesn’t restore memory from a snapshot.” It replays the history. Its docs list “LLM invocations” among the calls whose result is “reused, not recomputed.”</li>
+<li>So a snapshot is a position in the log, not a copy of memory.</li>
+<li>Rollback adds a fact and never deletes one. Files go back with git. A side effect outside git needs its own undo step.</li>
+<li>A long-running item must remember which version of the runbook it ran under, the way Temporal versions workflows that run for months.</li>
+</ul>
+</li>
+<li>
+<p><em><strong>Personal thought, an open question.</strong> How can an agent notice that its belief has drifted from the real state before someone else does?</em></p>
+<ul>
+<li><em>A first answer, still open: mark an item suspect when something it read has changed, and run cheap checks again on a schedule. But that only catches drift in what was recorded. The world outside the log stays hidden.</em></li>
+</ul>
+</li>
+</ul>
+<h2 id="my-vision-a-runbook-hub">My vision: a runbook hub</h2>
+<p>I think the next step is an app that owns the state, so the agents don’t have to. I call it a <strong>runbook hub</strong>.</p>
+<p>A runbook is a workflow written down once: the steps, the check at each gate, and who may write which part of the state. The hub keeps runbooks at three scales, like packages in a registry: light ones for one person, shared ones for a team, and versioned, audited ones for an organization. A small CLI clones a runbook and an agent pack into a sandbox. Inside, a runner enforces the steps. <strong>The agent proposes, and the runner decides.</strong> A rule engine owns the moves between steps. An orchestrator agent only plans and suggests.</p>
+<p>The real job of the hub is state. <strong>State belongs to the work item, not to the workflow or the agent.</strong> One migration unit may pass through a port runbook, then a review runbook, then a release runbook, handled by different agents on different machines. The hub keeps one log of facts for it: what passed, against which runbook version, with what evidence. The status is just a view over that log, so snapshot and replay come for free. An agent claims an item before it works on it, and the claim expires if the agent crashes. The hub should stay thin, though. It stores only what git doesn’t hold, and points to commits instead of copying them, because the repo is still its own best state.</p>
+<p>Parts of this already exist. <a href="https://github.com/henryqin1997/statem">StateM</a> checks steps and gates for one long agent run, but the agent can get around them. <a href="https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04">Gas Town</a> and its successor, Gas City, keep work state across many agents, but they trust the agent’s own report. <a href="https://github.github.com/gh-aw/">GitHub Agentic Workflows</a> runs agents in a sandbox and checks every write before it lands, but only on GitHub Actions. What I haven’t found is a work item whose log of facts spans many runbooks, with the runbook version stamped on each fact, checked by a runner the agent can’t touch, and a hub that shares runbooks at all three scales.</p>
+<p>One question I can’t answer yet. <a href="/blogs/blog/state-engineering/">State Engineering</a> says you don’t know the steps of a piece of work when you start. So can a runbook fix the gates without fixing the path?</p>
+<h2 id="from-questions-to-a-design">From questions to a design</h2>
+<p>The vision ended on an open question. This design is my bet on the answer, and the first build below is how to test it. Each question above turns into one part of the runbook hub. Here is the map from question to rule to the part that enforces it:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Question</th><th>Design rule</th><th>Part that enforces it</th></tr></thead><tbody><tr><td>Seen state versus real state</td><td>Every status is an estimate with a confidence level and a pointer to its evidence. An agent’s own claim never passes a gate.</td><td>views over the log, and the checker</td></tr><tr><td>The verbs of state</td><td>Read, write, fork, merge, snapshot, rollback, and replay are API calls, each with its own rule. Facts are only added, never edited.</td><td>the item log</td></tr><tr><td>What triggers a transition</td><td>A move needs a named event and a gate that passes at that moment. Every gate has a fail branch.</td><td>the runner</td></tr><tr><td>One state across sessions, agents, and machines</td><td>State belongs to the work item. An item has one holder at a time, through a claim that expires.</td><td>claims and the item log</td></tr><tr><td>Snapshot and replay</td><td>A snapshot is a position in the log. Replay rebuilds views from recorded facts and never calls the model again.</td><td>the item log</td></tr><tr><td>How an agent notices drift</td><td>When an input changes, the items that depend on it become <strong>suspect</strong>. Cheap checks run again on a schedule.</td><td>the runner</td></tr></tbody></table>
+<h3 id="the-parts">The parts</h3>
+<pre><code class="language-mermaid">flowchart LR
+  subgraph SB["sandbox, one per claim"]
+    AG["agent&#x3C;br/>Claude Code or Codex"]
+    CLI["rb CLI&#x3C;br/>claim, next, propose, note"]
+    WT["git worktree"]
+  end
+  subgraph HUB["runbook hub"]
+    REG["registry&#x3C;br/>runbooks by version:&#x3C;br/>personal, team, org"]
+    RUN{{"runner&#x3C;br/>the only part that&#x3C;br/>moves an item"}}
+    CLAIM["claims&#x3C;br/>lease + heartbeat"]
+    LOG[("item log&#x3C;br/>append-only facts")]
+    VIEW["views&#x3C;br/>status, confidence,&#x3C;br/>handoff summary"]
+  end
+  CHK{{"checker&#x3C;br/>its own credentials,&#x3C;br/>runs gates on a commit"}}
+  GIT[("git remote&#x3C;br/>the code")]
+  DASH["dashboard&#x3C;br/>phone or web,&#x3C;br/>by exception"]
+  AG --> CLI
+  AG --> WT
+  WT -->|"push a commit"| GIT
+  CLI -->|"claim, heartbeat"| CLAIM
+  CLI -->|"propose + commit"| RUN
+  REG -->|"runbook at a version"| RUN
+  RUN -->|"run the gate"| CHK
+  CHK -->|"reads the commit"| GIT
+  CHK -->|"result + evidence"| RUN
+  RUN -->|"append facts"| LOG
+  CLAIM -->|"append facts"| LOG
+  LOG --> VIEW
+  VIEW -->|"current step + summary"| CLI
+  VIEW --> DASH
+  class RUN,CHK check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<ul>
+<li><strong>The sandbox</strong> holds the agent, a git worktree, and the <code>rb</code> CLI. The agent can read its current step and propose a move. It cannot write a gate result, and it cannot move the item.</li>
+<li><strong>The runner</strong> is the only part that moves an item. It runs in its own process, with its own credentials, where the agent can’t reach it. This is the lesson from <a href="https://github.com/henryqin1997/statem">StateM</a>, whose checks run in the agent’s own shell and can be skipped.</li>
+<li><strong>The checker</strong> runs each gate against a commit, not against the agent’s working copy. It records what it read, so a later change can be traced back.</li>
+<li><strong>The item log</strong> is the source of truth. Status, confidence, and the handoff summary are all views computed from it.</li>
+<li><strong>The registry</strong> stores runbooks by content hash, at three scopes: personal, team, and organization.</li>
+<li><strong>Git</strong> keeps the code. The hub only stores pointers to commits, because the repo is still its own best state.</li>
+</ul>
+<h3 id="a-runbook-fixes-the-gates-not-the-path">A runbook fixes the gates, not the path</h3>
+<p>A runbook is a statechart. Each state is a milestone with an exit gate. The text inside a state is a hint, not a fixed path, so the agent can find its own way to the gate. Unlike <a href="https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04">Gas Town</a>, which fixes the steps and lets agents judge the work, this fixes the judgment and lets the agent choose the steps.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">runbook</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">port-unit</span></span>
+<span class="line"><span style="color:#85E89D">version</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">3</span><span style="color:#6A737D">                  # the registry stores it by content hash</span></span>
+<span class="line"><span style="color:#85E89D">initial</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">plan</span></span>
+<span class="line"><span style="color:#85E89D">inputs</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">rules/port.md</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">fixtures/</span><span style="color:#E1E4E8">]   </span><span style="color:#6A737D"># a hint for the checker about what to watch</span></span>
+<span class="line"><span style="color:#85E89D">states</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  plan</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    hint</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Read the old unit and write plan.md."</span></span>
+<span class="line"><span style="color:#85E89D">    exit</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      gate</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">run</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"test -s plan.md"</span><span style="color:#E1E4E8">, </span><span style="color:#85E89D">level</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">      on_pass</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">implement</span></span>
+<span class="line"><span style="color:#85E89D">      on_fail</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">plan</span></span>
+<span class="line"><span style="color:#85E89D">  implement</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    hint</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Port the unit. Propose when you think it works."</span></span>
+<span class="line"><span style="color:#85E89D">    timeout</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">2h</span></span>
+<span class="line"><span style="color:#85E89D">    exit</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      gate</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">run</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"pytest -q tests/unit_412"</span><span style="color:#E1E4E8">, </span><span style="color:#85E89D">level</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">      on_pass</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">review</span></span>
+<span class="line"><span style="color:#85E89D">      on_fail</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">implement</span></span>
+<span class="line"><span style="color:#85E89D">  review</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    exit</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      gate</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">human</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">approve</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">      on_pass</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">done</span></span>
+<span class="line"><span style="color:#85E89D">      on_fail</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">implement</span></span>
+<span class="line"><span style="color:#85E89D">  done</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">final</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">writes</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  agent</span><span style="color:#E1E4E8">:  [</span><span style="color:#9ECBFF">proposed</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">note</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">heartbeat</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#85E89D">  runner</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">gate_passed</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">gate_failed</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">moved</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">suspect</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#85E89D">  human</span><span style="color:#E1E4E8">:  [</span><span style="color:#9ECBFF">approved</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">blast_radius</span><span style="color:#E1E4E8">]</span></span></code></pre>
+<p>Three rules come from <a href="https://web.archive.org/web/2015/http://www.inf.ed.ac.uk/teaching/courses/seoc/2006_2007/resources/statecharts.pdf">Harel</a>. A gate is checked only when an event arrives, so the agent must send a <code>proposed</code> event. Every gate needs a fail branch, or a failed check just disappears. And the agent’s work is an activity that the runner starts and stops. The <code>writes</code> block is the Authority rule from <a href="/blogs/blog/state-engineering/">State Engineering</a>: each kind of fact has exactly one kind of writer.</p>
+<h3 id="the-log-of-facts">The log of facts</h3>
+<p>Every fact is one line, added and never changed:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span><span style="color:#79B8FF">"item"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"unit-412"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"seq"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">57</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"at"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"2026-11-04T10:12:03Z"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF"> "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"gate_passed"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"by"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"runner"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF"> "runbook"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"port-unit@sha256:ab12"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"state"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"implement"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"level"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF"> "evidence"</span><span style="color:#E1E4E8">: {</span><span style="color:#79B8FF">"commit"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"a1b2c3"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"run"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"ci#88"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">              "read"</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">"rules/port.md@v7"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"fixtures@3f9"</span><span style="color:#E1E4E8">]}}</span></span></code></pre>
+<p>The <code>by</code> field matters most. A <code>proposed</code> or <code>note</code> fact from an agent is kept for the record, but it never satisfies a gate. Only the runner writes <code>gate_passed</code>. The <code>read</code> field is the dependency edge: when <code>rules/port.md</code> changes, the runner finds every item that read the old version and marks it <code>suspect</code>. The runbook’s <code>inputs</code> list is only a hint. What marks an item suspect is what the checker actually read, recorded in <code>read</code>, because a hand-written list can leave things out.</p>
+<h3 id="the-life-of-one-work-item">The life of one work item</h3>
+<pre><code class="language-mermaid">stateDiagram-v2
+  direction LR
+  [*] --> queued
+  queued --> claimed: an agent claims it
+  claimed --> working: the runner starts the agent
+  working --> checking: the agent proposes a commit
+  checking --> working: gate failed, the reason goes back
+  checking --> passed: gate passed
+  passed --> queued: next state or next runbook
+  passed --> done: last gate
+  working --> queued: the lease expired
+  passed --> suspect: an input changed
+  done --> suspect: an input changed
+  suspect --> queued: a human sets the blast radius
+  done --> [*]
+</code></pre>
+<p>An item always has exactly one holder: the queue, one claim, or the checker. So an item being handed between agents is counted once, never twice and never zero times, which is the lesson from <a href="https://www.cs.princeton.edu/courses/archive/fall17/cos418/papers/chandy_lamport.pdf">Chandy and Lamport</a>. When a lease expires, the item goes back to the queue, and the next agent starts from the handoff summary, not from the whole log. If the lease expired while a gate was running, the fail reason is stored on the item, so the next agent sees it in the summary.</p>
+<h3 id="one-step-end-to-end">One step, end to end</h3>
+<pre><code class="language-mermaid">sequenceDiagram
+  autonumber
+  participant A as agent in sandbox
+  participant H as hub
+  participant R as runner
+  participant C as checker
+  participant G as git
+  A->>H: rb claim unit-412
+  H-->>A: lease, current state, handoff summary
+  loop while working
+    A->>H: rb heartbeat
+  end
+  A->>G: push commit a1b2
+  A->>R: rb propose --commit a1b2
+  R->>C: run the gate for this state on a1b2
+  C->>G: fetch a1b2
+  C-->>R: passed, level 2, evidence, read set
+  R->>H: append gate_passed and moved
+  H-->>A: next state: review
+</code></pre>
+<h3 id="snapshot-replay-and-rollback">Snapshot, replay, and rollback</h3>
+<ul>
+<li><strong>Snapshot</strong> is a position in the log. It safely answers stable questions, like “has this ever passed?” or “is this run done?” A question like “is this still valid now?” always needs a fresh check.</li>
+<li><strong>Replay</strong> rebuilds every view from the log. Agent output is recorded as commits and facts, so replay never calls the model again, the same idea as <a href="https://docs.temporal.io/workflows">Temporal</a>.</li>
+<li><strong>Rollback</strong> adds a <code>reverted</code> fact and runs <code>git revert</code>. Nothing is deleted. A side effect outside git, like a sent email or a deploy, needs its own undo step in the runbook.</li>
+<li><strong>Fork</strong> creates a new item with a link to its parent. <strong>Merge</strong> follows the <code>writes</code> rules. If two writers collide on the same fact, the hub records a conflict for a human to settle.</li>
+</ul>
+<h3 id="what-to-build-first">What to build first</h3>
+<ol>
+<li><strong>v0, one machine:</strong> one runbook, a log in SQLite, and the runner as a separate process under its own user, with its own git clone. Add the <code>rb</code> CLI, and a Claude Code hook that reminds the agent to propose instead of declaring itself done. This proves the agent can’t skip a gate. It also tests the open question: does the agent reach each gate when the runbook gives only hints, not a fixed path?</li>
+<li><strong>v1, two machines:</strong> the hub as a small web service, claims with leases and heartbeats, and the checker in its own container. Two agents on two machines share one item log. This proves state across agents and machines.</li>
+<li><strong>v2, the hub:</strong> the registry with three scopes, inputs that mark items suspect, and a dashboard that shows only failures and items waiting for approval. This proves the hub.</li>
+</ol>
+<p>Don’t write it all from scratch:</p>
+<ul>
+<li>From <a href="https://github.com/henryqin1997/statem">StateM</a> (Apache-2.0): the order of checks before a move, and its check types.</li>
+<li>From <a href="https://github.github.com/gh-aw/">GitHub Agentic Workflows</a>: the pattern of “propose, then a separate job checks and applies.”</li>
+<li>From <a href="https://github.com/gastownhall/beads">Beads</a>: the lease and heartbeat rules.</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>
+<p><a href="https://people.smp.uq.edu.au/YoniNazarathy/Control4406_2014/resources/KaelblingLittmanCassandra1998.pdf">Planning and acting in partially observable stochastic domains</a> - Kaelbling, Littman, and Cassandra (1998). An agent that can’t see the whole world keeps a <strong>belief</strong>: a probability over the states it might be in, updated from what it did and what it saw. The single most likely state is not enough. What I learn: a status in the hub is an estimate, not a fact. It should say how sure it is and where the evidence came from, and it should be checked again only when knowing is worth more than the check costs.</p>
+</li>
+<li>
+<p><a href="https://arxiv.org/abs/2305.04388">Language Models Don’t Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting</a> - Turpin et al. (2023). A model’s step-by-step explanation can sound right and still leave out what really drove its answer. Of 426 explanations for biased answers, only one mentioned the bias. What I learn: an agent’s own report is never evidence. Only checks that the runner runs itself should count.</p>
+</li>
+<li>
+<p><a href="https://web.archive.org/web/2015/http://www.inf.ed.ac.uk/teaching/courses/seoc/2006_2007/resources/statecharts.pdf">Statecharts: A Visual Formalism for Complex Systems</a> - Harel (1987). State diagrams stay readable for big systems once you add depth, parallel parts, and signals between them. A move happens when an event arrives and a condition holds at that moment. Long activities are started and stopped by instant actions. What I learn: a runbook can be written as a statechart. Each gate needs a trigger and a fail branch, and the agent’s work is an activity that the runner starts and stops.</p>
+</li>
+<li>
+<p><a href="https://www.cs.princeton.edu/courses/archive/fall17/cos418/papers/chandy_lamport.pdf">Distributed Snapshots: Determining Global States of Distributed Systems</a> - Chandy and Lamport (1985). You can record a consistent picture of many processes without stopping them. The picture may match no real moment, but it is safe for <strong>stable properties</strong>, the ones that stay true once they become true. What I learn: a dashboard can answer “has this ever passed?” from a snapshot, but “is this still valid now?” needs a fresh check.</p>
+</li>
+<li>
+<p><a href="https://docs.temporal.io/workflows">Temporal Workflow</a> - Temporal’s docs. The event history is the source of truth. After a crash, the code replays the history, and calls to the outside world, including LLM calls, run once and their results are reused, not recomputed. What I learn: replay the record, never the model.</p>
+</li>
+<li>
+<p><a href="/blogs/blog/state-engineering/">State Engineering</a> - My earlier post. You don’t know the steps of a piece of work when you start, so you declare where the state lives, who may write which part, and what makes an entry expire. What I learn: this draft starts where that post stops, with what we can actually do with state.</p>
+</li>
+<li>
+<p><a href="https://github.com/henryqin1997/statem">StateM</a> - A command-line runbook for long agent runs: states, allowed moves, and checks that must pass before each move, with a saved history. What I learn: the shape is right, but the checks run inside the agent’s own shell, so the agent can get around them. The runner must live where the agent can’t reach it.</p>
+</li>
+<li>
+<p><a href="https://arxiv.org/abs/2608.15089">StateM: Reaching 95.3% Raw Accuracy, or a $15 Frontier Run, on Terminal-Bench 2.1 via Harness Scaling</a> - The StateM paper. Moving the state out of the model and checking each move makes the same models score higher, without new training. What I learn: structure outside the model pays off, but these results come with a runbook tuned for the benchmark.</p>
+</li>
+<li>
+<p><a href="https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04">Welcome to Gas Town</a> - Steve Yegge’s post on running 20 to 30 coding agents at once. Work is a fixed chain of steps stored as issues in git, so it survives crashes, and the outcome is “guaranteed” even though the path is not. What I learn: Gas Town fixes the path and guarantees that work finishes, not that it is right. My idea is the inverse: fix the gates, and loosen the path.</p>
+</li>
+<li>
+<p><a href="https://steve-yegge.medium.com/gas-town-from-clown-show-to-v1-0-c239d9a407ec">Gas Town: from Clown Show to v1.0</a> - Yegge’s follow-up. Gas Town is now in maintenance mode, and new work goes to its successor, Gas City, where you can build your own orchestrators from the same parts. What I learn: even the person who built it moved from one fixed orchestrator to a kit of parts.</p>
+</li>
+<li>
+<p><a href="https://github.com/gastownhall/beads">Beads</a> - The issue tracker under Gas Town, built for agents and synced through git. It has claims that expire, typed links between items, and a view of the work that is ready. What I learn: a claim with a time limit and a heartbeat is the right way to hand work between agents.</p>
+</li>
+<li>
+<p><a href="https://github.github.com/gh-aw/">GitHub Agentic Workflows</a> - Agent workflows written in markdown and run on GitHub Actions, in a locked-down container. The agent only proposes its writes, and a separate job checks them and applies them. What I learn: this is the clearest working example of “the agent proposes, the runner decides.”</p>
+</li>
+</ul>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2026 Locch. All rights reserved.
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.IhaC7xqn.js"></script> </body> </html>
