@@ -285,3 +285,72 @@ Speed also fools the person who feels it. In 2025, the research group [METR time
 You can't read fast enough, and you can't trust how fast it feels. So the answer is not to read faster. **You can't verify every line the AI writes, but you can verify what the lines are for.** The check moves to two places. The first is what the code should do, written down before the work starts as specs and tests that the human owns. The second is evidence that it works: open staging and watch the feature run end to end, the way a user would. State Engineering calls this the highest level of verification: does it behave right at the boundary a human touches? It won't tell you the code is clean. It tells you the feature works, and that is a check that still fits in a human day.
 
 This has limits, and I should name them. Someone still has to judge whether the tests are right, and that means reading them. And in regulated work, like card payments or banking, a named person must still review the code itself. As the leading builders show, checking behavior moves most of the reading up a level. It doesn't remove all of it.
+
+## My own working modes
+
+I am a developer, and I am still a learner, so my workflow is a little strange. I don't stay in one pattern. I switch between four modes, and I gave each one a name so I can tell myself which one I'm in.
+
+**Coach mode.** I describe what I want and my design. Then I ask the AI to break it into steps I can build. For each step, it coaches me from the overview down to the details and suggests code, until I finish the step myself. If I give up on a step, it can finish it for me, and then we move on. I loop like this until the work is done. The check is my own understanding, step by step.
+
+```mermaid
+flowchart LR
+  D["I describe the goal<br/>and my design"] --> S["AI breaks it into<br/>steps I can build"]
+  S --> C["AI coaches me:<br/>overview, then details,<br/>then code ideas"]
+  C --> Y{{"I finish the step:<br/>do I understand it?"}}
+  Y -->|"I give up"| F["AI finishes<br/>the step"]
+  F --> N["next step"]
+  Y -->|"done"| N
+  N -.->|"loop until done"| C
+  class Y check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+```
+
+**Plan-first mode.** When I don't want to type, I give a work item to the agent and ask: what is your plan, and what is your coding flow? It writes the plan down. I adjust it, approve it, and only then does it run. The check sits before any code exists, which is the cheapest place to catch a wrong idea.
+
+```mermaid
+flowchart LR
+  W["I give a<br/>work item"] --> P["agent writes its plan<br/>and coding flow"]
+  P --> A{{"I adjust<br/>and approve"}}
+  A -->|"not yet"| P
+  A -->|"approved"| E["agent executes<br/>the plan"]
+  class A check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+```
+
+**Walkthrough mode.** Sometimes the AI has already made something. Before I accept it, I ask it to give me its coding flow and explain what it did, step by step. If I can't follow the story, I don't accept the code. The check is after the code, but before it becomes mine.
+
+```mermaid
+flowchart LR
+  M["AI has already<br/>made a change"] --> X["AI explains its coding flow,<br/>step by step"]
+  X --> U{{"I check:<br/>can I follow it?"}}
+  U -->|"yes"| K["I accept it"]
+  U -->|"no"| Q["I ask more,<br/>or reject it"]
+  class U check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+```
+
+**Docs-first mode.** This is where I want to grow. I aim at the high-level work: architecture, the data model, frameworks, and third-party services. So I spend my time in `docs/`, not in `src/`. Once the docs are clear enough to build from, I ask the AI to break them into an implementation plan, with phases and tasks. Then it builds the tasks one by one, with a commit for each. My check moves up to the design: if the docs are right, each task only has to match them.
+
+```mermaid
+flowchart LR
+  D{{"I write docs/:<br/>architecture, data model,<br/>frameworks, third parties"}} --> P["AI breaks the docs into<br/>phases and tasks"]
+  P --> T["AI builds<br/>one task"]
+  T --> V{{"I check the task<br/>against the docs"}}
+  V --> C["commit"]
+  C -.->|"next task"| T
+  class D,V check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+```
+
+**One habit across all four: unstaged changes are my review area.** I keep the new work unstaged until I've checked it. My editor highlights every unstaged line, so I see at a glance what is new, and anything wrong is one revert away. I can focus on just the unstaged part. Only after I've checked it do I let it become a commit. In git, the unstaged changes are my "still being checked" zone, and a commit means "I have looked at this."
+
+```mermaid
+flowchart LR
+  A["AI or I<br/>change the code"] --> U["changes stay<br/>unstaged"]
+  U --> R{{"I review the highlighted lines:<br/>what is new?"}}
+  R -->|"wrong"| X["revert<br/>the unstaged part"]
+  X -.-> A
+  R -->|"verified"| C["commit"]
+  class R check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+```
