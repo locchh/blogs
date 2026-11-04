@@ -88,6 +88,8 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		</main>
 		<Footer />
 		<script>
+			import { mermaidConfig, withThemedChecks } from '../scripts/mermaidThemes.js';
+
 			const diagrams = Array.from(document.querySelectorAll('pre > code.language-mermaid'), (block) => {
 				const container = document.createElement('div');
 				container.classList.add('mermaid');
@@ -102,13 +104,11 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 					// Serialize renders so switching modes cannot race Mermaid's shared state.
 					rendering = rendering.then(async () => {
 						const { default: mermaid } = await import('mermaid');
-						mermaid.initialize({
-							startOnLoad: false,
-							theme: document.documentElement.dataset.theme === 'dark' ? 'dark' : 'default',
-						});
+						const mode = document.documentElement.dataset.theme ?? 'light';
+						mermaid.initialize(mermaidConfig(mode));
 						for (const { container, source } of diagrams) {
 							container.removeAttribute('data-processed');
-							container.textContent = source;
+							container.textContent = withThemedChecks(source, mode);
 						}
 						await mermaid.run({ nodes: diagrams.map(({ container }) => container) });
 						for (const { container } of diagrams) {
