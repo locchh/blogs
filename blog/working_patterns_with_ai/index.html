@@ -299,7 +299,7 @@
 <p>You can’t read fast enough, and you can’t trust how fast it feels. So the answer is not to read faster. <strong>You can’t verify every line the AI writes, but you can verify what the lines are for.</strong> The check moves to two places. The first is what the code should do, written down before the work starts as specs and tests that the human owns. The second is evidence that it works: open staging and watch the feature run end to end, the way a user would. State Engineering calls this the highest level of verification: does it behave right at the boundary a human touches? It won’t tell you the code is clean. It tells you the feature works, and that is a check that still fits in a human day.</p>
 <p>This has limits, and I should name them. Someone still has to judge whether the tests are right, and that means reading them. And in regulated work, like card payments or banking, a named person must still review the code itself. As the leading builders show, checking behavior moves most of the reading up a level. It doesn’t remove all of it.</p>
 <h2 id="my-own-working-modes">My own working modes</h2>
-<p>I am a developer, and I am still a learner, so my workflow is a little strange. I don’t stay in one pattern. I switch between four modes, and I gave each one a name so I can tell myself which one I’m in.</p>
+<p>I am a developer, and I am still a learner, so my workflow is a little strange. I don’t stay in one pattern. I switch between five modes, and I gave each one a name so I can tell myself which one I’m in.</p>
 <p><strong>Coach mode.</strong> I describe what I want and my design. Then I ask the AI to break it into steps I can build. For each step, it coaches me from the overview down to the details and suggests code, until I finish the step myself. If I give up on a step, it can finish it for me, and then we move on. I loop like this until the work is done. The check is my own understanding, step by step.</p>
 <pre><code class="language-mermaid">flowchart LR
   D["I describe the goal&#x3C;br/>and my design"] --> S["AI breaks it into&#x3C;br/>steps I can build"]
@@ -340,7 +340,17 @@
   class D,V check
   classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
 </code></pre>
-<p><strong>One habit across all four: unstaged changes are my review area.</strong> I keep the new work unstaged until I’ve checked it. My editor highlights every unstaged line, so I see at a glance what is new, and anything wrong is one revert away. I can focus on just the unstaged part. Only after I’ve checked it do I let it become a commit. In git, the unstaged changes are my “still being checked” zone, and a commit means “I have looked at this.”</p>
+<p><strong>Prompt-file mode.</strong> I write a <code>PROMPT.md</code> that describes what I want, and sometimes a plan too. Then I hand the file to the agent. Writing it down forces me to make the requirement clear, and I don’t have to think about the implementation details. The check is the file itself: if the agent gets it wrong, I first ask whether my <code>PROMPT.md</code> was clear. I often combine this with walkthrough mode, so the agent explains what it built before I accept it.</p>
+<pre><code class="language-mermaid">flowchart LR
+  P{{"I write PROMPT.md:&#x3C;br/>what I want,&#x3C;br/>maybe a plan"}} --> A["agent reads it&#x3C;br/>and builds"]
+  A --> W{{"walkthrough:&#x3C;br/>agent explains its flow"}}
+  W -->|"I can follow it"| K["I accept it"]
+  W -->|"something is off"| F["I fix PROMPT.md&#x3C;br/>first"]
+  F -.-> A
+  class P,W check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p><strong>One habit across all five: unstaged changes are my review area.</strong> I keep the new work unstaged until I’ve checked it. My editor highlights every unstaged line, so I see at a glance what is new, and anything wrong is one revert away. I can focus on just the unstaged part. Only after I’ve checked it do I let it become a commit. In git, the unstaged changes are my “still being checked” zone, and a commit means “I have looked at this.”</p>
 <pre><code class="language-mermaid">flowchart LR
   A["AI or I&#x3C;br/>change the code"] --> U["changes stay&#x3C;br/>unstaged"]
   U --> R{{"I review the highlighted lines:&#x3C;br/>what is new?"}}
