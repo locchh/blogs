@@ -288,7 +288,7 @@ This has limits, and I should name them. Someone still has to judge whether the 
 
 ## My own working modes
 
-I am a developer, and I am still a learner, so my workflow is a little strange. I don't stay in one pattern. I switch between four modes, and I gave each one a name so I can tell myself which one I'm in.
+I am a developer, and I am still a learner, so my workflow is a little strange. I don't stay in one pattern. I switch between five modes, and I gave each one a name so I can tell myself which one I'm in.
 
 **Coach mode.** I describe what I want and my design. Then I ask the AI to break it into steps I can build. For each step, it coaches me from the overview down to the details and suggests code, until I finish the step myself. If I give up on a step, it can finish it for me, and then we move on. I loop like this until the work is done. The check is my own understanding, step by step.
 
@@ -342,7 +342,20 @@ flowchart LR
   classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
 ```
 
-**One habit across all four: unstaged changes are my review area.** I keep the new work unstaged until I've checked it. My editor highlights every unstaged line, so I see at a glance what is new, and anything wrong is one revert away. I can focus on just the unstaged part. Only after I've checked it do I let it become a commit. In git, the unstaged changes are my "still being checked" zone, and a commit means "I have looked at this."
+**Prompt-file mode.** I write a `PROMPT.md` that describes what I want, and sometimes a plan too. Then I hand the file to the agent. Writing it down forces me to make the requirement clear, and I don't have to think about the implementation details. The check is the file itself: if the agent gets it wrong, I first ask whether my `PROMPT.md` was clear. I often combine this with walkthrough mode, so the agent explains what it built before I accept it.
+
+```mermaid
+flowchart LR
+  P{{"I write PROMPT.md:<br/>what I want,<br/>maybe a plan"}} --> A["agent reads it<br/>and builds"]
+  A --> W{{"walkthrough:<br/>agent explains its flow"}}
+  W -->|"I can follow it"| K["I accept it"]
+  W -->|"something is off"| F["I fix PROMPT.md<br/>first"]
+  F -.-> A
+  class P,W check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+```
+
+**One habit across all five: unstaged changes are my review area.** I keep the new work unstaged until I've checked it. My editor highlights every unstaged line, so I see at a glance what is new, and anything wrong is one revert away. I can focus on just the unstaged part. Only after I've checked it do I let it become a commit. In git, the unstaged changes are my "still being checked" zone, and a commit means "I have looked at this."
 
 ```mermaid
 flowchart LR
