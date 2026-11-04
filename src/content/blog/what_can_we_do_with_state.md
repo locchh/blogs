@@ -1,7 +1,7 @@
 ---
 title: "What Can We Do With State?"
 description: "The characteristics of state, and what we can do with it."
-pubDate: "2026-10-28"
+pubDate: "2026-11-04"
 author: "locchh"
 tags: ["state", "agent-architecture", "2026"]
 draft: false
