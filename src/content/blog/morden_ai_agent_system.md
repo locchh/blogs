@@ -1,6 +1,6 @@
 ---
 title: "Modern AI Agent System"
-description: "What comes after one developer with a coding agent: a fleet of agents that works for a whole organization, on every kind of work, while nobody watches. Six building blocks, one hub, and why it all depends on work that can be checked."
+description: "What comes after one developer with a coding agent: a fleet of agents that works for a whole organization, on every kind of work, while nobody watches. Seven building blocks, one hub, and why it all depends on a checker the agent cannot touch."
 pubDate: "2026-11-02"
 author: "locchh"
 draft: false
@@ -8,9 +8,9 @@ draft: false
 
 Today most people meet AI agents in one shape: one person with one coding agent. A developer works with [GitHub Copilot](https://docs.github.com/en/copilot) in the editor or [in the terminal](https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/overview). Or each person on a team runs [Claude Code](https://code.claude.com/docs/en/overview), [Codex](https://learn.chatgpt.com/docs/codex/cli), or [OpenCode](https://opencode.ai/docs) on their own machine. I think this is only the first step. A coding agent is one worker, and it still needs a person at the keyboard. The system I have in mind is larger. Call it a **fleet**: many agent teams in many sandboxes, run from one hub. It works for a whole organization, on every kind of work, not only code, and most of the time nobody watches it run. This post is my picture of that system. Each section stands on its own, so you can read them in any order.
 
-## Six building blocks and why each must exist
+## Seven building blocks and why each must exist
 
-Each block below exists because something specific breaks when it is missing. That gives a simple test for any new tool in this space: which failure does it remove? If nobody can name the failure, the tool is not a building block yet.
+Each block below exists because something specific breaks when it is missing. That gives a simple test for any new tool in this space: which failure does it remove? If nobody can name the failure, the tool is not a building block yet. The seventh block, the checker, is the one the other six depend on.
 
 ```mermaid
 flowchart TB
@@ -21,12 +21,16 @@ flowchart TB
   RT["4. provider + routing<br/>without it: one limit or outage stops the run"]
   MON["5. monitoring<br/>without it: nobody can say why a run failed"]
   ENV["6. sandbox + special runtime<br/>without it: the agent acts on the real system,<br/>or cannot do the work at all"]
+  CHK{{"7. checker<br/>without it: work that only looks done<br/>is handed back as done"}}
   MEM <-->|"reads, writes lessons"| AG
   HUBA -->|"installs the pack"| AG
   ORC -->|"assigns, starts, restarts"| AG
   AG -->|"model calls"| RT
   AG -->|"logs and traces"| MON
   AG -->|"acts inside"| ENV
+  AG -->|"hands back the result"| CHK
+  class CHK check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
 ```
 
 1. **Memory system and memory hub.** A model forgets everything when its session ends. Without memory, every run pays again to learn the same things: where things live, which tool is slow, which rule failed last time. Memory keeps what one run learned for the next one. The hub goes one step further and shares it across agents and sandboxes, so a lesson learned in one sandbox is read in all of them. [XERJ](https://xerj.org/) is one example of the memory part: a search engine built for agents that also keeps a separate memory for each agent. Sharing across sandboxes is still the hub's job. Memory is also where the agent system meets the context system, a point the section "One hub, many sandboxes" comes back to.
@@ -40,6 +44,8 @@ flowchart TB
 5. **Monitoring system.** When nobody watches the run, its logs and traces are the only witnesses. Without them, nobody can say why a run failed, what it cost, or which step wasted the most turns. The person who improves the system then has nothing to read. [Langfuse](https://langfuse.com/) traces agent runs so they can be evaluated and improved. [OpenTelemetry](https://opentelemetry.io/) is the open standard for collecting traces, metrics, and logs from any service.
 
 6. **Sandbox and special runtime environment.** An agent acts, and a normal machine is often the wrong place for it to act. First, its actions need a sandbox: a safe, throwaway place where they can be checked before they touch anything real. [E2B](https://e2b.dev/) gives every agent session its own small virtual machine for this. Second, some work only runs in a special environment that a normal machine cannot provide. Code for a mainframe needs a mainframe, or a faithful copy of one, to build, run, and test. The same holds for other platforms a normal machine cannot run. Without this block, the agent either acts on the real system or cannot do the work at all.
+
+7. **Checker.** Something must say whether the work is right, and it cannot be the agent. A model that grades its own work is too generous with itself. Without a checker, a run ends when the agent *says* it is done, and nobody can tell finished work from work that only looks finished. That breaks the other six blocks too: memory stores lessons from runs nobody verified, monitoring traces runs that failed quietly, and the person can never leave the loop. So the checker follows three rules. It runs outside the agent's reach, with its own credentials, so the agent can propose a result but never mark it as passed. It checks the result that was handed back, a commit or a filed form, not the agent's working copy. And it records its evidence, what it ran and what it read, so a later change to a rule can mark old results as stale. The tools can be rented, like CI, but the rules cannot: the tests, the business rules, and the reconciliation belong to the organization. [GitHub Agentic Workflows](https://github.github.com/gh-aw/) shows the pattern. The agent only proposes its writes, and a separate job with its own permissions checks them and applies them. [Working Patterns With AI](/blogs/blog/working_patterns_with_ai/) shows how this check moved further from the code as agents got faster.
 
 ## One hub, many sandboxes
 
@@ -63,7 +69,8 @@ flowchart TB
   KB["knowledge base + memory hub (owned)<br/>decisions, standards, test data, lessons"]
   RT["router<br/>picks the model, spreads the load"]
   LLM["model provider (rented)<br/>API, usage limits"]
-  SOR["system of record + checker (rented)<br/>where finished work lands, is checked,<br/>and the result goes back to the queue"]
+  CHK{{"checker (owned rules)<br/>its own credentials,<br/>checks what was handed back"}}
+  SOR["system of record (rented)<br/>where checked work lands,<br/>and the result goes back to the queue"]
   BL -->|"open items"| HUB
   HUB -->|"1. set up the sandbox<br/>2. clone the agent team"| SB1
   HUB --> SBN
@@ -71,14 +78,18 @@ flowchart TB
   SBN <--> KB
   SB1 -->|"model calls"| RT
   RT --> LLM
-  SB1 -->|"hand back finished work"| SOR
+  SB1 -->|"hand back work + evidence"| CHK
+  CHK -.->|"fail, with the reason"| SB1
+  CHK -->|"pass"| SOR
+  class CHK check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
 ```
 
-The **hub** holds the team packs, assigns each item to a sandbox, and collects every sandbox's logs. Inside the sandbox, a supervisor starts, stops, and restarts the team. The team is cloned, not built by hand. A lead and its specialists come from the same packs every time, so ten sandboxes run ten copies of the same team. Next to the team sits what the work needs to run: its tools, plus a mainframe or a copy of one where the work calls for it. Three things stay outside and are rented: the work queue, the system of record where finished work lands, and the model provider. Next to the system of record sits a **checker**, the part that says whether the work is right. For code it is the tests and CI. For back-office work it is business rules or reconciliation.
+The **hub** holds the team packs, assigns each item to a sandbox, and collects every sandbox's logs. Inside the sandbox, a supervisor starts, stops, and restarts the team. The team is cloned, not built by hand. A lead and its specialists come from the same packs every time, so ten sandboxes run ten copies of the same team. Next to the team sits what the work needs to run: its tools, plus a mainframe or a copy of one where the work calls for it. Three things stay outside and are rented: the work queue, the system of record where finished work lands, and the model provider. Between the sandbox and the system of record sits the **checker**. Nothing lands until it passes. For code it is the tests and CI. For back-office work it is business rules or reconciliation. A failed check goes back to the team with its reason, not to the person.
 
-The fleet diagram spreads the same building blocks across many sandboxes. The hub and the supervisors are orchestration, and the hub is also the agent hub. The router is the routing system. The knowledge base is memory. The logs are monitoring. The sandboxes and their runtimes are the sixth block.
+The fleet diagram spreads the same building blocks across many sandboxes. The hub and the supervisors are orchestration, and the hub is also the agent hub. The router is the routing system. The knowledge base is memory. The logs are monitoring. The sandboxes and their runtimes are the sixth block, and the checker is the seventh.
 
-One box is marked as owned: the knowledge base and memory hub. It is the one part nobody can sell you, and every team both reads it and writes lessons back. This is where the context system lives, and where it meets the agent system. [When Code Is Cheap](/blogs/blog/when_code_is_cheap/) splits today's work into two kinds: building the agent system, and building the context system around it. Most of this post is about the first kind. The second kind decides what the agents are given. That post explains why it is hard, and how the hard part changes as an organization grows.
+Besides the checker's rules, one box is marked as owned: the knowledge base and memory hub. Like those rules, it is a part nobody can sell you, and every team both reads it and writes lessons back. This is where the context system lives, and where it meets the agent system. [When Code Is Cheap](/blogs/blog/when_code_is_cheap/) splits today's work into two kinds: building the agent system, and building the context system around it. Most of this post is about the first kind. The second kind decides what the agents are given. That post explains why it is hard, and how the hard part changes as an organization grows.
 
 A fleet multiplies whatever context it is given, good or bad, so the context system matters more here. With one developer and one agent, a stale fact gives one wrong answer, and the developer usually catches it. With a fleet, the same stale fact is read by every team, on every item, until someone fixes it. So the knowledge base needs an owner, and a fact is fixed once, at the source, not in a hundred transcripts. The same holds for the lessons the teams write back. A wrong lesson spreads as fast as a right one, so the owner reviews a lesson before every team reads it as a rule.
 
@@ -86,7 +97,7 @@ The flow also runs the other way. The logs that reach the hub show which facts e
 
 ## The life of one task
 
-Every task runs through the same loop, whatever the work. Only the runtime and the checker change. A bug fix, an invoice that does not match, and a research question all pass through the same stages:
+Every task runs through the same loop, whatever the work. Only the runtime and the checker, the seventh block, change. A bug fix, an invoice that does not match, and a research question all pass through the same stages:
 
 ```mermaid
 flowchart TB
@@ -94,12 +105,14 @@ flowchart TB
   B --> C["read the rules<br/>knowledge base, decisions, past lessons"]
   C --> D["plan<br/>write down what done looks like"]
   D --> E["do the work<br/>in the runtime"]
-  E --> F{"does the<br/>checker pass?"}
+  E --> F{{"the checker:<br/>does it pass?"}}
   F -->|"no, time left"| E
   F -->|"yes"| G["hand back the result<br/>with its evidence"]
   F -->|"stuck or out of time"| H["hand back what is verified,<br/>name what failed"]
   G --> I["write the lesson,<br/>close the sandbox"]
   H --> I
+  class F check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
 ```
 
 Two stages matter most. The plan comes before the work and writes down what done looks like, so the checker has something to check against. The loop also has a way out. When the team is stuck or out of time, it hands back what it has verified and names what failed. That beats an answer that only looks finished. At the end, writing the lesson makes the next task of the same kind cheaper, and closing the sandbox makes sure it starts clean.
@@ -161,6 +174,7 @@ Coding harnesses matured first because code has the strongest built-in checker: 
 - [Langfuse](https://langfuse.com/). Open-source tracing and evaluation for agent runs.
 - [OpenTelemetry](https://opentelemetry.io/). The vendor-neutral standard for collecting traces, metrics, and logs and sending them to any backend.
 - [E2B](https://e2b.dev/). Cloud sandboxes that give each agent session its own isolated virtual machine.
+- [GitHub Agentic Workflows](https://github.github.com/gh-aw/). Agent workflows run on GitHub Actions, where the agent only proposes its writes and a separate job with its own permissions checks and applies them. A working example of a checker the agent can't touch.
 
 **Coding agents today**
 
@@ -173,5 +187,6 @@ Coding harnesses matured first because code has the strongest built-in checker: 
 **On this blog and in history**
 
 - [When Code Is Cheap](/blogs/blog/when_code_is_cheap/). Eleven questions for deciding on AI in a project. Its closing notes split today's work into the agent system and the context system, and its question on authority sets what an agent may do alone.
+- [Working Patterns With AI](/blogs/blog/working_patterns_with_ai/). Nine ways people work with AI, sorted by where the human checks the work, and why the check climbs from each line to tests to end-to-end behavior as agents get faster.
 - [Migration is a harness](/blogs/blog/migration_is_a_harness/). An earlier post arguing that migration is a long process run through a harness, not a one-time AI task. It quotes a migration kit's rule: fix the process that produced the code, not the code.
 - [Agner Krarup Erlang](https://en.wikipedia.org/wiki/Agner_Krarup_Erlang). His 1909 paper showed that telephone traffic follows the Poisson distribution. His 1917 paper gave the formulas for lost and delayed calls that were used to size telephone exchanges.
