@@ -21,7 +21,7 @@ I am also curious about these questions:
 - The characteristics of state, and what manipulations we can do with it?
   - ***The verbs of state.** Read, write, fork, merge, snapshot, rollback, replay. Each verb needs a different guarantee. For merge, link back to [State Engineering](/blogs/blog/state-engineering/) instead of repeating it.*
   - **Read** comes from a view that says how sure it is. A "no" from an old snapshot is already out of date.
-  - **Write** only adds facts, and each kind of fact has one kind of writer. The agent proposes, and something else decides. GitHub Agentic Workflows writes this into its spec: "Assignment input, a successful Actions run, or an output artifact alone cannot establish authority or Result."
+  - **Write** only adds facts, and each kind of fact has one kind of writer. The agent proposes, and something else decides. GitHub Agentic Workflows writes this into its work-queue docs: "Assignment input, a successful Actions run, or an output artifact alone cannot establish authority or Result."
   - **Fork** makes a new item with a link to its parent. **Merge** follows the write rules, and a collision becomes a conflict for a human.
   - **Snapshot, rollback, and replay** belong to the last question below.
   - Insight: most of these verbs are safe only because facts are never edited.
@@ -45,18 +45,18 @@ I am also curious about these questions:
   - Temporal calls its event history "the source of truth," and it "doesn't restore memory from a snapshot." It replays the history. Its docs list "LLM invocations" among the calls whose result is "reused, not recomputed."
   - So a snapshot is a position in the log, not a copy of memory.
   - Rollback adds a fact and never deletes one. Files go back with git. A side effect outside git needs its own undo step.
-  - A long-running item must remember which version of the runbook it ran under, the way Temporal versions workflows that run for months.
+  - A long-running item must remember which version of the runbook it ran under, the way Temporal versions workflows that run for months or years.
 
 - ***Personal thought, an open question.** How can an agent notice that its belief has drifted from the real state before someone else does?*
   - *A first answer, still open: mark an item suspect when something it read has changed, and run cheap checks again on a schedule. But that only catches drift in what was recorded. The world outside the log stays hidden.*
 
 ## My vision: a state CLI and an online platform
 
-I think the next step is a small tool that owns the state, so the agents don't have to. It has two parts, and they do different jobs.
+I think the next step is a system that owns the state, so the agents don't have to. It has two parts, and they do different jobs.
 
-The first part is a **CLI** that keeps the state and changes it. It runs where the work runs, in the sandbox next to the agent. **State belongs to the work item, not to the workflow or the agent.** One migration unit may pass through a port runbook, then a review runbook, then a release runbook, handled by different agents on different machines. The CLI keeps one log of facts for it: what passed, against which runbook version, with what evidence. The status is just a view over that log, so snapshot and replay come for free. The CLI also runs the steps. **The agent proposes, and the CLI decides.** A rule engine inside it owns the moves between steps, and the agent can only ask to move. The CLI should stay thin, though. It stores only what git doesn't hold, and points to commits instead of copying them, because the repo is still its own best state.
+The first part is a **CLI** that keeps the state and changes it. It runs where the work runs, in the sandbox next to the agent. **State belongs to the work item, not to the workflow or the agent.** One migration unit may pass through a port runbook, then a review runbook, then a release runbook, handled by different agents on different machines. The CLI keeps a log of facts for it: what passed, against which runbook version, with what evidence. The platform keeps a copy of that log, so the next agent, on any machine, continues the same log. The status is just a view over that log, so snapshot and replay come for free. The CLI also runs the steps. **The agent proposes, and the CLI decides.** A rule engine inside it owns the moves between steps, and the agent can only ask to move. The CLI should stay thin, though. It stores only what git doesn't hold, and points to commits instead of copying them, because the repo is still its own best state.
 
-The second part is an **online platform**, and it has several jobs. One of them is the **runbook hub**. A runbook is a workflow written down once: the steps, the check at each gate, and who may write which part of the state. The hub keeps runbooks under version control at three scales, like packages in a registry: light ones for one person, shared ones for a team, and versioned, audited ones for an organization. The CLI pulls a runbook from the hub at a fixed version. The platform is also where the work is watched. Every CLI sends its facts and traces back, so one dashboard shows every item, and a person only opens the ones that failed or are waiting for approval.
+The second part is an **online platform**, and it has several jobs. One of them is the **runbook hub**. A runbook is a workflow written down once: the steps, the check at each gate, and who may write which part of the state. The hub keeps runbooks under version control at three scales, like packages in a registry: light ones for one person, shared ones for a team, and versioned, audited ones for an organization. The CLI pulls a runbook from the hub at a fixed version. The platform is also where the work is watched. Every CLI sends its facts and traces up, so one dashboard shows every item, and a person only opens the ones that failed or are waiting for approval.
 
 Parts of this already exist. [StateM](https://github.com/henryqin1997/statem) checks steps and gates for one long agent run, but the agent can get around them. [Gas Town](https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04) and its successor, Gas City, keep work state across many agents, but they trust the agent's own report. [GitHub Agentic Workflows](https://github.github.com/gh-aw/) runs agents in a sandbox and checks every write before it lands, but only on GitHub Actions. What I haven't found is a work item whose log of facts spans many runbooks, with the runbook version stamped on each fact, checked by a runner the agent can't touch, and a hub that shares runbooks at all three scales.
 
@@ -92,6 +92,7 @@ flowchart LR
   subgraph HUB["online platform"]
     REG["runbook hub<br/>runbooks under version control:<br/>personal, team, org"]
     CLAIM["claims<br/>lease + heartbeat"]
+    SYNC[("item logs, synced<br/>any machine can continue")]
     MON["monitoring + tracing<br/>every item, every run"]
     DASH["dashboard<br/>by exception"]
   end
@@ -107,7 +108,8 @@ flowchart LR
   VIEW -->|"rb next"| AG
   REG -->|"rb pull runbook@version"| RUN
   RUN <-->|"rb claim, heartbeat"| CLAIM
-  VIEW -->|"sync facts + traces"| MON
+  LOG <-->|"sync facts"| SYNC
+  SYNC --> MON
   MON --> DASH
   class RUN,CHK check
   classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
@@ -117,7 +119,7 @@ flowchart LR
 - **The runner** is the only part that moves an item. The agent calls `rb` like any command, but the CLI keeps its log and runs its checks as a separate process under its own user, so the agent can ask but cannot write. This is the lesson from [StateM](https://github.com/henryqin1997/statem), whose checks run in the agent's own shell and can be skipped.
 - **The checker** runs each gate against a commit, not against the agent's working copy. It records what it read, so a later change can be traced back.
 - **The item log** is the source of truth. Status, confidence, and the handoff summary are all views computed from it.
-- **The online platform** has several parts. The **runbook hub** is one of them: it keeps runbooks under version control, stored by content hash, at three scopes: personal, team, and organization. The platform also hands out claims, because giving out work is the one thing that needs coordination across machines. And it collects the facts and traces from every CLI, for monitoring, tracing, and a dashboard that shows only what needs a person.
+- **The online platform** has several parts. The **runbook hub** is one of them: it keeps runbooks under version control, stored by content hash, at three scopes: personal, team, and organization. The platform also hands out claims, because giving out work is the one thing that needs coordination across machines. It keeps a synced copy of every item log, so a claim on another machine starts from the same facts. And it collects the facts and traces from every CLI, for monitoring, tracing, and a dashboard that shows only what needs a person.
 - **Git** keeps the code. Neither part copies it. They only store pointers to commits, because the repo is still its own best state.
 
 ### A runbook fixes the gates, not the path
@@ -169,7 +171,7 @@ Every fact is one line, added and never changed:
               "read": ["rules/port.md@v7", "fixtures@3f9"]}}
 ```
 
-The `by` field matters most. A `proposed` or `note` fact from an agent is kept for the record, but it never satisfies a gate. Only the runner writes `gate_passed`. The `read` field is the dependency edge: when `rules/port.md` changes, the runner finds every item that read the old version and marks it `suspect`. The runbook's `inputs` list is only a hint. What marks an item suspect is what the checker actually read, recorded in `read`, because a hand-written list can leave things out.
+The `by` field matters most. A `proposed` or `note` fact from an agent is kept for the record, but it never satisfies a gate. Only the runner writes `gate_passed`. The `read` field is the dependency edge: when `rules/port.md` changes, the platform finds every item that read the old version, and each item's runner marks it `suspect`. The runbook's `inputs` list is only a hint. What marks an item suspect is what the checker actually read, recorded in `read`, because a hand-written list can leave things out.
 
 ### The life of one work item
 
@@ -184,6 +186,7 @@ stateDiagram-v2
   checking --> passed: gate passed
   passed --> queued: next state or next runbook
   passed --> done: last gate
+  claimed --> queued: the lease expired
   working --> queued: the lease expired
   passed --> suspect: an input changed
   done --> suspect: an input changed
@@ -204,7 +207,7 @@ sequenceDiagram
   participant H as online platform
   participant G as git
   R->>H: rb pull port-unit@3, rb claim unit-412
-  H-->>R: runbook, lease
+  H-->>R: runbook, lease, the item's log so far
   R-->>A: current state, handoff summary
   loop while working
     R->>H: heartbeat
@@ -249,7 +252,7 @@ Don't write it all from scratch:
 
 - [Temporal Workflow](https://docs.temporal.io/workflows) - Temporal's docs. The event history is the source of truth. After a crash, the code replays the history, and calls to the outside world, including LLM calls, run once and their results are reused, not recomputed. What I learn: replay the record, never the model.
 
-- [State Engineering](/blogs/blog/state-engineering/) - My earlier post. You don't know the steps of a piece of work when you start, so you declare where the state lives, who may write which part, and what makes an entry expire. What I learn: this draft starts where that post stops, with what we can actually do with state.
+- [State Engineering](/blogs/blog/state-engineering/) - My earlier post. You don't know the steps of a piece of work when you start, so you declare where the state lives, who may write which part, and what makes an entry expire. What I learn: this post starts where that one stops, with what we can actually do with state.
 
 - [StateM](https://github.com/henryqin1997/statem) - A command-line runbook for long agent runs: states, allowed moves, and checks that must pass before each move, with a saved history. What I learn: the shape is right, but the checks run inside the agent's own shell, so the agent can get around them. The runner must live where the agent can't reach it.
 
