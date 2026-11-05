@@ -75,14 +75,14 @@
 </ul>
 </li>
 </ul>
-<h2 id="my-vision-a-runbook-hub">My vision: a runbook hub</h2>
-<p>I think the next step is an app that owns the state, so the agents don’t have to. I call it a <strong>runbook hub</strong>.</p>
-<p>A runbook is a workflow written down once: the steps, the check at each gate, and who may write which part of the state. The hub keeps runbooks at three scales, like packages in a registry: light ones for one person, shared ones for a team, and versioned, audited ones for an organization. A small CLI clones a runbook and an agent pack into a sandbox. Inside, a runner enforces the steps. <strong>The agent proposes, and the runner decides.</strong> A rule engine owns the moves between steps. An orchestrator agent only plans and suggests.</p>
-<p>The real job of the hub is state. <strong>State belongs to the work item, not to the workflow or the agent.</strong> One migration unit may pass through a port runbook, then a review runbook, then a release runbook, handled by different agents on different machines. The hub keeps one log of facts for it: what passed, against which runbook version, with what evidence. The status is just a view over that log, so snapshot and replay come for free. An agent claims an item before it works on it, and the claim expires if the agent crashes. The hub should stay thin, though. It stores only what git doesn’t hold, and points to commits instead of copying them, because the repo is still its own best state.</p>
+<h2 id="my-vision-a-state-cli-and-a-runbook-hub">My vision: a state CLI and a runbook hub</h2>
+<p>I think the next step is a small tool that owns the state, so the agents don’t have to. It has two parts, and they do different jobs.</p>
+<p>The first part is a <strong>CLI</strong> that keeps the state and changes it. It runs where the work runs, in the sandbox next to the agent. <strong>State belongs to the work item, not to the workflow or the agent.</strong> One migration unit may pass through a port runbook, then a review runbook, then a release runbook, handled by different agents on different machines. The CLI keeps one log of facts for it: what passed, against which runbook version, with what evidence. The status is just a view over that log, so snapshot and replay come for free. The CLI also runs the steps. <strong>The agent proposes, and the CLI decides.</strong> A rule engine inside it owns the moves between steps, and the agent can only ask to move. The CLI should stay thin, though. It stores only what git doesn’t hold, and points to commits instead of copying them, because the repo is still its own best state.</p>
+<p>The second part is the <strong>runbook hub</strong>, an online platform. A runbook is a workflow written down once: the steps, the check at each gate, and who may write which part of the state. The hub keeps runbooks under version control at three scales, like packages in a registry: light ones for one person, shared ones for a team, and versioned, audited ones for an organization. The CLI pulls a runbook from the hub at a fixed version. The hub is also where the work is watched. Every CLI sends its facts and traces back, so one dashboard shows every item, and a person only opens the ones that failed or are waiting for approval.</p>
 <p>Parts of this already exist. <a href="https://github.com/henryqin1997/statem">StateM</a> checks steps and gates for one long agent run, but the agent can get around them. <a href="https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04">Gas Town</a> and its successor, Gas City, keep work state across many agents, but they trust the agent’s own report. <a href="https://github.github.com/gh-aw/">GitHub Agentic Workflows</a> runs agents in a sandbox and checks every write before it lands, but only on GitHub Actions. What I haven’t found is a work item whose log of facts spans many runbooks, with the runbook version stamped on each fact, checked by a runner the agent can’t touch, and a hub that shares runbooks at all three scales.</p>
 <p>One question I can’t answer yet. <a href="/blogs/blog/state-engineering/">State Engineering</a> says you don’t know the steps of a piece of work when you start. So can a runbook fix the gates without fixing the path?</p>
 <h2 id="from-questions-to-a-design">From questions to a design</h2>
-<p>The vision ended on an open question. This design is my bet on the answer, and the first build below is how to test it. Each question above turns into one part of the runbook hub. Here is the map from question to rule to the part that enforces it:</p>
+<p>The vision ended on an open question. This design is my bet on the answer, and the first build below is how to test it. Each question above turns into one part of the design. Most of them land in the CLI, because that is where the state lives. Here is the map from question to rule to the part that enforces it:</p>
 
 
 
@@ -123,53 +123,54 @@
 
 
 
-<table><thead><tr><th>Question</th><th>Design rule</th><th>Part that enforces it</th></tr></thead><tbody><tr><td>Seen state versus real state</td><td>Every status is an estimate with a confidence level and a pointer to its evidence. An agent’s own claim never passes a gate.</td><td>views over the log, and the checker</td></tr><tr><td>The verbs of state</td><td>Read, write, fork, merge, snapshot, rollback, and replay are API calls, each with its own rule. Facts are only added, never edited.</td><td>the item log</td></tr><tr><td>What triggers a transition</td><td>A move needs a named event and a gate that passes at that moment. Every gate has a fail branch.</td><td>the runner</td></tr><tr><td>One state across sessions, agents, and machines</td><td>State belongs to the work item. An item has one holder at a time, through a claim that expires.</td><td>claims and the item log</td></tr><tr><td>Snapshot and replay</td><td>A snapshot is a position in the log. Replay rebuilds views from recorded facts and never calls the model again.</td><td>the item log</td></tr><tr><td>How an agent notices drift</td><td>When an input changes, the items that depend on it become <strong>suspect</strong>. Cheap checks run again on a schedule.</td><td>the runner</td></tr></tbody></table>
+<table><thead><tr><th>Question</th><th>Design rule</th><th>Part that enforces it</th></tr></thead><tbody><tr><td>Seen state versus real state</td><td>Every status is an estimate with a confidence level and a pointer to its evidence. An agent’s own claim never passes a gate.</td><td>CLI: the views and the checker</td></tr><tr><td>The verbs of state</td><td>Read, write, fork, merge, snapshot, rollback, and replay are CLI commands, each with its own rule. Facts are only added, never edited.</td><td>CLI: the item log</td></tr><tr><td>What triggers a transition</td><td>A move needs a named event and a gate that passes at that moment. Every gate has a fail branch.</td><td>CLI: the runner</td></tr><tr><td>One state across sessions, agents, and machines</td><td>State belongs to the work item. An item has one holder at a time, through a claim that expires. Facts sync to the hub.</td><td>hub: claims and synced logs</td></tr><tr><td>Snapshot and replay</td><td>A snapshot is a position in the log. Replay rebuilds views from recorded facts and never calls the model again.</td><td>CLI: the item log</td></tr><tr><td>How an agent notices drift</td><td>When an input changes, the items that depend on it become <strong>suspect</strong>. Cheap checks run again on a schedule.</td><td>CLI: the runner, told of changes by the hub</td></tr></tbody></table>
 <h3 id="the-parts">The parts</h3>
 <pre><code class="language-mermaid">flowchart LR
   subgraph SB["sandbox, one per claim"]
     AG["agent&#x3C;br/>Claude Code or Codex"]
-    CLI["rb CLI&#x3C;br/>claim, next, propose, note"]
     WT["git worktree"]
+    subgraph CLI["rb CLI, under its own user"]
+      RUN{{"runner&#x3C;br/>the only part that&#x3C;br/>moves an item"}}
+      CHK{{"checker&#x3C;br/>runs gates on a commit"}}
+      LOG[("item log&#x3C;br/>append-only facts")]
+      VIEW["views&#x3C;br/>status, confidence,&#x3C;br/>handoff summary"]
+    end
   end
-  subgraph HUB["runbook hub"]
-    REG["registry&#x3C;br/>runbooks by version:&#x3C;br/>personal, team, org"]
-    RUN{{"runner&#x3C;br/>the only part that&#x3C;br/>moves an item"}}
+  subgraph HUB["runbook hub, online"]
+    REG["registry&#x3C;br/>runbooks under version control:&#x3C;br/>personal, team, org"]
     CLAIM["claims&#x3C;br/>lease + heartbeat"]
-    LOG[("item log&#x3C;br/>append-only facts")]
-    VIEW["views&#x3C;br/>status, confidence,&#x3C;br/>handoff summary"]
+    MON["monitoring + tracing&#x3C;br/>every item, every run"]
+    DASH["dashboard&#x3C;br/>by exception"]
   end
-  CHK{{"checker&#x3C;br/>its own credentials,&#x3C;br/>runs gates on a commit"}}
   GIT[("git remote&#x3C;br/>the code")]
-  DASH["dashboard&#x3C;br/>phone or web,&#x3C;br/>by exception"]
-  AG --> CLI
+  AG -->|"rb propose, rb note"| RUN
   AG --> WT
-  WT -->|"push a commit"| GIT
-  CLI -->|"claim, heartbeat"| CLAIM
-  CLI -->|"propose + commit"| RUN
-  REG -->|"runbook at a version"| RUN
+  WT -->|"push"| GIT
   RUN -->|"run the gate"| CHK
   CHK -->|"reads the commit"| GIT
   CHK -->|"result + evidence"| RUN
   RUN -->|"append facts"| LOG
-  CLAIM -->|"append facts"| LOG
   LOG --> VIEW
-  VIEW -->|"current step + summary"| CLI
-  VIEW --> DASH
+  VIEW -->|"rb next"| AG
+  REG -->|"rb pull runbook@version"| RUN
+  RUN &#x3C;-->|"rb claim, heartbeat"| CLAIM
+  VIEW -->|"sync facts + traces"| MON
+  MON --> DASH
   class RUN,CHK check
   classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
 </code></pre>
 <ul>
-<li><strong>The sandbox</strong> holds the agent, a git worktree, and the <code>rb</code> CLI. The agent can read its current step and propose a move. It cannot write a gate result, and it cannot move the item.</li>
-<li><strong>The runner</strong> is the only part that moves an item. It runs in its own process, with its own credentials, where the agent can’t reach it. This is the lesson from <a href="https://github.com/henryqin1997/statem">StateM</a>, whose checks run in the agent’s own shell and can be skipped.</li>
+<li><strong>The <code>rb</code> CLI</strong> keeps the state and changes it. It holds the item log, the views, the runner, and the checker. Every verb of state is one of its commands: <code>rb claim</code>, <code>rb next</code>, <code>rb propose</code>, <code>rb snapshot</code>, <code>rb replay</code>, <code>rb revert</code>, <code>rb fork</code>.</li>
+<li><strong>The runner</strong> is the only part that moves an item. The agent calls <code>rb</code> like any command, but the CLI keeps its log and runs its checks as a separate process under its own user, so the agent can ask but cannot write. This is the lesson from <a href="https://github.com/henryqin1997/statem">StateM</a>, whose checks run in the agent’s own shell and can be skipped.</li>
 <li><strong>The checker</strong> runs each gate against a commit, not against the agent’s working copy. It records what it read, so a later change can be traced back.</li>
 <li><strong>The item log</strong> is the source of truth. Status, confidence, and the handoff summary are all views computed from it.</li>
-<li><strong>The registry</strong> stores runbooks by content hash, at three scopes: personal, team, and organization.</li>
-<li><strong>Git</strong> keeps the code. The hub only stores pointers to commits, because the repo is still its own best state.</li>
+<li><strong>The runbook hub</strong> is the online platform. Its registry keeps runbooks under version control, stored by content hash, at three scopes: personal, team, and organization. It also hands out claims, because giving out work is the one thing that needs coordination across machines. And it collects the facts and traces from every CLI, for monitoring, tracing, and a dashboard that shows only what needs a person.</li>
+<li><strong>Git</strong> keeps the code. Neither part copies it. They only store pointers to commits, because the repo is still its own best state.</li>
 </ul>
 <h3 id="a-runbook-fixes-the-gates-not-the-path">A runbook fixes the gates, not the path</h3>
 <p>A runbook is a statechart. Each state is a milestone with an exit gate. The text inside a state is a hint, not a fixed path, so the agent can find its own way to the gate. Unlike <a href="https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04">Gas Town</a>, which fixes the steps and lets agents judge the work, this fixes the judgment and lets the agent choose the steps.</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">runbook</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">port-unit</span></span>
-<span class="line"><span style="color:#85E89D">version</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">3</span><span style="color:#6A737D">                  # the registry stores it by content hash</span></span>
+<span class="line"><span style="color:#85E89D">version</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">3</span><span style="color:#6A737D">                  # the hub stores it by content hash</span></span>
 <span class="line"><span style="color:#85E89D">initial</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">plan</span></span>
 <span class="line"><span style="color:#85E89D">inputs</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">rules/port.md</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">fixtures/</span><span style="color:#E1E4E8">]   </span><span style="color:#6A737D"># a hint for the checker about what to watch</span></span>
 <span class="line"><span style="color:#85E89D">states</span><span style="color:#E1E4E8">:</span></span>
@@ -227,35 +228,37 @@
 <pre><code class="language-mermaid">sequenceDiagram
   autonumber
   participant A as agent in sandbox
-  participant H as hub
-  participant R as runner
-  participant C as checker
+  participant R as rb CLI: runner
+  participant C as rb CLI: checker
+  participant H as runbook hub
   participant G as git
-  A->>H: rb claim unit-412
-  H-->>A: lease, current state, handoff summary
+  R->>H: rb pull port-unit@3, rb claim unit-412
+  H-->>R: runbook, lease
+  R-->>A: current state, handoff summary
   loop while working
-    A->>H: rb heartbeat
+    R->>H: heartbeat
   end
   A->>G: push commit a1b2
   A->>R: rb propose --commit a1b2
   R->>C: run the gate for this state on a1b2
   C->>G: fetch a1b2
   C-->>R: passed, level 2, evidence, read set
-  R->>H: append gate_passed and moved
-  H-->>A: next state: review
+  R->>R: append gate_passed and moved
+  R-->>A: next state: review
+  R->>H: sync facts and traces
 </code></pre>
 <h3 id="snapshot-replay-and-rollback">Snapshot, replay, and rollback</h3>
 <ul>
 <li><strong>Snapshot</strong> is a position in the log. It safely answers stable questions, like “has this ever passed?” or “is this run done?” A question like “is this still valid now?” always needs a fresh check.</li>
 <li><strong>Replay</strong> rebuilds every view from the log. Agent output is recorded as commits and facts, so replay never calls the model again, the same idea as <a href="https://docs.temporal.io/workflows">Temporal</a>.</li>
 <li><strong>Rollback</strong> adds a <code>reverted</code> fact and runs <code>git revert</code>. Nothing is deleted. A side effect outside git, like a sent email or a deploy, needs its own undo step in the runbook.</li>
-<li><strong>Fork</strong> creates a new item with a link to its parent. <strong>Merge</strong> follows the <code>writes</code> rules. If two writers collide on the same fact, the hub records a conflict for a human to settle.</li>
+<li><strong>Fork</strong> creates a new item with a link to its parent. <strong>Merge</strong> follows the <code>writes</code> rules. If two writers collide on the same fact, the CLI records a conflict for a human to settle.</li>
 </ul>
 <h3 id="what-to-build-first">What to build first</h3>
 <ol>
-<li><strong>v0, one machine:</strong> one runbook, a log in SQLite, and the runner as a separate process under its own user, with its own git clone. Add the <code>rb</code> CLI, and a Claude Code hook that reminds the agent to propose instead of declaring itself done. This proves the agent can’t skip a gate. It also tests the open question: does the agent reach each gate when the runbook gives only hints, not a fixed path?</li>
-<li><strong>v1, two machines:</strong> the hub as a small web service, claims with leases and heartbeats, and the checker in its own container. Two agents on two machines share one item log. This proves state across agents and machines.</li>
-<li><strong>v2, the hub:</strong> the registry with three scopes, inputs that mark items suspect, and a dashboard that shows only failures and items waiting for approval. This proves the hub.</li>
+<li><strong>v0, the CLI on one machine:</strong> one runbook in a local file, the item log in SQLite, and the <code>rb</code> CLI running its runner and checker under its own user, with its own git clone. Add a Claude Code hook that reminds the agent to propose instead of declaring itself done. This proves the agent can’t skip a gate. It also tests the open question: does the agent reach each gate when the runbook gives only hints, not a fixed path?</li>
+<li><strong>v1, the hub:</strong> a small web service with the registry, so the CLI pulls runbooks by version, and with monitoring, so every CLI sends its facts and traces to one dashboard that shows only failures and items waiting for approval. This proves the hub.</li>
+<li><strong>v2, many machines:</strong> claims with leases and heartbeats from the hub, and inputs that mark items suspect. Two agents on two machines carry one item through several runbooks. This proves state across agents and machines.</li>
 </ol>
 <p>Don’t write it all from scratch:</p>
 <ul>
@@ -266,7 +269,7 @@
 <h2 id="references">References</h2>
 <ul>
 <li>
-<p><a href="https://people.smp.uq.edu.au/YoniNazarathy/Control4406_2014/resources/KaelblingLittmanCassandra1998.pdf">Planning and acting in partially observable stochastic domains</a> - Kaelbling, Littman, and Cassandra (1998). An agent that can’t see the whole world keeps a <strong>belief</strong>: a probability over the states it might be in, updated from what it did and what it saw. The single most likely state is not enough. What I learn: a status in the hub is an estimate, not a fact. It should say how sure it is and where the evidence came from, and it should be checked again only when knowing is worth more than the check costs.</p>
+<p><a href="https://people.smp.uq.edu.au/YoniNazarathy/Control4406_2014/resources/KaelblingLittmanCassandra1998.pdf">Planning and acting in partially observable stochastic domains</a> - Kaelbling, Littman, and Cassandra (1998). An agent that can’t see the whole world keeps a <strong>belief</strong>: a probability over the states it might be in, updated from what it did and what it saw. The single most likely state is not enough. What I learn: a status in the CLI is an estimate, not a fact. It should say how sure it is and where the evidence came from, and it should be checked again only when knowing is worth more than the check costs.</p>
 </li>
 <li>
 <p><a href="https://arxiv.org/abs/2305.04388">Language Models Don’t Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting</a> - Turpin et al. (2023). A model’s step-by-step explanation can sound right and still leave out what really drove its answer. Of 426 explanations for biased answers, only one mentioned the bias. What I learn: an agent’s own report is never evidence. Only checks that the runner runs itself should count.</p>
