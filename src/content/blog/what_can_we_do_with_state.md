@@ -7,6 +7,66 @@ tags: ["state", "agent-architecture", "2026"]
 draft: false
 ---
 
+## Overview of State
+
+**State** is what a system knows about where it is right now: the step it is on, and the data it carries with it.
+
+Every part of an AI system has state:
+
+- A **workflow** is on some step.
+- A **request** is awaiting approval or not.
+- A **model version** is active or deprecated.
+- An **agent** has made some amount of progress.
+
+Most production failures trace back to state that:
+
+- changed without a clear reason,
+- changed without a record, or
+- lived somewhere nobody owned.
+
+---
+
+### The Core Model
+
+> A state changes only when an **event** arrives and a **guard** allows it.
+
+```mermaid
+flowchart LR
+    S["State<br/>(+ the data it carries)"] --> G{"Guard<br/>(condition)"}
+    E["Event"] --> G
+    G -->|passes| T["Transition<br/>+ action / side effect"]
+    T --> N["New State<br/>(persisted + logged)"]
+    G -->|fails| R["Stay in current state<br/>+ record why"]
+```
+
+| Part | What it is | Example |
+|---|---|---|
+| **State** | Where the system is now, plus the data it holds | `awaiting_review`, with the draft attached |
+| **Event** | Something that happened and asks for a change | Reviewer clicks approve |
+| **Guard** | The condition that must hold for the change to be allowed | Reviewer has authority for this risk level |
+| **Transition** | The move itself, and any action it triggers | Publish the document, send a notification |
+| **New State** | Where the system ends up, saved so it survives restarts | `published` |
+
+---
+
+### Two Rules That Hold the Model Together
+
+**1. A failed guard means no move.**
+The system stays where it is and records why. This is the fail-safe default: decisions are based on permission, not on the absence of a reason to refuse.
+
+**2. Every transition is persisted and logged.**
+If you cannot reconstruct how the system reached its current state, you cannot debug it, audit it, or resume it.
+
+---
+
+### Where the Risk Lives
+
+> **The action on a transition is where the risk lives.**
+
+A state label is harmless. Sending an email, writing to a database, or calling a tool may not be reversible. This is why human review is routed by **stakes** and **reversibility**.
+
+##  My Concerns
+
 I think the state of the object or a work can be hidden from what we can see. And what is see can be not true or don't reflect the real state underneath.
 
 - ***Seen state versus real state.** An agent never holds the real state, only a belief about it ([Kaelbling, Littman & Cassandra 1998](https://people.smp.uq.edu.au/YoniNazarathy/Control4406_2014/resources/KaelblingLittmanCassandra1998.pdf), POMDP belief state). Even the model's reasoning text can leave out what really drove its answer ([Turpin et al. 2023](https://arxiv.org/abs/2305.04388)). Insight: treat every status as an estimate, and record where it came from.*
