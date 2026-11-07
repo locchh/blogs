@@ -17,8 +17,46 @@
 <h2 id="why-the-codex-workers-were-slower">Why the Codex workers were slower</h2>
 <p>The setup has two kinds of agent. One main agent, the <strong>orchestrator</strong>, hands out items. The <strong>workers</strong> each take one item and do the work. The code around them, here called the <strong>pack</strong>, starts the workers, feeds them their items, and gives them helper tools. The same coding job ran twice with the same orchestrator. The first time, the workers were <strong>Claude Code</strong> processes at medium effort. The second time, they were <strong>Codex</strong> subagents at high effort. The question was simple: is Codex good enough to replace Claude Code?</p>
 <h3 id="what-the-process-showed">What the process showed</h3>
-<p>On quality, the answer came back yes. The job had five items: some bugs, a change request, and a few small tasks. Both setups solved all five. They found the same fixes, and every fix held up on the first try.</p>
-<p>The clock told a different story. The Claude Code workers had finished all five items in 30 minutes. The Codex workers needed 35. Inside the workers, the gap was bigger: 31 minutes of worker time for Claude Code, and 50 for Codex. So Codex could do the work. It just took 19 more worker minutes to do it.</p>
+<p>On quality, the answer came back yes. The job had five items: two bugs, a change request, and two tasks. They did not arrive at once, but in three batches, at minutes 0, 14, and 29. Both setups solved all five. They found the same fixes, and every fix held up on the first try.</p>
+<p>Speed was another story. Measured from the moment each item arrived to the moment its fix was handed in, every item took longer with Codex:</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Claude Code</th>
+<th>Codex</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A bug</td>
+<td>8.5 min</td>
+<td>10.3 min</td>
+</tr>
+<tr>
+<td>A second bug, with a deadline</td>
+<td>9.0 min</td>
+<td>16.5 min</td>
+</tr>
+<tr>
+<td>A change request</td>
+<td>10.0 min</td>
+<td>11.3 min</td>
+</tr>
+<tr>
+<td>A larger task</td>
+<td>5.0 min</td>
+<td>10.6 min</td>
+</tr>
+<tr>
+<td>A small task</td>
+<td>1.0 min</td>
+<td>5.8 min</td>
+</tr>
+</tbody>
+</table>
+<p>The small task came in the last batch, at minute 29. So the last hand-in landed at about minute 30 with Claude Code, and at about minute 35 with Codex.</p>
+<p>The workers run side by side, several at once, so the clock hides most of the gap. A better total is <strong>worker time</strong>: how long each worker was busy, added up across all of them. Because the workers overlap, this total can be longer than the clock. It was 31 minutes for Claude Code and 50 for Codex. So Codex could do the work. Its workers just spent 19 more minutes doing it.</p>
 <p><strong>The Codex workers did not take many more steps. Each step simply took about twice as long.</strong> A step is one turn of the agent loop: the agent gets a tool result, decides what to do, and calls the next tool. Both sides needed a few dozen steps per item. But a median Claude step took about 3 seconds, and a median Codex step took 5 to 7. Over 50 to 70 steps, that adds 2.5 to 4 minutes to each item, which is most of the gap.</p>
 <p>Around the steps, the Codex setup lost time in two more places, and both came from the pack, not from Codex. First, each Codex worker started fresh for each item, so it had to learn the codebase again. On the four items that needed an edit, it read 13 to 18 files or searches first, and the first edit came 1.1 to 2.1 minutes in. The Claude workers kept one warm session for several items, after a warm-up that read the code once. They read only 3 to 10 files, and on three of the five items they made their first edit within a minute.</p>
 <p>Second, to start each Codex worker, the orchestrator typed the worker’s whole brief into the spawn call. That took 12 to 21 seconds per worker, one after another, so workers started 30 to 80 seconds after each batch of new items arrived. Neither of these is a limit of Codex. Codex can send a new task to a worker that is already running. The pack just didn’t use it. (Keeping workers warm is not free either, as the token counts below show.)</p>
