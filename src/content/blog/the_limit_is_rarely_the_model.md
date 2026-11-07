@@ -15,9 +15,21 @@ The setup has two kinds of agent. One main agent, the **orchestrator**, hands ou
 
 ### What the process showed
 
-On quality, the answer came back yes. The job had five items: some bugs, a change request, and a few small tasks. Both setups solved all five. They found the same fixes, and every fix held up on the first try.
+On quality, the answer came back yes. The job had five items: two bugs, a change request, and two tasks. They did not arrive at once, but in three batches, at minutes 0, 14, and 29. Both setups solved all five. They found the same fixes, and every fix held up on the first try.
 
-The clock told a different story. The Claude Code workers had finished all five items in 30 minutes. The Codex workers needed 35. Inside the workers, the gap was bigger: 31 minutes of worker time for Claude Code, and 50 for Codex. So Codex could do the work. It just took 19 more worker minutes to do it.
+Speed was another story. Measured from the moment each item arrived to the moment its fix was handed in, every item took longer with Codex:
+
+| Item | Claude Code | Codex |
+|---|---|---|
+| A bug | 8.5 min | 10.3 min |
+| A second bug, with a deadline | 9.0 min | 16.5 min |
+| A change request | 10.0 min | 11.3 min |
+| A larger task | 5.0 min | 10.6 min |
+| A small task | 1.0 min | 5.8 min |
+
+The small task came in the last batch, at minute 29. So the last hand-in landed at about minute 30 with Claude Code, and at about minute 35 with Codex.
+
+The workers run side by side, several at once, so the clock hides most of the gap. A better total is **worker time**: how long each worker was busy, added up across all of them. Because the workers overlap, this total can be longer than the clock. It was 31 minutes for Claude Code and 50 for Codex. So Codex could do the work. Its workers just spent 19 more minutes doing it.
 
 **The Codex workers did not take many more steps. Each step simply took about twice as long.** A step is one turn of the agent loop: the agent gets a tool result, decides what to do, and calls the next tool. Both sides needed a few dozen steps per item. But a median Claude step took about 3 seconds, and a median Codex step took 5 to 7. Over 50 to 70 steps, that adds 2.5 to 4 minutes to each item, which is most of the gap.
 
