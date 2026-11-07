@@ -35,6 +35,29 @@ The main body of a post must read as **one argument**, not a stack of notes. Cou
 
 **When editing an existing post, do NOT touch:** the frontmatter, `mermaid` blocks, other code blocks and inline `code`, quoted text (keep quotes verbatim), links and their URLs, table structure, or the place of a personal thought in the post. You may simplify the words inside a table cell or a personal thought, but keep every row, column, link, and idea.
 
+## Clarity Check Before Publishing
+
+A post can be correct and still confuse. Reviews that ask "is this number right?" miss it, because the number *is* right. In November 2026 a published post set "finished all five items in 30 minutes" beside "50 minutes of worker time", and a reader asked how 50 minutes fit in 30. The post never said that one was clock time and the other was time summed over workers running side by side. So every post gets a second kind of review, which asks: **could a newcomer misread this?**
+
+**Rules for the text:**
+
+- **Every number says what it measures.** State its unit and scope: per step, per item, per worker, or in total; median or total; clock time or summed time; and which run or job it comes from.
+- **Never set two different measures side by side without saying how they differ.** Prefer the measure a reader can picture (time per item, from arrival to hand-in) over an aggregate.
+- **Every percentage and "N times" names its base.** "35% fewer tokens" must say fewer than what.
+- **Define a term before its first use**, in one plain clause. This covers both the post's own words (job, pack, slot, hand-off, evidence) and outside jargon.
+- **Name the thing, not "it" or "the run".** Once a post has two runs, two scales, or two kinds of agent, give each a name and keep using it.
+- **Explain why** whenever the reader will ask "why?": why this setup, why this job, why the comparison is fair, and what else changed with it.
+- **A claim must follow from what is shown.** If two statements seem to contradict each other, fix one of them or explain the difference.
+- **Check sources that may have changed since you read them.** A sentence based on an older document can turn false. A post once said the practice setup "had no approval reviewer" after the setup had added it back.
+
+**Process:** before a post goes from `draft: true` to `draft: false`, and again before any later edit of a published post is committed:
+
+1. Run a **newcomer read**: a fresh sub-agent that did not write the post. It reads the post as a smart reader who knows nothing about the project, and lists every number, term, reference, or claim that reader could misunderstand, with a plain rewrite for each. It may check facts against the sources, but its job is confusion, not correctness.
+2. Fix every finding, or note why it is not a problem.
+3. Stamp the post: `scripts/clarity-stamp.sh src/content/blog/<post>.md`. The stamp records the file's content hash in `.claude/clarity/`.
+
+**The gate.** A project hook (`.claude/settings.json` → `scripts/clarity-gate.sh`) blocks any `git commit` that includes a published post whose stamp is missing or older than its last edit. Drafts are not gated. Any edit after the stamp means a new newcomer read before the commit can go through. In a true emergency, start the command with `CLARITY_SKIP=1` and do the read right after.
+
 ## Blog Mechanics
 
 - **Mermaid renders in the browser, not at build time.** `npm run build` does **not** catch diagram syntax errors — a broken diagram only shows as an error glyph on the live page. Before publishing a post that has diagrams, validate them with a headless mermaid `parse`/`render` pass.
