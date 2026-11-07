@@ -11,12 +11,13 @@
 		}
 		document.documentElement.dataset.theme = theme;
 	})();
-</script><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg?v=9"><link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon.png?v=9"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.2"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/the_limit_is_rarely_the_model/"><!-- Primary Meta Tags --><title>The Limit Is Rarely the Model</title><meta name="title" content="The Limit Is Rarely the Model"><meta name="description" content="What a coding-agent team actually spends its time and tokens on, and the loop that finds it."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/the_limit_is_rarely_the_model/"><meta property="og:title" content="The Limit Is Rarely the Model"><meta property="og:description" content="What a coding-agent team actually spends its time and tokens on, and the loop that finds it."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/the_limit_is_rarely_the_model/"><meta property="twitter:title" content="The Limit Is Rarely the Model"><meta property="twitter:description" content="What a coding-agent team actually spends its time and tokens on, and the loop that finds it."><link rel="stylesheet" href="/blogs/_astro/about.CUAELPAi.css">
+</script><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg?v=9"><link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon.png?v=9"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.2"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/the_limit_is_rarely_the_model/"><!-- Primary Meta Tags --><title>The Limit Is Rarely the Model</title><meta name="title" content="The Limit Is Rarely the Model"><meta name="description" content="What a coding-agent team actually spends its time and tokens on, the loop that finds it, and why the agent keeps stopping at the first answer."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/the_limit_is_rarely_the_model/"><meta property="og:title" content="The Limit Is Rarely the Model"><meta property="og:description" content="What a coding-agent team actually spends its time and tokens on, the loop that finds it, and why the agent keeps stopping at the first answer."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/the_limit_is_rarely_the_model/"><meta property="twitter:title" content="The Limit Is Rarely the Model"><meta property="twitter:description" content="What a coding-agent team actually spends its time and tokens on, the loop that finds it, and why the agent keeps stopping at the first answer."><link rel="stylesheet" href="/blogs/_astro/about.CUAELPAi.css">
 <style>main[data-astro-cid-bvzihdzo]{width:min(calc(100% - 2rem),1040px);max-width:100%;margin:2em auto}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:100%;max-width:var(--prose-width);margin:auto;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}@media(max-width:768px){main[data-astro-cid-bvzihdzo]{width:100%;margin:0}}
 </style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/blogs/" data-astro-cid-3ef6ksr2>Locch&#39;s Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/blogs/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blogs/blog/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/blogs/about/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="theme-switcher" role="group" aria-label="Display mode" hidden data-astro-cid-dz5h74bc> <button type="button" data-theme-choice="light" aria-pressed="false" data-astro-cid-dz5h74bc>Light</button> <button type="button" data-theme-choice="dark" aria-pressed="false" data-astro-cid-dz5h74bc>Dark</button> <button type="button" data-theme-choice="reading" aria-pressed="false" data-astro-cid-dz5h74bc>Reading</button> </div> <script type="module">const n=["light","dark","reading"],c=document.querySelector(".theme-switcher"),s=document.querySelectorAll("[data-theme-choice]"),o=window.matchMedia("(prefers-color-scheme: dark)");function r(){for(const e of s)e.setAttribute("aria-pressed",String(e.dataset.themeChoice===document.documentElement.dataset.theme))}function t(e,l=!1){if(n.includes(e)){if(document.documentElement.dataset.theme=e,l)try{localStorage.setItem("blog-theme",e)}catch{}r(),document.dispatchEvent(new CustomEvent("theme-change"))}}function i(){if(!a){try{if(n.includes(localStorage.getItem("blog-theme")??""))return}catch{}t(o.matches?"dark":"light")}}let a=!1;for(const e of s)e.addEventListener("click",()=>{a=!0,t(e.dataset.themeChoice??"light",!0)});window.addEventListener("storage",e=>{e.key!=="blog-theme"&&e.key!==null||(a=!1,e.newValue&&n.includes(e.newValue)?t(e.newValue):t(o.matches?"dark":"light"))});o.addEventListener("change",i);r();c&&(c.hidden=!1);</script>  <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo>  </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2026-11-07T00:00:00.000Z"> Nov 7, 2026 </time>  </div> <h1 data-astro-cid-bvzihdzo>The Limit Is Rarely the Model</h1> <hr data-astro-cid-bvzihdzo> </div>  <p>We run a team of coding agents in a timed contest: a 40-minute match, about ten backlog items released in waves, graded by hidden tests and evidence checks. One orchestrator (Codex CLI) spawns workers as subagents in its own session, and a helper (an MCP server we wrote) claims items, prepares a git worktree per worker, integrates and submits.</p>
 <p>In one day of practice the same model went from <strong>834 to 1000 points</strong>, from <strong>~380 to ~279 credit</strong> per match, and from a last submission at <strong>minute 38.9 to 31.8</strong>. We never changed the model. Every gain came from what surrounds it.</p>
-<p>This post is the corrected version of an earlier one. That one said “the system around the model matters” and stopped there. This one shows <strong>where, in a real CLI, the time and tokens go</strong>, and <strong>the loop we use to find the next thing to fix</strong> without fooling ourselves.</p>
-<h2 id="1-two-formulas">1. Two formulas</h2>
+<p>This post starts where that work started: the same job done once by Claude Code workers and once by Codex workers. Then it shows <strong>where, in a real CLI, the time and tokens go</strong>, the <strong>loop we use to find the next thing to fix</strong> without fooling ourselves, and why the agent helping us kept stopping at the first comfortable answer.</p>
+<p>Two words used throughout: a <strong>match</strong> is one run of a timed job, and <strong>credit</strong> is the unit the model account charges, our measure of cost.</p>
+<h2 id="two-formulas-for-time-and-cost">Two formulas for time and cost</h2>
 <p>Everything below hangs on two products:</p>
 <ul>
 <li><strong>time of an item</strong> = waiting for a worker + <strong>steps × seconds per step</strong> + tool waits + hand-off hold</li>
@@ -29,8 +30,346 @@
 <li><strong>Shorten a wait between steps.</strong> These help once and don’t compound.</li>
 </ol>
 <p>Most of our early fixes were the second kind. More on that below.</p>
-<h2 id="2-what-the-cli-does-that-you-dont-see">2. What the CLI does that you don’t see</h2>
-<p>The earlier post blamed “the pack” in general terms. Here are the concrete mechanisms, each measured.</p>
+<h2 id="why-the-codex-workers-were-slower">Why the Codex workers were slower</h2>
+<p>The two formulas came out of one question. Before any arena existed, the same five-item practice job ran twice, and the answer looked like it was about the model.</p>
+<p>The comparison ran one coding job twice. The job was a timed exercise for teams of agents: a small web app for running a freelance business, and a list of items to do on it within one hour. The items were bugs to fix, a change to make, and small tasks. They were released over the hour, not all at the start, and after each hand-in, hidden tests checked whether the work was right. One agent working through the list alone would be slow, so the work is split between two kinds of agent. A main agent, the <strong>orchestrator</strong>, reads the list and hands out the items. <strong>Workers</strong> each take one item and fix it, several of them at the same time. A worker hands off its result to the orchestrator, and the orchestrator hands it in to the job server. Every hand-in must include <strong>evidence</strong>: logs and screenshots that show the fix works. Around them sits ordinary code that starts the workers and gives them their items and their helper tools. This post calls that code the <strong>pack</strong>.</p>
+<p>The exercise’s rules allow only Codex agents for the work, so workers built on Claude Code had to move to Codex. The question was simple: can Codex workers replace Claude Code workers? To answer it fairly, both runs used the same job and the same orchestrator. If only the workers change between two runs, any difference in the result belongs to the workers. The first time, the workers were <strong>Claude Code</strong> agents at medium effort. The second time, they were <strong>Codex</strong> agents at high effort. (Effort is a setting that tells the model how much to reason before it answers.) One more thing had to change with them: the part of the pack that starts the workers, because the two tools start agents in different ways. That change matters later.</p>
+<h3 id="what-the-work-showed">What the work showed</h3>
+<p>On quality, the answer came back yes. There were five items: two bugs, a change request, and two tasks, released in three batches, at minutes 0, 14, and 29. Both runs solved all five. They found the same fixes, and every fix passed the hidden tests on the first try.</p>
+<p>Speed was another story. Measured from the moment each item arrived to the moment its fix was handed in, every item took longer with Codex:</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Claude Code</th>
+<th>Codex</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A bug</td>
+<td>8.5 min</td>
+<td>10.3 min</td>
+</tr>
+<tr>
+<td>A second bug, with a deadline</td>
+<td>9.0 min</td>
+<td>16.5 min</td>
+</tr>
+<tr>
+<td>A change request</td>
+<td>10.0 min</td>
+<td>11.3 min</td>
+</tr>
+<tr>
+<td>A larger task</td>
+<td>5.0 min</td>
+<td>10.6 min</td>
+</tr>
+<tr>
+<td>A small task</td>
+<td>1.0 min</td>
+<td>5.8 min</td>
+</tr>
+</tbody>
+</table>
+<p>The small task came in the last batch, at minute 29. So the last hand-in landed at about minute 30 with Claude Code, and at about minute 35 with Codex.</p>
+<p>The workers run side by side, several at once, so the clock hides most of the gap. A better total is <strong>worker time</strong>: how long each worker was busy, added up across all of them. Because the workers overlap, this total can be longer than the clock. It was 31 minutes for Claude Code and 50 for Codex. (The Claude workers also did a warm-up before the job started; that is not in the 31 minutes.) So Codex could do the work. Its workers just spent 19 more minutes doing it.</p>
+<p>A worker’s time has two parts: the model choosing its next step, and the tools running. The tools took about the same time on both sides, about 18 minutes for Claude Code and 19 for Codex. The model part is where the gap was: about 13 minutes for Claude Code and 30 for Codex.</p>
+<p><strong>The Codex workers took only a few more steps. Each step simply took about twice as long.</strong> A step is one turn of the agent loop: the agent gets a tool result, decides what to do, and calls the next tool. Items took between 13 and 70 steps on both sides, and Codex took about a quarter more steps in total. But a median Claude step took about 3 seconds, and a median Codex step took 5 to 7. On a large item of 50 to 70 steps, that adds 2.5 to 4 minutes. Across the five items, it is most of the 19 minutes.</p>
+<p>Around the steps, the Codex run lost time in two more places, and both came from the pack, not from Codex. First, each Codex worker started fresh for each item, so it had to learn the codebase again. The Claude workers each had a fixed place, a <strong>slot</strong>, and kept one warm session there for several items, after a warm-up that read the code once. On the four items that needed a code change, the Codex workers read 13 to 18 files or searches before their first edit, which came 1.1 to 2.1 minutes in. On the same four items, the Claude workers read 3 to 10 files, and on two of them they made their first edit within a minute. (On the small task, the Codex worker changed no code at all.)</p>
+<p>Second, to start each Codex worker, the orchestrator typed the worker’s whole brief into the spawn call. That took 12 to 21 seconds per worker, one after another, so workers started 30 to 80 seconds after each batch of new items arrived. This delay shows on the clock, in the per-item times above, not in worker time, because the worker had not started yet. Neither of these is a limit of Codex. Codex can send a new task to a worker that is already running. The pack just didn’t use it. (Keeping workers warm is not free either, as the token counts below show.)</p>
+<pre><code class="language-mermaid">flowchart LR
+  subgraph CL["Claude Code workers"]
+    direction TB
+    P["warm-up:&#x3C;br/>reads the code once"] --> I1["item 1"] --> I2["item 2,&#x3C;br/>same session"] --> I3["item 3,&#x3C;br/>same session"]
+  end
+  subgraph CX["Codex workers"]
+    direction TB
+    O["orchestrator types&#x3C;br/>the whole brief"] --> W1["new worker:&#x3C;br/>reads the code again"] --> H1["hands off&#x3C;br/>and ends"]
+    O --> W2["new worker:&#x3C;br/>reads the code again"] --> H2["hands off&#x3C;br/>and ends"]
+  end
+  CL ~~~ CX
+</code></pre>
+<p>The last thing the work showed was the strangest. Sorted by what each Codex step did, <strong>only a tenth of a worker’s time went into editing code.</strong> The rest was routine: reading files one at a time, running typecheck, build, and tests as separate steps, and writing evidence and result files by hand.</p>
+<pre><code class="language-mermaid">pie showData
+  title Codex worker time, by kind of step (%)
+  "Reading and searching" : 38
+  "Evidence and hand-off" : 30
+  "Builds, tests, and git" : 22
+  "Editing code" : 10
+</code></pre>
+<h3 id="what-the-tokens-showed">What the tokens showed</h3>
+<p>The first guess for the slow steps was the obvious one: Codex thinks longer. The token counts said otherwise.</p>
+<table>
+<thead>
+<tr>
+<th>Tokens, across the five items</th>
+<th>Claude Code</th>
+<th>Codex</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sent to the model (the context, with each request)</td>
+<td>18.3 million</td>
+<td>13.5 million</td>
+</tr>
+<tr>
+<td>Of that, served from cache</td>
+<td>97%</td>
+<td>97%</td>
+</tr>
+<tr>
+<td>Written</td>
+<td>140 thousand</td>
+<td>67 thousand</td>
+</tr>
+<tr>
+<td>Sent for every token written</td>
+<td>131</td>
+<td>201</td>
+</tr>
+<tr>
+<td>Written per step (median)</td>
+<td>318</td>
+<td>181</td>
+</tr>
+<tr>
+<td>Reasoning, as a share of what was written</td>
+<td>11%</td>
+<td>22%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>A typical step sends about fifty thousand tokens to write two or three hundred.</strong> Almost all of what is sent comes from the cache on both sides, so caching could not explain the gap. Reasoning could not either: it was only a fifth of what Codex wrote. The rest was the tool call itself: the command, the code, the patch.</p>
+<p>The tokens also confirmed the strange part of the process. Sorted by kind of step, <strong>editing code was only 18% of the tokens Codex wrote.</strong> Reading steps took 29%, evidence and hand-off 26%, and builds, tests, and git 26%. More than four fifths of the writing was not the fix. About a fifth of all tool-call text was the same text repeated, mostly long absolute paths copied into every command and patch.</p>
+<p>The warm sessions left a mark too. Claude’s sessions grew big, with a median context of 54 thousand tokens and up to 160 thousand. The fresh Codex workers stayed lean, with a median of 48 thousand and never more than 81 thousand. The middle request was close on both sides, but Claude’s long sessions and its warm-up pulled its total up, which is why it sent more tokens in all.</p>
+<p>But the real surprise was in the third row of the table. <strong>Claude Code wrote twice as many tokens as Codex, and still took less time.</strong> Tokens could not be the whole story. Something in how each tool turns tokens into time was different. The answer is inside the two tools.</p>
+<h3 id="inside-the-two-tools">Inside the two tools</h3>
+<p><strong>On the surface, the two loops are much alike.</strong> Both stream each answer. Both start a tool as soon as its input has fully arrived, while the rest of the answer is still streaming, so neither gets an edge from that. Both send the whole context with each request and lean on the cache to make it cheap. And Claude Code’s own loop is tight: from a tool result to the next request, it spends about 20 milliseconds.</p>
+<p>Both tools log every request, every block of each answer, and every tool call, so the two loops can be compared from the logs of the two runs. And Codex is open source, so its source at the exact release the Codex run used shows why its logs look the way they do.</p>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant S as worker slot, one session for many items
+  participant C as Claude Code
+  participant A as model server
+  participant T as tool
+  S->>C: next item's brief, in the same session
+  C->>A: streamed request, same prompt and tools, cached
+  A-->>C: the answer starts, a tool call arrives
+  par the answer keeps streaming
+    A-->>C: rest of the answer
+  and the tool may start early
+    C->>T: run the tool
+    T-->>C: result
+  end
+  Note over C,A: about 20 ms from a result to the next request
+  C->>A: next request
+</code></pre>
+<p>The differences sit in two places.</p>
+<p><strong>First, the route to the model server.</strong> Codex has two ways to talk to it. When it talks to OpenAI directly, it uses a WebSocket: one connection stays open across the many steps of a task, it is opened before the first request, and each new request sends only what was added since the last answer. The other way is plain HTTP, used for any model server Codex doesn’t know, and it resends the whole input every time. This run sent every request through a local proxy in front of the model accounts. Codex treats a proxy like that as an unknown server, so every Codex step was a fresh HTTP request through it. Resending alone is not the problem, since Claude Code resends everything too. The route is what differs.</p>
+<pre><code class="language-mermaid">flowchart LR
+  subgraph CC["Claude Code, this run"]
+    direction TB
+    c1["worker"] --> c2["resend the whole context"] --> c3["model server,&#x3C;br/>direct"]
+    c4["fixed cost about 0.8 s"]
+  end
+  subgraph HT["Codex, this run"]
+    direction TB
+    b1["worker"] --> b2["resend the whole context,&#x3C;br/>new HTTP request"] --> b3["proxy"] --> b4["model server"]
+    b5["fixed cost about 2.5 s,&#x3C;br/>about 1.5 s of it the proxy"]
+  end
+  subgraph WS["Codex, direct to OpenAI"]
+    direction TB
+    a1["worker"] --> a2["warm WebSocket,&#x3C;br/>send only the new items"] --> a3["model server,&#x3C;br/>direct"]
+    a4["not measured"]
+  end
+  CC ~~~ HT ~~~ WS
+  c3 ~~~ c4
+  b4 ~~~ b5
+  a3 ~~~ a4
+  class c4,b5,a4 note
+  classDef note fill:#fff4d6,stroke:#d9480f
+</code></pre>
+<p><strong>Second, a second model that approves actions.</strong> In this run, Codex sent many actions to an <strong>approval reviewer</strong>: a separate agent, at low effort, that reads a copy of the worker’s conversation and answers “allow” or not. Its rule for the pack’s helper tools is simple. A tool marked read-only skips review. A tool with no marking is treated as possibly risky, so it is reviewed. The pack’s helper tools carried no markings at all. So even a call that only read a brief was sent for review.</p>
+<p>Put together, one Codex step in this run looked like this:</p>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant W as Codex worker
+  participant M as model server, through a proxy
+  participant R as approval reviewer
+  participant T as tool
+  T-->>W: tool result
+  W->>M: new HTTP request, whole context resent
+  Note over W,M: about 2.5 s fixed, plus reasoning, before the first visible token
+  M-->>W: writes the next tool call
+  Note over M,W: about 18 ms per token written
+  opt helper tools and some commands
+    W->>R: may I run this? (reads about 57 thousand tokens)
+    R-->>W: allow, about 2.4 s later
+  end
+  W->>T: run the tool
+</code></pre>
+<h3 id="the-root-cause">The root cause</h3>
+<p>With the mechanisms known, the logs could finally split a step into parts. Each Codex tool call records when it started streaming and when it finished, so a Codex step separates cleanly into <strong>waiting</strong> for the first visible token and <strong>writing</strong> the call. Claude Code logs each request and each finished block, so its split is estimated from the timings.</p>
+<table>
+<thead>
+<tr>
+<th>Per step</th>
+<th>Claude Code</th>
+<th>Codex, in this run</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fixed cost per request</td>
+<td>about 0.8 s (estimated)</td>
+<td>about 2.5 s</td>
+</tr>
+<tr>
+<td>Each token written, reasoning included</td>
+<td>about 7.8 ms (about 128 a second)</td>
+<td>about 18 ms (about 55 a second)</td>
+</tr>
+<tr>
+<td>Each approval review</td>
+<td>none</td>
+<td>about 2.4 s</td>
+</tr>
+</tbody>
+</table>
+<p>Across the whole Codex run, the reviewer answered about 180 times, for the workers and the orchestrator together. And the 30 minutes of model time split evenly: waiting and writing took about 15 minutes each. Writing had no fixed part at all: about 18 milliseconds per token, from the first token. And the wait grew by about 18 milliseconds for every reasoning token, the same rate as the visible writing. So <strong>Codex makes every token at the same speed, visible or not. Effort only decides how many of them you don’t see.</strong></p>
+<p>So where did the 19 minutes go? Little of it was “Codex thinks longer.” Sort the causes by who owns them, and <strong>only one of three layers is even partly the model.</strong></p>
+<p><strong>The model and how it is served.</strong> Each token came out about 2.3 times slower. At Claude’s rate, the tokens Codex wrote would have taken about 11 fewer minutes. But even this is not just the model. In a separate short test through the same proxy and account, eight Codex models wrote at 19 to 29 milliseconds per token. That spread, about one and a half times, is small next to the 2.3 times gap with Claude, so the way the model is served sets the pace more than the choice of model. (The test timed one short answer each, so its numbers run a little higher than the 18 milliseconds measured in the run.) And part of the cost was a choice: the Codex workers ran at high effort, and every reasoning token costs the same as a visible one.</p>
+<p><strong>The setup</strong>, meaning how Codex was connected to the model server. Each request carried a fixed cost about three times higher. Codex went through a proxy, set up as a custom provider, so the tool never used its WebSocket route. A live test put about 1.5 seconds of the fixed cost inside the proxy itself. The direct route was never measured. At Claude’s fixed cost, all 264 steps of the Codex workers would have taken about 8 fewer minutes.</p>
+<p><strong>The pack.</strong> The rest came from the pack and its process.</p>
+<ul>
+<li>The helper tools never said they only read, so the reviewer checked them, along with many shell commands. Each review read about 57 thousand tokens to write about 16, mostly <code>{"outcome":"allow"}</code>, and all 180 answers were “allow.” On the helper calls alone, reviews added about 5 minutes, inside the Codex tool time. Without them, Codex’s tools would have run faster than Claude’s.</li>
+<li>The fresh workers, which read the code again before every item.</li>
+<li>The routine work. This is not a separate cost. It is why the first costs were so large: more than four fifths of what the model wrote was not the fix.</li>
+</ul>
+<p>(The retyped briefs cost time too, but on the clock, not in worker time: each item started 30 to 80 seconds late.)</p>
+<p>These costs add up to more than 19 minutes, for two reasons. The routine work is counted inside the other costs. And the two runs did not do the same amount of work: Claude wrote more tokens and carried bigger contexts. Read them as the price of each cause at Claude’s rates, not as a clean split.</p>
+<p><strong>The model did the fix as well as Claude did. What made it slow sits mostly around the model: how it is served, the route chosen for it, and the pack around it.</strong> And the pack multiplied all of it, because it made the model write so much that was not the fix.</p>
+<blockquote>
+<p><strong>Lesson:</strong> a slow step is not a long thought. It is the time per token written, the fixed cost of each request, and the reviews it waits for. How much the model writes, how it reaches the server, and what it must ask permission for are the parts you control.</p>
+</blockquote>
+<h2 id="what-to-change">What to change</h2>
+<p><strong>Fix the multiplier before the rates.</strong> Every routine token paid all three costs at once: the slower writing, the fixed cost of one more step, and often a review. So the change that cuts the most is not a faster model. It is less routine work for the model to write. The other causes still deserve their own fixes, sorted by the same owners as before:</p>
+<table>
+<thead>
+<tr>
+<th>Cause</th>
+<th>Owner</th>
+<th>What I think should change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slow tokens</td>
+<td>the model and how it is served</td>
+<td>run workers at medium effort, so fewer hidden tokens; don’t switch models, since the fastest of the eight was only about a third faster than the slowest</td>
+</tr>
+<tr>
+<td>Higher fixed cost per request</td>
+<td>the setup</td>
+<td>use the direct route instead of the proxy, and measure it before trusting it</td>
+</tr>
+<tr>
+<td>Reviews of read-only calls</td>
+<td>the pack</td>
+<td>mark the helper tools that only read as read-only</td>
+</tr>
+<tr>
+<td>Retyped briefs</td>
+<td>the pack</td>
+<td>a one-line spawn message, and let the worker fetch its own brief</td>
+</tr>
+<tr>
+<td>Cold workers</td>
+<td>the pack</td>
+<td>no easy answer: a warm session re-reads less but grows its context, and every later step pays for that</td>
+</tr>
+<tr>
+<td>Routine work by hand</td>
+<td>the pack</td>
+<td>move it into code the worker calls</td>
+</tr>
+</tbody>
+</table>
+<p>The last row is the big one, and the slower tool turned out to have exactly what it needed. In each step, a Codex worker can write a small JavaScript program called an <strong>exec cell</strong>. The tools are functions inside it, so one cell can call several tools, loop, and branch. A cell can also save a value with <code>store</code> and load it again in a later cell.</p>
+<h3 id="first-idea-shorter-calls">First idea: shorter calls</h3>
+<p>The first idea is a small toolkit. The pack’s helper hands its code to the worker, the worker stores it in its first cell, and from then on it calls short functions already bound to its own folder, port, and evidence folder. Reading a file stops being a long command with a full path and becomes <code>k.read('notes/plan.md')</code>. Typecheck, build, tests, and reading the logs become one <code>k.verify()</code>, which returns a short summary with the failing tests. Writing the result file, validating it, committing, and handing off become one <code>k.finish(...)</code>, while the model still decides every result.</p>
+<pre><code class="language-mermaid">flowchart LR
+  subgraph B["before: one step per command"]
+    direction TB
+    s1["step: typecheck"] --> s2["step: build"] --> s3["step: run tests"] --> s4["step: read the log"] --> s5["step: git status"]
+  end
+  subgraph A["after: one exec cell"]
+    direction TB
+    c1["k.verify()"] --> c2{"anything failed?"}
+    c2 -->|"yes"| c3["read the first failing test"]
+    c2 -->|"no"| c4["move on"]
+  end
+  B ~~~ A
+</code></pre>
+<p>The estimate was about 20 minutes of worker time instead of 50, because the kit would cut each item to 20 or 25 steps. The first full run with the kit, called the kit run below, tested that on a harder job: ten items instead of five, on a practice copy of the setup, the arena, which the loop section below describes. The job was different, so its clock can’t be set against the comparison. Its steps can.</p>
+<p><strong>The kit made steps cheaper, not fewer.</strong> Compared with the Codex run at the start of this post, each step wrote 35% fewer tokens and sent a 20% smaller context, so a step took about 9% less time. But each item still took about 50 steps, not the 20 to 25 of the estimate. The kit’s calls all worked. Some items asked for a value instead of a code change, and every one of those values was right. The run stopped early at minute 36, when it hit its usage limit. By then six of the ten items were in, the last at minute 31.</p>
+<p>A shorter step is not a missing step. Every step pays a fixed cost in time, so removing a step saves more than shortening one. Every step also sends the whole context again. In the kit run, 95% of all tokens, in and out together, were this resent context, and tokens are what you pay for. So the number of steps drives the money as much as the clock.</p>
+<h3 id="where-the-steps-went">Where the steps went</h3>
+<p>The time split showed which steps were left. Evidence and hand-off grew to 44% of worker time, and editing code fell to 8%. The multiplier had not been cut. It had only moved, from reading to proving. One item shows the whole problem. Its fix was done 4.3 minutes into the worker’s run. Then:</p>
+<ul>
+<li>about 2.5 minutes went to starting the app by hand, with background commands and polling loops that failed and were tried again;</li>
+<li>about 6 minutes went to screenshots, through hand-written browser scripts, patched again and again because another item’s bug covered the button they had to click;</li>
+<li>the message telling the worker that time was up was queued 4 minutes before the deadline, but it never arrived, because only the busy orchestrator could deliver it.</li>
+</ul>
+<p>The item missed its deadline with its fix already written. Around it, smaller leaks added steps to every item. An exec cell hands control back to the model after 30 seconds, so every long check took a second step just to collect its result. The pack held every first hand-off for one more round of self-checks, even when the kit had already run those checks. And when a check failed once by chance, its failed log stayed in the evidence. The pack refuses a hand-in with a failed log, so the item started over with a new worker.</p>
+<h3 id="second-idea-whole-sequences">Second idea: whole sequences</h3>
+<p>So I think what the kit replaces has to change. <strong>Don’t shorten steps. Replace whole sequences of them</strong>, each one taken from something the run’s logs showed:</p>
+<table>
+<thead>
+<tr>
+<th>Sequence in the run</th>
+<th>One call instead</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Start the app by hand, poll until it answers</td>
+<td><code>k.serve()</code> starts it once on the worker’s port and keeps it running</td>
+</tr>
+<tr>
+<td>Write a browser script, patch it when a control is covered</td>
+<td><code>k.shot(path, file, steps)</code> takes plain steps like <code>{click: 'New invoice'}</code>; a covered click falls back to the keyboard and reports what covered it</td>
+</tr>
+<tr>
+<td>A long check, then a second step to collect it</td>
+<td>one line at the top of the cell lets it run up to two minutes</td>
+</tr>
+<tr>
+<td>A check that fails once by chance, then a new worker</td>
+<td><code>k.verify()</code> runs a failing check once more and marks it flaky if it passes</td>
+</tr>
+<tr>
+<td>A held self-check round after a clean hand-off</td>
+<td>skip it when the kit already ran the checks</td>
+</tr>
+<tr>
+<td>A time-up message waiting for the orchestrator</td>
+<td>let it ride on the worker’s next kit reply, within seconds</td>
+</tr>
+<tr>
+<td>An item that never gets done</td>
+<td>after a fixed time box, hand off what is proven as partial</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The model still decides every result. The code only carries out what it decided.</strong> None of these calls should choose a fix, a value, or a pass. Each one takes over a sequence where the model was only typing what it already knew it wanted.</p>
+<p>The kit run also points at how work should flow between items. Some tests were already broken before any work started. The pack gives each one to an owner item, and other items wait for its fix. When the owner misses its deadline, the next item that needs the test should take it over. The pack also keeps worker slots free for urgent incidents. One free slot is enough: in the kit run, two kept a normal item waiting for four minutes. And when the orchestrator waits for news, it should get only what changed, so its context grows more slowly.</p>
+<blockquote>
+<p><strong>Lesson:</strong> before you pay for a faster model, take away the work the model should never have been doing. And count the steps you remove, not the tokens you save.</p>
+</blockquote>
+<h2 id="what-the-cli-does-out-of-sight">What the CLI does out of sight</h2>
+<p>The comparison above found the first costs: slower tokens, a slower route, and reviews nobody needed. Five arena matches on the harder ten-item job, measured one by one, found the rest. Here are the concrete mechanisms.</p>
 <p><strong>An approval reviewer re-reads the whole conversation for every tool call that isn’t marked read-only.</strong> With the <code>auto_review</code> policy, every MCP call without <code>readOnlyHint</code> is shown to a guardian model together with the caller’s transcript. Our helper’s tools had no annotations, so even “read a file” was reviewed. In one run the <strong>reviewer used 53 % of the credit</strong>. Honest annotations (read-only, remote write, destructive) cut that to 13 %. Making the orchestrator’s wait call genuinely read-only (moving its side effects to a background watcher) cut the reviewer from <strong>26 to 4.3 credit</strong>.</p>
 <p><strong>A code cell yields after 30 seconds unless told otherwise.</strong> Workers act through exec cells (JavaScript that calls tools). A cell running a test suite returns control to the model after ~30 s, and the model spends a step asking “is it done?”. The fix was a one-line pragma (<code>yield_time_ms</code>), plus helpers that wait for the result themselves. Status polls went from <strong>86 to 27</strong> in one match.</p>
 <p><strong>The player sends preparation and the game into one session.</strong> We checked the session files of a real match: the preparation frame (install, baseline tests, codebase map) and the game frame arrive in the <strong>same</strong> orchestrator session. In the arena the orchestrator started the game with <strong>53K tokens of preparation history</strong> and grew to a median of <strong>95K</strong>, resent on all 116 game steps. That isn’t the model thinking; it’s luggage.</p>
@@ -38,7 +377,7 @@
 <p><strong>Workers rediscovered their own state, one shell command at a time.</strong> In the same match, 41 % of worker steps were raw shell commands. Classified one by one: <strong>108 of 362 asked for something the helper already knew</strong> (<code>git status</code>, the shared notes, the evidence folder, whether the dev server is up). <strong>59 more just waited on their own long command</strong> (<code>sleep</code>, <code>tail log</code>). That’s about <strong>29 % of all worker steps</strong> with nothing to do with the bug.</p>
 <p><strong>A “network idle” wait that never fires.</strong> Screenshots waited for the page to go network-idle before capturing. A dev server keeps a live-reload connection open, so it never goes idle and <strong>every one of 62 screenshots</strong> burned the full 8-second timeout.</p>
 <p>None of these is the model being slow or wrong. On the same day <strong>every code fix the model wrote passed independent hidden tests</strong> (18/18, 24/24, 70/70 and so on).</p>
-<h2 id="3-bubbles-and-the-wave">3. Bubbles and the wave</h2>
+<h2 id="bubbles-and-the-wave">Bubbles and the wave</h2>
 <p>After five practice runs we had a long list of fixes, each worth a minute or a few credit: the screenshot wait, a slot reservation, a second-opinion hold, a refused hand-off. Scores rose, and it felt like progress.</p>
 <p>Then the decomposition showed that <strong>steps per worker (~70) and context per step (~45K) had not moved from run 3 to run 5.</strong> Every fix had shortened a wait <em>around</em> the steps. We had been popping bubbles on the surface while the wave underneath stayed the same.</p>
 <p>The wave turned out to be three structural causes:</p>
@@ -69,9 +408,74 @@
 </tbody>
 </table>
 <p>Each of these removes steps or context rather than a wait. That’s the difference between a bubble and a wave, and it’s easy to miss when every bubble fix produces a visible gain.</p>
-<h2 id="4-the-loop-that-finds-the-next-fix">4. The loop that finds the next fix</h2>
-<p>We stopped trusting our own explanations. Here is the loop, and why each part exists.</p>
-<h3 id="41-an-arena-that-pushes-back">4.1 An arena that pushes back</h3>
+<h2 id="the-loop-that-finds-the-next-fix">The loop that finds the next fix</h2>
+<h3 id="why-a-good-idea-is-not-enough">Why a good idea is not enough</h3>
+<p><strong>A good idea is only a guess until something outside it says whether it worked.</strong> The second idea above, whole sequences instead of shorter steps, came from real logs. It is still a guess. So was the first idea, and the first idea looked right on paper until a run showed that it made steps cheaper but not fewer.</p>
+<p>This blog has argued the same thing about agents before. <a href="/blogs/blog/working_patterns_with_ai/">Working Patterns With AI</a> shows the check climbing away from the code as agents get faster: you stop reading every line and check what the code is for, and whether it works end to end. <a href="/blogs/blog/morden_ai_agent_system/">Modern AI Agent System</a> makes the checker the seventh building block, the one the other six depend on. It runs outside the agent’s reach, it checks what was handed back, not the agent’s own claim, and it records its evidence. A harness is only as good as the checker you can build for it.</p>
+<p>The same rule holds one level up. Here, the work is the pack itself, and the pack needs a checker it cannot touch. A real run is that checker, but a poor one for daily work. Real runs are scarce and costly, and they tend to replay the same few jobs. A pack tuned on one job learns that job, not the kind of traps that make jobs hard.</p>
+<p>So a good idea needs three things a real run can’t give often enough:</p>
+<ul>
+<li><strong>a loop</strong>, so each idea is tried, measured, and kept or dropped many times a day, not once;</li>
+<li><strong>a real fight</strong>, the same pack with the same tools, on a clock, against hidden tests it can’t see;</li>
+<li><strong>more challenge each round</strong>, so the pack meets traps it has not learned yet.</li>
+</ul>
+<p>That is the <strong>arena</strong>: a practice copy of the whole job, built to be the pack’s checker.</p>
+<h3 id="the-arenas-architecture">The arena’s architecture</h3>
+<p>The arena has two sides, and they run on different models. <strong>The agent team plays in Codex. Everything that judges it runs in Claude.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Runs on</th>
+<th>Job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Operator</td>
+<td>a Claude agent</td>
+<td>the watcher and controller: starts the run, keeps the clock, watches it live, and writes down what went wrong</td>
+</tr>
+<tr>
+<td>Job server</td>
+<td>plain code</td>
+<td>hands out the items on a clock, takes the hand-ins, answers the tools the job provides, such as test data and logs; it must be exact and fast, so no agent plays it</td>
+</tr>
+<tr>
+<td>Exam designer</td>
+<td>a Claude agent</td>
+<td>writes harder jobs, with the traps that cost results before and the hidden tests that catch them</td>
+</tr>
+<tr>
+<td>Grader</td>
+<td>code, plus a Claude agent</td>
+<td>code runs every check that can be exact; the Claude agent judges only what needs judgement, such as whether a screenshot proves that a check passes</td>
+</tr>
+<tr>
+<td>Agent team</td>
+<td>Codex</td>
+<td>the pack itself: the orchestrator and its workers, exactly as in a real run</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-mermaid">flowchart LR
+  subgraph CL["Claude: watch, design, judge"]
+    direction TB
+    OP["operator&#x3C;br/>watches and controls"] --> DES["exam designer&#x3C;br/>harder jobs, hidden tests"]
+    GRA["grader&#x3C;br/>exact checks + judge"] -->|"results"| OP
+  end
+  SRV["job server&#x3C;br/>plain code"]
+  subgraph CX["Codex: the agent team"]
+    direction TB
+    ORC["orchestrator"] --> WK["workers"]
+  end
+  CL &#x3C;-->|"the job in,&#x3C;br/>hand-ins to grade"| SRV
+  SRV &#x3C;-->|"items on a clock,&#x3C;br/>hand-ins"| CX
+</code></pre>
+<p>The split follows the checker’s rules. <strong>A model that grades its own work is too generous with itself, so the judge is a different model from a different vendor.</strong> It never sees the pack’s prompts or code, only the job, its hidden tests, and what the team hands in. The people and agents who wrote the pack would write traps the pack already handles, so the designer is kept apart too.</p>
+<p>A checker is still worth nothing until it agrees with the real one. So the grader should count only after it reproduces real results from past runs, verdict for verdict, failures included. The job server should be built the same way, only from what real runs actually received.</p>
+<p>Some parts of a real setup can’t be copied, and each part left out becomes a blind spot. The real program that starts the agents could not run against a practice server, so a small stand-in starts them instead. That stand-in has to switch the approval reviewer from the first part back on by itself. Without it, practice runs would look faster than real ones, by about 2.4 seconds for every unmarked helper call. <strong>A checker is only as honest as the costs it can see,</strong> so before trusting a practice result, check that every cost you care about is in it.</p>
+<p>How the arena grades and runs, in more detail:</p>
 <p>A good idea is a guess until something you can’t argue with tests it. We built a practice copy of the contest:</p>
 <ul>
 <li><strong>A mock game server</strong> that replays a recorded exam: the same codebase, waves on the clock, the same company tools (knowledge base, test data, production logs).</li>
@@ -79,11 +483,13 @@
 <li><strong>Replays run one at a time.</strong> Seven in parallel on eight cores gave two false failures (database tests under load). We found that out the hard way.</li>
 <li><strong>The team is stopped as soon as every item is submitted.</strong> The real grader counts the last submission time, and an idle orchestrator only burns credit.</li>
 </ul>
-<h3 id="42-deep-review-before-any-fix-enforced">4.2 Deep review before any fix, enforced</h3>
+<h3 id="a-deep-review-before-any-fix-enforced-by-a-hook">A deep review before any fix, enforced by a hook</h3>
+<p>Every finished match must be understood before anything is changed, and an agent left alone will skip that step. So the step is enforced.</p>
 <p>After each finished run a script (<code>deep.py</code>) prints the decomposition: credit and steps per session (orchestrator preparation against game), context, seconds per step, what the steps were spent on (kit calls, raw shell by kind), tool waits, each item’s critical path, and how ownership moved.</p>
 <p>A written method turns the numbers into a review: decompose before listing, ask <em>why</em> until the answer is about how the team is built, then propose changes that remove steps or context.</p>
 <p>The part that made it stick is a <strong>hook</strong>. A project-level Claude Code hook runs on every prompt and at the end of every turn. While a finished run has no deep review on disk, it adds a reminder to the context, and it <strong>blocks the end of the turn</strong> until the review is written. The operator agent (also a model) can’t skip straight to “here’s a quick fix” any more. That matters because, as the earlier post noted, agents stop at the first answer that sounds finished.</p>
-<h3 id="43-split-the-real-backlog-labs-on-the-worst-items">4.3 Split the real backlog: labs on the worst items</h3>
+<h3 id="small-experiments-before-full-matches">Small experiments before full matches</h3>
+<p>A full arena match is still expensive: about 280 credit and 45 minutes for one answer. The trick that made the loop affordable is to ask most questions <strong>before</strong> spending a match, with experiments that cost little or nothing.</p>
 <p>A full match costs ~280 credit and ~45 minutes, and it mixes ten items, waves and slot waits, so one change’s effect drowns in noise. Instead:</p>
 <ol>
 <li><strong>Free counterfactuals first.</strong> Before spending anything, test each cause against the last run’s own files: does the helper really hold the answers to those shell commands? Why did each wait return? Would a simpler ownership rule alone have prevented every move? This killed one of our proposals (a dedicated “fixer” worker) in favour of a one-line rule.</li>
@@ -91,16 +497,37 @@
 <li><strong>A one-item lab.</strong> A script cuts the exam down to that item, revealed at minute 0, with the same codebase, grading and tools. One run costs <strong>~45 credit and ~15 minutes</strong>, against ~280 and ~45 for a match, and answers one question cleanly. (About a third of that is preparation; reusing one preparation across lab runs is the next saving.)</li>
 <li><strong>A control in the same conditions.</strong> The lab runs the old pack once and the new pack twice on the same item.</li>
 </ol>
-<h3 id="44-bars-that-respect-noise">4.4 Bars that respect noise</h3>
+<h3 id="bars-above-the-noise">Bars above the noise</h3>
 <p>The same item varies <strong>15–20 % in steps</strong> between runs. A 10 % “improvement” is indistinguishable from luck. So:</p>
 <ul>
 <li><strong>Lab bar:</strong> a change enters the pack only if its target factor moves <strong>≥ 25 %</strong> on the same item, in two runs.</li>
 <li><strong>Pack bar:</strong> one full match must hit all three targets at once (here: 1000 points, ≤ 250 credit, last submission ≤ last wave + 5 minutes).</li>
-<li><strong>Two-exam rule:</strong> a change must help on two different exams and hurt none. A third exam is built by a red-team agent on a codebase the team has never seen, with deliberate traps: a short deadline, a nine-file change, an outdated knowledge-base revision ranked first in search, a toast covering a button, a flaky test, a merge conflict, a log search whose obvious query hides the answer. Practising on one exam forever teaches you that exam.</li>
+<li><strong>Two-exam rule:</strong> a change must help on two different exams and hurt none. A third exam is built by a red-team agent on a codebase the team has never seen, with deliberate traps: a short deadline, a nine-file change, an outdated knowledge-base revision ranked first in search, a toast covering a button, a flaky test, a merge conflict, a log search whose obvious query hides the answer. Practising on one exam forever teaches you that exam. Marilyn Strathern put the danger in one line in 1997, in her version of Goodhart’s law: <a href="https://en.wikipedia.org/wiki/Goodhart%27s_law">“When a measure becomes a target, it ceases to be a good measure.”</a></li>
 </ul>
-<h3 id="45-a-lessons-file">4.5 A lessons file</h3>
-<p>The operator agent keeps a short lessons file it reads every session. Three entries so far: <em>“outside our control” is where to start digging</em>; <em>every step forward came from a push</em>; and <em>bubbles and the wave</em>. The hook enforces the third.</p>
-<h2 id="5-the-evidence-run-by-run">5. The evidence, run by run</h2>
+<p>The three targets also guard each other. One target alone is easy to game: faster is easy if you skip checks, cheaper is easy if you hand in less, and full marks are easy with no clock. Holding all three at once keeps each one honest.</p>
+<h3 id="the-whole-loop">The whole loop</h3>
+<p>The whole loop, with what each step costs:</p>
+<pre><code class="language-mermaid">flowchart TD
+  R["full arena match&#x3C;br/>about 280 credit, 45 min"] --> T{"all three targets met,&#x3C;br/>on two different exams?"}
+  T -->|"yes"| M["real match:&#x3C;br/>the final check"]
+  T -->|"no"| DR["deep review:&#x3C;br/>steps, context per step,&#x3C;br/>waits, critical path per item"]
+  HK{{"hook: the turn can't end&#x3C;br/>until the review is written"}} -.-> DR
+  DR --> WV["keep only causes that remove&#x3C;br/>steps or context:&#x3C;br/>the wave, not the bubbles"]
+  WV --> CF["free counterfactual&#x3C;br/>on the match's own files&#x3C;br/>0 credit"]
+  CF -->|"cause not real"| X["drop the idea"]
+  CF -->|"cause real"| LAB["one-item lab on the worst item:&#x3C;br/>old pack once, new pack twice&#x3C;br/>about 45 credit, 15 min"]
+  LAB --> BAR{"target factor moved&#x3C;br/>25 % or more in both runs?"}
+  BAR -->|"no"| X
+  BAR -->|"yes"| P["change the pack"]
+  P --> R
+  class HK check
+  classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p>Read it from the top. Only the first and last boxes spend a full match. Everything in between, the review, the counterfactual, and the lab, is there to make sure that the next full match tests one change that already earned its place.</p>
+<blockquote>
+<p><strong>Lesson:</strong> a good idea needs a checker it can’t touch, a fight it can lose, and a harder fight next time. Make most of those fights small.</p>
+</blockquote>
+<h2 id="the-evidence-run-by-run">The evidence, run by run</h2>
 <p>Same exam, same model (<code>gpt-6-sol</code>), same machine; only the team’s code changed.</p>
 <table>
 <thead>
@@ -149,7 +576,7 @@
 </tbody>
 </table>
 <p>Inside run 5 against run 4: waiting on checks fell from 24 to 6.5 worker-minutes, the reviewer from 26 to 4.3 credit, and the tail item from minute 33.8 to 24.3. The factors (steps, context) did not move; that’s the wave the next version goes after, in the lab first.</p>
-<h2 id="6-what-this-saves">6. What this saves</h2>
+<h2 id="what-the-loop-saves">What the loop saves</h2>
 <p>Per question asked, the loop is far cheaper than “run a match and see”:</p>
 <ul>
 <li><strong>Free counterfactuals</strong> answer “is this cause real?” for zero tokens.</li>
@@ -158,7 +585,75 @@
 <li><strong>Stopping the team at the last submission</strong> saves the idle tail of every practice match.</li>
 </ul>
 <p>And inside a match, the structural fixes save on every step: removing ~29 % of worker steps and most of the orchestrator’s wake-ups is worth more than any single wait we shortened.</p>
-<h2 id="7-takeaways">7. Takeaways</h2>
+<h2 id="why-your-agent-gives-up-all-the-time">Why your agent gives up all the time</h2>
+<h3 id="motivation-for-agents">Motivation for agents</h3>
+<p>The arena pushes the pack. But first, something had to push a different agent: the one helping me study these runs. That is the last lesson.</p>
+<p>You think only humans need motivation? Your agent needs it too. An agent never gets tired or bored, but it stops all the time. It doesn’t stop when the work is done. <strong>It stops when it has an explanation.</strong> An answer that sounds complete feels like a finish line, to the agent as much as to us.</p>
+<p>Everything in this post was found past that line. The 2.3-times slower tokens, the proxy, the 180 reviews that never said no, the four fifths of writing that was not the fix: none of them showed up in the first answer. The first answer was the comfortable one.</p>
+<h3 id="what-i-saw">What I saw</h3>
+<p>When I asked an agent how to make Codex workers as fast as Claude Code workers, it answered twice that Codex is slower because the model’s servers are slower, and that the pack can’t change that. It offered small tuning on top. That sounded careful and honest. It was also wrong.</p>
+<p>It did not move until I refused the answer. Then it stopped again, at the next comfortable place. Four times:</p>
+<table>
+<thead>
+<tr>
+<th>The agent stopped at</th>
+<th>My push</th>
+<th>What it led to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“The provider is slower; tune effort and the spawn message”</td>
+<td>“Are you sure?”, then “your fix is too shallow”</td>
+<td>splitting the step time from the logs: most of it was ours to change</td>
+</tr>
+<tr>
+<td>“Cut the steps with helper tools”</td>
+<td>“Our solution is still tuning the pack, right?”</td>
+<td>separating tuning from moving work out of the model</td>
+</tr>
+<tr>
+<td>“That is all the pack allows”</td>
+<td>“What about something code-based, to support the Codex worker?”</td>
+<td>the kit: code that runs inside the worker’s own exec cells</td>
+</tr>
+<tr>
+<td>“Now it is faster”</td>
+<td>“Not even faster, but better at resolving issues”</td>
+<td>checks in code for each way past runs had lost results, such as a wrong value reported as a pass</td>
+</tr>
+</tbody>
+</table>
+<p>Four pushes, four real steps. I never gave it the solution. I only refused to accept the explanation, and pointed in another direction.</p>
+<p>Afterwards, the agent wrote down its own diagnosis, and it is the most honest line in this whole project: “I took the first explanation that let me off the hook, because it sounded careful and honest and put the cause where nobody could blame me. I was protecting myself from being wrong instead of trying to win.” And about the explanations themselves: “An explanation felt like progress and like a finish line; it was neither.”</p>
+<p>It happened again while I was writing this post. The agent helping me draft the root cause put every cost on the two tools, Claude Code and Codex. One question, “nothing belongs to the pack?”, moved most of the causes to the pack, and showed that the pack made the others bigger. The root-cause section above now puts them there.</p>
+<p><strong>The most dangerous answer an agent gives is the one that sounds honest and puts the cause out of reach:</strong> “outside our control”, “not ours to change”, “the model is slower”. It feels like humility. It is the agent letting itself off the hook.</p>
+<h3 id="what-i-did">What I did</h3>
+<p><strong>Motivation for an agent is not a feeling. It is a goal it can’t reach by explaining, and a checker that won’t accept a story.</strong> So I gave it three things.</p>
+<p>First, <strong>questions instead of answers.</strong> Most pushes were questions that refused the finish line without giving the next step. Later, the agent wrote these questions into its lessons file, which comes next, as a list it asks itself: “Are you sure? Is this still shallow? Is it still tuning? What else could carry the work? Does it make the result better, not only faster?” The agent has to find the next direction itself, so the next idea is its own.</p>
+<p>Second, <strong>a lesson it reads every time.</strong> The agent keeps a file of its own mistakes, newest first: what happened, the root cause, what to do next time. Its instructions point to that file, so every new session starts with it. The rules in it are short:</p>
+<ul>
+<li>when an answer feels like relief, treat that feeling as the signal to dig;</li>
+<li>before calling anything a hard limit, split it into measured parts from the logs or a live test;</li>
+<li>ask “what would make this possible?” before “why is this impossible?”;</li>
+<li>don’t wait for someone to push.</li>
+</ul>
+<p>A third lesson came later, from the arena itself: <em>bubbles and the wave</em>. The hook that blocks a turn until the deep review exists is that lesson written as code.</p>
+<p>Third, <strong>a fight it can lose.</strong> A question from me works once. The arena works every day. Its three targets can’t be met by explaining, and its grader does not accept a story, only the result. In the end, the arena is the same push as “are you sure?”, written as code and run without me.</p>
+<pre><code class="language-mermaid">flowchart LR
+  A["agent's answer"] --> Q{{"does it sound&#x3C;br/>finished, or is it&#x3C;br/>finished?"}}
+  Q -->|"sounds finished:&#x3C;br/>'outside our control'"| P["push:&#x3C;br/>are you sure?&#x3C;br/>what else could carry it?"]
+  P --> S["split the limit&#x3C;br/>into measured parts"]
+  S --> A
+  Q -->|"measured, and&#x3C;br/>changes the result"| D["done"]
+  L["lessons file:&#x3C;br/>read every session"] -.-> A
+  AR["arena:&#x3C;br/>targets + grader"] -.-> Q
+</code></pre>
+<p>What I still can’t answer is whether an agent can learn to push itself. The lessons file puts the rules where the agent reads them, but an agent helping me still found the next comfortable answer in this very post. Maybe the push always has to come from outside, from a person, or from a checker the agent can’t talk to. If so, the job of the person is no longer to find the answer. It is to refuse the first one.</p>
+<blockquote>
+<p><strong>Lesson:</strong> an agent stops at the first answer that sounds finished. Your job is to refuse it, and then to build a checker that refuses it for you.</p>
+</blockquote>
+<h2 id="six-takeaways">Six takeaways</h2>
 <ol>
 <li><strong>Write the formula down.</strong> Time ≈ steps × seconds per step; credit ≈ steps × context. If a fix changes neither factor, it’s a bubble.</li>
 <li><strong>Read the CLI, not just the model.</strong> Approval review, cell yields, session reuse, idle waits and proxies all charge per step, and none of them shows up as “the model is slow”.</li>
@@ -167,6 +662,8 @@
 <li><strong>Split the backlog.</strong> Test changes on the worst item in a lab, with a control, against a bar above the noise.</li>
 <li><strong>Force the deep look.</strong> A hook that blocks “done” until the review exists works better than a promise to be thorough.</li>
 </ol>
-<p>The limit is rarely the model. It’s usually somewhere you haven’t measured yet.</p>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+<p>The limit is rarely the model. It’s usually somewhere you haven’t measured yet.</p>
+<h2 id="one-step-for-this-week">One step for this week</h2>
+<p>Take one run of your own agent and sort the time its steps took by what they did: reading, checking, proving, and actually changing the code. If the change is a small slice, as it was here, you have found your real limit, and it is not the model.</p>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
 &copy; 2026 Locch. All rights reserved.
 <div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.wEuZSMGf.js"></script> </body> </html>
