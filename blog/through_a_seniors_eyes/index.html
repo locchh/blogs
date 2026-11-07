@@ -55,42 +55,42 @@
 <p>Business comes first because it defines what success means. Once that is clear, think <strong>error-first</strong>: identify what can go wrong before designing the happy path.</p>
 <p>The junior habit (mine too) is to build the happy path first and treat errors as cleanup for later. The senior habit is the opposite, because the happy path is the easy 20%. The errors are the design.</p>
 <p>Not all errors are one thing, and each kind wants a different answer:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Kind of error</th><th>Example</th><th>The senior question</th><th>Where do we meet it?</th></tr></thead><tbody><tr><td>Coding</td><td>A real bug in our own logic</td><td>Crash loudly. Never hide it.</td><td>Catch as much as possible while coding: types, linters, builds, and unit tests.</td></tr><tr><td>Validation</td><td>Input is not what we expected</td><td>Reject at the border, with a clear message.</td><td>At every boundary where data enters the system.</td></tr><tr><td>Connection</td><td>API down, rate limit hit, resources exhausted</td><td>Retry, back off, or fail fast?</td><td>Integration tests and staging reveal some cases; production must still be designed to survive them.</td></tr><tr><td>Business</td><td>The rule says no — this order can’t ship</td><td>Not an exception at all. A normal outcome to model.</td><td>In the domain logic, where the rule can be named and explained.</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Kind of error</th>
+<th>Example</th>
+<th>The senior question</th>
+<th>Where do we meet it?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Coding</td>
+<td>A real bug in our own logic</td>
+<td>Crash loudly. Never hide it.</td>
+<td>Catch as much as possible while coding: types, linters, builds, and unit tests.</td>
+</tr>
+<tr>
+<td>Validation</td>
+<td>Input is not what we expected</td>
+<td>Reject at the border, with a clear message.</td>
+<td>At every boundary where data enters the system.</td>
+</tr>
+<tr>
+<td>Connection</td>
+<td>API down, rate limit hit, resources exhausted</td>
+<td>Retry, back off, or fail fast?</td>
+<td>Integration tests and staging reveal some cases; production must still be designed to survive them.</td>
+</tr>
+<tr>
+<td>Business</td>
+<td>The rule says no — this order can’t ship</td>
+<td>Not an exception at all. A normal outcome to model.</td>
+<td>In the domain logic, where the rule can be named and explained.</td>
+</tr>
+</tbody>
+</table>
 <p>Errors happen all the time, so the goal is not to pretend we can remove all of them. The goal is to control <strong>where we discover them and how many people they can affect</strong>. Catch coding mistakes before they leave the laptop. Run the build and tests in CI. Put the feature in staging, where the pieces meet. Then, after it passes, route a small percentage of real traffic to the new version before releasing it to everyone. Each step accepts that the previous one could miss something while making the next failure cheaper and easier to reverse.</p>
 <p>Then three questions to ask of any system. How is each kind handled? Are the errors <strong>meaningful</strong> — a good error says what failed, with what input, and what to do next? And can you <strong>trace</strong> one failing request through the logs after it’s gone wrong?</p>
 <p>The strongest version of error-first thinking is old. Erlang was built at Ericsson for telephone switches that were not allowed to stop, and Joe Armstrong’s thesis title says the whole philosophy: <a href="https://erlang.org/download/armstrong_thesis_2003.pdf"><em>Making reliable distributed systems in the presence of software errors</em></a> (2003). Not “without errors” — <em>in the presence of</em> them. The famous rule, <strong>“let it crash,”</strong> sounds reckless and is the opposite: don’t defend every line against every failure; build the system so a part can die and a supervisor restarts it clean. Error handling designed first, at the architecture level — not sprinkled on at the end.</p>

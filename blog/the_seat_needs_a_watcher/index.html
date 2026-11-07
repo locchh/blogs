@@ -43,42 +43,42 @@
 <p>The most precisely built version of this I’ve found is Claude Code’s experimental <a href="https://claudefa.st/blog/guide/agents/observer-agents">observer agents</a>: a worker and a watcher spawned as a matched pair, the watcher fed only a read-only digest of what the worker just did, silent by default, allowed to send exactly one advisory message if it catches something real — and never allowed to block, pause, or touch anything itself. External, silent unless needed, advisory only. That’s this post’s watcher, built almost to spec.</p>
 <p>One honest difference, though. My watcher exists because the model has no spare attention to notice its own goal decaying — a structural limit, not a choice. The observer’s own stated reason is different: <strong>one agent optimizing to finish the task and validating its own honesty is a conflict of interest</strong>, so the fix splits the two jobs across two agents. That’s built to catch a worker quietly weakening a test to make it pass, not a goal buried by Lost in the Middle. Different failure, same fix — whatever the reason self-monitoring breaks, the answer is still someone outside, watching, saying as little as possible.</p>
 <h2 id="the-two-watchers">The two watchers</h2>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th></th><th>Human</th><th>Agent</th></tr></thead><tbody><tr><td>The seat</td><td>Global workspace, one train of thought</td><td>Context window, one active reasoning pass</td></tr><tr><td>What it loses to</td><td>A louder rival signal</td><td>Slow burial under everything piled on top</td></tr><tr><td>Can it notice itself?</td><td>Yes — that’s what meditation trains</td><td>No — noticing would need the same seat that’s already losing</td></tr><tr><td>The fix</td><td>An internal watcher, trained over time</td><td>An external watcher, built into the harness</td></tr><tr><td>The goal of watching</td><td>Loosen the grip, notice without following</td><td>Tighten the grip, re-broadcast before it decays</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Human</th>
+<th>Agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The seat</td>
+<td>Global workspace, one train of thought</td>
+<td>Context window, one active reasoning pass</td>
+</tr>
+<tr>
+<td>What it loses to</td>
+<td>A louder rival signal</td>
+<td>Slow burial under everything piled on top</td>
+</tr>
+<tr>
+<td>Can it notice itself?</td>
+<td>Yes — that’s what meditation trains</td>
+<td>No — noticing would need the same seat that’s already losing</td>
+</tr>
+<tr>
+<td>The fix</td>
+<td>An internal watcher, trained over time</td>
+<td>An external watcher, built into the harness</td>
+</tr>
+<tr>
+<td>The goal of watching</td>
+<td>Loosen the grip, notice without following</td>
+<td>Tighten the grip, re-broadcast before it decays</td>
+</tr>
+</tbody>
+</table>
 <p>Same mechanism, opposite tools. A person can grow a watcher inside their own head, given enough sitting practice, and use it to hold the seat a little more lightly. A model can’t, not yet — so the watcher has to live outside it, in a task list, a checkpoint file, a lead agent checking in. Either way the lesson points the same direction, just aimed differently: the seat was never yours to keep. Something has to watch it, or it decides itself.</p>
 <p>One last loop worth noticing. Baars didn’t invent the workspace metaphor from nothing — he borrowed it from AI’s <a href="https://en.wikipedia.org/wiki/Blackboard_system">blackboard systems</a> of the 1970s, where specialist programs cooperated on one shared board. AI lent cognitive science an architecture to explain the mind; half a century later, we’re borrowing the explanation back to build agents. The metaphor has crossed the bridge twice, once in each direction.</p>
 <blockquote>

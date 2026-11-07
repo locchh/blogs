@@ -109,36 +109,36 @@ Last updated on <time datetime="2026-10-20T00:00:00.000Z"> Oct 20, 2026 </time> 
 </ul>
 <p>Three names, one move: do the expensive thinking in advance, and keep it.</p>
 <p>Now — before this sounds like something I invented — <strong>“put inference in the store” is a fifty-year-old idea, built three times.</strong> Each attempt got one piece right and got stuck on another:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Era</th><th>The idea</th><th>Got right</th><th>Got stuck on</th></tr></thead><tbody><tr><td><strong>Symbolic</strong> (1980s–)</td><td>logic engines derive new facts from stored ones, by rule</td><td>the <em>engine</em> — deriving at write or query time, and keeping the derived facts up to date</td><td>the rules were hand-written: fragile, closed-world, couldn’t generalize</td></tr><tr><td><strong>In-DB ML</strong> (2020s)</td><td>run the models next to the data instead of shipping data to the models</td><td>inference <em>can</em> live inside the engine</td><td>it worked row-by-row — it produced Information, never <em>connected</em> Knowledge</td></tr><tr><td><strong>LLM-at-ingest</strong> (2024–)</td><td>an LLM builds the graph, summaries, and resolved entities at index time</td><td>it finally builds <em>real</em> knowledge</td><td>cost, staleness, and a ceiling on extraction quality</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Era</th>
+<th>The idea</th>
+<th>Got right</th>
+<th>Got stuck on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Symbolic</strong> (1980s–)</td>
+<td>logic engines derive new facts from stored ones, by rule</td>
+<td>the <em>engine</em> — deriving at write or query time, and keeping the derived facts up to date</td>
+<td>the rules were hand-written: fragile, closed-world, couldn’t generalize</td>
+</tr>
+<tr>
+<td><strong>In-DB ML</strong> (2020s)</td>
+<td>run the models next to the data instead of shipping data to the models</td>
+<td>inference <em>can</em> live inside the engine</td>
+<td>it worked row-by-row — it produced Information, never <em>connected</em> Knowledge</td>
+</tr>
+<tr>
+<td><strong>LLM-at-ingest</strong> (2024–)</td>
+<td>an LLM builds the graph, summaries, and resolved entities at index time</td>
+<td>it finally builds <em>real</em> knowledge</td>
+<td>cost, staleness, and a ceiling on extraction quality</td>
+</tr>
+</tbody>
+</table>
 <p>So the idea isn’t just plausible — it’s been <em>arrived at</em> from three directions. What nobody has put together yet is the <strong>union</strong>: LLM-grade inference (which fixes the hand-written-rule problem) on an engine that keeps its derived facts up to date with provenance (which the symbolic era got right), able to <strong>revise beliefs</strong> as the world changes — all decided by one choice made per fact: <strong>think now (write time), later (sleep job), or never-until-asked (query time)?</strong> You can watch the field work this out in real time. <a href="https://github.com/microsoft/graphrag">GraphRAG</a> derived everything eagerly at index time, and Microsoft’s own <em>LazyGraphRAG</em> pushed much of it back to query time. Eager-vs-lazy isn’t a rule to obey — it’s the same <code>index-vs-scan</code> tradeoff databases have always made, now measured in tokens.</p>
 <p>Two warnings, because I don’t want to sell a fantasy:</p>
 <ol>
@@ -148,37 +148,37 @@ Last updated on <time datetime="2026-10-20T00:00:00.000Z"> Oct 20, 2026 </time> 
 <h2 id="the-self-wiring-graph">The self-wiring graph</h2>
 <p>Everything above says <em>put inference in the store</em>, but stays vague about how. Here is the most concrete mechanism I know, and it comes straight from the Hebb section at the top of this post.</p>
 <p>Picture the difference between a map and a lawn. A normal knowledge graph is a map: someone draws the edges once, and they sit there forever, all equally important, no matter how the graph is used. A lawn is different. Walk the same line across it every day and a path appears — nobody drew it; the walking made it. Stop walking, and the grass grows back. <strong>Make the graph work like the lawn.</strong> Give every edge a <em>weight</em>, and let the weight change with use, exactly the way Hebb said a brain’s connections do. His four ideas map onto four database operations:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Hebb’s idea</th><th>…in the brain</th><th>…as a graph-DB operation</th></tr></thead><tbody><tr><td><strong>Learning rule</strong> — fire together, wire together</td><td>co-active neurons strengthen their link</td><td><strong>Potentiate</strong>: when two nodes are co-activated — retrieved together, cited in the same answer, used to settle one query — bump the weight of the edge between them (create it if it’s missing)</td></tr><tr><td><strong>Cell assembly</strong> — part of the team re-lights the whole</td><td>a cue reactivates the bound group</td><td><strong>Spreading activation</strong>: a query lights a few seed nodes; activation flows along the weighted edges and pulls in the rest of the cluster. The densely-wired clusters <em>are</em> your communities</td></tr><tr><td><strong>Phase sequence</strong> — a train of thought</td><td>assemblies fire in order</td><td><strong>Trails</strong>: paths walked together build up weight and harden into ready-made reasoning chains — Bush’s trail, grown from use instead of drawn by hand</td></tr><tr><td><strong>Looping → consolidation</strong></td><td>looping activity is later made permanent</td><td><strong>Consolidate &#x26; prune</strong> (the sleep job): distill hot, densely-wired subgraphs into higher-level summary nodes; let cold edges fade; drop what falls below a threshold</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Hebb’s idea</th>
+<th>…in the brain</th>
+<th>…as a graph-DB operation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Learning rule</strong> — fire together, wire together</td>
+<td>co-active neurons strengthen their link</td>
+<td><strong>Potentiate</strong>: when two nodes are co-activated — retrieved together, cited in the same answer, used to settle one query — bump the weight of the edge between them (create it if it’s missing)</td>
+</tr>
+<tr>
+<td><strong>Cell assembly</strong> — part of the team re-lights the whole</td>
+<td>a cue reactivates the bound group</td>
+<td><strong>Spreading activation</strong>: a query lights a few seed nodes; activation flows along the weighted edges and pulls in the rest of the cluster. The densely-wired clusters <em>are</em> your communities</td>
+</tr>
+<tr>
+<td><strong>Phase sequence</strong> — a train of thought</td>
+<td>assemblies fire in order</td>
+<td><strong>Trails</strong>: paths walked together build up weight and harden into ready-made reasoning chains — Bush’s trail, grown from use instead of drawn by hand</td>
+</tr>
+<tr>
+<td><strong>Looping → consolidation</strong></td>
+<td>looping activity is later made permanent</td>
+<td><strong>Consolidate &#x26; prune</strong> (the sleep job): distill hot, densely-wired subgraphs into higher-level summary nodes; let cold edges fade; drop what falls below a threshold</td>
+</tr>
+</tbody>
+</table>
 <p>Concretely, every edge carries just two extra numbers: a <strong>strength</strong> and a <strong>last-used date</strong>. Two habits keep those numbers honest. When facts are used together and the answer helped, the links between them get stronger — and if a link doesn’t exist yet, it is <em>born</em>. While the system is idle, everything unused slowly fades, and links that fade below a threshold get deleted. Strengthen with use; fade with disuse. That’s the whole trick, and the second half is the part every naive knowledge base forgets to build:</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># POTENTIATION — every time a query co-activates a set of nodes</span></span>
 <span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> on_coactivation</span><span style="color:#E1E4E8">(graph, nodes, was_useful):</span></span>
@@ -330,72 +330,72 @@ Last updated on <time datetime="2026-10-20T00:00:00.000Z"> Oct 20, 2026 </time> 
 <p>Notice what every method so far has in common: they grade the answer with a <strong>judge</strong> — a rubric, an LLM, a profile. So ask the obvious question for a FAQ agent: in real life, who is the judge? The user who asked. And that is the one person who <em>can’t</em> grade it — they asked <em>because</em> they don’t have the answer. A thumbs-up from them measures whether the answer <em>felt</em> right — fluent, confident, on-topic — not whether it <em>was</em> right. Worse, the bias runs the wrong way: a confident, well-written, wrong answer collects upvotes; a hedged, correct one collects shrugs. User scores measure satisfaction, and satisfaction is a different axis from truth.</p>
 <p>So when the asker can’t grade the answer, stop asking the asker and ask <strong>reality</strong>. Feed the knowledge base’s answer into the next step, and the next, until you reach something you <em>can</em> check — code that runs, a total that reconciles, an action whose result is measurable — and grade the whole chain by that verifiable end. If the thing built on top of the answer works, the answer was good enough. This is why code is the easy case (the CodeAct idea from <a href="/blogs/blog/coding_today/">coding today</a>): running it is a free, honest grader, with no human in the loop. Same shape as the incident loop in that post — the fix either stopped the outage or it didn’t, and <em>that</em> is the label.</p>
 <p>There’s a small ladder of what you can actually check, worth keeping straight:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>What you check</th><th>Who grades it</th><th>Needs the true answer?</th></tr></thead><tbody><tr><td>Fluency / helpfulness</td><td>the asker (thumbs)</td><td>No — but it isn’t correctness</td></tr><tr><td><strong>Faithfulness</strong> — did the answer come from the KB, and cite it?</td><td>automatic (<code>kb why</code>, provenance)</td><td><strong>No</strong> — the cheap escape</td></tr><tr><td><strong>Correctness</strong></td><td>a verifiable downstream result</td><td>Yes — and this is where you get it</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>What you check</th>
+<th>Who grades it</th>
+<th>Needs the true answer?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fluency / helpfulness</td>
+<td>the asker (thumbs)</td>
+<td>No — but it isn’t correctness</td>
+</tr>
+<tr>
+<td><strong>Faithfulness</strong> — did the answer come from the KB, and cite it?</td>
+<td>automatic (<code>kb why</code>, provenance)</td>
+<td><strong>No</strong> — the cheap escape</td>
+</tr>
+<tr>
+<td><strong>Correctness</strong></td>
+<td>a verifiable downstream result</td>
+<td>Yes — and this is where you get it</td>
+</tr>
+</tbody>
+</table>
 <p>The middle row is the one people skip. Even without the true answer, you can check whether the answer really traced back to a stored fact instead of being invented — that’s what <code>kb why</code> and per-fact provenance are for (RAGAS calls it <em>faithfulness</em>). It doesn’t prove the KB is right — garbage in, garbage out — but it cleanly splits “the KB was wrong” from “the model made something up past the KB.” The bottom row, real correctness, is what a downstream check buys you when the asker can’t hand it to you.</p>
 <p>Two caveats, the same as everywhere else in this post. A downstream pass/fail is <strong>coarse</strong>: it tells you the <em>pipeline</em> failed, not <em>which</em> step — retrieval, reasoning, or step four. (That is the same credit-assignment problem as <code>was_useful</code> from the self-wiring section.) And <strong>not every question ends in something checkable</strong> — a policy lookup may have no crisp result for hours. So this doesn’t replace the profile; it patches its weakest spot. Grade the answer (the profile) to see <em>where</em> the KB is weak; grade what the answer <em>causes</em> (the consequence) to know it’s actually <em>right</em> where it matters. A real evaluation uses both.</p>
 <h3 id="evaluate-in-tiers">Evaluate in tiers</h3>
 <p>Step back, and those two — the profile and the consequence — are really the middle and the end of a <strong>four-tier</strong> stack. No single tier is enough: each draws its truth from a different place, and each has a blind spot the others cover. So don’t pick one — <strong>layer them</strong>, pairing a <em>narrow-but-hard</em> signal with a <em>broad-but-soft</em> one:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Tier</th><th>What it is</th><th>Where the truth comes from</th><th>Answers</th></tr></thead><tbody><tr><td><strong>1 · Golden set</strong></td><td>pre-defined questions with known answers, for the critical few</td><td><strong>you</strong> — you already know the must-not-break answers</td><td>Did we break something that matters?</td></tr><tr><td><strong>2 · Sample audit</strong></td><td>pull real questions from usage, verify the answers</td><td><strong>an expert / oracle</strong>, per sample</td><td>How good are we on what people <em>actually</em> ask?</td></tr><tr><td><strong>3 · Profile</strong></td><td>questions per ability, scored 0–5 by a judge</td><td><strong>a judge</strong> — approximated, no true answer needed</td><td>What’s the shape, and is it drifting?</td></tr><tr><td><strong>4 · Consequence</strong></td><td>feed the answer into a verifiable task; check provenance</td><td><strong>reality</strong> (the outcome) + the <strong>store</strong> (provenance)</td><td>Is it actually right where it counts?</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>What it is</th>
+<th>Where the truth comes from</th>
+<th>Answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1 · Golden set</strong></td>
+<td>pre-defined questions with known answers, for the critical few</td>
+<td><strong>you</strong> — you already know the must-not-break answers</td>
+<td>Did we break something that matters?</td>
+</tr>
+<tr>
+<td><strong>2 · Sample audit</strong></td>
+<td>pull real questions from usage, verify the answers</td>
+<td><strong>an expert / oracle</strong>, per sample</td>
+<td>How good are we on what people <em>actually</em> ask?</td>
+</tr>
+<tr>
+<td><strong>3 · Profile</strong></td>
+<td>questions per ability, scored 0–5 by a judge</td>
+<td><strong>a judge</strong> — approximated, no true answer needed</td>
+<td>What’s the shape, and is it drifting?</td>
+</tr>
+<tr>
+<td><strong>4 · Consequence</strong></td>
+<td>feed the answer into a verifiable task; check provenance</td>
+<td><strong>reality</strong> (the outcome) + the <strong>store</strong> (provenance)</td>
+<td>Is it actually right where it counts?</td>
+</tr>
+</tbody>
+</table>
 <p>The first two sharpen the “you can’t enumerate the questions” rule rather than break it. You can’t enumerate <em>all</em> the questions — but you can enumerate the <strong>critical few</strong> and pin them with ground truth. That’s the golden set: a <strong>regression gate</strong>, not a coverage tool — the payment that must never double-charge, the compliance answer that can’t be wrong. The sample audit is the only tier that reads the <em>real</em> question distribution (tiers 1 and 3 test questions <em>you</em> chose), and its catch is that the grader can’t be the asker — it needs an expert.</p>
 <p>The shape of the stack: tiers <strong>1 and 4 give hard truth but narrow coverage</strong> (the curated few, the checkable few); tiers <strong>2 and 3 give broad coverage but a softer signal</strong> (a sample, a judge’s guess). Run <strong>3 continuously</strong> to watch the shape and catch drift, <strong>1 on every change</strong> as the gate, <strong>2 now and then</strong> to keep the judge and the golden set honest against reality, and <strong>4 wherever a downstream result actually checks out</strong>. Defense in depth — the same discipline the rest of this post asks for, turned on the evaluation itself.</p>
 <h2 id="something-related">Something related</h2>
@@ -409,158 +409,158 @@ Last updated on <time datetime="2026-10-20T00:00:00.000Z"> Oct 20, 2026 </time> 
 </ul>
 <h3 id="agent-memory-frameworks">Agent memory frameworks</h3>
 <p>Where the “inference layer beside the store” is already shipping. The columns to watch are the ones this whole post is about: <em>where</em> each one thinks, and what it does when two memories disagree.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Framework</th><th>Storage</th><th>Where it thinks</th><th>When memories conflict</th><th>Pick it when</th></tr></thead><tbody><tr><td><a href="https://github.com/thedotmack/claude-mem">claude-mem</a></td><td>SQLite + FTS5 (optional Chroma vectors)</td><td><strong>Background, at ingest</strong> — an async worker LLM-compresses sessions into typed observations</td><td>Nothing — observations stay isolated; connecting them is left to the reading agent</td><td>You live in Claude Code and want cheap session recall; its whole pitch is token economics (~10× savings via progressive disclosure)</td></tr><tr><td><a href="https://github.com/mem0ai/mem0">mem0</a> (<a href="https://arxiv.org/abs/2504.19413">paper</a>)</td><td>Vector (Qdrant default) + optional graph + SQLite history log</td><td><strong>Write time</strong> — an LLM extracts facts, then picks ADD / UPDATE / DELETE / NOOP against what’s already stored</td><td>The textbook belief revision, at write time — though v3 backed away to append-only, resolving at read</td><td>You want a general-purpose memory API over stores you choose</td></tr><tr><td><a href="https://github.com/topoteretes/cognee">cognee</a></td><td>Graph + vector + relational — can run entirely on one Postgres</td><td><strong>Write time</strong> (<code>cognify</code> builds the graph) <em>and</em> <strong>background</strong> (<code>improve</code>/<code>memify</code> enrich it)</td><td>Partial — LLM entity consolidation merges fragmented, conflicting descriptions</td><td>You want a semantic knowledge graph derived from any kind of data, self-hosted</td></tr><tr><td><a href="https://github.com/getzep/zep">Zep / Graphiti</a> (<a href="https://arxiv.org/abs/2501.13956">paper</a>)</td><td>Temporal graph on Neo4j / FalkorDB / Neptune</td><td><strong>Write time</strong> — entity resolution, fact extraction, temporal dating</td><td>The best story here — bi-temporal edges: contradicted facts are <em>invalidated, never deleted</em>; “true now” and “true then” both queryable</td><td>Your facts change over time and you need to know <em>when</em></td></tr><tr><td><a href="https://github.com/letta-ai/letta">Letta</a> (<a href="https://arxiv.org/abs/2504.13171">paper</a>)</td><td>Postgres + vectors, organized as memory blocks</td><td><strong>Background</strong> — a dedicated <em>sleep-time agent</em> rewrites memory while the main one is idle</td><td>Via consolidation — the sleep agent cleans, merges, and reorganizes</td><td>You’re building stateful agents; this is the “sleep jobs” place, literally named</td></tr><tr><td><a href="https://github.com/Gentleman-Programming/engram">engram</a></td><td>One Go binary, one SQLite file — FTS5 only, no embeddings (named after Hebb’s word for a stored memory trace, from the top of this post)</td><td><strong>Write time, by the agent itself</strong> — it decides what’s worth saving; conflict scans run on demand</td><td>Explicit — an LLM judges conflicts into a relations table (<code>conflicts_with</code>, <code>supersedes</code>)</td><td>You want zero-dependency, local-first memory for coding agents</td></tr><tr><td><a href="https://www.maximem.ai/">Maximem (Synap)</a></td><td>Hosted; mixed vector + graph + files</td><td><strong>Write time</strong> (multi-stage ingestion) <em>and</em> <strong>background</strong> consolidation cycles modeled on sleep</td><td>Contradiction detection, retraction processing, decay, deliberate forgetting</td><td>You’d rather pay than operate — vendor benchmarks, take with salt (as they themselves advise)</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Storage</th>
+<th>Where it thinks</th>
+<th>When memories conflict</th>
+<th>Pick it when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/thedotmack/claude-mem">claude-mem</a></td>
+<td>SQLite + FTS5 (optional Chroma vectors)</td>
+<td><strong>Background, at ingest</strong> — an async worker LLM-compresses sessions into typed observations</td>
+<td>Nothing — observations stay isolated; connecting them is left to the reading agent</td>
+<td>You live in Claude Code and want cheap session recall; its whole pitch is token economics (~10× savings via progressive disclosure)</td>
+</tr>
+<tr>
+<td><a href="https://github.com/mem0ai/mem0">mem0</a> (<a href="https://arxiv.org/abs/2504.19413">paper</a>)</td>
+<td>Vector (Qdrant default) + optional graph + SQLite history log</td>
+<td><strong>Write time</strong> — an LLM extracts facts, then picks ADD / UPDATE / DELETE / NOOP against what’s already stored</td>
+<td>The textbook belief revision, at write time — though v3 backed away to append-only, resolving at read</td>
+<td>You want a general-purpose memory API over stores you choose</td>
+</tr>
+<tr>
+<td><a href="https://github.com/topoteretes/cognee">cognee</a></td>
+<td>Graph + vector + relational — can run entirely on one Postgres</td>
+<td><strong>Write time</strong> (<code>cognify</code> builds the graph) <em>and</em> <strong>background</strong> (<code>improve</code>/<code>memify</code> enrich it)</td>
+<td>Partial — LLM entity consolidation merges fragmented, conflicting descriptions</td>
+<td>You want a semantic knowledge graph derived from any kind of data, self-hosted</td>
+</tr>
+<tr>
+<td><a href="https://github.com/getzep/zep">Zep / Graphiti</a> (<a href="https://arxiv.org/abs/2501.13956">paper</a>)</td>
+<td>Temporal graph on Neo4j / FalkorDB / Neptune</td>
+<td><strong>Write time</strong> — entity resolution, fact extraction, temporal dating</td>
+<td>The best story here — bi-temporal edges: contradicted facts are <em>invalidated, never deleted</em>; “true now” and “true then” both queryable</td>
+<td>Your facts change over time and you need to know <em>when</em></td>
+</tr>
+<tr>
+<td><a href="https://github.com/letta-ai/letta">Letta</a> (<a href="https://arxiv.org/abs/2504.13171">paper</a>)</td>
+<td>Postgres + vectors, organized as memory blocks</td>
+<td><strong>Background</strong> — a dedicated <em>sleep-time agent</em> rewrites memory while the main one is idle</td>
+<td>Via consolidation — the sleep agent cleans, merges, and reorganizes</td>
+<td>You’re building stateful agents; this is the “sleep jobs” place, literally named</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Gentleman-Programming/engram">engram</a></td>
+<td>One Go binary, one SQLite file — FTS5 only, no embeddings (named after Hebb’s word for a stored memory trace, from the top of this post)</td>
+<td><strong>Write time, by the agent itself</strong> — it decides what’s worth saving; conflict scans run on demand</td>
+<td>Explicit — an LLM judges conflicts into a relations table (<code>conflicts_with</code>, <code>supersedes</code>)</td>
+<td>You want zero-dependency, local-first memory for coding agents</td>
+</tr>
+<tr>
+<td><a href="https://www.maximem.ai/">Maximem (Synap)</a></td>
+<td>Hosted; mixed vector + graph + files</td>
+<td><strong>Write time</strong> (multi-stage ingestion) <em>and</em> <strong>background</strong> consolidation cycles modeled on sleep</td>
+<td>Contradiction detection, retraction processing, decay, deliberate forgetting</td>
+<td>You’d rather pay than operate — vendor benchmarks, take with salt (as they themselves advise)</td>
+</tr>
+</tbody>
+</table>
 <h3 id="code-as-knowledge-graph">Code-as-knowledge-graph</h3>
 <p>Already-built inference over a codebase — build the knowledge once, query it cheaply forever. The interesting split in this group is <em>how much of the deriving is an LLM</em> versus plain algorithms.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Tool</th><th>How the graph is built</th><th>Where the LLM is</th><th>Output &#x26; query</th><th>Pick it when</th></tr></thead><tbody><tr><td><a href="https://github.com/Lum1104/Understand-Anything">Understand-Anything</a></td><td>Tree-sitter for structure, LLM agents for meaning — summaries, layers, guided tours</td><td><strong>Build time</strong>, plus git-hook incremental updates (zero tokens on cosmetic changes)</td><td>A committable <code>knowledge-graph.json</code>; chat greps it; the dashboard needs no LLM at all</td><td>You want a codebase that <em>teaches</em> — onboarding, tours, and teammates who skip the pipeline</td></tr><tr><td><a href="https://github.com/abhigyanpatwari/GitNexus">GitNexus</a></td><td>Deterministic end-to-end: Tree-sitter + graph algorithms — Leiden clustering, call-flow tracing, impact scoring</td><td><strong>Nowhere in the pipeline</strong> — “Precomputed Relational Intelligence”; an LLM only <em>reads</em> the results</td><td>Embedded graph DB (WASM — runs fully in-browser); 17 MCP tools, raw Cypher</td><td>You want hard structure for agent tooling — “what breaks if I change this?” — on code that never leaves the machine</td></tr><tr><td><a href="https://github.com/safishamsi/graphify">Graphify</a></td><td>Tree-sitter for code (36 grammars, $0); every edge tagged <code>EXTRACTED</code> vs <code>INFERRED</code></td><td><strong>At ingest, only for non-code</strong> (docs, PDFs, media); <code>reflect</code> does deterministic, time-decayed belief updating</td><td><code>graph.json</code> + optional Neo4j / FalkorDB; <code>merge-graphs</code> for composition</td><td>Mixed folders — code plus docs plus PDFs — and it publishes real LOCOMO / LongMemEval numbers, which is rare honesty</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>How the graph is built</th>
+<th>Where the LLM is</th>
+<th>Output &#x26; query</th>
+<th>Pick it when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/Lum1104/Understand-Anything">Understand-Anything</a></td>
+<td>Tree-sitter for structure, LLM agents for meaning — summaries, layers, guided tours</td>
+<td><strong>Build time</strong>, plus git-hook incremental updates (zero tokens on cosmetic changes)</td>
+<td>A committable <code>knowledge-graph.json</code>; chat greps it; the dashboard needs no LLM at all</td>
+<td>You want a codebase that <em>teaches</em> — onboarding, tours, and teammates who skip the pipeline</td>
+</tr>
+<tr>
+<td><a href="https://github.com/abhigyanpatwari/GitNexus">GitNexus</a></td>
+<td>Deterministic end-to-end: Tree-sitter + graph algorithms — Leiden clustering, call-flow tracing, impact scoring</td>
+<td><strong>Nowhere in the pipeline</strong> — “Precomputed Relational Intelligence”; an LLM only <em>reads</em> the results</td>
+<td>Embedded graph DB (WASM — runs fully in-browser); 17 MCP tools, raw Cypher</td>
+<td>You want hard structure for agent tooling — “what breaks if I change this?” — on code that never leaves the machine</td>
+</tr>
+<tr>
+<td><a href="https://github.com/safishamsi/graphify">Graphify</a></td>
+<td>Tree-sitter for code (36 grammars, $0); every edge tagged <code>EXTRACTED</code> vs <code>INFERRED</code></td>
+<td><strong>At ingest, only for non-code</strong> (docs, PDFs, media); <code>reflect</code> does deterministic, time-decayed belief updating</td>
+<td><code>graph.json</code> + optional Neo4j / FalkorDB; <code>merge-graphs</code> for composition</td>
+<td>Mixed folders — code plus docs plus PDFs — and it publishes real LOCOMO / LongMemEval numbers, which is rare honesty</td>
+</tr>
+</tbody>
+</table>
 <h3 id="research">Research</h3>
 <ul>
 <li><a href="https://arxiv.org/abs/2603.09022">MEMO: Memory-Augmented Model Context Optimization</a> (ICML 2026) — a self-play framework that boils game trajectories down into a memory bank via CRUD-style consolidation and feeds them back in as priors; roughly <em>doubles</em> win rates and, notably, uses <strong>TrueSkill ratings</strong> to score under an infinite state space — the “rank along dimensions” idea applied to evaluation itself.</li>
 </ul>
 <h3 id="tools-and-frameworks">Tools and frameworks</h3>
 <p>The Data→Information front-end. Necessary, and — the point of this whole post — <em>not where the thinking is</em>. The “thinking inside” column proves it: at most you get perception models (layout, OCR), never knowledge-making.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Tool</th><th>Input</th><th>Output</th><th>Thinking inside</th><th>Pick it when</th></tr></thead><tbody><tr><td><a href="https://www.docling.ai/">Docling</a> (IBM)</td><td>PDF, Office, images, audio</td><td>Structured <code>DoclingDocument</code> → Markdown / JSON</td><td>Perception only — layout models, TableFormer, OCR</td><td>Complex PDFs where table structure and reading order matter</td></tr><tr><td><a href="https://github.com/microsoft/markitdown">MarkItDown</a> (Microsoft)</td><td>Office files, ZIP, EPub, even YouTube URLs</td><td>LLM-ready Markdown</td><td>Optional — an LLM can caption images</td><td>You want one lightweight converter in front of a model</td></tr><tr><td><a href="https://github.com/Unstructured-IO/unstructured">Unstructured</a></td><td>25+ document types</td><td>Typed elements (Title, Table, …) plus chunking and embedding</td><td>Perception — layout detection in hi-res mode</td><td>Production ETL pipelines feeding vector stores</td></tr><tr><td><a href="https://pymupdf.io">PyMuPDF</a> / <a href="https://github.com/pymupdf/PyMuPDF4LLM">PyMuPDF4LLM</a></td><td>PDF (Office with Pro)</td><td>Text, tables, one-liner Markdown</td><td>None — “no GPU, no cloud, no tokens”</td><td>Speed, and extraction that stays local</td></tr><tr><td><a href="https://python-pptx.readthedocs.io/en/latest/">python-pptx</a> / <a href="https://openpyxl.readthedocs.io/en/stable/">openpyxl</a></td><td>PPTX / XLSX</td><td>Python object models — read <em>and write</em></td><td>None — pure parsing</td><td>You need to <em>generate</em> decks and spreadsheets, not just read them</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Input</th>
+<th>Output</th>
+<th>Thinking inside</th>
+<th>Pick it when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://www.docling.ai/">Docling</a> (IBM)</td>
+<td>PDF, Office, images, audio</td>
+<td>Structured <code>DoclingDocument</code> → Markdown / JSON</td>
+<td>Perception only — layout models, TableFormer, OCR</td>
+<td>Complex PDFs where table structure and reading order matter</td>
+</tr>
+<tr>
+<td><a href="https://github.com/microsoft/markitdown">MarkItDown</a> (Microsoft)</td>
+<td>Office files, ZIP, EPub, even YouTube URLs</td>
+<td>LLM-ready Markdown</td>
+<td>Optional — an LLM can caption images</td>
+<td>You want one lightweight converter in front of a model</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Unstructured-IO/unstructured">Unstructured</a></td>
+<td>25+ document types</td>
+<td>Typed elements (Title, Table, …) plus chunking and embedding</td>
+<td>Perception — layout detection in hi-res mode</td>
+<td>Production ETL pipelines feeding vector stores</td>
+</tr>
+<tr>
+<td><a href="https://pymupdf.io">PyMuPDF</a> / <a href="https://github.com/pymupdf/PyMuPDF4LLM">PyMuPDF4LLM</a></td>
+<td>PDF (Office with Pro)</td>
+<td>Text, tables, one-liner Markdown</td>
+<td>None — “no GPU, no cloud, no tokens”</td>
+<td>Speed, and extraction that stays local</td>
+</tr>
+<tr>
+<td><a href="https://python-pptx.readthedocs.io/en/latest/">python-pptx</a> / <a href="https://openpyxl.readthedocs.io/en/stable/">openpyxl</a></td>
+<td>PPTX / XLSX</td>
+<td>Python object models — read <em>and write</em></td>
+<td>None — pure parsing</td>
+<td>You need to <em>generate</em> decks and spreadsheets, not just read them</td>
+</tr>
+</tbody>
+</table>
 <p>And one that doesn’t fit the table because it isn’t a parser at all:</p>
 <ul>
 <li><a href="https://github.com/anthropics/skills">anthropics/skills</a> — knowledge as folders of <code>SKILL.md</code> + scripts, loaded by progressive disclosure. Human-written knowledge, turned into files — a hand-made knowledge pack, if you’ve read this far.</li>

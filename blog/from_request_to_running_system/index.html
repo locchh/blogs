@@ -297,340 +297,340 @@
 </ul>
 <h2 id="glossary">Glossary</h2>
 <p>The terms used in this post, in alphabetical order.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody><tr><td>5xx errors</td><td>Server-side failures such as 500, 503, or an overloaded response. Usually transient and fixed by retrying with backoff</td></tr><tr><td>Adaptive reasoning</td><td>A reasoning mode where the model decides whether and how much to think. You set an effort level instead of a token budget</td></tr><tr><td>Agent</td><td>The model choosing its own sequence of tool calls toward a goal. The control flow lives inside the model</td></tr><tr><td>Agent SDK</td><td>A managed agent loop you embed in your own product, such as the one behind Claude Code. Different from a plain API wrapper</td></tr><tr><td>API</td><td>The direct programmatic interface to a model. Full control, and you own everything around it</td></tr><tr><td>Augmented call</td><td>One bounded model call, possibly with retrieval, a tool, or extended reasoning</td></tr><tr><td>Authoritative source</td><td>The source agreed to be correct, such as the system of record or the live policy table</td></tr><tr><td>BAA</td><td>Business Associate Agreement. Required under HIPAA before a vendor handles health data, and coverage depends on the exact configuration</td></tr><tr><td>Caching</td><td>Storing a stable prompt prefix so it is not reprocessed on every call. Cuts cost and latency</td></tr><tr><td>Circuit breaker</td><td>Stops calls to a failing dependency for a cooldown period so one fault does not take down the whole system</td></tr><tr><td>Coding agent</td><td>An agentic tool that reads code, edits files, and runs commands, such as Claude Code</td></tr><tr><td>Compaction</td><td>Periodically summarizing accumulated context so long sessions stay within the window</td></tr><tr><td>Compliance register</td><td>A table mapping each obligation to a control, an owner, and an evidence artifact</td></tr><tr><td>Consent fatigue</td><td>Reviewers approving everything without reading because they are asked too often</td></tr><tr><td>Constitution</td><td>A written document a vendor uses in training to shape a model’s values and priorities. It does not encode any deployment’s own policy</td></tr><tr><td>Corpus</td><td>The documents a retrieval system searches</td></tr><tr><td>Data residency</td><td>The requirement that data, including logs and caches, stays in an approved region</td></tr><tr><td>Decision log</td><td>A record of each automated decision: its inputs, retrieved context, output, and routing, kept so the decision can be replayed</td></tr><tr><td>Delivery route</td><td>Where API traffic runs: the vendor’s own API or a cloud platform. It affects billing and region, not model behavior</td></tr><tr><td>Design decision record</td><td>A record of one design decision with its date, rejected alternatives, the trade-off it resolved, its owner, and its evidence</td></tr><tr><td>Deterministic rule</td><td>A rule that always gives the same output for the same input</td></tr><tr><td>Discovery</td><td>Structured questioning that turns a business goal into requirements, assumptions, and constraints</td></tr><tr><td>DPA</td><td>Data Processing Agreement between the controller and the processor of personal data</td></tr><tr><td>Entry point</td><td>What a person or system opens to reach the model</td></tr><tr><td>Entry-point responsibility map</td><td>A written map of which entry point owns which task in a multi-platform system</td></tr><tr><td>Escalation path</td><td>Who handles which issue, and when it leaves the team</td></tr><tr><td>Eval</td><td>A structured test set that scores the system so changes can be compared</td></tr><tr><td>Evaluator-optimizer</td><td>A workflow in which one call drafts and another grades against criteria and requests revisions</td></tr><tr><td>Evidence artifact</td><td>Proof that a control is live: a signed agreement, a configuration screen, an authorization record, or a log query</td></tr><tr><td>Exponential backoff</td><td>Retrying with waits that grow, usually doubling each time</td></tr><tr><td>Extended reasoning</td><td>A billed reasoning pass before the answer. Adds cost and latency</td></tr><tr><td>Fail open / fail closed</td><td>Whether a failing guardrail lets traffic through or blocks it</td></tr><tr><td>Fairness entry point</td><td>Where unequal outcomes can enter: corpus, prompt framing, examples, routing</td></tr><tr><td>FedRAMP</td><td>US government cloud authorization at an impact level the workload requires</td></tr><tr><td>Feedback loop</td><td>The decision layer above monitoring: signals, triage, decision, action, review</td></tr><tr><td>GDPR</td><td>The EU’s personal data law</td></tr><tr><td>Generator-verifier loop</td><td>A second pass, by code or a model, that checks the first output</td></tr><tr><td>Governance table</td><td>The pre-launch table mapping each signal to a trigger, an action, and any scheduled checkpoint</td></tr><tr><td>Hallucination rate</td><td>The share of responses containing unsupported content</td></tr><tr><td>HIPAA</td><td>The US health information law</td></tr><tr><td>Hooks</td><td>Deterministic code that fires on defined events and enforces a rule the model cannot skip</td></tr><tr><td>Human-in-the-loop routing</td><td>Sending decisions to people by confidence, reversibility, and cost</td></tr><tr><td>Input / output screening</td><td>Checks before the model call and before the response reaches the user</td></tr><tr><td>Joint scoping</td><td>A working session with the vendor’s solutions team, prepared in advance with requirements, candidate patterns, and open questions</td></tr><tr><td>Judge model</td><td>A model that scores another model’s output. It can be evaded, so pair it with deterministic checks</td></tr><tr><td>Limit placement</td><td>Choosing in advance which limits a demo will name</td></tr><tr><td>Live state</td><td>Data that changes during a process, such as order status or stock. Look it up, do not retrieve a snapshot</td></tr><tr><td>Long tail</td><td>The few very long requests that use most of the tokens and decide the real cost</td></tr><tr><td>MCP</td><td>Model Context Protocol. An open standard for exposing tools once so many AI clients can use them</td></tr><tr><td>Model tier</td><td>The small, middle, and large models a vendor sells at different cost, speed, and capability</td></tr><tr><td>Monolithic / progressive context</td><td>Loading everything up front versus loading only what each step needs</td></tr><tr><td>Observability</td><td>Seeing what the system does and reconstructing why</td></tr><tr><td>Orchestrator</td><td>The agent that owns the goal, splits the work, and combines subagent results</td></tr><tr><td>Outcome document</td><td>Six fields that make a deployment’s value clear to a sponsor</td></tr><tr><td>p95 latency</td><td>The time under which 95% of requests finish. Use it as the design target</td></tr><tr><td>Parametric knowledge</td><td>What the model learned in training, as opposed to what it is given at request time</td></tr><tr><td>PHI</td><td>Protected health information under HIPAA</td></tr><tr><td>RAG</td><td>Retrieval-augmented generation: retrieve relevant chunks and pass them to the model. For stable knowledge, not live state</td></tr><tr><td>Rate limit</td><td>A request cap per time window, usually answered with HTTP 429</td></tr><tr><td>Reciprocal rank fusion</td><td>A low-tuning method for merging ranked lists from dense and sparse retrieval</td></tr><tr><td>Requirement vs assumption</td><td>A requirement traces to something the stakeholder said. An assumption was never stated</td></tr><tr><td>Reversal cost</td><td>The cost of undoing a decision after the system depends on it</td></tr><tr><td>Runbook</td><td>Known paths from symptom to cause to action</td></tr><tr><td>Schema</td><td>The required structure of an output</td></tr><tr><td>SDK</td><td>A language library that wraps the API</td></tr><tr><td>Shadow testing</td><td>Running a new version on a copy of live traffic and scoring its outputs offline, without users seeing them</td></tr><tr><td>Shared configuration</td><td>One team baseline instead of drifting personal setups</td></tr><tr><td>Skill</td><td>A versioned package of instructions and optional scripts for a repeatable procedure</td></tr><tr><td>SLA</td><td>What is measured, what counts as a breach, and what happens then</td></tr><tr><td>Spend posture</td><td>Default models, allowed models, effort guidance, and caps</td></tr><tr><td>SSO</td><td>Single sign-on through a central identity provider</td></tr><tr><td>Staged rollout</td><td>Giving one person per team access first to prove the workflow, then expanding in batches</td></tr><tr><td>Subagent</td><td>An agent that carries one scoped piece of work in its own context</td></tr><tr><td>Tool use</td><td>The model calling functions or APIs during a response</td></tr><tr><td>Tool-call authorization</td><td>A deterministic check before any side effect: allowlist, identity, scope</td></tr><tr><td>Training-time alignment vs inference-time control</td><td>Safe behavior built into the model versus the rules you enforce at request time</td></tr><tr><td>Transient error</td><td>A temporary failure that likely succeeds on retry</td></tr><tr><td>Translation table</td><td>The output of discovery: statement, constraint, decision, assumption</td></tr><tr><td>Verification checklist</td><td>Correctness, security, maintainability, and human understanding, checked before production</td></tr><tr><td>Workflow</td><td>Steps orchestrated in your own code, some of which call the model</td></tr><tr><td>Working set</td><td>The part of a program’s memory, or a model’s context, that the next steps actually need</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5xx errors</td>
+<td>Server-side failures such as 500, 503, or an overloaded response. Usually transient and fixed by retrying with backoff</td>
+</tr>
+<tr>
+<td>Adaptive reasoning</td>
+<td>A reasoning mode where the model decides whether and how much to think. You set an effort level instead of a token budget</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>The model choosing its own sequence of tool calls toward a goal. The control flow lives inside the model</td>
+</tr>
+<tr>
+<td>Agent SDK</td>
+<td>A managed agent loop you embed in your own product, such as the one behind Claude Code. Different from a plain API wrapper</td>
+</tr>
+<tr>
+<td>API</td>
+<td>The direct programmatic interface to a model. Full control, and you own everything around it</td>
+</tr>
+<tr>
+<td>Augmented call</td>
+<td>One bounded model call, possibly with retrieval, a tool, or extended reasoning</td>
+</tr>
+<tr>
+<td>Authoritative source</td>
+<td>The source agreed to be correct, such as the system of record or the live policy table</td>
+</tr>
+<tr>
+<td>BAA</td>
+<td>Business Associate Agreement. Required under HIPAA before a vendor handles health data, and coverage depends on the exact configuration</td>
+</tr>
+<tr>
+<td>Caching</td>
+<td>Storing a stable prompt prefix so it is not reprocessed on every call. Cuts cost and latency</td>
+</tr>
+<tr>
+<td>Circuit breaker</td>
+<td>Stops calls to a failing dependency for a cooldown period so one fault does not take down the whole system</td>
+</tr>
+<tr>
+<td>Coding agent</td>
+<td>An agentic tool that reads code, edits files, and runs commands, such as Claude Code</td>
+</tr>
+<tr>
+<td>Compaction</td>
+<td>Periodically summarizing accumulated context so long sessions stay within the window</td>
+</tr>
+<tr>
+<td>Compliance register</td>
+<td>A table mapping each obligation to a control, an owner, and an evidence artifact</td>
+</tr>
+<tr>
+<td>Consent fatigue</td>
+<td>Reviewers approving everything without reading because they are asked too often</td>
+</tr>
+<tr>
+<td>Constitution</td>
+<td>A written document a vendor uses in training to shape a model’s values and priorities. It does not encode any deployment’s own policy</td>
+</tr>
+<tr>
+<td>Corpus</td>
+<td>The documents a retrieval system searches</td>
+</tr>
+<tr>
+<td>Data residency</td>
+<td>The requirement that data, including logs and caches, stays in an approved region</td>
+</tr>
+<tr>
+<td>Decision log</td>
+<td>A record of each automated decision: its inputs, retrieved context, output, and routing, kept so the decision can be replayed</td>
+</tr>
+<tr>
+<td>Delivery route</td>
+<td>Where API traffic runs: the vendor’s own API or a cloud platform. It affects billing and region, not model behavior</td>
+</tr>
+<tr>
+<td>Design decision record</td>
+<td>A record of one design decision with its date, rejected alternatives, the trade-off it resolved, its owner, and its evidence</td>
+</tr>
+<tr>
+<td>Deterministic rule</td>
+<td>A rule that always gives the same output for the same input</td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>Structured questioning that turns a business goal into requirements, assumptions, and constraints</td>
+</tr>
+<tr>
+<td>DPA</td>
+<td>Data Processing Agreement between the controller and the processor of personal data</td>
+</tr>
+<tr>
+<td>Entry point</td>
+<td>What a person or system opens to reach the model</td>
+</tr>
+<tr>
+<td>Entry-point responsibility map</td>
+<td>A written map of which entry point owns which task in a multi-platform system</td>
+</tr>
+<tr>
+<td>Escalation path</td>
+<td>Who handles which issue, and when it leaves the team</td>
+</tr>
+<tr>
+<td>Eval</td>
+<td>A structured test set that scores the system so changes can be compared</td>
+</tr>
+<tr>
+<td>Evaluator-optimizer</td>
+<td>A workflow in which one call drafts and another grades against criteria and requests revisions</td>
+</tr>
+<tr>
+<td>Evidence artifact</td>
+<td>Proof that a control is live: a signed agreement, a configuration screen, an authorization record, or a log query</td>
+</tr>
+<tr>
+<td>Exponential backoff</td>
+<td>Retrying with waits that grow, usually doubling each time</td>
+</tr>
+<tr>
+<td>Extended reasoning</td>
+<td>A billed reasoning pass before the answer. Adds cost and latency</td>
+</tr>
+<tr>
+<td>Fail open / fail closed</td>
+<td>Whether a failing guardrail lets traffic through or blocks it</td>
+</tr>
+<tr>
+<td>Fairness entry point</td>
+<td>Where unequal outcomes can enter: corpus, prompt framing, examples, routing</td>
+</tr>
+<tr>
+<td>FedRAMP</td>
+<td>US government cloud authorization at an impact level the workload requires</td>
+</tr>
+<tr>
+<td>Feedback loop</td>
+<td>The decision layer above monitoring: signals, triage, decision, action, review</td>
+</tr>
+<tr>
+<td>GDPR</td>
+<td>The EU’s personal data law</td>
+</tr>
+<tr>
+<td>Generator-verifier loop</td>
+<td>A second pass, by code or a model, that checks the first output</td>
+</tr>
+<tr>
+<td>Governance table</td>
+<td>The pre-launch table mapping each signal to a trigger, an action, and any scheduled checkpoint</td>
+</tr>
+<tr>
+<td>Hallucination rate</td>
+<td>The share of responses containing unsupported content</td>
+</tr>
+<tr>
+<td>HIPAA</td>
+<td>The US health information law</td>
+</tr>
+<tr>
+<td>Hooks</td>
+<td>Deterministic code that fires on defined events and enforces a rule the model cannot skip</td>
+</tr>
+<tr>
+<td>Human-in-the-loop routing</td>
+<td>Sending decisions to people by confidence, reversibility, and cost</td>
+</tr>
+<tr>
+<td>Input / output screening</td>
+<td>Checks before the model call and before the response reaches the user</td>
+</tr>
+<tr>
+<td>Joint scoping</td>
+<td>A working session with the vendor’s solutions team, prepared in advance with requirements, candidate patterns, and open questions</td>
+</tr>
+<tr>
+<td>Judge model</td>
+<td>A model that scores another model’s output. It can be evaded, so pair it with deterministic checks</td>
+</tr>
+<tr>
+<td>Limit placement</td>
+<td>Choosing in advance which limits a demo will name</td>
+</tr>
+<tr>
+<td>Live state</td>
+<td>Data that changes during a process, such as order status or stock. Look it up, do not retrieve a snapshot</td>
+</tr>
+<tr>
+<td>Long tail</td>
+<td>The few very long requests that use most of the tokens and decide the real cost</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>Model Context Protocol. An open standard for exposing tools once so many AI clients can use them</td>
+</tr>
+<tr>
+<td>Model tier</td>
+<td>The small, middle, and large models a vendor sells at different cost, speed, and capability</td>
+</tr>
+<tr>
+<td>Monolithic / progressive context</td>
+<td>Loading everything up front versus loading only what each step needs</td>
+</tr>
+<tr>
+<td>Observability</td>
+<td>Seeing what the system does and reconstructing why</td>
+</tr>
+<tr>
+<td>Orchestrator</td>
+<td>The agent that owns the goal, splits the work, and combines subagent results</td>
+</tr>
+<tr>
+<td>Outcome document</td>
+<td>Six fields that make a deployment’s value clear to a sponsor</td>
+</tr>
+<tr>
+<td>p95 latency</td>
+<td>The time under which 95% of requests finish. Use it as the design target</td>
+</tr>
+<tr>
+<td>Parametric knowledge</td>
+<td>What the model learned in training, as opposed to what it is given at request time</td>
+</tr>
+<tr>
+<td>PHI</td>
+<td>Protected health information under HIPAA</td>
+</tr>
+<tr>
+<td>RAG</td>
+<td>Retrieval-augmented generation: retrieve relevant chunks and pass them to the model. For stable knowledge, not live state</td>
+</tr>
+<tr>
+<td>Rate limit</td>
+<td>A request cap per time window, usually answered with HTTP 429</td>
+</tr>
+<tr>
+<td>Reciprocal rank fusion</td>
+<td>A low-tuning method for merging ranked lists from dense and sparse retrieval</td>
+</tr>
+<tr>
+<td>Requirement vs assumption</td>
+<td>A requirement traces to something the stakeholder said. An assumption was never stated</td>
+</tr>
+<tr>
+<td>Reversal cost</td>
+<td>The cost of undoing a decision after the system depends on it</td>
+</tr>
+<tr>
+<td>Runbook</td>
+<td>Known paths from symptom to cause to action</td>
+</tr>
+<tr>
+<td>Schema</td>
+<td>The required structure of an output</td>
+</tr>
+<tr>
+<td>SDK</td>
+<td>A language library that wraps the API</td>
+</tr>
+<tr>
+<td>Shadow testing</td>
+<td>Running a new version on a copy of live traffic and scoring its outputs offline, without users seeing them</td>
+</tr>
+<tr>
+<td>Shared configuration</td>
+<td>One team baseline instead of drifting personal setups</td>
+</tr>
+<tr>
+<td>Skill</td>
+<td>A versioned package of instructions and optional scripts for a repeatable procedure</td>
+</tr>
+<tr>
+<td>SLA</td>
+<td>What is measured, what counts as a breach, and what happens then</td>
+</tr>
+<tr>
+<td>Spend posture</td>
+<td>Default models, allowed models, effort guidance, and caps</td>
+</tr>
+<tr>
+<td>SSO</td>
+<td>Single sign-on through a central identity provider</td>
+</tr>
+<tr>
+<td>Staged rollout</td>
+<td>Giving one person per team access first to prove the workflow, then expanding in batches</td>
+</tr>
+<tr>
+<td>Subagent</td>
+<td>An agent that carries one scoped piece of work in its own context</td>
+</tr>
+<tr>
+<td>Tool use</td>
+<td>The model calling functions or APIs during a response</td>
+</tr>
+<tr>
+<td>Tool-call authorization</td>
+<td>A deterministic check before any side effect: allowlist, identity, scope</td>
+</tr>
+<tr>
+<td>Training-time alignment vs inference-time control</td>
+<td>Safe behavior built into the model versus the rules you enforce at request time</td>
+</tr>
+<tr>
+<td>Transient error</td>
+<td>A temporary failure that likely succeeds on retry</td>
+</tr>
+<tr>
+<td>Translation table</td>
+<td>The output of discovery: statement, constraint, decision, assumption</td>
+</tr>
+<tr>
+<td>Verification checklist</td>
+<td>Correctness, security, maintainability, and human understanding, checked before production</td>
+</tr>
+<tr>
+<td>Workflow</td>
+<td>Steps orchestrated in your own code, some of which call the model</td>
+</tr>
+<tr>
+<td>Working set</td>
+<td>The part of a program’s memory, or a model’s context, that the next steps actually need</td>
+</tr>
+</tbody>
+</table>
 <h2 id="references">References</h2>
 <p><strong>Architecture and patterns</strong></p>
 <ul>

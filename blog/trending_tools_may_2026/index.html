@@ -24,37 +24,37 @@
 <h3 id="ccflare"><a href="https://github.com/snipeship/ccflare">ccflare</a></h3>
 <p>A Bun + TypeScript proxy that takes a different angle: instead of translating between providers, it does <strong>native passthrough</strong> for both Anthropic and OpenAI — <code>/v1/anthropic/*</code> and <code>/v1/openai/*</code> route directly without payload rewriting. Where it shines is multi-account orchestration: load-balance across accounts, automatically fail over when one rate-limits, and watch every request stream through a built-in dashboard.</p>
 <p>If you’re a team running multiple keys (or multiple plans) and want one place to see usage, history, and rate-limit pressure, ccflare is the more honest fit. free-claude-code is for cost arbitrage; ccflare is for operations.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th></th><th>free-claude-code</th><th>ccflare</th></tr></thead><tbody><tr><td>Stack</td><td>Python / FastAPI</td><td>Bun / TypeScript</td></tr><tr><td>Model translation</td><td>Yes (NIM ↔ Anthropic)</td><td>No (native passthrough)</td></tr><tr><td>Killer feature</td><td>Per-tier provider routing</td><td>Account failover + dashboard</td></tr><tr><td>Best for</td><td>Cost optimization, local models</td><td>Multi-account teams</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>free-claude-code</th>
+<th>ccflare</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stack</td>
+<td>Python / FastAPI</td>
+<td>Bun / TypeScript</td>
+</tr>
+<tr>
+<td>Model translation</td>
+<td>Yes (NIM ↔ Anthropic)</td>
+<td>No (native passthrough)</td>
+</tr>
+<tr>
+<td>Killer feature</td>
+<td>Per-tier provider routing</td>
+<td>Account failover + dashboard</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>Cost optimization, local models</td>
+<td>Multi-account teams</td>
+</tr>
+</tbody>
+</table>
 <hr>
 <h2 id="2-agent-frameworks--the-ready-to-run-tier">2. Agent frameworks — the “ready to run” tier</h2>
 <p>The second layer is the agent itself: the prompt, the tool loop, the planner, the file system, the sub-agent dispatcher. Two projects worth knowing.</p>
@@ -64,37 +64,37 @@
 <h3 id="hermes-agent"><a href="https://github.com/nousresearch/hermes-agent">hermes-agent</a></h3>
 <p>Nous Research’s contribution is a <em>self-improving</em> agent. The pitch is a closed learning loop: the agent curates its own memory, autonomously creates new skills from experience, and refines those skills during use. It implements the <a href="https://agentskills.io">agentskills.io</a> open standard so skills are portable.</p>
 <p>The other distinguishing feature is reach. Hermes runs on CLI, Telegram, Discord, Slack, WhatsApp, Signal, and email through a unified gateway, supports 200+ models, and can spawn sub-agents across six terminal backends (local, Docker, SSH, Modal, etc.). It’s designed to live somewhere — a $5 VPS, a serverless function, your laptop — and stay reachable.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th></th><th>deepagents</th><th>hermes-agent</th></tr></thead><tbody><tr><td>Provenance</td><td>LangChain</td><td>Nous Research</td></tr><tr><td>Core stack</td><td>Python + LangGraph</td><td>Python + TypeScript</td></tr><tr><td>Differentiator</td><td>Compiled graph, sub-agent dispatch</td><td>Skill self-improvement, multi-platform</td></tr><tr><td>Best for</td><td>Building production agent apps</td><td>Always-on personal/research agent</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>deepagents</th>
+<th>hermes-agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Provenance</td>
+<td>LangChain</td>
+<td>Nous Research</td>
+</tr>
+<tr>
+<td>Core stack</td>
+<td>Python + LangGraph</td>
+<td>Python + TypeScript</td>
+</tr>
+<tr>
+<td>Differentiator</td>
+<td>Compiled graph, sub-agent dispatch</td>
+<td>Skill self-improvement, multi-platform</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>Building production agent apps</td>
+<td>Always-on personal/research agent</td>
+</tr>
+</tbody>
+</table>
 <hr>
 <h2 id="3-workflow-and-skill-layer--methodology-not-just-tools">3. Workflow and skill layer — methodology, not just tools</h2>
 <p>A capable agent without a workflow is a fast way to ship bad code. This layer is about the <em>process</em> the agent follows.</p>
@@ -124,42 +124,42 @@
 <h3 id="tolaria"><a href="https://github.com/refactoringhq/tolaria">tolaria</a></h3>
 <p>Different problem, adjacent answer. Tolaria is a Tauri + React desktop app for managing markdown-based knowledge bases — think a local-first, offline, git-backed Obsidian, designed from day one to be readable by Claude Code, Codex CLI, and Gemini CLI. Notes are plain markdown with YAML frontmatter, every vault is a git repo, and there is no cloud, account, or subscription.</p>
 <p>Why it sits in this section: in the SDD world you want your specs, mission docs, and architecture notes in one place that <em>both</em> you and your agent can read. Tolaria is the curation surface; GitNexus and graphify are the indexing surface.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th></th><th>GitNexus</th><th>graphify</th><th>tolaria</th></tr></thead><tbody><tr><td>Input</td><td>Code repos</td><td>Code + docs + media</td><td>Hand-authored markdown</td></tr><tr><td>Output</td><td>Interactive graph + MCP tools</td><td>HTML graph + report + JSON</td><td>Vault of files + git history</td></tr><tr><td>Storage</td><td>LadybugDB (graph + vector)</td><td>NetworkX + JSON cache</td><td>Plain markdown files</td></tr><tr><td>Best for</td><td>“Understand this codebase”</td><td>“Understand this folder of stuff”</td><td>“Curate context for my agent”</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>GitNexus</th>
+<th>graphify</th>
+<th>tolaria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Input</td>
+<td>Code repos</td>
+<td>Code + docs + media</td>
+<td>Hand-authored markdown</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>Interactive graph + MCP tools</td>
+<td>HTML graph + report + JSON</td>
+<td>Vault of files + git history</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>LadybugDB (graph + vector)</td>
+<td>NetworkX + JSON cache</td>
+<td>Plain markdown files</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>“Understand this codebase”</td>
+<td>“Understand this folder of stuff”</td>
+<td>“Curate context for my agent”</td>
+</tr>
+</tbody>
+</table>
 <hr>
 <h2 id="5-memory-layer--making-sessions-stop-forgetting">5. Memory layer — making sessions stop forgetting</h2>
 <p>I covered <a href="/blogs/blog/coding_today/">memory at length in the previous post</a>, so the short version here. Three projects, three philosophies:</p>
@@ -174,36 +174,36 @@
 <p><strong><a href="https://github.com/topoteretes/cognee">cognee</a></strong> — Knowledge graph instead of bag-of-vectors. Four operations (<code>remember</code>, <code>recall</code>, <code>forget</code>, <code>improve</code>), auto-routing between vector and graph search, ontology grounding, and enterprise features like tenant isolation and audit trails. Best when relationships matter — timelines, cause-and-effect, contradiction detection.</p>
 </li>
 </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Tool</th><th>Storage</th><th>Tied to</th><th>Strength</th></tr></thead><tbody><tr><td>claude-mem</td><td>SQLite + Chroma</td><td>Claude Code</td><td>Zero-config session continuity</td></tr><tr><td>mem0</td><td>Vector + BM25 + entities</td><td>Any LLM</td><td>Generality, fast extraction</td></tr><tr><td>cognee</td><td>Vector + Graph DB</td><td>Any LLM</td><td>Relationship intelligence</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Storage</th>
+<th>Tied to</th>
+<th>Strength</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>claude-mem</td>
+<td>SQLite + Chroma</td>
+<td>Claude Code</td>
+<td>Zero-config session continuity</td>
+</tr>
+<tr>
+<td>mem0</td>
+<td>Vector + BM25 + entities</td>
+<td>Any LLM</td>
+<td>Generality, fast extraction</td>
+</tr>
+<tr>
+<td>cognee</td>
+<td>Vector + Graph DB</td>
+<td>Any LLM</td>
+<td>Relationship intelligence</td>
+</tr>
+</tbody>
+</table>
 <hr>
 <h2 id="how-the-layers-fit-together">How the layers fit together</h2>
 <p>Each project on its own is a tool. The interesting picture is what happens when you stack them:</p>

@@ -40,42 +40,42 @@
     T --> N["New State&#x3C;br/>(persisted + logged)"]
     G -->|fails| R["Stay in current state&#x3C;br/>+ record why"]
 </code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Part</th><th>What it is</th><th>Example</th></tr></thead><tbody><tr><td><strong>State</strong></td><td>Where the system is now, plus the data it holds</td><td><code>awaiting_review</code>, with the draft attached</td></tr><tr><td><strong>Event</strong></td><td>Something that happened and asks for a change</td><td>Reviewer clicks approve</td></tr><tr><td><strong>Guard</strong></td><td>The condition that must hold for the change to be allowed</td><td>Reviewer has authority for this risk level</td></tr><tr><td><strong>Transition</strong></td><td>The move itself, and any action it triggers</td><td>Publish the document, send a notification</td></tr><tr><td><strong>New State</strong></td><td>Where the system ends up, saved so it survives restarts</td><td><code>published</code></td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>What it is</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>State</strong></td>
+<td>Where the system is now, plus the data it holds</td>
+<td><code>awaiting_review</code>, with the draft attached</td>
+</tr>
+<tr>
+<td><strong>Event</strong></td>
+<td>Something that happened and asks for a change</td>
+<td>Reviewer clicks approve</td>
+</tr>
+<tr>
+<td><strong>Guard</strong></td>
+<td>The condition that must hold for the change to be allowed</td>
+<td>Reviewer has authority for this risk level</td>
+</tr>
+<tr>
+<td><strong>Transition</strong></td>
+<td>The move itself, and any action it triggers</td>
+<td>Publish the document, send a notification</td>
+</tr>
+<tr>
+<td><strong>New State</strong></td>
+<td>Where the system ends up, saved so it survives restarts</td>
+<td><code>published</code></td>
+</tr>
+</tbody>
+</table>
 <hr>
 <h3 id="two-rules-that-hold-the-model-together">Two Rules That Hold the Model Together</h3>
 <p><strong>1. A failed guard means no move.</strong>
@@ -159,47 +159,47 @@ If you cannot reconstruct how the system reached its current state, you cannot d
 <p>One question I can’t answer yet. <a href="/blogs/blog/state-engineering/">State Engineering</a> says you don’t know the steps of a piece of work when you start. So can a runbook fix the gates without fixing the path?</p>
 <h2 id="from-questions-to-a-design">From questions to a design</h2>
 <p>The vision ended on an open question. This design is my bet on the answer, and the first build below is how to test it. Each question above turns into one part of the design. Most of them land in the CLI, because that is where the state lives. Here is the map from question to rule to the part that enforces it:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Question</th><th>Design rule</th><th>Part that enforces it</th></tr></thead><tbody><tr><td>Seen state versus real state</td><td>Every status is an estimate with a confidence level and a pointer to its evidence. An agent’s own claim never passes a gate.</td><td>CLI: the views and the checker</td></tr><tr><td>The verbs of state</td><td>Read, write, fork, merge, snapshot, rollback, and replay are CLI commands, each with its own rule. Facts are only added, never edited.</td><td>CLI: the item log</td></tr><tr><td>What triggers a transition</td><td>A move needs a named event and a gate that passes at that moment. Every gate has a fail branch.</td><td>CLI: the runner</td></tr><tr><td>One state across sessions, agents, and machines</td><td>State belongs to the work item. An item has one holder at a time, through a claim that expires. Facts sync to the platform.</td><td>platform: claims and synced logs</td></tr><tr><td>Snapshot and replay</td><td>A snapshot is a position in the log. Replay rebuilds views from recorded facts and never calls the model again.</td><td>CLI: the item log</td></tr><tr><td>How an agent notices drift</td><td>When an input changes, the items that depend on it become <strong>suspect</strong>. Cheap checks run again on a schedule.</td><td>CLI: the runner, told of changes by the platform</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Design rule</th>
+<th>Part that enforces it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seen state versus real state</td>
+<td>Every status is an estimate with a confidence level and a pointer to its evidence. An agent’s own claim never passes a gate.</td>
+<td>CLI: the views and the checker</td>
+</tr>
+<tr>
+<td>The verbs of state</td>
+<td>Read, write, fork, merge, snapshot, rollback, and replay are CLI commands, each with its own rule. Facts are only added, never edited.</td>
+<td>CLI: the item log</td>
+</tr>
+<tr>
+<td>What triggers a transition</td>
+<td>A move needs a named event and a gate that passes at that moment. Every gate has a fail branch.</td>
+<td>CLI: the runner</td>
+</tr>
+<tr>
+<td>One state across sessions, agents, and machines</td>
+<td>State belongs to the work item. An item has one holder at a time, through a claim that expires. Facts sync to the platform.</td>
+<td>platform: claims and synced logs</td>
+</tr>
+<tr>
+<td>Snapshot and replay</td>
+<td>A snapshot is a position in the log. Replay rebuilds views from recorded facts and never calls the model again.</td>
+<td>CLI: the item log</td>
+</tr>
+<tr>
+<td>How an agent notices drift</td>
+<td>When an input changes, the items that depend on it become <strong>suspect</strong>. Cheap checks run again on a schedule.</td>
+<td>CLI: the runner, told of changes by the platform</td>
+</tr>
+</tbody>
+</table>
 <h3 id="the-parts">The parts</h3>
 <pre><code class="language-mermaid">flowchart LR
   subgraph SB["sandbox, one per claim"]

@@ -76,36 +76,36 @@ Last updated on <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time> 
 <p>Once the answer to question 2 is yes, the next mistake is to build the most impressive shape. Anthropic’s guide to <a href="https://www.anthropic.com/engineering/building-effective-agents">building effective agents</a> puts the rule plainly: “we recommend finding the simplest solution possible, and only increasing complexity when needed.” It adds: “This might mean not building agentic systems at all.” Microsoft’s <a href="https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns">Architecture Center</a> says the same in its own words: “Use the lowest level of complexity that reliably meets your requirements.”</p>
 <p>Before choosing a shape, split the request three ways: the work the model will own, the work existing systems already own, and the work people must keep. Anthropic’s architect course for partners, <a href="https://anthropic-partners.skilljar.com/path/claude-certified-architect-professional/claude-platform-solution-design">Claude Platform Solution Design</a>, starts there. The model’s share usually turns out smaller than the request suggests. Its public outline adds a second check. When an answer depends on the current state of a system, such as a ticket’s status or an order in flight, ask the system directly. Searching a copy of last week’s documents gives an answer that was true last week.</p>
 <p>With the model’s share known, pick the shape. The same course names three, and each costs more than the last.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Shape</th><th>What decides the next step</th><th>Good for</th><th>What it costs you</th></tr></thead><tbody><tr><td>Augmented call</td><td>Nothing. One model call, with retrieval, examples, or a tool</td><td>Classify, summarize, translate, extract, draft</td><td>A prompt, a test set, and a check on the output</td></tr><tr><td>Workflow</td><td>Your code. Anthropic: “systems where LLMs and tools are orchestrated through predefined code paths”</td><td>Fixed steps where some need language: triage, reports, release notes</td><td>All of the above, plus the code path and a check between steps</td></tr><tr><td>Agent</td><td>The model. It chooses its own steps and tools</td><td>Open-ended work where the number of steps cannot be known in advance</td><td>All of the above, plus iteration limits, tool permissions, tracing, and a harder test set</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Shape</th>
+<th>What decides the next step</th>
+<th>Good for</th>
+<th>What it costs you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Augmented call</td>
+<td>Nothing. One model call, with retrieval, examples, or a tool</td>
+<td>Classify, summarize, translate, extract, draft</td>
+<td>A prompt, a test set, and a check on the output</td>
+</tr>
+<tr>
+<td>Workflow</td>
+<td>Your code. Anthropic: “systems where LLMs and tools are orchestrated through predefined code paths”</td>
+<td>Fixed steps where some need language: triage, reports, release notes</td>
+<td>All of the above, plus the code path and a check between steps</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>The model. It chooses its own steps and tools</td>
+<td>Open-ended work where the number of steps cannot be known in advance</td>
+<td>All of the above, plus iteration limits, tool permissions, tracing, and a harder test set</td>
+</tr>
+</tbody>
+</table>
 <p>Inside the agent row there is one more step up. Microsoft calls a single agent with tools “often the right default for enterprise use cases.” Several agents are justified only when one agent cannot cope because of prompt size, too many tools, or separate security boundaries. If the agents talk in a shared thread, the same page suggests keeping it to three or fewer. The Decision Framework puts the whole rule in one line: “Audition the soloist before you hire the orchestra.” Try one agent with good tools before anyone talks about several.</p>
 <p>The shape says who decides the next step. It does not say how hard the work is, and that is what sets the evidence you need before launch. The Decision Framework’s <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html">evaluation criteria</a> sort work into four tiers, and each tier lists the evidence it needs before going live. To place a project in a tier, ask six quick questions and let the hardest answer decide. That last rule is my addition, not the page’s. It rests on a simple fact: a system is as hard as its hardest part.</p>
 <ol>
@@ -116,100 +116,100 @@ Last updated on <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time> 
 <li><strong>Drift:</strong> how often do the inputs or the right answer change?</li>
 <li><strong>Owners:</strong> who will run it? A team that builds in a low-code tool and a team that runs CI/CD and an on-call rotation are different owners, and the tier must match the team.</li>
 </ol>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Tier</th><th>Typical shape</th><th>Example</th><th>Evidence before it goes live</th><th>Usual time to production</th></tr></thead><tbody><tr><td>1. Informational</td><td>Augmented call with retrieval</td><td>Answer questions from documents, with sources</td><td>Citations are right, results are trimmed to what the asker may see, content is fresh</td><td>Days</td></tr><tr><td>2. Transactional</td><td>Workflow</td><td>Classify a request and update a record</td><td>Safe to run twice, can be rolled back, someone approves, every action is logged</td><td>Weeks</td></tr><tr><td>3. Reasoning</td><td>Single agent with tools</td><td>Investigate an incident and propose a cause</td><td>Tools are called correctly, a failed run can resume, there is a latency budget and a test pass threshold</td><td>Weeks to months</td></tr><tr><td>4. Autonomous</td><td>Bounded agent or several agents</td><td>Run a multi-step change across systems with little supervision</td><td>Written limits on autonomy, isolation, stop conditions, escalation, tracing end to end</td><td>Months</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Typical shape</th>
+<th>Example</th>
+<th>Evidence before it goes live</th>
+<th>Usual time to production</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Informational</td>
+<td>Augmented call with retrieval</td>
+<td>Answer questions from documents, with sources</td>
+<td>Citations are right, results are trimmed to what the asker may see, content is fresh</td>
+<td>Days</td>
+</tr>
+<tr>
+<td>2. Transactional</td>
+<td>Workflow</td>
+<td>Classify a request and update a record</td>
+<td>Safe to run twice, can be rolled back, someone approves, every action is logged</td>
+<td>Weeks</td>
+</tr>
+<tr>
+<td>3. Reasoning</td>
+<td>Single agent with tools</td>
+<td>Investigate an incident and propose a cause</td>
+<td>Tools are called correctly, a failed run can resume, there is a latency budget and a test pass threshold</td>
+<td>Weeks to months</td>
+</tr>
+<tr>
+<td>4. Autonomous</td>
+<td>Bounded agent or several agents</td>
+<td>Run a multi-step change across systems with little supervision</td>
+<td>Written limits on autonomy, isolation, stop conditions, escalation, tracing end to end</td>
+<td>Months</td>
+</tr>
+</tbody>
+</table>
 <p>The time column comes from the same page, with a fair warning: “Products are anchors, not clocks.” The data and the approvals decide the date, not the tool.</p>
 <p><strong>Borrow a reference architecture instead of inventing one.</strong> Most requests match a shape that someone has already drawn, tested, and written failure notes for. The map below names the common cases and where each is written up.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>If the problem looks like</th><th>Start from</th><th>Written up in</th></tr></thead><tbody><tr><td>Answer questions from a body of documents</td><td>Retrieval with citations and permission trimming</td><td><a href="https://learn.microsoft.com/en-us/azure/architecture/ai-ml/architecture/baseline-microsoft-foundry-chat">Baseline Foundry chat reference architecture</a></td></tr><tr><td>Sort incoming requests to the right handler</td><td>Routing</td><td><a href="https://www.anthropic.com/engineering/building-effective-agents">Building effective agents</a></td></tr><tr><td>A fixed sequence of steps, some of them language</td><td>Prompt chaining with checks between steps, or sequential orchestration</td><td>Anthropic guide; <a href="https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns">Azure orchestration patterns</a></td></tr><tr><td>Produce something, then check it against criteria</td><td>Evaluator-optimizer, also called maker-checker</td><td>Both of the above</td></tr><tr><td>Many independent pieces, or several lenses on one input</td><td>Parallelization or orchestrator-workers, with an outside judge</td><td>Both of the above</td></tr><tr><td>Investigate something open-ended</td><td>Single agent with tools, an iteration limit, and a person who approves the conclusion</td><td>Azure orchestration patterns</td></tr><tr><td>The right specialist only becomes clear partway through</td><td>Handoff</td><td>Azure orchestration patterns</td></tr><tr><td>Work that crosses security or ownership boundaries</td><td>Several agents, one identity each, with written handoffs</td><td>Azure orchestration patterns; question 9</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>If the problem looks like</th>
+<th>Start from</th>
+<th>Written up in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Answer questions from a body of documents</td>
+<td>Retrieval with citations and permission trimming</td>
+<td><a href="https://learn.microsoft.com/en-us/azure/architecture/ai-ml/architecture/baseline-microsoft-foundry-chat">Baseline Foundry chat reference architecture</a></td>
+</tr>
+<tr>
+<td>Sort incoming requests to the right handler</td>
+<td>Routing</td>
+<td><a href="https://www.anthropic.com/engineering/building-effective-agents">Building effective agents</a></td>
+</tr>
+<tr>
+<td>A fixed sequence of steps, some of them language</td>
+<td>Prompt chaining with checks between steps, or sequential orchestration</td>
+<td>Anthropic guide; <a href="https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns">Azure orchestration patterns</a></td>
+</tr>
+<tr>
+<td>Produce something, then check it against criteria</td>
+<td>Evaluator-optimizer, also called maker-checker</td>
+<td>Both of the above</td>
+</tr>
+<tr>
+<td>Many independent pieces, or several lenses on one input</td>
+<td>Parallelization or orchestrator-workers, with an outside judge</td>
+<td>Both of the above</td>
+</tr>
+<tr>
+<td>Investigate something open-ended</td>
+<td>Single agent with tools, an iteration limit, and a person who approves the conclusion</td>
+<td>Azure orchestration patterns</td>
+</tr>
+<tr>
+<td>The right specialist only becomes clear partway through</td>
+<td>Handoff</td>
+<td>Azure orchestration patterns</td>
+</tr>
+<tr>
+<td>Work that crosses security or ownership boundaries</td>
+<td>Several agents, one identity each, with written handoffs</td>
+<td>Azure orchestration patterns; question 9</td>
+</tr>
+</tbody>
+</table>
 <p>The same Azure page lists eight common mistakes, and three of them are mismatches. One is a complex pattern where a simple sequence would do. Another is adding agents that do not specialize in anything. The third is a pattern that does not fit the work: a fixed pattern for work that is really open-ended, or a free-form agent for work that is really fixed.</p>
 <blockquote>
 <p><strong>Lesson:</strong> split the request before you shape it, choose the lowest shape that works, let the hardest of the six answers set the tier, and borrow an architecture someone has already tested.</p>
@@ -240,32 +240,32 @@ Last updated on <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time> 
 <p>Here is the trap inside the word “cheap.” In 1865 the economist William Jevons looked back at a century of steam engines that kept getting more efficient, while some experts expected better technology to make England burn less coal. It burned more, and he explained why: cheaper coal found more uses, and demand grew faster than efficiency. His line still applies: <a href="https://en.wikipedia.org/wiki/Jevons_paradox">“It is a confusion of ideas to suppose that the economical use of fuel is equivalent to diminished consumption.”</a></p>
 <p>Code behaves like coal. When a feature costs twenty minutes, we ask for twenty features, and every one still has to be read, run, kept working, and understood. Dijkstra said in 1988 that we count lines of code <a href="https://www.cs.utexas.edu/~EWD/transcriptions/EWD10xx/EWD1036.html">on the wrong side of the ledger</a>: they are not “lines produced” but “lines spent.” The Decision Framework’s <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/capability-model.html">capability model</a> puts it in two short sentences: “Building got cheap. Owning didn’t.”</p>
 <p>The same page pictures every agent as a coin. One side is the demo: visible, interactive, easy to show in a meeting. The other side runs in the background with nobody at the keyboard, and that side is what changes the operating cost. The demo gets the project approved, but the other side is what you own, so budget the two separately. The <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html">evaluation criteria</a> page counts the cost of owning across licenses, usage, and engineering hours, and adds two warnings that are easy to miss. A system that charges per call quietly tempts you to test less, so budget the testing as its own line. And an agent in a loop can spend a month’s budget in a few hours, so set spending caps before launch.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>The side you see</th><th>The side you own</th></tr></thead><tbody><tr><td>The demo in the meeting</td><td>The job that runs with nobody at the keyboard</td></tr><tr><td>One happy case</td><td>The odd cases, retries, and exceptions</td></tr><tr><td>The cost to build</td><td>The cost to run: usage, checking, fixing, and the owner’s time</td></tr><tr><td>“It works”</td><td>The cost of one outcome that met the standard</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>The side you see</th>
+<th>The side you own</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The demo in the meeting</td>
+<td>The job that runs with nobody at the keyboard</td>
+</tr>
+<tr>
+<td>One happy case</td>
+<td>The odd cases, retries, and exceptions</td>
+</tr>
+<tr>
+<td>The cost to build</td>
+<td>The cost to run: usage, checking, fixing, and the owner’s time</td>
+</tr>
+<tr>
+<td>“It works”</td>
+<td>The cost of one outcome that met the standard</td>
+</tr>
+</tbody>
+</table>
 <p>The last row of that table is the number to aim for: the total cost of one outcome that met the agreed standard, with the checking and the fixing included. Count only the cases that met the standard. Keep the rejected and unfinished ones visible, or dropping the hard cases will make the average look good. To estimate that number, the official <a href="https://learn.microsoft.com/en-us/azure/well-architected/ai/design-principles">design principles</a> name what drives it: how much data, how many questions, how much load at once, and the hidden cost of the services you depend on. One more correction belongs in every business case. Staff time freed by AI is capacity, not cash. It becomes a saving only if spending actually falls, or if someone names what the freed hours will now do.</p>
 <blockquote>
 <p><strong>Lesson:</strong> price the side of the coin nobody watches. Cost per good outcome, checking included, build and run budgeted apart.</p>
@@ -295,42 +295,42 @@ Last updated on <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time> 
 <h3 id="7-how-will-we-know-it-worked">7. How will we know it worked?</h3>
 <p>If AI made the work cheaper, we should be able to show where the time went. Usually we cannot, because we trust how it feels.</p>
 <p>In early 2025, <a href="https://arxiv.org/abs/2507.09089">METR</a> randomly assigned real tasks to experienced open-source developers, with and without AI. They finished about a fifth slower with AI. They believed they had been about a fifth faster. Same people, same work, opposite numbers. In its <a href="https://metr.org/blog/2026-02-24-uplift-update/">February 2026 update</a>, METR says developers likely get more help from AI than they did in early 2025, but its own data cannot yet say how much. Other studies find real gains, but only for some people and some organizations, as the table below shows.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Study</th><th>Who was measured</th><th>What it found</th><th>What I take from it</th></tr></thead><tbody><tr><td><a href="https://arxiv.org/abs/2507.09089">METR, early 2025</a></td><td>Experienced open-source developers on their own projects, tasks assigned at random</td><td>About a fifth slower with AI, while believing they were a fifth faster</td><td>Feelings are not measurement</td></tr><tr><td><a href="https://metr.org/blog/2026-02-24-uplift-update/">METR, February 2026</a></td><td>A larger group, same design</td><td>Leans toward a speedup, but too noisy to be sure: “only very weak evidence”</td><td>When people refuse to work without AI, the measurement itself breaks</td></tr><tr><td><a href="https://arxiv.org/abs/2304.11771">Generative AI at Work</a></td><td>Over five thousand customer support workers</td><td>More issues resolved per hour, with the gain mostly for the newest workers</td><td>For individuals, AI can be a leveler</td></tr><tr><td><a href="https://dora.dev/research/2025/dora-report/">DORA 2025</a></td><td>Software organizations</td><td>AI amplifies what is already there: a strong system gets stronger, a weak one is exposed</td><td>For teams, the system around the tool decides the result</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Study</th>
+<th>Who was measured</th>
+<th>What it found</th>
+<th>What I take from it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://arxiv.org/abs/2507.09089">METR, early 2025</a></td>
+<td>Experienced open-source developers on their own projects, tasks assigned at random</td>
+<td>About a fifth slower with AI, while believing they were a fifth faster</td>
+<td>Feelings are not measurement</td>
+</tr>
+<tr>
+<td><a href="https://metr.org/blog/2026-02-24-uplift-update/">METR, February 2026</a></td>
+<td>A larger group, same design</td>
+<td>Leans toward a speedup, but too noisy to be sure: “only very weak evidence”</td>
+<td>When people refuse to work without AI, the measurement itself breaks</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/2304.11771">Generative AI at Work</a></td>
+<td>Over five thousand customer support workers</td>
+<td>More issues resolved per hour, with the gain mostly for the newest workers</td>
+<td>For individuals, AI can be a leveler</td>
+</tr>
+<tr>
+<td><a href="https://dora.dev/research/2025/dora-report/">DORA 2025</a></td>
+<td>Software organizations</td>
+<td>AI amplifies what is already there: a strong system gets stronger, a weak one is exposed</td>
+<td>For teams, the system around the tool decides the result</td>
+</tr>
+</tbody>
+</table>
 <p>None of these is a number to paste into a business case. The studies do not agree, and that is the point. Together they give one instruction: measure in your own setting. Compare against the baseline from question 1, using similar cases with and without the tool. Look at the slow cases, not just the average. Give delayed failures time to appear. Count total human effort, time to the final outcome, quality failures, and cost. One habit matters more than the rest. Most teams track cost, time, token use, and tickets closed, but few check whether the output is right. Check the progress, not just the bill.</p>
 <blockquote>
 <p><strong>Lesson:</strong> faster is a measurement, not a mood. If you cannot show where the saved time went, you have not saved it yet.</p>
@@ -346,32 +346,32 @@ Last updated on <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time> 
 <h3 id="8-how-much-may-it-do-alone-and-who-answers-for-it">8. How much may it do alone, and who answers for it?</h3>
 <p>The capability model separates three levels of trust: the system <strong>recommends</strong>, it <strong>acts within set limits</strong>, or it <strong>owns the outcome</strong>. The line between the first two is where accountability changes hands, and that line is the real design decision. The page says it in one sentence: “Capability is a demo. Authority is a liability.”</p>
 <p>The official <a href="https://learn.microsoft.com/en-us/agents/center-of-excellence/govern-agents-risk">agent governance guide</a> draws the same line and gives it a name: the assist-to-execute line. An agent that drafts a reply assists a person who stays in charge. An agent that sends the reply, updates a record, or moves money makes a change in a system the business treats as the truth. The guide’s rule is short: “Sort every agent by what it does, not by how impressive it looks.” It then sets three risk tiers, and each tier adds controls to the one before it.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Risk tier</th><th>What the agent does</th><th>What it needs before it ships</th></tr></thead><tbody><tr><td>Low</td><td>Summarizes, drafts, or searches for one person or a small team</td><td>A named owner, basic monitoring, a release checklist</td></tr><tr><td>Medium</td><td>Answers domain questions or runs an internal service where a wrong answer misleads people</td><td>All of the above, plus an expert who confirms the answers, monitoring of the knowledge it reads, and a formal gate before going live</td></tr><tr><td>High</td><td>Sits in a core process, faces customers, or takes consequential actions</td><td>All of the above, plus a process owner, a security and responsible-AI review, written decision rights on what it may decide alone, an incident plan, and a regular review</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Risk tier</th>
+<th>What the agent does</th>
+<th>What it needs before it ships</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Low</td>
+<td>Summarizes, drafts, or searches for one person or a small team</td>
+<td>A named owner, basic monitoring, a release checklist</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>Answers domain questions or runs an internal service where a wrong answer misleads people</td>
+<td>All of the above, plus an expert who confirms the answers, monitoring of the knowledge it reads, and a formal gate before going live</td>
+</tr>
+<tr>
+<td>High</td>
+<td>Sits in a core process, faces customers, or takes consequential actions</td>
+<td>All of the above, plus a process owner, a security and responsible-AI review, written decision rights on what it may decide alone, an incident plan, and a regular review</td>
+</tr>
+</tbody>
+</table>
 <p>The tier sets the controls for the whole agent. Inside it, decide per action what the system may do. Reading can be logged. Writing needs a person to confirm. Anything destructive needs approval through a separate channel, from someone who owns the process. The Decision Framework asks for a <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/evaluation-criteria.html">named owner</a> for every production duty. A useful split is two owners: one for the business result and one for keeping the service alive. The Decision Framework’s <a href="https://microsoft.github.io/Microsoft-AI-Decision-Framework/docs/decision-framework.html">decision method</a> page gives the final test: “An agent you cannot see, attribute, or switch off is not in production.”</p>
 <div align="center">
 <pre><code class="language-mermaid">graph LR
@@ -404,40 +404,40 @@ Last updated on <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time> 
 <p>For safety, the oldest security rule still carries the most weight. In 1974 Jerome Saltzer wrote that every program and every privileged user should operate with the <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege">least amount of privilege necessary</a>. An agent is a program that acts on behalf of a person, so it must see only what that person may see, and do only what that person may do. The Decision Framework’s decision method page separates two things that get confused: an agent’s attribution, meaning who it acts for, and its data access, meaning what it may reach. They are different problems, and both need solving.</p>
 <p>Least privilege limits the damage. The next step is to know the attacks. Microsoft’s official <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/secure">security guidance</a> starts with the list of attacks you already defend against. It then checks that list against the AI-specific attack catalogs kept by <a href="https://atlas.mitre.org/">MITRE ATLAS</a> and the <a href="https://genai.owasp.org/">OWASP generative AI project</a>. The new attacks have names worth learning. In prompt injection, a document or a message the agent reads carries instructions it was never meant to follow. In data leakage, sensitive data escapes through the answer itself. In model inversion, an attacker pulls training data back out of the model. The page’s advice is to red-team the system, meaning attack it on purpose before someone else does, and to repeat that as models and usage change.</p>
 <p>A manager does not need every attack name. They need answers to four questions, which turn the final test from question 8 into checks. Is there an inventory of every agent, with an owner? Does each agent have its own identity, so an action can be traced to it? Are the data boundaries written down, so the agent cannot reach what the requesting person cannot? Who can switch it off, and how fast? The <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai/govern">governance page</a> turns Microsoft’s six responsible-AI principles into six risk questions, shown below. The accountability one is the sharpest: where could it be unclear who is responsible?</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Principle</th><th>The question to ask about this project</th></tr></thead><tbody><tr><td>Privacy and security</td><td>Where could it handle sensitive data, or be attacked through what it reads?</td></tr><tr><td>Reliability and safety</td><td>When could it fail to work safely, or give an answer nobody should trust?</td></tr><tr><td>Fairness</td><td>How could it treat some people worse than others?</td></tr><tr><td>Inclusiveness</td><td>Who could be left out by how it is built or used?</td></tr><tr><td>Transparency</td><td>Which of its decisions would a user find hard to understand?</td></tr><tr><td>Accountability</td><td>Where is it unclear who is responsible?</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>The question to ask about this project</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Privacy and security</td>
+<td>Where could it handle sensitive data, or be attacked through what it reads?</td>
+</tr>
+<tr>
+<td>Reliability and safety</td>
+<td>When could it fail to work safely, or give an answer nobody should trust?</td>
+</tr>
+<tr>
+<td>Fairness</td>
+<td>How could it treat some people worse than others?</td>
+</tr>
+<tr>
+<td>Inclusiveness</td>
+<td>Who could be left out by how it is built or used?</td>
+</tr>
+<tr>
+<td>Transparency</td>
+<td>Which of its decisions would a user find hard to understand?</td>
+</tr>
+<tr>
+<td>Accountability</td>
+<td>Where is it unclear who is responsible?</td>
+</tr>
+</tbody>
+</table>
 <p>The business plan page has the line that closes this conversation: “If you can’t name the risks, you can’t manage them.” Pause until you can.</p>
 <blockquote>
 <p><strong>Lesson:</strong> least privilege, an identity per agent, a written data boundary, and a switch someone is allowed to pull. Name the risks or do not ship.</p>
@@ -491,60 +491,60 @@ Last updated on <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time> 
 </ul>
 <h2 id="all-eleven-questions-on-one-page">All eleven questions on one page</h2>
 <p>Here are the eleven questions together, with what to see before saying yes to each.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Question</th><th>What I want to see before I say yes</th></tr></thead><tbody><tr><td>1. What is the problem, before AI?</td><td>The delay or loss, named and measured as it is today</td></tr><tr><td>2. Does it need AI, and does something exist?</td><td>Why plain code, search, and an existing product each failed</td></tr><tr><td>3. What shape, and how hard?</td><td>The lowest shape that works, the tier set by the hardest answer, and a reference architecture to start from</td></tr><tr><td>4. Which decisions are hard to undo?</td><td>Data meaning, boundaries, owners, and rules decided by people, not by the agent</td></tr><tr><td>5. What will it cost to own?</td><td>Cost per good outcome, checking included, build and run budgeted apart</td></tr><tr><td>6. How do we run the pilot?</td><td>The hardest step, on real cases, with expand, change, and stop conditions written first</td></tr><tr><td>7. How will we know it worked?</td><td>A comparison planned in advance, and output checked, not just the bill</td></tr><tr><td>8. How much may it do alone?</td><td>Which actions need a person, the risk tier, and the named owners</td></tr><tr><td>9. How do we keep it safe?</td><td>Least privilege, an identity per agent, a written data boundary, a switch</td></tr><tr><td>10. Who checks it?</td><td>Done defined by the receiver, a test set, and review hours planned</td></tr><tr><td>11. How do we keep it good?</td><td>Tests rerun on every change, drift watched, rejections fed back</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>What I want to see before I say yes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. What is the problem, before AI?</td>
+<td>The delay or loss, named and measured as it is today</td>
+</tr>
+<tr>
+<td>2. Does it need AI, and does something exist?</td>
+<td>Why plain code, search, and an existing product each failed</td>
+</tr>
+<tr>
+<td>3. What shape, and how hard?</td>
+<td>The lowest shape that works, the tier set by the hardest answer, and a reference architecture to start from</td>
+</tr>
+<tr>
+<td>4. Which decisions are hard to undo?</td>
+<td>Data meaning, boundaries, owners, and rules decided by people, not by the agent</td>
+</tr>
+<tr>
+<td>5. What will it cost to own?</td>
+<td>Cost per good outcome, checking included, build and run budgeted apart</td>
+</tr>
+<tr>
+<td>6. How do we run the pilot?</td>
+<td>The hardest step, on real cases, with expand, change, and stop conditions written first</td>
+</tr>
+<tr>
+<td>7. How will we know it worked?</td>
+<td>A comparison planned in advance, and output checked, not just the bill</td>
+</tr>
+<tr>
+<td>8. How much may it do alone?</td>
+<td>Which actions need a person, the risk tier, and the named owners</td>
+</tr>
+<tr>
+<td>9. How do we keep it safe?</td>
+<td>Least privilege, an identity per agent, a written data boundary, a switch</td>
+</tr>
+<tr>
+<td>10. Who checks it?</td>
+<td>Done defined by the receiver, a test set, and review hours planned</td>
+</tr>
+<tr>
+<td>11. How do we keep it good?</td>
+<td>Tests rerun on every change, drift watched, rejections fed back</td>
+</tr>
+</tbody>
+</table>
 <p><strong>When code is cheap, the senior’s job is to pay for what stayed expensive: deciding, owning, checking, and understanding.</strong> Brooks described that job in 1986. The agent just made it impossible to hide behind the typing.</p>
 <h2 id="applying-the-questions-to-five-kinds-of-delivery-work">Applying the questions to five kinds of delivery work</h2>
 <p>The eleven questions stay the same from project to project. Their answers do not, especially in software services, where a vendor builds for a customer and the same work can be sold in different ways. A dedicated team billed by the hour, a maintenance contract, a fixed-bid project, a migration, and a sales pursuit each get a different answer to the question that decides the rest: <strong>when AI saves an hour, who keeps it?</strong> Whoever keeps the saving is the one who wants to measure it. Whoever carries the risk is the one who has to check the output.</p>
@@ -614,60 +614,60 @@ Last updated on <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time> 
 </div>
 <p>The last box matters. Presales decides which of the other four a project becomes, so a promise made there is inherited by everything after it.</p>
 <h3 id="the-five-side-by-side">The five side by side</h3>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th></th><th>Dedicated team, billed by time</th><th>Maintenance and support</th><th>Fixed-bid project</th><th>Migration of an old system</th><th>Business development and presales</th></tr></thead><tbody><tr><td><strong>How it is paid</strong></td><td>Hours or headcount, at a rate</td><td>A monthly fee with service levels, sometimes per ticket</td><td>One price for an agreed scope</td><td>One price per project or per wave of units</td><td>Cost of sale, paid by the deals that close</td></tr><tr><td><strong>Who keeps the saved hour</strong></td><td>The customer, through fewer billed hours, unless the contract changes</td><td>It depends on the contract</td><td>The vendor, who also carries the risk</td><td>Mostly the vendor</td><td>The vendor</td></tr><tr><td><strong>Where AI helps most</strong></td><td>Code, tests, documents, translation</td><td>Sorting tickets, answering from known fixes, investigating, small fixes</td><td>Estimation, design drafts, code, test generation</td><td>Reading old code, translating units, generating tests, reverse documentation</td><td>Discovery, proposal drafts, answers to requirements, demos</td></tr><tr><td><strong>Biggest risk</strong></td><td>Nobody has a reason to measure, and each customer allows different tools</td><td>The agent reads text written by outsiders, and the team slowly stops understanding the system</td><td>Promising savings in the price before they are proven, and scope that grows because “AI is fast”</td><td>Code that compiles but behaves differently, and a new system nobody understands</td><td>Promising savings you cannot prove, and customer documents pasted into tools</td></tr><tr><td><strong>Questions that weigh most</strong></td><td>1, 7, 9</td><td>2, 9, 10, 11</td><td>5, 6, 10</td><td>3, 4, 10</td><td>1, 7</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Dedicated team, billed by time</th>
+<th>Maintenance and support</th>
+<th>Fixed-bid project</th>
+<th>Migration of an old system</th>
+<th>Business development and presales</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>How it is paid</strong></td>
+<td>Hours or headcount, at a rate</td>
+<td>A monthly fee with service levels, sometimes per ticket</td>
+<td>One price for an agreed scope</td>
+<td>One price per project or per wave of units</td>
+<td>Cost of sale, paid by the deals that close</td>
+</tr>
+<tr>
+<td><strong>Who keeps the saved hour</strong></td>
+<td>The customer, through fewer billed hours, unless the contract changes</td>
+<td>It depends on the contract</td>
+<td>The vendor, who also carries the risk</td>
+<td>Mostly the vendor</td>
+<td>The vendor</td>
+</tr>
+<tr>
+<td><strong>Where AI helps most</strong></td>
+<td>Code, tests, documents, translation</td>
+<td>Sorting tickets, answering from known fixes, investigating, small fixes</td>
+<td>Estimation, design drafts, code, test generation</td>
+<td>Reading old code, translating units, generating tests, reverse documentation</td>
+<td>Discovery, proposal drafts, answers to requirements, demos</td>
+</tr>
+<tr>
+<td><strong>Biggest risk</strong></td>
+<td>Nobody has a reason to measure, and each customer allows different tools</td>
+<td>The agent reads text written by outsiders, and the team slowly stops understanding the system</td>
+<td>Promising savings in the price before they are proven, and scope that grows because “AI is fast”</td>
+<td>Code that compiles but behaves differently, and a new system nobody understands</td>
+<td>Promising savings you cannot prove, and customer documents pasted into tools</td>
+</tr>
+<tr>
+<td><strong>Questions that weigh most</strong></td>
+<td>1, 7, 9</td>
+<td>2, 9, 10, 11</td>
+<td>5, 6, 10</td>
+<td>3, 4, 10</td>
+<td>1, 7</td>
+</tr>
+</tbody>
+</table>
 <p>Two patterns come out of that table. First, <strong>the more a machine can check the output, the more work AI can safely take.</strong> A migration has an old system to compare against, so it can use the most. Presales has no test suite for a promise, so it should use the least without a person in the loop. Second, <strong>the activities share their foundations.</strong> One knowledge layer with permissions, workflows for fixed steps, a coding loop with an independent checker, and a way to watch production serve all five. Build those once and each activity is a configuration, not a new project. The sections below take the five in turn.</p>
 <h3 id="dedicated-teams-billed-by-time">Dedicated teams billed by time</h3>
 <p>The trap here is simple. If the customer pays for hours, every hour AI saves is an hour nobody bills. The vendor has no reason to measure, and the customer has no proof to ask for a better deal. Most teams do use AI, but “not measured yet” is their most common status. Question 7 is the bottleneck, not the tool.</p>
@@ -693,76 +693,76 @@ Last updated on <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time> 
 <p>Every claim in a proposal needs your own measurement behind it. Do not paste a study’s number into a proposal as a promise, because question 7 shows the studies disagree. Show what you measured in your own delivery, with and without the tool. The same goes for people: selling AI-augmented engineers at a higher rate needs proof of how they check AI output, not a certificate that they used it. Governance is evidence too. A customer who is asked to move from hours to outcomes needs to see how the vendor measures, reviews, and switches things off. Dashboards and review discipline are what make outcome pricing believable.</p>
 <p>Finally, keep customer material inside the boundary. Requirement documents and source code shared during a pursuit fall under question 9 like any other data. Drafting a proposal is a tier 1 task in the terms of question 3, but the documents it reads may not be.</p>
 <h3 id="the-same-eleven-questions-five-answers">The same eleven questions, five answers</h3>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Question</th><th>Dedicated team</th><th>Maintenance</th><th>Fixed bid</th><th>Migration</th><th>Presales</th></tr></thead><tbody><tr><td>1. The problem</td><td>Where hours go today</td><td>Where tickets wait</td><td>Where rework comes from</td><td>What the old system really does</td><td>What the customer actually loses</td></tr><tr><td>3. Shape and tier</td><td>Augmented calls and workflows, tiers 1 to 2</td><td>Workflows for sorting and reports, one agent for investigation, tiers 1 to 3</td><td>Workflows and a checked coding loop, tiers 2 to 3</td><td>Orchestrator, workers, outside judge, tier 3</td><td>Augmented calls, tier 1</td></tr><tr><td>5. Cost to own</td><td>Tool quota and review hours</td><td>Cost per ticket closed to standard</td><td>Build, run, and review as three lines</td><td>Cost per unit proven equal</td><td>Time per proposal</td></tr><tr><td>6. The pilot</td><td>Shadow billing on one team</td><td>Replay closed tickets and change requests</td><td>One module, priced only after proof</td><td>The easiest unit first, to build the pipeline</td><td>One discovery workshop</td></tr><tr><td>7. Did it work</td><td>Effort per task and throughput, with and without the tool on similar tasks</td><td>Tickets closed to standard, time to resolve, reopens, re-routes, repeat questions, root cause in the top three</td><td>Cost per function, rework, escaped defects, the review queue</td><td>Units converted and proven to behave like the old ones, loops per unit</td><td>Time to a proposal, win rate, proposals backed by own data</td></tr><tr><td>8. Authority</td><td>Suggests; people commit</td><td>Reads freely, writes with a person</td><td>Opens changes; people merge</td><td>Commits only what the judge passed</td><td>Drafts; people send</td></tr><tr><td>10. Who checks</td><td>Reviewer hours in the plan</td><td>The receiver at the next level</td><td>Review queue as a metric</td><td>The judge and an independent evaluator</td><td>A person who signs each claim</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Dedicated team</th>
+<th>Maintenance</th>
+<th>Fixed bid</th>
+<th>Migration</th>
+<th>Presales</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. The problem</td>
+<td>Where hours go today</td>
+<td>Where tickets wait</td>
+<td>Where rework comes from</td>
+<td>What the old system really does</td>
+<td>What the customer actually loses</td>
+</tr>
+<tr>
+<td>3. Shape and tier</td>
+<td>Augmented calls and workflows, tiers 1 to 2</td>
+<td>Workflows for sorting and reports, one agent for investigation, tiers 1 to 3</td>
+<td>Workflows and a checked coding loop, tiers 2 to 3</td>
+<td>Orchestrator, workers, outside judge, tier 3</td>
+<td>Augmented calls, tier 1</td>
+</tr>
+<tr>
+<td>5. Cost to own</td>
+<td>Tool quota and review hours</td>
+<td>Cost per ticket closed to standard</td>
+<td>Build, run, and review as three lines</td>
+<td>Cost per unit proven equal</td>
+<td>Time per proposal</td>
+</tr>
+<tr>
+<td>6. The pilot</td>
+<td>Shadow billing on one team</td>
+<td>Replay closed tickets and change requests</td>
+<td>One module, priced only after proof</td>
+<td>The easiest unit first, to build the pipeline</td>
+<td>One discovery workshop</td>
+</tr>
+<tr>
+<td>7. Did it work</td>
+<td>Effort per task and throughput, with and without the tool on similar tasks</td>
+<td>Tickets closed to standard, time to resolve, reopens, re-routes, repeat questions, root cause in the top three</td>
+<td>Cost per function, rework, escaped defects, the review queue</td>
+<td>Units converted and proven to behave like the old ones, loops per unit</td>
+<td>Time to a proposal, win rate, proposals backed by own data</td>
+</tr>
+<tr>
+<td>8. Authority</td>
+<td>Suggests; people commit</td>
+<td>Reads freely, writes with a person</td>
+<td>Opens changes; people merge</td>
+<td>Commits only what the judge passed</td>
+<td>Drafts; people send</td>
+</tr>
+<tr>
+<td>10. Who checks</td>
+<td>Reviewer hours in the plan</td>
+<td>The receiver at the next level</td>
+<td>Review queue as a metric</td>
+<td>The judge and an independent evaluator</td>
+<td>A person who signs each claim</td>
+</tr>
+</tbody>
+</table>
 <blockquote>
 <p><strong>Lesson:</strong> ask who keeps the saved hour before you ask which tool. The answer tells you who will measure, who must check, and how much of the work AI can safely carry.</p>
 </blockquote>
@@ -772,47 +772,47 @@ Last updated on <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time> 
 <p>The first kind, the agent system, is about making the agent itself handle more of the task. That means four things: it runs longer without stopping, it survives failures, it spends less for the same result, and it takes on harder work. All four depend on something that has to come first: a target the agent can be checked against. Without a check, a longer run is just a longer way to be wrong, and a cheaper run cannot show that it still gives the same result. With a check, you can cut the steps and the cost, and prove the result stayed the same. This is an old discipline under a new name. Martin Fowler’s <a href="https://martinfowler.com/books/refactoring.html">Refactoring</a> (1999) describes refactoring as a series of small behavior-preserving transformations. Only a test can tell you the behavior was preserved. Making an agent faster or cheaper is a refactoring of the work itself. The test set from question 10 is what makes it safe.</p>
 <p>The second kind of work is building the <strong>context system</strong>. The information the agent gets must be consistent, current, relevant, and just enough. It must also stay inside what the person asking may see, the rule from question 9. Connecting the tools, such as the issue tracker, the chat, and the document store, is only the starting point. The hard part is knowing where each fact came from, when it was valid, and which version applies. The model does not fix bad data. It combines what it is given, and it is very good at that, so most of the engineering is in what it is given. The model is the part you can rent. The context is the part nobody can sell you.</p>
 <p>A context system also grows with the organization, and the hard problem changes at each step:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Setting</th><th>Where the context lives</th><th>The hard part</th></tr></thead><tbody><tr><td>Solo developer</td><td>The repository, an instruction file, a folder of notes</td><td>The discipline to write things down</td></tr><tr><td>Small business</td><td>A few shared tools: chat, documents, an issue tracker</td><td>Knowledge lives in people’s heads, so you need one shared truth</td></tr><tr><td>Manufacturer with a thousand people</td><td>Office tools plus the plant systems, machine data, and procedures, often on paper</td><td>The documents say one thing and the factory floor does another</td></tr><tr><td>Enterprise</td><td>Many teams, many tools, many copies</td><td>Permissions: the agent must see only what the asking person may see, and pick the right version</td></tr><tr><td>Company with several business units</td><td>Each unit’s own systems and its own meaning for the same word</td><td>Shared meaning: does “customer” mean the same thing everywhere?</td></tr><tr><td>Global company</td><td>Many languages, regions, and laws</td><td>Data must stay where the law says, and meaning must survive translation</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Where the context lives</th>
+<th>The hard part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Solo developer</td>
+<td>The repository, an instruction file, a folder of notes</td>
+<td>The discipline to write things down</td>
+</tr>
+<tr>
+<td>Small business</td>
+<td>A few shared tools: chat, documents, an issue tracker</td>
+<td>Knowledge lives in people’s heads, so you need one shared truth</td>
+</tr>
+<tr>
+<td>Manufacturer with a thousand people</td>
+<td>Office tools plus the plant systems, machine data, and procedures, often on paper</td>
+<td>The documents say one thing and the factory floor does another</td>
+</tr>
+<tr>
+<td>Enterprise</td>
+<td>Many teams, many tools, many copies</td>
+<td>Permissions: the agent must see only what the asking person may see, and pick the right version</td>
+</tr>
+<tr>
+<td>Company with several business units</td>
+<td>Each unit’s own systems and its own meaning for the same word</td>
+<td>Shared meaning: does “customer” mean the same thing everywhere?</td>
+</tr>
+<tr>
+<td>Global company</td>
+<td>Many languages, regions, and laws</td>
+<td>Data must stay where the law says, and meaning must survive translation</td>
+</tr>
+</tbody>
+</table>
 <p>The amount of data grows down that table, but that is not the real change. The hard problem moves: from discipline, to shared truth, to the gap between documents and reality, to permissions, to shared meaning, to law and language. Adding more documents to a search index does not settle any of those.</p>
 <p>Under every row of that table sits one more layer of context, and no tool holds it. In 1985 Peter Naur wrote <a href="https://pages.cs.wisc.edu/~remzi/Naur.pdf">Programming as Theory Building</a>. His claim is that the program is not the code. It is the <strong>theory</strong> in the heads of the people who built it: the knowledge that lets them explain it and change it without breaking it. Then comes his sharpest line: “The death of a program happens when the programmer team possessing its theory is dissolved.” A dead program keeps running. You find out when someone asks for a change and nobody can answer.</p>
 <p>When an agent writes the code, nobody holds the theory by default. Geoffrey Huntley argues that software <a href="https://ghuntley.com/readable/">no longer needs to be readable, only explainable</a> by a model on demand. I think that is half right. An explanation on request is useful, but it is not a person who understands the system and answers for it. The instruction files we now write for agents, a CLAUDE.md or an AGENTS.md, are the theory partly written down: what the system is for, which decisions were made and why, which source wins when two disagree. That is where the context system and the theory meet. It makes these files the most valuable documents a team can write today. They are still not the whole theory.</p>

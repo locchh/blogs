@@ -43,28 +43,28 @@
 <li><strong>fresh input</strong> (1× the base price) — anything new that isn’t cached yet.</li>
 </ul>
 <p>Watch what happens in a long session — every turn drags the whole history along with it:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Turn</th><th>What gets re-sent as input</th></tr></thead><tbody><tr><td>1</td><td>system prompt + tools + your first message</td></tr><tr><td>5</td><td>all of the above + turns 1-4 (every message, file, and command output)</td></tr><tr><td>20</td><td>all of the above + turns 1-19 — this can be <em>huge</em></td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Turn</th>
+<th>What gets re-sent as input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>system prompt + tools + your first message</td>
+</tr>
+<tr>
+<td>5</td>
+<td>all of the above + turns 1-4 (every message, file, and command output)</td>
+</tr>
+<tr>
+<td>20</td>
+<td>all of the above + turns 1-19 — this can be <em>huge</em></td>
+</tr>
+</tbody>
+</table>
 <p>This is why a long chat gets expensive even when your own messages are short — you are re-paying for the context every time. And it’s exactly why the <strong>cache read</strong> price matters so much: that re-sent history is read at ~10% instead of full price. Without the cache, a long session would cost a fortune.</p>
 <h3 id="output-tokens--there-are-4-kinds">Output tokens — there are 4 kinds</h3>
 <p>Output is everything the model <em>generates</em>, and it’s the expensive side — usually around <strong>5× the price of input</strong>.</p>
@@ -142,47 +142,47 @@
     C --> D([Workout&#x3C;br/>speak aloud &#x26; record])
     D -. "repeat — faster each loop" .-> A
 </code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Step</th><th>Time</th><th>Action</th><th>Goal</th><th>Note</th></tr></thead><tbody><tr><td>1</td><td>10-15 min</td><td>Watch the video without subtitles</td><td>Try to understand the content and identify the sounds you don’t understand</td><td>A <strong>5-minute YouTube video</strong> is enough; the key is to choose content suitable for you — not too hard to understand, not boring, etc.</td></tr><tr><td>2</td><td>20-30 min</td><td>Watch the video again with subtitles</td><td>Collect new words and write them down</td><td>I use a <strong>sticky-note app</strong> on my phone — it’s quite convenient, I can easily review them later, and the <strong>Google Translate</strong> integration helps me quickly look up meanings and pronunciation just by tapping a word. From a 5-minute video, I can collect 10-20 new words.</td></tr><tr><td>3</td><td>20-40 min</td><td>Write</td><td>Write something about the content of the video, BUT include the new words and phrases you learned</td><td>With 20 new words, you can write about <strong>2 A5-sized pages</strong> of notes. That is enough — not too much, not too little.</td></tr><tr><td>4</td><td>10-20 min</td><td>Practice speaking</td><td>Speak the content of the video aloud</td><td>Practice until you can repeat it fluently, or half-fluently, without reading the text. I use my phone’s <strong>voice recorder</strong> to record myself speaking — that is how I realized my pronunciation is terrible. You don’t need to be perfect; just practice until your speech is smooth and natural, and don’t hate your voice.</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Time</th>
+<th>Action</th>
+<th>Goal</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>10-15 min</td>
+<td>Watch the video without subtitles</td>
+<td>Try to understand the content and identify the sounds you don’t understand</td>
+<td>A <strong>5-minute YouTube video</strong> is enough; the key is to choose content suitable for you — not too hard to understand, not boring, etc.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>20-30 min</td>
+<td>Watch the video again with subtitles</td>
+<td>Collect new words and write them down</td>
+<td>I use a <strong>sticky-note app</strong> on my phone — it’s quite convenient, I can easily review them later, and the <strong>Google Translate</strong> integration helps me quickly look up meanings and pronunciation just by tapping a word. From a 5-minute video, I can collect 10-20 new words.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>20-40 min</td>
+<td>Write</td>
+<td>Write something about the content of the video, BUT include the new words and phrases you learned</td>
+<td>With 20 new words, you can write about <strong>2 A5-sized pages</strong> of notes. That is enough — not too much, not too little.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>10-20 min</td>
+<td>Practice speaking</td>
+<td>Speak the content of the video aloud</td>
+<td>Practice until you can repeat it fluently, or half-fluently, without reading the text. I use my phone’s <strong>voice recorder</strong> to record myself speaking — that is how I realized my pronunciation is terrible. You don’t need to be perfect; just practice until your speech is smooth and natural, and don’t hate your voice.</td>
+</tr>
+</tbody>
+</table>
 <p>So with this method, you can gain:</p>
 <ul>
 <li>10-20 new words</li>

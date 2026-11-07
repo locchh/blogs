@@ -143,36 +143,36 @@
 <span class="line"><span>               response in</span></span>
 <span class="line"><span>               character</span></span></code></pre>
 <p>Each layer reinforces the others:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Layer</th><th>File</th><th>When active</th><th>Purpose</th></tr></thead><tbody><tr><td>Base identity</td><td><code>CLAUDE.md</code></td><td>Always</td><td>Who the agent is</td></tr><tr><td>Behavioral spec</td><td><code>SKILL.md</code> (<code>context: always</code>)</td><td>Always</td><td>How the agent reasons and speaks</td></tr><tr><td>Reinforcement</td><td><code>settings.json</code> hook</td><td>Every prompt</td><td>Prevents drift over long sessions</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>File</th>
+<th>When active</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Base identity</td>
+<td><code>CLAUDE.md</code></td>
+<td>Always</td>
+<td>Who the agent is</td>
+</tr>
+<tr>
+<td>Behavioral spec</td>
+<td><code>SKILL.md</code> (<code>context: always</code>)</td>
+<td>Always</td>
+<td>How the agent reasons and speaks</td>
+</tr>
+<tr>
+<td>Reinforcement</td>
+<td><code>settings.json</code> hook</td>
+<td>Every prompt</td>
+<td>Prevents drift over long sessions</td>
+</tr>
+</tbody>
+</table>
 <hr>
 <h2 id="the-rule">The Rule</h2>
 <blockquote>

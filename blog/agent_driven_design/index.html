@@ -37,37 +37,37 @@
 <span class="line"><span>                         │  (`od` binary)   │      query live design files</span></span>
 <span class="line"><span>                         └──────────────────┘</span></span></code></pre>
 <p>Everything persists in a local <code>.od/</code> directory — projects, conversations, open tabs in SQLite, generated artifacts on the filesystem. Nothing ships to a cloud you didn’t choose.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Asset</th><th>Count</th><th>What it is</th></tr></thead><tbody><tr><td>Skills</td><td>132</td><td><code>SKILL.md</code> folders, by mode (prototype / deck / template / image / video) × scenario (design / marketing / engineering / HR / finance)</td></tr><tr><td>Design systems</td><td>150</td><td><code>DESIGN.md</code> files (Linear, Stripe, Vercel, Notion, Tesla…) following a 9-section schema</td></tr><tr><td>Visual directions</td><td>5</td><td>Editorial, Modern Minimal, Tech Utility, Brutalist, Soft Warm — deterministic OKLch palettes</td></tr><tr><td>Export formats</td><td>—</td><td>HTML, PDF, PPTX, ZIP, Markdown</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Asset</th>
+<th>Count</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Skills</td>
+<td>132</td>
+<td><code>SKILL.md</code> folders, by mode (prototype / deck / template / image / video) × scenario (design / marketing / engineering / HR / finance)</td>
+</tr>
+<tr>
+<td>Design systems</td>
+<td>150</td>
+<td><code>DESIGN.md</code> files (Linear, Stripe, Vercel, Notion, Tesla…) following a 9-section schema</td>
+</tr>
+<tr>
+<td>Visual directions</td>
+<td>5</td>
+<td>Editorial, Modern Minimal, Tech Utility, Brutalist, Soft Warm — deterministic OKLch palettes</td>
+</tr>
+<tr>
+<td>Export formats</td>
+<td>—</td>
+<td>HTML, PDF, PPTX, ZIP, Markdown</td>
+</tr>
+</tbody>
+</table>
 <h3 id="how-i-installed-it">How I installed it</h3>
 <p>Three paths exist (AppImage, Docker, source). I picked source because I already had Node 24 and a <code>claude</code> CLI on <code>PATH</code> — the source install lets the daemon spawn my local CLI directly, no API key in any UI. The other two paths are listed in case your starting point is different.</p>
 <h4 id="option-a--linux-appimage-no-build-1-min">Option A — Linux AppImage (no build, ~1 min)</h4>
@@ -101,42 +101,42 @@
 <p><code>pnpm tools-dev status</code> to inspect sidecars, <code>pnpm tools-dev stop</code> to shut down. The daemon runs as your user, so Claude Code / Cursor / Gemini CLIs on your <code>PATH</code> are detected and usable directly — no API keys needed.</p>
 <h3 id="two-claudes-no-shared-context">Two Claudes, no shared context</h3>
 <p>This is the part of agent-driven design that took me a moment to internalize. When you use Open Design’s web UI to generate something, it spawns <strong>a fresh <code>claude</code> subprocess</strong> — not the Claude Code session you’re currently chatting with somewhere else. The two share nothing.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th></th><th>The Claude <strong>inside Open Design</strong></th><th>Your Claude Code session</th></tr></thead><tbody><tr><td>How invoked</td><td>OD’s daemon spawns <code>claude</code> as a subprocess per generation request</td><td>You launched it in some working dir</td></tr><tr><td>Sees</td><td>OD’s internal prompt, its skills/design systems, the task brief</td><td>Your chat history, your files, your <code>CLAUDE.md</code></td></tr><tr><td>Working dir</td><td><code>~/Works/open-design/.od/projects/&#x3C;id>/</code></td><td>Wherever you started it</td></tr><tr><td>Lifetime</td><td>Dies when the OD task finishes</td><td>Lives until you exit</td></tr><tr><td>Memory of the other</td><td>None</td><td>None</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>The Claude <strong>inside Open Design</strong></th>
+<th>Your Claude Code session</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>How invoked</td>
+<td>OD’s daemon spawns <code>claude</code> as a subprocess per generation request</td>
+<td>You launched it in some working dir</td>
+</tr>
+<tr>
+<td>Sees</td>
+<td>OD’s internal prompt, its skills/design systems, the task brief</td>
+<td>Your chat history, your files, your <code>CLAUDE.md</code></td>
+</tr>
+<tr>
+<td>Working dir</td>
+<td><code>~/Works/open-design/.od/projects/&#x3C;id>/</code></td>
+<td>Wherever you started it</td>
+</tr>
+<tr>
+<td>Lifetime</td>
+<td>Dies when the OD task finishes</td>
+<td>Lives until you exit</td>
+</tr>
+<tr>
+<td>Memory of the other</td>
+<td>None</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
 <p>Three things follow from that:</p>
 <ul>
 <li>Context doesn’t carry. If your session and you decided on a palette, OD-Claude won’t know unless you paste it into the brief.</li>
@@ -246,36 +246,36 @@
 <span class="line"><span>   .od/projects/&#x3C;id>/           (no file by default)     (no file form)             ./design-handoff/</span></span></code></pre>
 <h3 id="step-by-step-with-the-sign-up-card">Step-by-step with the sign-up card</h3>
 <p><strong>1. Brief</strong> — fill OD’s discovery form like this:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>What should I build?</td><td><strong>Live artifact</strong></td></tr><tr><td>Who is this for?</td><td><code>Backend engineers signing up for a developer tool — assume they already chose the product.</code></td></tr><tr><td>Brand context</td><td>Click <strong>Pick a direction for me</strong></td></tr><tr><td>Roughly how much?</td><td><code>One card / single screen</code></td></tr><tr><td>Any important constraints?</td><td>See the block below</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What should I build?</td>
+<td><strong>Live artifact</strong></td>
+</tr>
+<tr>
+<td>Who is this for?</td>
+<td><code>Backend engineers signing up for a developer tool — assume they already chose the product.</code></td>
+</tr>
+<tr>
+<td>Brand context</td>
+<td>Click <strong>Pick a direction for me</strong></td>
+</tr>
+<tr>
+<td>Roughly how much?</td>
+<td><code>One card / single screen</code></td>
+</tr>
+<tr>
+<td>Any important constraints?</td>
+<td>See the block below</td>
+</tr>
+</tbody>
+</table>
 <p>Paste this into <strong>“Any important constraints”</strong> verbatim:</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Single sign-up card, centered on a dark background.</span></span>
 <span class="line"><span>Visual direction: Tech Utility. One accent color of your choice.</span></span>
@@ -311,52 +311,52 @@
 <p>The agent writes those back to disk with the regular <code>Write</code> tool. The engineer never opens Penpot — they get code-ready files in the repo.</p>
 <h3 id="the-receipts">The receipts</h3>
 <p>Claude Code writes every session to <code>~/.claude/projects/&#x3C;cwd>/&#x3C;session>.jsonl</code>, including for OD’s spawned subprocess — it gets its own log under the OD project directory. Counting the relevant turns gives a hard number for what each phase of the pipeline actually costs.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th></th><th>Design phase (OD-Claude)</th><th>Convert phase (Penpot MCP)</th></tr></thead><tbody><tr><td>Wall clock</td><td><strong>1m 58s</strong></td><td><strong>13m 24s</strong></td></tr><tr><td>Assistant turns</td><td>4</td><td>63</td></tr><tr><td><code>cache_creation</code></td><td>129,724</td><td>146,011</td></tr><tr><td><code>cache_read</code></td><td>116,469</td><td><strong>15,603,929</strong></td></tr><tr><td><code>output</code></td><td>30,095</td><td>104,974</td></tr><tr><td><strong>Effective billed</strong>¹</td><td><strong>~171,500 tokens</strong></td><td><strong>~1,811,500 tokens</strong></td></tr><tr><td>Output artifact</td><td>20 KB <code>index.html</code> + tokens.json</td><td>11 library colors + ~50-shape vector component</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Design phase (OD-Claude)</th>
+<th>Convert phase (Penpot MCP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wall clock</td>
+<td><strong>1m 58s</strong></td>
+<td><strong>13m 24s</strong></td>
+</tr>
+<tr>
+<td>Assistant turns</td>
+<td>4</td>
+<td>63</td>
+</tr>
+<tr>
+<td><code>cache_creation</code></td>
+<td>129,724</td>
+<td>146,011</td>
+</tr>
+<tr>
+<td><code>cache_read</code></td>
+<td>116,469</td>
+<td><strong>15,603,929</strong></td>
+</tr>
+<tr>
+<td><code>output</code></td>
+<td>30,095</td>
+<td>104,974</td>
+</tr>
+<tr>
+<td><strong>Effective billed</strong>¹</td>
+<td><strong>~171,500 tokens</strong></td>
+<td><strong>~1,811,500 tokens</strong></td>
+</tr>
+<tr>
+<td>Output artifact</td>
+<td>20 KB <code>index.html</code> + tokens.json</td>
+<td>11 library colors + ~50-shape vector component</td>
+</tr>
+</tbody>
+</table>
 <p>¹ Anthropic prices <code>cache_read</code> at ~10% of input, so effective = <code>input + cache_creation + 0.1 × cache_read + output</code>.</p>
 <p>The convert phase lands at <strong>~1.8 million effective tokens</strong> — about an order of magnitude more than the design phase. That ratio is larger than the work itself justifies, and the reason matters.</p>
 <p>Every Claude Code turn re-sends the full conversation history as <code>cache_read</code>. By the time the convert phase began, the session was four hours deep — Penpot setup, MCP debugging, an earlier throwaway sign-up card, the OD install. Sixty-three convert-phase turns each dragged ~250k tokens of stale history through <code>cache_read</code> just to add another 1.5k of fresh reasoning. That’s where the 15.6M raw number comes from.</p>
@@ -371,52 +371,52 @@
 <p>To cut the convert cost ~10× next time: run it in a fresh session in the OD project dir, ship a <code>CLAUDE.md</code> with the Penpot API quirks, and persist the DNA as <code>dna.yaml</code> so re-runs skip the HTML re-read.</p>
 <h3 id="the-design-gap">The design gap</h3>
 <p>The pipeline above is what works. It’s worth saying just as plainly what <em>doesn’t</em> — where the agent helps, where it doesn’t, and where it creates new gaps that didn’t exist before AI tools entered the diagram.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Gap</th><th>What it is</th><th>Agent’s effect</th></tr></thead><tbody><tr><td><strong>Intent → Brief</strong></td><td>Your vision vs. what you typed</td><td>Neutral — and dangerously easy to under-specify</td></tr><tr><td><strong>Brief → Artifact</strong></td><td>What the brief asked vs. what OD shipped</td><td>Big speedup, but expect scope drift (we got OAuth + strength meter we didn’t ask for)</td></tr><tr><td><strong>Artifact → Infra</strong></td><td>HTML draft vs. vector source of truth</td><td>Big speedup, small fidelity loss (grid bg, SVG icons skipped)</td></tr><tr><td><strong>Design → Code</strong></td><td>Mock vs. production frontend</td><td>Tokens bridge ~60 %; animation, focus, ARIA, edge cases stay human</td></tr><tr><td><strong>Code → Production</strong></td><td>Green-path vs. real users</td><td>Unchanged — AI rarely designs for long content, RTL, accessibility</td></tr><tr><td><strong>Two-Claude divergence</strong></td><td>OD-Claude’s taste vs. session-Claude’s</td><td><strong>New gap.</strong> Pass the DNA explicitly or they’ll disagree at the margins</td></tr><tr><td><strong>Taste</strong></td><td>Median-good vs. distinctive</td><td>AI smooths toward the average of its training data; humans earn their keep at the edges</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Gap</th>
+<th>What it is</th>
+<th>Agent’s effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Intent → Brief</strong></td>
+<td>Your vision vs. what you typed</td>
+<td>Neutral — and dangerously easy to under-specify</td>
+</tr>
+<tr>
+<td><strong>Brief → Artifact</strong></td>
+<td>What the brief asked vs. what OD shipped</td>
+<td>Big speedup, but expect scope drift (we got OAuth + strength meter we didn’t ask for)</td>
+</tr>
+<tr>
+<td><strong>Artifact → Infra</strong></td>
+<td>HTML draft vs. vector source of truth</td>
+<td>Big speedup, small fidelity loss (grid bg, SVG icons skipped)</td>
+</tr>
+<tr>
+<td><strong>Design → Code</strong></td>
+<td>Mock vs. production frontend</td>
+<td>Tokens bridge ~60 %; animation, focus, ARIA, edge cases stay human</td>
+</tr>
+<tr>
+<td><strong>Code → Production</strong></td>
+<td>Green-path vs. real users</td>
+<td>Unchanged — AI rarely designs for long content, RTL, accessibility</td>
+</tr>
+<tr>
+<td><strong>Two-Claude divergence</strong></td>
+<td>OD-Claude’s taste vs. session-Claude’s</td>
+<td><strong>New gap.</strong> Pass the DNA explicitly or they’ll disagree at the margins</td>
+</tr>
+<tr>
+<td><strong>Taste</strong></td>
+<td>Median-good vs. distinctive</td>
+<td>AI smooths toward the average of its training data; humans earn their keep at the edges</td>
+</tr>
+</tbody>
+</table>
 <p>The agent wins in the middle of the pipeline — <em>brief → artifact → infra</em>. The endpoints — intent, production reality, taste — stay human-shaped. Designing with agents doesn’t replace design judgement; it moves it. You spend less time pushing pixels and more time deciding what the artifact should <em>be</em>, and which AI drifts to overrule.</p>
 <hr>
 <h2 id="tearing-it-down">Tearing it down</h2>
@@ -454,73 +454,73 @@
 <p>Then in chat: <em>“Read the <code>Forge / SignUp Card</code> from Penpot and recreate it as a Figma component with auto-layout.”</em> The agent does the structural translation — components stay components, tokens become Figma variables, auto-layout maps to auto-layout. Pays the convert-phase token cost again, just in the other direction.</p>
 <p>Good for: handing off a whole component library, keeping the design system intact across tools. Bad for: budgets that care about every million tokens.</p>
 <h3 id="which-route-when">Which route when</h3>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>You want…</th><th>Use</th></tr></thead><tbody><tr><td>One screen in Figma now, no system</td><td>Route A — SVG + DTCG</td></tr><tr><td>Whole component library, faithful</td><td>Route B — agent + Figma MCP</td></tr><tr><td>Engineering handoff only</td><td>Skip Figma entirely; Penpot’s CSS export is enough</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>You want…</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One screen in Figma now, no system</td>
+<td>Route A — SVG + DTCG</td>
+</tr>
+<tr>
+<td>Whole component library, faithful</td>
+<td>Route B — agent + Figma MCP</td>
+</tr>
+<tr>
+<td>Engineering handoff only</td>
+<td>Skip Figma entirely; Penpot’s CSS export is enough</td>
+</tr>
+</tbody>
+</table>
 <p>The third option is the one I’d nudge teams toward when the work is genuinely for production: the value of Figma in an open-source-design workflow is often <em>collaboration with designers who already know Figma</em>, not anything intrinsic to the file format. If the artifact is shipping straight to engineering, Penpot → CSS → repo is shorter and loses nothing.</p>
 <h3 id="why-penpot-then">Why Penpot, then?</h3>
 <p>A reasonable question after spending a whole section on how to get <em>out</em> of Penpot is why I put the artifact there in the first place. It is <strong>not</strong> because Figma’s MCP is read-only — it isn’t. Figma’s MCP in 2026 exposes write tools (<code>use_figma</code>, <code>generate_figma_design</code>, <code>create_new_file</code>, <code>upload_assets</code>) and can build a design from chat just like Penpot can.</p>
 <p>The reasons that <em>do</em> hold up:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Reason</th><th>Penpot</th><th>Figma</th></tr></thead><tbody><tr><td>Self-hostable on your machine</td><td>Yes (Docker)</td><td>No (cloud-only)</td></tr><tr><td>Open, inspectable file format</td><td>SVG-based</td><td>Proprietary <code>.fig</code></td></tr><tr><td>Cost per agent iteration</td><td>Free, local</td><td>Counts against seat + API quota</td></tr><tr><td>Failed-attempt blast radius</td><td>Local DB, wipe with <code>down -v</code></td><td>Live multiplayer file — your churn is visible to everyone</td></tr><tr><td>Sandbox flexibility</td><td><code>execute_code</code> is raw JS against the full Plugin API</td><td>Higher-level tool surface; less precise for arbitrary mutations</td></tr><tr><td>Vendor / format lock-in</td><td>None</td><td>Adobe owns the format and roadmap</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Reason</th>
+<th>Penpot</th>
+<th>Figma</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Self-hostable on your machine</td>
+<td>Yes (Docker)</td>
+<td>No (cloud-only)</td>
+</tr>
+<tr>
+<td>Open, inspectable file format</td>
+<td>SVG-based</td>
+<td>Proprietary <code>.fig</code></td>
+</tr>
+<tr>
+<td>Cost per agent iteration</td>
+<td>Free, local</td>
+<td>Counts against seat + API quota</td>
+</tr>
+<tr>
+<td>Failed-attempt blast radius</td>
+<td>Local DB, wipe with <code>down -v</code></td>
+<td>Live multiplayer file — your churn is visible to everyone</td>
+</tr>
+<tr>
+<td>Sandbox flexibility</td>
+<td><code>execute_code</code> is raw JS against the full Plugin API</td>
+<td>Higher-level tool surface; less precise for arbitrary mutations</td>
+</tr>
+<tr>
+<td>Vendor / format lock-in</td>
+<td>None</td>
+<td>Adobe owns the format and roadmap</td>
+</tr>
+</tbody>
+</table>
 <p>For a team that already lives in Figma, the agent does fine and the case for switching is weak. For a solo or open-source-aligned workflow that iterates with hundreds of <code>execute_code</code> calls against a fast-moving design — and pays in tokens for every retry — Penpot wins on cost, control, and reversibility. Not on capability.</p>
 <hr>
 <h2 id="what-i-keep-coming-back-to">What I keep coming back to</h2>

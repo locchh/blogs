@@ -59,54 +59,54 @@
 <p>So monitoring is not reading traces. Monitoring is <strong>data-quality engineering on the pipeline</strong>: throughput, typed-error rate per stage, schema-failure rate, drift in field values, and accuracy <strong>broken down</strong> per document type and per field. All of it computed from the validation records the pipeline is already writing. Only when a gate fires do you pull the expensive thing: the deep trace of that <em>one</em> record at the inference stage. That is where Langfuse actually belongs. Inside one stage, sampled, mostly for the dev loop. The business answer lives in the pipeline’s own tables.</p>
 <p>Notice that each person in that room now gets their answer from the same machinery. Compliance gets the gates (“the forbidden action cannot pass — here is the code”). Operations gets the typed failures and the run history (“we know the kind of failure the moment the gate fires”). And the delivery lead gets the broken-down numbers (“here is which document type is weak, at which field”). One pipeline, three answers.</p>
 <p>And the hard questions in a client Q&#x26;A are never abstract. They come as production stories with numbers in them. These are the six I now prepare for. For each one, the junior instinct reaches for a bigger prompt or a bigger dashboard. The senior move is always a property of the pipeline:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>The concern</th><th>The production story</th><th>The junior instinct</th><th>The senior move</th></tr></thead><tbody><tr><td><strong>The numbers</strong></td><td>Extraction hits <strong>97% overall</strong>, so the team wants to drop human review. Hidden inside the average: one claim type at <strong>85%</strong>. Split by format: tables <strong>94%</strong>, prose <strong>72%</strong>.</td><td>Quote the average. Celebrate.</td><td>Break the numbers down by case type and field <em>before</em> automating. The validation records already hold the data. Fix the weak group with few-shot examples <strong>from that group</strong> (prose-format numbers, unclear clauses). Tune the confidence score on labeled data before it routes a single case.</td></tr><tr><td><strong>Traceability</strong></td><td>The final report says <em>“AI adoption reached 45% in 2024”</em> — and nobody can say where that number came from. The steps in between were summarized away.</td><td>Add a “sources consulted” list at the end.</td><td>Add history columns to every record: input ref, source excerpt, prompt and model version. A claim in the report points to a record ID; the record points to its source. The source trail is data in a table, not decoration in a paragraph.</td></tr><tr><td><strong>Monitoring</strong></td><td>The search API goes down. The stage returns <code>{"results": [], "status": "success"}</code>. The report ships with a whole section quietly missing.</td><td>Increase the timeout.</td><td>An access failure is not an empty result. The stage contract tells them apart (<code>isError</code>). The gate refuses “empty success,” the run is marked partial, and the orchestrator decides: retry, reroute, or deliver with the gap <em>stated out loud</em>.</td></tr><tr><td><strong>Inspection</strong></td><td>A claim type that extracted fine last month starts failing today. What changed — the documents, the prompt, or the model?</td><td>Re-run it and hope.</td><td>Every record stores its prompt, model, and schema versions. Compare last month’s record against today’s, replay the same input through both versions on their own, and the answer falls out. No versions in the records means no answer, ever.</td></tr><tr><td><strong>Explainability</strong></td><td>The stage that wrote a 200-line module also reviews it: <em>“looks good.”</em> A human finds the logic bug in minutes. Meanwhile the security review flags <strong>60% of PRs</strong> and developers stop reading it.</td><td>Tell it to “review carefully” and “only report high-confidence findings.”</td><td>Writing and review are <strong>separate pipeline stages with separate contexts</strong> — the reviewer never sees the writer’s reasoning. Findings carry the <em>pattern that triggered them</em>, judged against clear rules (report this vs. let this pass, with code examples). So the false-alarm rate per pattern can be measured from the findings table — and trimmed.</td></tr><tr><td><strong>Error handling</strong></td><td>Fraud detection blocks a refund. The system reads it as a glitch and retries <strong>three times</strong> — firing three fraud alerts into compliance.</td><td>Catch everything, apologize, end the chat.</td><td>Errors are typed at the gate: transient / validation / policy, each with <code>isRetryable</code>. Policy blocks stop and explain. Validation failures retry once <strong>with the exact error attached</strong> (“line items sum to X, total says Y”). Same field fails three times → dead-letter queue, and check whether the data is even <em>in</em> the document before anyone schedules retry four.</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>The concern</th>
+<th>The production story</th>
+<th>The junior instinct</th>
+<th>The senior move</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>The numbers</strong></td>
+<td>Extraction hits <strong>97% overall</strong>, so the team wants to drop human review. Hidden inside the average: one claim type at <strong>85%</strong>. Split by format: tables <strong>94%</strong>, prose <strong>72%</strong>.</td>
+<td>Quote the average. Celebrate.</td>
+<td>Break the numbers down by case type and field <em>before</em> automating. The validation records already hold the data. Fix the weak group with few-shot examples <strong>from that group</strong> (prose-format numbers, unclear clauses). Tune the confidence score on labeled data before it routes a single case.</td>
+</tr>
+<tr>
+<td><strong>Traceability</strong></td>
+<td>The final report says <em>“AI adoption reached 45% in 2024”</em> — and nobody can say where that number came from. The steps in between were summarized away.</td>
+<td>Add a “sources consulted” list at the end.</td>
+<td>Add history columns to every record: input ref, source excerpt, prompt and model version. A claim in the report points to a record ID; the record points to its source. The source trail is data in a table, not decoration in a paragraph.</td>
+</tr>
+<tr>
+<td><strong>Monitoring</strong></td>
+<td>The search API goes down. The stage returns <code>{"results": [], "status": "success"}</code>. The report ships with a whole section quietly missing.</td>
+<td>Increase the timeout.</td>
+<td>An access failure is not an empty result. The stage contract tells them apart (<code>isError</code>). The gate refuses “empty success,” the run is marked partial, and the orchestrator decides: retry, reroute, or deliver with the gap <em>stated out loud</em>.</td>
+</tr>
+<tr>
+<td><strong>Inspection</strong></td>
+<td>A claim type that extracted fine last month starts failing today. What changed — the documents, the prompt, or the model?</td>
+<td>Re-run it and hope.</td>
+<td>Every record stores its prompt, model, and schema versions. Compare last month’s record against today’s, replay the same input through both versions on their own, and the answer falls out. No versions in the records means no answer, ever.</td>
+</tr>
+<tr>
+<td><strong>Explainability</strong></td>
+<td>The stage that wrote a 200-line module also reviews it: <em>“looks good.”</em> A human finds the logic bug in minutes. Meanwhile the security review flags <strong>60% of PRs</strong> and developers stop reading it.</td>
+<td>Tell it to “review carefully” and “only report high-confidence findings.”</td>
+<td>Writing and review are <strong>separate pipeline stages with separate contexts</strong> — the reviewer never sees the writer’s reasoning. Findings carry the <em>pattern that triggered them</em>, judged against clear rules (report this vs. let this pass, with code examples). So the false-alarm rate per pattern can be measured from the findings table — and trimmed.</td>
+</tr>
+<tr>
+<td><strong>Error handling</strong></td>
+<td>Fraud detection blocks a refund. The system reads it as a glitch and retries <strong>three times</strong> — firing three fraud alerts into compliance.</td>
+<td>Catch everything, apologize, end the chat.</td>
+<td>Errors are typed at the gate: transient / validation / policy, each with <code>isRetryable</code>. Policy blocks stop and explain. Validation failures retry once <strong>with the exact error attached</strong> (“line items sum to X, total says Y”). Same field fails three times → dead-letter queue, and check whether the data is even <em>in</em> the document before anyone schedules retry four.</td>
+</tr>
+</tbody>
+</table>
 <blockquote>
 <p><strong>Lesson 6:</strong> Look down that table — six different questions, six different answers, and not one of them is a tool. <em>That</em> is the lesson, and it reaches far past observability. When someone asks <strong>“how do you do X?”</strong> — observe it, secure it, make it reliable, guarantee it — naming a framework (“we use Langfuse”, “we use Kafka”) is the junior reflex. The senior answer is never a tool. It is a <strong>mechanism you can defend</strong>. And it is a <strong>different answer every time</strong>, because it depends on who is asking and what they actually need: compliance wants a guarantee, operations wants a kind of failure, the delivery lead wants a number. The tool is only where the mechanism happens to live. It is never the answer to “how.”</p>
 </blockquote>
@@ -154,54 +154,54 @@
 </ul>
 <p>The quiet trick is that a well-designed system already holds most of these answers. The record store prices a case, the list of error kinds names the risks, the review queue names the people. The engineering questions and the business questions are the same questions at different levels.</p>
 <p>But there is a deeper version of this, and it is the thing I most want to keep. Notice that none of those five questions are about <em>frameworks</em>. A senior does not think in React and Kafka and Postgres. Those are broad, shallow, and they change with every wave. A senior thinks in the client’s own nouns: <strong>payment, extraction, customer support, voting, authentication, continuous update.</strong> And each of those nouns quietly decides <em>which</em> property is the one that can get you fired. The parts barely change; the meaning does:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>The same generic parts</th><th>The business noun</th><th>What actually matters most</th><th>What “failure” means here</th></tr></thead><tbody><tr><td>API + DB + queue</td><td><strong>Payment</strong></td><td>idempotency (a repeated request must not charge twice), matching the books, audit trail</td><td>a double-charge, money lost</td></tr><tr><td>API + model + DB</td><td><strong>Extraction</strong></td><td>accuracy broken down by group, a human in the loop on low confidence</td><td>one wrong figure shipped as fact</td></tr><tr><td>API + LLM + tools</td><td><strong>Customer support</strong></td><td>tuning when to hand off, policy enforced in code</td><td>an unauthorized action taken</td></tr><tr><td>API + ledger</td><td><strong>Voting</strong></td><td>anonymity <em>and</em> one-vote-per-person <em>and</em> tamper-evidence</td><td>a vote changed or double-counted</td></tr><tr><td>API + token store</td><td><strong>Authentication</strong></td><td>least privilege, revoking access, limiting the blast radius</td><td>account takeover</td></tr><tr><td>pipeline + scheduler</td><td><strong>Continuous update</strong></td><td>re-runs that are safe to repeat, backfill, no double-apply</td><td>stale or corrupted state</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>The same generic parts</th>
+<th>The business noun</th>
+<th>What actually matters most</th>
+<th>What “failure” means here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API + DB + queue</td>
+<td><strong>Payment</strong></td>
+<td>idempotency (a repeated request must not charge twice), matching the books, audit trail</td>
+<td>a double-charge, money lost</td>
+</tr>
+<tr>
+<td>API + model + DB</td>
+<td><strong>Extraction</strong></td>
+<td>accuracy broken down by group, a human in the loop on low confidence</td>
+<td>one wrong figure shipped as fact</td>
+</tr>
+<tr>
+<td>API + LLM + tools</td>
+<td><strong>Customer support</strong></td>
+<td>tuning when to hand off, policy enforced in code</td>
+<td>an unauthorized action taken</td>
+</tr>
+<tr>
+<td>API + ledger</td>
+<td><strong>Voting</strong></td>
+<td>anonymity <em>and</em> one-vote-per-person <em>and</em> tamper-evidence</td>
+<td>a vote changed or double-counted</td>
+</tr>
+<tr>
+<td>API + token store</td>
+<td><strong>Authentication</strong></td>
+<td>least privilege, revoking access, limiting the blast radius</td>
+<td>account takeover</td>
+</tr>
+<tr>
+<td>pipeline + scheduler</td>
+<td><strong>Continuous update</strong></td>
+<td>re-runs that are safe to repeat, backfill, no double-apply</td>
+<td>stale or corrupted state</td>
+</tr>
+</tbody>
+</table>
 <p>One layer up sits the industry, and it decides <em>which failure is not allowed at all</em> — which is not an engineering choice you get to make:</p>
 <ul>
 <li><strong>Regulated</strong> — banking, insurance, healthcare, fintech, gambling: the acceptable error rate is a compliance floor, not a dial you turn. Here “97% accurate” can be <em>illegal</em>.</li>
@@ -209,48 +209,48 @@
 </ul>
 <p>The same phrase — “acceptable rate” — means a regulator in one column and a profit margin in the other. A senior knows which column they are standing in before writing a line.</p>
 <p>But the cost of failure is only half of what an industry hands you. The other half is a whole <strong>vocabulary</strong> you have to learn before you can even name the right services. It is the part that never shows up on a résumé’s skills list:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Industry</th><th>The vocabulary you actually have to learn</th><th>The flow that decides everything</th><th>The constraint that rules it</th></tr></thead><tbody><tr><td><strong>Healthcare</strong></td><td>PHI, EHR, HL7/FHIR, ICD/CPT codes, prior authorization</td><td>patient → encounter → claim → adjudication → payout</td><td>HIPAA — a leaked record is a fine, not a bug report</td></tr><tr><td><strong>Ecommerce</strong></td><td>cart, SKU, inventory, fulfillment, RMA, chargeback</td><td>browse → cart → checkout → fulfill → return</td><td>conversion and fraud — a second of latency is revenue</td></tr><tr><td><strong>Fintech / banking</strong></td><td>ledger, double-entry, reconciliation, settlement, KYC/AML</td><td>authorize → capture → settle → reconcile</td><td>it must balance to the cent, and stay auditable</td></tr><tr><td><strong>Insurance</strong></td><td>policy, premium, underwriting, claim, adjuster, actuarial</td><td>quote → underwrite → bind → claim → adjust</td><td>pricing is regulated; the claim decision can be disputed</td></tr><tr><td><strong>Logistics</strong></td><td>WMS, SKU, pick/pack/ship, routing, last-mile</td><td>inbound → store → pick → pack → ship → track</td><td>throughput per hour — one mis-pick causes trouble all the way down the line</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Industry</th>
+<th>The vocabulary you actually have to learn</th>
+<th>The flow that decides everything</th>
+<th>The constraint that rules it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Healthcare</strong></td>
+<td>PHI, EHR, HL7/FHIR, ICD/CPT codes, prior authorization</td>
+<td>patient → encounter → claim → adjudication → payout</td>
+<td>HIPAA — a leaked record is a fine, not a bug report</td>
+</tr>
+<tr>
+<td><strong>Ecommerce</strong></td>
+<td>cart, SKU, inventory, fulfillment, RMA, chargeback</td>
+<td>browse → cart → checkout → fulfill → return</td>
+<td>conversion and fraud — a second of latency is revenue</td>
+</tr>
+<tr>
+<td><strong>Fintech / banking</strong></td>
+<td>ledger, double-entry, reconciliation, settlement, KYC/AML</td>
+<td>authorize → capture → settle → reconcile</td>
+<td>it must balance to the cent, and stay auditable</td>
+</tr>
+<tr>
+<td><strong>Insurance</strong></td>
+<td>policy, premium, underwriting, claim, adjuster, actuarial</td>
+<td>quote → underwrite → bind → claim → adjust</td>
+<td>pricing is regulated; the claim decision can be disputed</td>
+</tr>
+<tr>
+<td><strong>Logistics</strong></td>
+<td>WMS, SKU, pick/pack/ship, routing, last-mile</td>
+<td>inbound → store → pick → pack → ship → track</td>
+<td>throughput per hour — one mis-pick causes trouble all the way down the line</td>
+</tr>
+</tbody>
+</table>
 <p>Read across any row and you feel it: knowing “REST + Postgres” tells you nothing here. Knowing that a <em>chargeback</em> is not a <em>refund</em>, or that a <em>claim</em> is not an <em>invoice</em>, is the whole game. It is also the exact difference between a demo that sounds like the customer’s business and one that makes them squint and say <em>“this data looks so strange”</em> — which, if you remember Lesson 3, is exactly the wall I walked into.</p>
 <p>Put all of that together and you get the stack a senior actually holds in their head. Not files and functions, but <strong>business → service → module → infrastructure → deployment</strong>. Ask one about the payment system and watch them move straight down it: the domain (regulated fintech), the service (payment — so idempotency and matching the books matter most), the module (the nightly reconciliation job), the infrastructure (the ledger DB, the queue), the deployment (blue-green, because you cannot drop a charge mid-rollout). That fluency top to bottom on a single business noun is the senior tell. A junior can talk about any one layer; a senior can walk the whole column without changing the subject.</p>
 <p>And the asset that lasts is not any one of these domains. A banker who cannot move industries is still narrow. It is the <em>habit</em> of thinking in the business’s nouns instead of the framework’s, plus knowing how to pick up a new domain fast: interview the experts, read the <em>real</em> data, map each service to the property that matters most for it. Which is Lessons 1 and 3 again, wearing a suit. Because domain knowledge is exactly the thing AI cannot hand you. It is not on the internet. It lives in <em>their</em> production database and <em>their</em> regulator’s rulebook. That is where your value builds up, and why it outlasts the wave.</p>

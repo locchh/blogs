@@ -102,36 +102,36 @@
 <hr>
 <h2 id="the-taxonomy-everyone-uses-has-no-arrows">The taxonomy everyone uses has no arrows</h2>
 <p>If you build agents, you’ve met this table. It’s from the <a href="https://docs.langchain.com/oss/python/concepts/memory">LangChain memory docs</a>, and the split comes from <a href="https://arxiv.org/abs/2309.02427">CoALA</a> (Sumers, Yao, Narasimhan &#x26; Griffiths, 2023), which borrowed it from cognitive science:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Memory type</th><th>What is stored</th><th>Human example</th><th>Agent example</th></tr></thead><tbody><tr><td>Semantic</td><td>Facts</td><td>Things I learned in school</td><td>Facts about a user</td></tr><tr><td>Episodic</td><td>Experiences</td><td>Things I did</td><td>Past agent actions</td></tr><tr><td>Procedural</td><td>Instructions</td><td>Instincts or motor skills</td><td>Agent system prompt</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Memory type</th>
+<th>What is stored</th>
+<th>Human example</th>
+<th>Agent example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Semantic</td>
+<td>Facts</td>
+<td>Things I learned in school</td>
+<td>Facts about a user</td>
+</tr>
+<tr>
+<td>Episodic</td>
+<td>Experiences</td>
+<td>Things I did</td>
+<td>Past agent actions</td>
+</tr>
+<tr>
+<td>Procedural</td>
+<td>Instructions</td>
+<td>Instincts or motor skills</td>
+<td>Agent system prompt</td>
+</tr>
+</tbody>
+</table>
 <p>It’s a good table, and the categories are real ones — Tulving separated episodic from semantic memory back in 1972. But look at what kind of table it is. It classifies memory by <strong>what is stored</strong>. Three boxes and no arrows. Nothing in it says how an experience turns into a fact, or how a fact turns into an instinct.</p>
 <p>In people, those three are not three boxes. They are <strong>one thing at three ages.</strong></p>
 <p><strong>Episodic becomes semantic.</strong> That’s consolidation — the hippocampus-to-neocortex transform from earlier in this post. You know that Paris is the capital of France, and you have no memory of learning it. That fact used to be an episode. The episode wore away and left the fact behind.</p>
@@ -164,52 +164,52 @@
 </code></pre>
 </div>
 <p>The dotted line is the part people miss. What you already understand decides what is worth storing next — which is Ausubel’s sentence, drawn as a loop.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th></th><th>Memory</th><th>Knowledge</th></tr></thead><tbody><tr><td>What it holds</td><td>Specific cases, as they happened</td><td>The pattern running across cases</td></tr><tr><td>Cost to add one</td><td>Cheap — just write it</td><td>Expensive — has to be integrated</td></tr><tr><td>Good at</td><td>Exact recall, detail, reuse as-is</td><td>Categories, transfer, judgment on new cases</td></tr><tr><td>Fails by</td><td>Piling up until nothing can be found</td><td>Smoothing away the detail that mattered</td></tr><tr><td>In the brain</td><td>Hippocampus — fast, keeps episodes apart</td><td>Neocortex — slow, blends across episodes</td></tr><tr><td>In machines today</td><td>Retrieval stores, notes, context files</td><td>The frozen weights, set at training time</td></tr><tr><td>The gap between them</td><td>-</td><td>Consolidation — and it mostly runs offline</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Memory</th>
+<th>Knowledge</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What it holds</td>
+<td>Specific cases, as they happened</td>
+<td>The pattern running across cases</td>
+</tr>
+<tr>
+<td>Cost to add one</td>
+<td>Cheap — just write it</td>
+<td>Expensive — has to be integrated</td>
+</tr>
+<tr>
+<td>Good at</td>
+<td>Exact recall, detail, reuse as-is</td>
+<td>Categories, transfer, judgment on new cases</td>
+</tr>
+<tr>
+<td>Fails by</td>
+<td>Piling up until nothing can be found</td>
+<td>Smoothing away the detail that mattered</td>
+</tr>
+<tr>
+<td>In the brain</td>
+<td>Hippocampus — fast, keeps episodes apart</td>
+<td>Neocortex — slow, blends across episodes</td>
+</tr>
+<tr>
+<td>In machines today</td>
+<td>Retrieval stores, notes, context files</td>
+<td>The frozen weights, set at training time</td>
+</tr>
+<tr>
+<td>The gap between them</td>
+<td>-</td>
+<td>Consolidation — and it mostly runs offline</td>
+</tr>
+</tbody>
+</table>
 <hr>
 <h2 id="what-i-actually-do-with-this">What I actually do with this</h2>
 <p><strong>For learning.</strong> Taking notes is not learning; it’s the staging area. The step that counts is the one where you go back over the pile and ask what runs through it — and that step needs its own time on the calendar, because nothing forces it. This is why re-reading feels productive and does so little. It’s also permission to hold things you don’t understand yet, which I used to treat as failure. It isn’t. It’s phase one, and when the structure doesn’t exist yet, phase one is the only way in. (More on the mechanics in <a href="/blogs/blog/how_to_learn/">how I learn</a>.)</p>

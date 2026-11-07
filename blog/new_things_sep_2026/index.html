@@ -45,48 +45,48 @@ Last updated on <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time> 
 </li>
 </ul>
 <p><strong>The shared shape.</strong> Put them side by side and they’ve ended up with almost the same interface. Look at the question types:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th></th><th>Yes / no</th><th>Pick one</th><th>Rate on a scale</th></tr></thead><tbody><tr><td>TypeSafe</td><td>Noul</td><td>Choice</td><td>Score</td></tr><tr><td>Laya</td><td>noul</td><td>choice</td><td>score</td></tr><tr><td>OpenAI Decisions</td><td>predicate</td><td>choice</td><td>score</td></tr><tr><td>Strands Decider</td><td>noul</td><td>choice</td><td><em>(not shown in the launch post)</em></td></tr><tr><td>CLM</td><td>Noul</td><td>Choice</td><td>Score</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Yes / no</th>
+<th>Pick one</th>
+<th>Rate on a scale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TypeSafe</td>
+<td>Noul</td>
+<td>Choice</td>
+<td>Score</td>
+</tr>
+<tr>
+<td>Laya</td>
+<td>noul</td>
+<td>choice</td>
+<td>score</td>
+</tr>
+<tr>
+<td>OpenAI Decisions</td>
+<td>predicate</td>
+<td>choice</td>
+<td>score</td>
+</tr>
+<tr>
+<td>Strands Decider</td>
+<td>noul</td>
+<td>choice</td>
+<td><em>(not shown in the launch post)</em></td>
+</tr>
+<tr>
+<td>CLM</td>
+<td>Noul</td>
+<td>Choice</td>
+<td>Score</td>
+</tr>
+</tbody>
+</table>
 <p>Part of this agreement has one source. CLM serves itself behind a TypeSafe-compatible API, Strands tests itself on JevBench (named after TypeSafe’s model), and Jev-Mem is built on Jev. OpenAI uses the same three shapes too, and its guide doesn’t mention the others. I can’t tell if they got there alone or not. Either way, the biggest vendor shipped the same three building blocks. That’s a strong hint these three are the right ones.</p>
 <p><strong>Why it matters.</strong> Most of what an agent does all day isn’t hard thinking. It’s small calls. Which tool? Is this safe? Is this relevant? Is it done? We’ve been paying the slow brain to make every one of them, and then paying again to turn its essay into a yes or no. Decision models make those calls <strong>cheap, fast, always inside the options, and with a confidence number you can set a threshold on</strong>. The reasoning model doesn’t go away. It becomes <strong>the one you call when the fast brain isn’t sure</strong>.</p>
 <p>One honest caveat for the whole section, borrowed from a project in group 5. Cua’s README says its own “System 1” label is <strong>an engineering comparison, not a strict category</strong>. That’s the right attitude. These are not little brains. They’re classifiers with a good interface. That’s still a big deal.</p>
@@ -174,57 +174,57 @@ Last updated on <time datetime="2026-10-28T00:00:00.000Z"> Oct 28, 2026 </time> 
 </li>
 </ul>
 <p><strong>OpenSpec vs. Spec Kit:</strong></p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th></th><th>OpenSpec</th><th>Spec Kit</th></tr></thead><tbody><tr><td>Feel</td><td>Light and flexible</td><td>Thorough, with phase gates</td></tr><tr><td>Unit of work</td><td>A <strong>change</strong>, merged into living specs</td><td>A <strong>feature</strong>, carried through phases</td></tr><tr><td>Starting point</td><td>Explore the existing code</td><td>Write a constitution first</td></tr><tr><td>Strongest on</td><td>Existing codebases</td><td>New projects and team process</td></tr><tr><td>Beyond features</td><td>Shared spec stores (beta)</td><td>Bug and idea-assessment flows</td></tr><tr><td>Checking the work</td><td>Optional verify step</td><td>Converge loop, <em>verified</em> bug verdict</td></tr><tr><td>Setup</td><td>Node</td><td>Python and uv</td></tr><tr><td>License</td><td>MIT</td><td>MIT</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>OpenSpec</th>
+<th>Spec Kit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Feel</td>
+<td>Light and flexible</td>
+<td>Thorough, with phase gates</td>
+</tr>
+<tr>
+<td>Unit of work</td>
+<td>A <strong>change</strong>, merged into living specs</td>
+<td>A <strong>feature</strong>, carried through phases</td>
+</tr>
+<tr>
+<td>Starting point</td>
+<td>Explore the existing code</td>
+<td>Write a constitution first</td>
+</tr>
+<tr>
+<td>Strongest on</td>
+<td>Existing codebases</td>
+<td>New projects and team process</td>
+</tr>
+<tr>
+<td>Beyond features</td>
+<td>Shared spec stores (beta)</td>
+<td>Bug and idea-assessment flows</td>
+</tr>
+<tr>
+<td>Checking the work</td>
+<td>Optional verify step</td>
+<td>Converge loop, <em>verified</em> bug verdict</td>
+</tr>
+<tr>
+<td>Setup</td>
+<td>Node</td>
+<td>Python and uv</td>
+</tr>
+<tr>
+<td>License</td>
+<td>MIT</td>
+<td>MIT</td>
+</tr>
+</tbody>
+</table>
 <p>A fair warning about this table: the “light vs. heavy” framing comes from OpenSpec’s own README, so it’s one side’s view. Spec Kit’s extra steps are the point if your team needs them.</p>
 <p><strong>My pick:</strong> I’d start with <strong>OpenSpec</strong> for a codebase I already have. Its change-then-merge model matches how real work arrives: one change at a time, on code that already exists. I’d pick <strong>Spec Kit</strong> when a team needs the same process for everyone, with firm gates and a constitution everyone signs up to. Either way, the lesson is the same as the rest of this post. When code is cheap, the spec is the expensive part. It’s what tells the agent what “right” means, and it’s what you check the work against.</p>
 <h2 id="references">References</h2>

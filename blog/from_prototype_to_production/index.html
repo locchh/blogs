@@ -308,216 +308,216 @@
 </ul>
 <h2 id="glossary">Glossary</h2>
 <p>The terms used in this post, in alphabetical order.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody><tr><td>Accelerator</td><td>A working build packaged so the next engagement configures it instead of rebuilding it: parameters, documented assumptions, a bundled eval</td></tr><tr><td>Adaptive thinking</td><td>A reasoning mode where the model decides when and how much to think, tuned by an effort setting rather than a token budget</td></tr><tr><td>Agent</td><td>The model choosing its own sequence of tool calls toward a goal. The control flow lives inside the model</td></tr><tr><td>Agent SDK</td><td>A library that runs the same agent loop as Claude Code inside your own process, while your code executes the tools</td></tr><tr><td>Agentic search</td><td>Letting the model search and read across several rounds at query time instead of matching a pre-built index</td></tr><tr><td>CLAUDE.md</td><td>A project file loaded into every coding-agent session, holding universal constraints and conventions. It dilutes as it grows</td></tr><tr><td>Compaction</td><td>Summarizing accumulated conversation so a session can continue near the context ceiling</td></tr><tr><td>Context engineering</td><td>Deciding in advance what enters the context window, what is summarized, and what never enters</td></tr><tr><td>Context window</td><td>The total tokens a model can take in for one request, including prompts, history, tools, results, and the answer</td></tr><tr><td>Contribution readiness</td><td>What a maintainer needs to accept a contribution: focused code, a runnable example, a test, stated assumptions, and confirmed rights</td></tr><tr><td>Design document</td><td>A one-page record of success criteria, failure handling, cost and latency budget, and trust boundary, written before building</td></tr><tr><td>Eval</td><td>A set of input cases, expected behaviors, and grades that turns “done” into a trackable score</td></tr><tr><td>Exponential backoff</td><td>Retrying with growing waits, jitter, and a cap, honoring the server’s wait header when present</td></tr><tr><td>Few-shot</td><td>Including several input-output examples in a prompt to show the exact shape of the answer</td></tr><tr><td>Files API</td><td>Uploading a file once and referencing it by ID in later requests</td></tr><tr><td>HITL</td><td>Human in the loop: a checkpoint that pauses an automated process for review before a consequential action</td></tr><tr><td>Hook</td><td>A script bound to a lifecycle event, such as before a tool call, that runs every time and can block the action</td></tr><tr><td>Integration test</td><td>A test that drives the handoff between two components with real data, where most silent failures hide</td></tr><tr><td>Least privilege</td><td>Giving each identity or component only the access its task needs, so a steered agent can do little harm</td></tr><tr><td>LLM-as-judge</td><td>Grading open-ended output with a second model and a rubric, trustworthy only after calibration against human labels</td></tr><tr><td>MCP</td><td>Model Context Protocol: an open standard for exposing tools, resources, and prompts from a server to any MCP client</td></tr><tr><td>Message Batches API</td><td>Submitting many requests at once for asynchronous processing at lower cost, with results matched by a custom ID</td></tr><tr><td>Model alias vs pinned ID</td><td>An alias moves to new snapshots over time. A pinned full model ID stays fixed until you change it</td></tr><tr><td>Non-determinism</td><td>Identical inputs can produce different outputs, so tests assert properties rather than exact text</td></tr><tr><td>Orchestrator-worker</td><td>A lead agent that splits work across parallel subagents and combines their results, at a large token multiplier</td></tr><tr><td>Output constraint</td><td>The part of a prompt that fixes the form of the response: fields, types, length, and what to do when data is missing</td></tr><tr><td>Permission mode</td><td>A coding-agent setting that controls how often the agent asks before acting, from asking before everything to asking for nothing</td></tr><tr><td>Plugin</td><td>A versioned bundle of skills, hooks, subagents, and MCP servers installed in one step from a marketplace</td></tr><tr><td>Prompt caching</td><td>Reusing the processing of a stable prompt prefix across requests at a fraction of the cost</td></tr><tr><td>Prompt injection</td><td>Instructions hidden in content the agent reads that it treats as commands. Defended by treating content as data and limiting actions</td></tr><tr><td>Retriable vs terminal error</td><td>Whether retrying the same request could succeed. Retriable errors get backoff, terminal ones fail fast</td></tr><tr><td>Rules file</td><td>A scoped instruction file that loads only when the agent works on matching paths</td></tr><tr><td>Sampling</td><td>Choosing each next token from a probability distribution, which is why the same prompt can return different text</td></tr><tr><td>SDK</td><td>A language library that wraps the REST API, handling authentication, retries, and parsing</td></tr><tr><td>Secret store</td><td>A managed service that holds credentials, returns them at runtime, logs access, and makes rotation a single change</td></tr><tr><td>Skill</td><td>A SKILL.md file of reusable instructions that loads on demand when a request matches its description</td></tr><tr><td>Stdio</td><td>A local MCP transport where the client launches the server as a subprocess</td></tr><tr><td>Streaming</td><td>Receiving a response as a series of events while it is generated, then assembling it yourself</td></tr><tr><td>Structured outputs</td><td>API-level schema enforcement for responses or tool arguments, so non-conforming output cannot be generated</td></tr><tr><td>Subagent</td><td>A separate agent with its own context that handles a delegated task and returns only a result</td></tr><tr><td>System prompt</td><td>The persistent behavioral contract for a session: role, scope, format, and rules that must not change</td></tr><tr><td>Systems lifecycle</td><td>Requirements, design, build, test, deploy, operate, and iterate, with gates between phases</td></tr><tr><td>Token</td><td>The unit a model reads, writes, and bills by. Its size depends on the model’s tokenizer</td></tr><tr><td>Tool use</td><td>The loop in which the model asks for a tool, your code runs it, and the result goes back to the model</td></tr><tr><td>tool_use block</td><td>The content block naming a tool call, its ID, and its inputs, which must be answered by a matching result in the next turn</td></tr><tr><td>Trace</td><td>A record of each step of a run: prompts, tool calls, intermediate outputs, and timing</td></tr><tr><td>Trust boundary</td><td>Any seam where data or instructions cross from one environment to another, where incoming content is treated as data</td></tr><tr><td>Workflow</td><td>Steps orchestrated in your own code, some of which call the model</td></tr><tr><td>XML tags</td><td>Descriptively named tags that separate instructions from data and examples inside a prompt</td></tr><tr><td>Zero-shot</td><td>A prompt with instructions and no examples</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accelerator</td>
+<td>A working build packaged so the next engagement configures it instead of rebuilding it: parameters, documented assumptions, a bundled eval</td>
+</tr>
+<tr>
+<td>Adaptive thinking</td>
+<td>A reasoning mode where the model decides when and how much to think, tuned by an effort setting rather than a token budget</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>The model choosing its own sequence of tool calls toward a goal. The control flow lives inside the model</td>
+</tr>
+<tr>
+<td>Agent SDK</td>
+<td>A library that runs the same agent loop as Claude Code inside your own process, while your code executes the tools</td>
+</tr>
+<tr>
+<td>Agentic search</td>
+<td>Letting the model search and read across several rounds at query time instead of matching a pre-built index</td>
+</tr>
+<tr>
+<td>CLAUDE.md</td>
+<td>A project file loaded into every coding-agent session, holding universal constraints and conventions. It dilutes as it grows</td>
+</tr>
+<tr>
+<td>Compaction</td>
+<td>Summarizing accumulated conversation so a session can continue near the context ceiling</td>
+</tr>
+<tr>
+<td>Context engineering</td>
+<td>Deciding in advance what enters the context window, what is summarized, and what never enters</td>
+</tr>
+<tr>
+<td>Context window</td>
+<td>The total tokens a model can take in for one request, including prompts, history, tools, results, and the answer</td>
+</tr>
+<tr>
+<td>Contribution readiness</td>
+<td>What a maintainer needs to accept a contribution: focused code, a runnable example, a test, stated assumptions, and confirmed rights</td>
+</tr>
+<tr>
+<td>Design document</td>
+<td>A one-page record of success criteria, failure handling, cost and latency budget, and trust boundary, written before building</td>
+</tr>
+<tr>
+<td>Eval</td>
+<td>A set of input cases, expected behaviors, and grades that turns “done” into a trackable score</td>
+</tr>
+<tr>
+<td>Exponential backoff</td>
+<td>Retrying with growing waits, jitter, and a cap, honoring the server’s wait header when present</td>
+</tr>
+<tr>
+<td>Few-shot</td>
+<td>Including several input-output examples in a prompt to show the exact shape of the answer</td>
+</tr>
+<tr>
+<td>Files API</td>
+<td>Uploading a file once and referencing it by ID in later requests</td>
+</tr>
+<tr>
+<td>HITL</td>
+<td>Human in the loop: a checkpoint that pauses an automated process for review before a consequential action</td>
+</tr>
+<tr>
+<td>Hook</td>
+<td>A script bound to a lifecycle event, such as before a tool call, that runs every time and can block the action</td>
+</tr>
+<tr>
+<td>Integration test</td>
+<td>A test that drives the handoff between two components with real data, where most silent failures hide</td>
+</tr>
+<tr>
+<td>Least privilege</td>
+<td>Giving each identity or component only the access its task needs, so a steered agent can do little harm</td>
+</tr>
+<tr>
+<td>LLM-as-judge</td>
+<td>Grading open-ended output with a second model and a rubric, trustworthy only after calibration against human labels</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>Model Context Protocol: an open standard for exposing tools, resources, and prompts from a server to any MCP client</td>
+</tr>
+<tr>
+<td>Message Batches API</td>
+<td>Submitting many requests at once for asynchronous processing at lower cost, with results matched by a custom ID</td>
+</tr>
+<tr>
+<td>Model alias vs pinned ID</td>
+<td>An alias moves to new snapshots over time. A pinned full model ID stays fixed until you change it</td>
+</tr>
+<tr>
+<td>Non-determinism</td>
+<td>Identical inputs can produce different outputs, so tests assert properties rather than exact text</td>
+</tr>
+<tr>
+<td>Orchestrator-worker</td>
+<td>A lead agent that splits work across parallel subagents and combines their results, at a large token multiplier</td>
+</tr>
+<tr>
+<td>Output constraint</td>
+<td>The part of a prompt that fixes the form of the response: fields, types, length, and what to do when data is missing</td>
+</tr>
+<tr>
+<td>Permission mode</td>
+<td>A coding-agent setting that controls how often the agent asks before acting, from asking before everything to asking for nothing</td>
+</tr>
+<tr>
+<td>Plugin</td>
+<td>A versioned bundle of skills, hooks, subagents, and MCP servers installed in one step from a marketplace</td>
+</tr>
+<tr>
+<td>Prompt caching</td>
+<td>Reusing the processing of a stable prompt prefix across requests at a fraction of the cost</td>
+</tr>
+<tr>
+<td>Prompt injection</td>
+<td>Instructions hidden in content the agent reads that it treats as commands. Defended by treating content as data and limiting actions</td>
+</tr>
+<tr>
+<td>Retriable vs terminal error</td>
+<td>Whether retrying the same request could succeed. Retriable errors get backoff, terminal ones fail fast</td>
+</tr>
+<tr>
+<td>Rules file</td>
+<td>A scoped instruction file that loads only when the agent works on matching paths</td>
+</tr>
+<tr>
+<td>Sampling</td>
+<td>Choosing each next token from a probability distribution, which is why the same prompt can return different text</td>
+</tr>
+<tr>
+<td>SDK</td>
+<td>A language library that wraps the REST API, handling authentication, retries, and parsing</td>
+</tr>
+<tr>
+<td>Secret store</td>
+<td>A managed service that holds credentials, returns them at runtime, logs access, and makes rotation a single change</td>
+</tr>
+<tr>
+<td>Skill</td>
+<td>A SKILL.md file of reusable instructions that loads on demand when a request matches its description</td>
+</tr>
+<tr>
+<td>Stdio</td>
+<td>A local MCP transport where the client launches the server as a subprocess</td>
+</tr>
+<tr>
+<td>Streaming</td>
+<td>Receiving a response as a series of events while it is generated, then assembling it yourself</td>
+</tr>
+<tr>
+<td>Structured outputs</td>
+<td>API-level schema enforcement for responses or tool arguments, so non-conforming output cannot be generated</td>
+</tr>
+<tr>
+<td>Subagent</td>
+<td>A separate agent with its own context that handles a delegated task and returns only a result</td>
+</tr>
+<tr>
+<td>System prompt</td>
+<td>The persistent behavioral contract for a session: role, scope, format, and rules that must not change</td>
+</tr>
+<tr>
+<td>Systems lifecycle</td>
+<td>Requirements, design, build, test, deploy, operate, and iterate, with gates between phases</td>
+</tr>
+<tr>
+<td>Token</td>
+<td>The unit a model reads, writes, and bills by. Its size depends on the model’s tokenizer</td>
+</tr>
+<tr>
+<td>Tool use</td>
+<td>The loop in which the model asks for a tool, your code runs it, and the result goes back to the model</td>
+</tr>
+<tr>
+<td>tool_use block</td>
+<td>The content block naming a tool call, its ID, and its inputs, which must be answered by a matching result in the next turn</td>
+</tr>
+<tr>
+<td>Trace</td>
+<td>A record of each step of a run: prompts, tool calls, intermediate outputs, and timing</td>
+</tr>
+<tr>
+<td>Trust boundary</td>
+<td>Any seam where data or instructions cross from one environment to another, where incoming content is treated as data</td>
+</tr>
+<tr>
+<td>Workflow</td>
+<td>Steps orchestrated in your own code, some of which call the model</td>
+</tr>
+<tr>
+<td>XML tags</td>
+<td>Descriptively named tags that separate instructions from data and examples inside a prompt</td>
+</tr>
+<tr>
+<td>Zero-shot</td>
+<td>A prompt with instructions and no examples</td>
+</tr>
+</tbody>
+</table>
 <h2 id="references">References</h2>
 <p><strong>Anthropic partner training</strong> (sign-in required)</p>
 <ul>

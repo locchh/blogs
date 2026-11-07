@@ -118,36 +118,36 @@
 <p>A second agent saves real time only when the queue backs up, that is, when the first agent is busy most of the time. If items arrive well apart, each one is done soon after it arrives. The finish time is then set by when the last item arrives, not by how many agents work, and a second agent buys almost no time. This is old queueing arithmetic. In 1917, <a href="https://en.wikipedia.org/wiki/Agner_Krarup_Erlang">A. K. Erlang</a> published formulas for lost and delayed calls. Engineers used them to work out how many lines a telephone exchange needs for a given flow of calls. Extra lines pay off when the ones you have are busy most of the time. When they are mostly idle, nobody is waiting, so the new ones sit idle too.</p>
 <p>So the work is sequential by default. Spawn a worker only when the open work will not fit before a deadline. This holds for any queue, not only code: support tickets, invoices to match, test runs on phones. A fleet grows by the same rule: it adds a sandbox when a queue backs up, not before.</p>
 <p>When you do spawn, five rules keep the workers out of each other’s way:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>When you do spawn</th><th>Rule</th></tr></thead><tbody><tr><td>Isolation</td><td>its own workspace: a worktree, port, build cache, and database for code; its own device or test account for other work</td></tr><tr><td>Brief</td><td>once and complete: the item, the workspace, the deadline, the names of the evidence to return</td></tr><tr><td>Report</td><td>only when done or blocked</td></tr><tr><td>Ownership</td><td>one agent writes the final result (a commit and push, a ticket update, a filed form) and hands back</td></tr><tr><td>Roles</td><td>named profiles whose standing rules travel with them, not a generic worker</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>When you do spawn</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Isolation</td>
+<td>its own workspace: a worktree, port, build cache, and database for code; its own device or test account for other work</td>
+</tr>
+<tr>
+<td>Brief</td>
+<td>once and complete: the item, the workspace, the deadline, the names of the evidence to return</td>
+</tr>
+<tr>
+<td>Report</td>
+<td>only when done or blocked</td>
+</tr>
+<tr>
+<td>Ownership</td>
+<td>one agent writes the final result (a commit and push, a ticket update, a filed form) and hands back</td>
+</tr>
+<tr>
+<td>Roles</td>
+<td>named profiles whose standing rules travel with them, not a generic worker</td>
+</tr>
+</tbody>
+</table>
 <p>The five rules share one idea: workers never talk to each other. Each one gets a brief and hands back a result, and anything else it learns goes to the memory hub.</p>
 <h2 id="do-we-still-need-a-human-in-the-loop">Do we still need a human in the loop?</h2>
 <p>A person is needed to check the work only where the target is vague. Say the agent can check the result itself: steps a, b, c, and d are done, or the math problem is solved. Then why do we need a human in the loop? So autonomy has one condition: the target must be clear and checkable. A checkable target also makes autonomy measurable, with two numbers: the cost, in tokens, and the number of results that passed the check.</p>
@@ -159,61 +159,61 @@
 </blockquote>
 <h2 id="why-one-harness-doesnt-fit-all">Why one harness doesn’t fit all</h2>
 <p>A harness is only as good as the checker you can build for its domain. By harness I mean everything around the model: tools, state, the loop, the checks, the limits. Each kind of work needs its own, because each kind of work is checked in a different way.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Harness for</th><th>Tools</th><th>State it carries</th><th>How it checks the work</th><th>Main risk</th></tr></thead><tbody><tr><td>Coding agent</td><td>Shell, editor, git, tests</td><td>Repo, plan, task list</td><td>Compiler, tests, linters (strong)</td><td>Breaking code that works</td></tr><tr><td>Research agent</td><td>Search, fetch, read PDFs</td><td>Sources, notes, open questions</td><td>Citations, cross-checking sources (weak)</td><td>Confident claims with no real source</td></tr><tr><td>Back-office agent</td><td>ERP, CRM, email, forms, Excel</td><td>Case file, approval status</td><td>Business rules, reconciliation, sign-off</td><td>Actions you can’t undo (payments, emails)</td></tr><tr><td>Support agent</td><td>Ticketing, knowledge base, CRM</td><td>Customer history</td><td>Resolution rate, policy rules</td><td>Wrong promises to customers</td></tr><tr><td>Data / analytics agent</td><td>SQL, notebooks, BI tools</td><td>Schema, metric definitions</td><td>Re-run the query, compare to known totals</td><td>A wrong number that looks right</td></tr><tr><td>Ops / SRE agent</td><td>Logs, metrics, deploy tools</td><td>Incident timeline</td><td>Health checks, rollback</td><td>Making an outage worse</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Harness for</th>
+<th>Tools</th>
+<th>State it carries</th>
+<th>How it checks the work</th>
+<th>Main risk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Coding agent</td>
+<td>Shell, editor, git, tests</td>
+<td>Repo, plan, task list</td>
+<td>Compiler, tests, linters (strong)</td>
+<td>Breaking code that works</td>
+</tr>
+<tr>
+<td>Research agent</td>
+<td>Search, fetch, read PDFs</td>
+<td>Sources, notes, open questions</td>
+<td>Citations, cross-checking sources (weak)</td>
+<td>Confident claims with no real source</td>
+</tr>
+<tr>
+<td>Back-office agent</td>
+<td>ERP, CRM, email, forms, Excel</td>
+<td>Case file, approval status</td>
+<td>Business rules, reconciliation, sign-off</td>
+<td>Actions you can’t undo (payments, emails)</td>
+</tr>
+<tr>
+<td>Support agent</td>
+<td>Ticketing, knowledge base, CRM</td>
+<td>Customer history</td>
+<td>Resolution rate, policy rules</td>
+<td>Wrong promises to customers</td>
+</tr>
+<tr>
+<td>Data / analytics agent</td>
+<td>SQL, notebooks, BI tools</td>
+<td>Schema, metric definitions</td>
+<td>Re-run the query, compare to known totals</td>
+<td>A wrong number that looks right</td>
+</tr>
+<tr>
+<td>Ops / SRE agent</td>
+<td>Logs, metrics, deploy tools</td>
+<td>Incident timeline</td>
+<td>Health checks, rollback</td>
+<td>Making an outage worse</td>
+</tr>
+</tbody>
+</table>
 <p>Coding harnesses matured first because code has the strongest built-in checker: the compiler and the tests say right away whether it worked. The other harnesses are behind not because the models are worse, but because their work is harder to check. So designing a new harness starts with one question: how does this agent know it’s done, and done right?</p>
 <h2 id="references">References</h2>
 <p><strong>The building blocks</strong></p>

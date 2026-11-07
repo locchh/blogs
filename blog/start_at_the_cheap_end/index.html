@@ -89,110 +89,110 @@
 <p>One thing to keep straight, because the table below uses the word too. “Time to pay off” there means how long a fix takes to earn out. This dial means wall-clock inside one run. They can point opposite ways — turning up thinking pays off the moment you flip it, and makes every single run slower.</p>
 <h2 id="the-ladder-in-one-table">The ladder, in one table</h2>
 <p>Two things matter when you pick what to try: how much <strong>effort</strong> it takes to build, and how long until it <strong>pays off</strong>. Here they are, cheapest and fastest at the top.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>#</th><th>Fix</th><th>Effort to build</th><th>Time to pay off</th><th>What you get</th></tr></thead><tbody><tr><td>0</td><td>Cap the turns and the spend</td><td>Tiny (a config value)</td><td>Instant</td><td>Bounds the worst case</td></tr><tr><td>1</td><td>Right-size the model &#x26; output</td><td>Tiny (config + prompt)</td><td>Instant</td><td>Free lunch</td></tr><tr><td>2</td><td>Prompt caching</td><td>Tiny (a flag)</td><td>Instant</td><td>Free lunch</td></tr><tr><td>3</td><td>More thinking on medium-hard tasks</td><td>Tiny (a setting)</td><td>Instant</td><td>Trade — spend more</td></tr><tr><td>4</td><td>Trim context + remind the goal</td><td>Small</td><td>Instant</td><td>Win-win</td></tr><tr><td>5</td><td>A “do less” rule</td><td>Small</td><td>Fast</td><td>Win-win</td></tr><tr><td>6</td><td>Compress tool output</td><td>Small (drop-in tool)</td><td>Fast</td><td>Win-win</td></tr><tr><td>7</td><td>Offload to real tools</td><td>Medium</td><td>Days</td><td>Win-win</td></tr><tr><td>8</td><td>The check-and-retry loop</td><td>Medium</td><td>Days</td><td>Trade — finishing beats failing</td></tr><tr><td>9</td><td>Route easy work to a cheap model</td><td>Medium</td><td>Days–weeks</td><td>Free lunch</td></tr><tr><td>10</td><td>A memory with a write path</td><td>Medium–large</td><td>Weeks</td><td>Continuity</td></tr><tr><td>11</td><td>A lesson library (rules + skills)</td><td>Large</td><td>Weeks</td><td>Compounds over time</td></tr><tr><td>12</td><td>Fine-tune / distill</td><td>Large</td><td>Weeks–months</td><td>Cheap once it’s stable</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Fix</th>
+<th>Effort to build</th>
+<th>Time to pay off</th>
+<th>What you get</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Cap the turns and the spend</td>
+<td>Tiny (a config value)</td>
+<td>Instant</td>
+<td>Bounds the worst case</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Right-size the model &#x26; output</td>
+<td>Tiny (config + prompt)</td>
+<td>Instant</td>
+<td>Free lunch</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Prompt caching</td>
+<td>Tiny (a flag)</td>
+<td>Instant</td>
+<td>Free lunch</td>
+</tr>
+<tr>
+<td>3</td>
+<td>More thinking on medium-hard tasks</td>
+<td>Tiny (a setting)</td>
+<td>Instant</td>
+<td>Trade — spend more</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Trim context + remind the goal</td>
+<td>Small</td>
+<td>Instant</td>
+<td>Win-win</td>
+</tr>
+<tr>
+<td>5</td>
+<td>A “do less” rule</td>
+<td>Small</td>
+<td>Fast</td>
+<td>Win-win</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Compress tool output</td>
+<td>Small (drop-in tool)</td>
+<td>Fast</td>
+<td>Win-win</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Offload to real tools</td>
+<td>Medium</td>
+<td>Days</td>
+<td>Win-win</td>
+</tr>
+<tr>
+<td>8</td>
+<td>The check-and-retry loop</td>
+<td>Medium</td>
+<td>Days</td>
+<td>Trade — finishing beats failing</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Route easy work to a cheap model</td>
+<td>Medium</td>
+<td>Days–weeks</td>
+<td>Free lunch</td>
+</tr>
+<tr>
+<td>10</td>
+<td>A memory with a write path</td>
+<td>Medium–large</td>
+<td>Weeks</td>
+<td>Continuity</td>
+</tr>
+<tr>
+<td>11</td>
+<td>A lesson library (rules + skills)</td>
+<td>Large</td>
+<td>Weeks</td>
+<td>Compounds over time</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Fine-tune / distill</td>
+<td>Large</td>
+<td>Weeks–months</td>
+<td>Cheap once it’s stable</td>
+</tr>
+</tbody>
+</table>
 <h2 id="the-ladder-assumes-the-model-holds-still">The ladder assumes the model holds still</h2>
 <p>Every fix above treats the model as a fixed thing you tune around. It isn’t. The newest models are trained to keep working on their own for long stretches, and that training brought habits with it — habits that cost money and buy nothing.</p>
 <p>I found two by reading my own transcripts with <a href="https://github.com/locchh/clear-mind">clear-mind</a>, a small tool I wrote to make session logs legible.</p>

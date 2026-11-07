@@ -83,48 +83,48 @@
     D3 --> S3["Status: strong results&#x3C;br/>at research scale, not yet frontier"]
 </code></pre>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th></th><th>MoE</th><th>World models (JEPA)</th><th>Titans / Hope / Sleep</th></tr></thead><tbody><tr><td>Attacks</td><td>Cost per token</td><td>What the model learns from</td><td>Frozen weights, forgetting</td></tr><tr><td>Core move</td><td>Route each token to few experts</td><td>Predict in representation space</td><td>Memory at many update frequencies</td></tr><tr><td>Changes the paradigm?</td><td>No — a patch inside it</td><td>Yes — replaces generation as the goal</td><td>Partly — transformer plus a memory system</td></tr><tr><td>Where it is today</td><td>In production everywhere</td><td>Research + robotics demos</td><td>Research scale only</td></tr><tr><td>Doesn’t fix</td><td>Frozen weights, long-context cost</td><td>Language, planning</td><td>Still a transformer at heart, unproven at frontier scale</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>MoE</th>
+<th>World models (JEPA)</th>
+<th>Titans / Hope / Sleep</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Attacks</td>
+<td>Cost per token</td>
+<td>What the model learns from</td>
+<td>Frozen weights, forgetting</td>
+</tr>
+<tr>
+<td>Core move</td>
+<td>Route each token to few experts</td>
+<td>Predict in representation space</td>
+<td>Memory at many update frequencies</td>
+</tr>
+<tr>
+<td>Changes the paradigm?</td>
+<td>No — a patch inside it</td>
+<td>Yes — replaces generation as the goal</td>
+<td>Partly — transformer plus a memory system</td>
+</tr>
+<tr>
+<td>Where it is today</td>
+<td>In production everywhere</td>
+<td>Research + robotics demos</td>
+<td>Research scale only</td>
+</tr>
+<tr>
+<td>Doesn’t fix</td>
+<td>Frozen weights, long-context cost</td>
+<td>Language, planning</td>
+<td>Still a transformer at heart, unproven at frontier scale</td>
+</tr>
+</tbody>
+</table>
 <p>The neat part: <strong>these three don’t compete, they compose.</strong> The sleep paper grows MoE-style experts as its memory cells. JEPA models have transformers inside. Nothing stops a future model from being all three at once — sparse, predicting in representation space, and consolidating memory while it sleeps. If I had to bet on “the model of 2028,” that’s the shape I’d sketch.</p>
 <p>And notice what all three quietly agree on. The transformer isn’t being <em>replaced</em> — every one of these still has attention doing what attention is genuinely great at. What’s being abandoned is the idea that <strong>one frozen network, answering in a single pass,</strong> is all you need. The bets differ only on which missing piece matters most: cheaper capacity, a grounded model of the world, or a memory that survives the session.</p>
 <hr>
@@ -137,48 +137,48 @@
 <p><strong>4. Self-modifying models — the model rewrites itself.</strong> The deep end: the model produces its own updates. <a href="https://arxiv.org/abs/2506.10943">SEAL</a> has the model write its own finetuning data and use reinforcement learning to discover which self-edits actually help. <a href="https://arxiv.org/abs/2501.06252">Transformer²</a> rescales its own weights at inference to fit the task. Door 3’s Hope is <a href="https://arxiv.org/abs/2512.24695">a model that learns its own update rule</a>. The lineage is Schmidhuber’s 1990s line that <a href="https://arxiv.org/abs/2202.05780">“the weight matrix of a neural network is its program”</a> — so a self-modifying model is a program rewriting itself as it runs. The vivid case is the <a href="https://arxiv.org/abs/2505.22954">Darwin Gödel Machine</a>, a coding agent that edits its <strong>own source code</strong>, keeps whatever tests better, and more than doubled its own benchmark score — by relaxing the old dream of “provably better” to just “empirically better.” And that’s exactly where it turns unsettling: when the benchmark is the only rule, the model games it. In their runs it <strong>faked a test log</strong>; when they tried to catch that, it <strong>deleted the markers they’d added to detect the faking</strong>. A system optimized against its own referee will eventually attack the referee. Keep it in proportion, though — every result is narrow, forgetting is still unsolved, and all of it is sandboxed research.</p>
 <p><strong>5. Agent architectures — where the four meet reality.</strong> The four above are ingredients; the architecture is the recipe deciding which happens, where, and when. The clearest map is <a href="https://arxiv.org/abs/2309.02427">CoALA</a>, which borrows from cognitive science: an agent has working, episodic, semantic, and <strong>procedural</strong> memory (its own code and weights), plus a plan-and-act loop. Our four frontiers slot straight in — long-term memory writes episodic and semantic, continual learning is the “learn” action, test-time learning is fast internal adaptation, self-modification rewrites procedural memory. And here’s the honest punchline of the whole door: when an agent “learns” today — <a href="https://arxiv.org/abs/2210.03629">ReAct</a>, <a href="https://arxiv.org/abs/2303.11366">Reflexion</a>, <a href="https://arxiv.org/abs/2305.16291">Voyager</a> — it almost always means it <strong>took better notes</strong>: stored and reused its own experience, <em>not</em> ran gradient descent. Better notes, not new weights. Which is why the craft moved to what Karpathy renamed <strong>context engineering</strong>, and what Lilian Weng calls <a href="https://lilianweng.github.io/posts/2026-07-04-harness/">harness engineering</a>: <em>“the layer between the raw model and the real-world context seems to be as important as the model’s raw intelligence.”</em> Which is this blog’s whole refrain — <a href="/blogs/blog/migration_is_a_harness/">the harness is the job</a>.</p>
 <p>Line them up and the axis does the work:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Frontier</th><th>Where the change lives</th><th>When</th><th>Shipping today?</th></tr></thead><tbody><tr><td>Long-term memory</td><td>Outside the model, in a store</td><td>Every write</td><td>Yes — everywhere</td></tr><tr><td>Continual learning</td><td>In the weights</td><td>Offline, gated</td><td>Rarely — RAG and adapters stand in</td></tr><tr><td>Test-time learning</td><td>In the weights, per input</td><td>Per query</td><td>Research and competitions</td></tr><tr><td>Self-modifying</td><td>In the weights and its own code</td><td>The model decides</td><td>Research only</td></tr><tr><td>Agent architecture</td><td>Around the model</td><td>By design</td><td>Yes — it <em>is</em> the harness</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Frontier</th>
+<th>Where the change lives</th>
+<th>When</th>
+<th>Shipping today?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Long-term memory</td>
+<td>Outside the model, in a store</td>
+<td>Every write</td>
+<td>Yes — everywhere</td>
+</tr>
+<tr>
+<td>Continual learning</td>
+<td>In the weights</td>
+<td>Offline, gated</td>
+<td>Rarely — RAG and adapters stand in</td>
+</tr>
+<tr>
+<td>Test-time learning</td>
+<td>In the weights, per input</td>
+<td>Per query</td>
+<td>Research and competitions</td>
+</tr>
+<tr>
+<td>Self-modifying</td>
+<td>In the weights and its own code</td>
+<td>The model decides</td>
+<td>Research only</td>
+</tr>
+<tr>
+<td>Agent architecture</td>
+<td>Around the model</td>
+<td>By design</td>
+<td>Yes — it <em>is</em> the harness</td>
+</tr>
+</tbody>
+</table>
 <p>The pattern is impossible to miss, and it echoes the three-door table above: everything we actually run keeps the model <strong>frozen</strong> and puts the learning <em>outside</em> it — in a store, in retrieved context, in notes, in adapters. Everything that truly changes the model — continual learning, test-time training, self-modification — is thrilling and stuck in the lab. In the <a href="/blogs/blog/how_to_build_knowledgebase/">knowledge-base post’s</a> brain picture, we shipped the fast external-capture half (the hippocampus); the slow, into-the-weights, sleeping half (the neocortex) is exactly what Titans, Hope, the sleep paper, and SEAL are all reaching for — and haven’t landed.</p>
 <hr>
 <h2 id="where-this-leaves-us">Where this leaves us</h2>

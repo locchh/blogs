@@ -20,60 +20,60 @@
 <h3 id="the-7-rs">The 7 R’s</h3>
 <p>Before you write a single line of new code, you have to decide <em>what to do</em> with each piece of the old system. The mistake is treating “migration” as one decision applied to everything. It isn’t. Every application has its own architecture, dependencies, and business value, so you evaluate each one individually and pick the path that best balances speed, cost, and long-term value.</p>
 <p>The <a href="https://www.ibm.com/think/insights/7-rs-cloud-migration">7 R’s framework</a> names the seven options:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Strategy</th><th>What it means</th><th>When to use it</th><th>Trade-off</th></tr></thead><tbody><tr><td><strong>Rehost</strong> (lift-and-shift)</td><td>Move the app as-is, no code changes</td><td>Tight deadlines, datacenter exits, low-risk workloads</td><td>Fastest and cheapest to move, but you carry the old inefficiencies with you</td></tr><tr><td><strong>Relocate</strong></td><td>Move a whole environment (VMs, containers) without new hardware or a new ops model</td><td>Large estates you want shifted wholesale with minimal disruption</td><td>Even less change than rehost — inherits every existing limitation</td></tr><tr><td><strong>Replatform</strong> (lift-tinker-shift)</td><td>Move with a few targeted optimizations (e.g. swap a self-managed DB for a managed one)</td><td>When small tweaks unlock real value without a rebuild</td><td>A middle ground: modest benefit, modest effort and risk</td></tr><tr><td><strong>Refactor / Re-architect</strong></td><td>Significantly rewrite to be cloud-native</td><td>Apps that need scale, agility, or features the old design can’t deliver</td><td>Highest cost, effort, and risk — but the highest long-term payoff</td></tr><tr><td><strong>Repurchase</strong> (drop-and-shop)</td><td>Replace with a different product, usually SaaS</td><td>When a commercial option beats maintaining your own</td><td>Less control and customization; data migration and retraining cost</td></tr><tr><td><strong>Retire</strong></td><td>Decommission the app entirely</td><td>Usage data shows it’s barely used, or its capability is duplicated elsewhere</td><td>Saves money and shrinks the surface area — but you need confidence it’s truly dead</td></tr><tr><td><strong>Retain</strong> (revisit)</td><td>Leave it where it is, for now</td><td>Recently upgraded, stable, or blocked by unresolved compliance/dependencies</td><td>Defers the decision instead of forcing a bad migration</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>What it means</th>
+<th>When to use it</th>
+<th>Trade-off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rehost</strong> (lift-and-shift)</td>
+<td>Move the app as-is, no code changes</td>
+<td>Tight deadlines, datacenter exits, low-risk workloads</td>
+<td>Fastest and cheapest to move, but you carry the old inefficiencies with you</td>
+</tr>
+<tr>
+<td><strong>Relocate</strong></td>
+<td>Move a whole environment (VMs, containers) without new hardware or a new ops model</td>
+<td>Large estates you want shifted wholesale with minimal disruption</td>
+<td>Even less change than rehost — inherits every existing limitation</td>
+</tr>
+<tr>
+<td><strong>Replatform</strong> (lift-tinker-shift)</td>
+<td>Move with a few targeted optimizations (e.g. swap a self-managed DB for a managed one)</td>
+<td>When small tweaks unlock real value without a rebuild</td>
+<td>A middle ground: modest benefit, modest effort and risk</td>
+</tr>
+<tr>
+<td><strong>Refactor / Re-architect</strong></td>
+<td>Significantly rewrite to be cloud-native</td>
+<td>Apps that need scale, agility, or features the old design can’t deliver</td>
+<td>Highest cost, effort, and risk — but the highest long-term payoff</td>
+</tr>
+<tr>
+<td><strong>Repurchase</strong> (drop-and-shop)</td>
+<td>Replace with a different product, usually SaaS</td>
+<td>When a commercial option beats maintaining your own</td>
+<td>Less control and customization; data migration and retraining cost</td>
+</tr>
+<tr>
+<td><strong>Retire</strong></td>
+<td>Decommission the app entirely</td>
+<td>Usage data shows it’s barely used, or its capability is duplicated elsewhere</td>
+<td>Saves money and shrinks the surface area — but you need confidence it’s truly dead</td>
+</tr>
+<tr>
+<td><strong>Retain</strong> (revisit)</td>
+<td>Leave it where it is, for now</td>
+<td>Recently upgraded, stable, or blocked by unresolved compliance/dependencies</td>
+<td>Defers the decision instead of forcing a bad migration</td>
+</tr>
+</tbody>
+</table>
 <p>In practice you don’t pick one. Most enterprises apply <em>different</em> R’s to different components — a hybrid strategy is the expected, healthy outcome, not a sign of indecision. The 7 R’s are the decision layer. The rest of this post is about <em>how</em> you execute the hard ones (refactor and re-architect) without breaking the business.</p>
 <h3 id="the-strangler-fig-and-the-seam">The Strangler Fig and the Seam</h3>
 <p>A strangler fig germinates up in the branches of a host tree, grows its roots down to the ground, and slowly becomes self-sustaining until the original tree dies away — leaving the fig standing in its shape. <a href="https://martinfowler.com/bliki/StranglerFigApplication.html">Martin Fowler’s Strangler Fig pattern</a> borrows that image: you grow the new system <em>around</em> the old one, shifting behavior piece by piece, until the legacy code can be removed.</p>
@@ -89,75 +89,75 @@
 <li><strong>Verifier</strong> — proves <em>the new code matches the old</em>: it compares legacy and modernized implementations to confirm behavioral equivalence against the Phase 2 business rules. This is the whole of Phase 6.</li>
 </ul>
 <p>The split maps cleanly onto the harness idea from earlier — <em>understand → locate → verify</em> — and notice none of them decides anything. They inform; the human at each HITL gate commits.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Phase</th><th>Name</th><th>Purpose</th><th>Role</th><th>Sub-Playbook</th></tr></thead><tbody><tr><td>1</td><td>Codebase Assessment</td><td>Evaluate modernization readiness: architecture, dependencies, tech debt, coupling, risk — including non-code artifacts (JCL, configuration, data stores)</td><td>Expert</td><td>Codebase Assessment</td></tr><tr><td>2</td><td>Business Rules Inventory</td><td>Extract, catalog, and validate all business rules the modernized system must preserve</td><td>Expert + Navigator</td><td>Business Rules Extraction</td></tr><tr><td>3</td><td>Target Architecture &#x26; Strategy</td><td>Select modernization pattern (7 R’s), define target architecture, human approval gate</td><td>Expert</td><td>Target Architecture</td></tr><tr><td>4</td><td>Decomposition &#x26; Sequencing</td><td>Identify service boundaries, map dependencies, produce an ordered migration plan, push to Jira/Linear</td><td>Navigator</td><td>Decomposition &#x26; Sequencing</td></tr><tr><td>5</td><td>Iterative Execution</td><td>Transform → Coexist → Eliminate per component, using Strangler Fig / Branch by Abstraction</td><td>Expert + Navigator</td><td>Spec-Driven Development + architecture-to-architecture variants</td></tr><tr><td>6</td><td>Behavioral Verification</td><td>Prove modernized components preserve the business rules from Phase 2</td><td>Verifier</td><td>Behavioral Verification</td></tr><tr><td>7</td><td>Cutover</td><td>Switch live traffic from the legacy system to the new one, and monitor closely</td><td>Navigator + Verifier</td><td>Cutover &#x26; Rollback</td></tr><tr><td>8</td><td>Decommission</td><td>Retire the legacy system — only after the new one has proven stable in production</td><td>Expert</td><td>Decommission</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Name</th>
+<th>Purpose</th>
+<th>Role</th>
+<th>Sub-Playbook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Codebase Assessment</td>
+<td>Evaluate modernization readiness: architecture, dependencies, tech debt, coupling, risk — including non-code artifacts (JCL, configuration, data stores)</td>
+<td>Expert</td>
+<td>Codebase Assessment</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Business Rules Inventory</td>
+<td>Extract, catalog, and validate all business rules the modernized system must preserve</td>
+<td>Expert + Navigator</td>
+<td>Business Rules Extraction</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Target Architecture &#x26; Strategy</td>
+<td>Select modernization pattern (7 R’s), define target architecture, human approval gate</td>
+<td>Expert</td>
+<td>Target Architecture</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Decomposition &#x26; Sequencing</td>
+<td>Identify service boundaries, map dependencies, produce an ordered migration plan, push to Jira/Linear</td>
+<td>Navigator</td>
+<td>Decomposition &#x26; Sequencing</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Iterative Execution</td>
+<td>Transform → Coexist → Eliminate per component, using Strangler Fig / Branch by Abstraction</td>
+<td>Expert + Navigator</td>
+<td>Spec-Driven Development + architecture-to-architecture variants</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Behavioral Verification</td>
+<td>Prove modernized components preserve the business rules from Phase 2</td>
+<td>Verifier</td>
+<td>Behavioral Verification</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Cutover</td>
+<td>Switch live traffic from the legacy system to the new one, and monitor closely</td>
+<td>Navigator + Verifier</td>
+<td>Cutover &#x26; Rollback</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Decommission</td>
+<td>Retire the legacy system — only after the new one has proven stable in production</td>
+<td>Expert</td>
+<td>Decommission</td>
+</tr>
+</tbody>
+</table>
 <p>CoreStory’s playbook stops at Phase 6, because behavioral equivalence is the part AI can meaningfully drive. But verification proves a component is <em>ready</em>; it doesn’t make it <em>live</em>. Phases 7 and 8 are the system-level endgame — the moment the strangler fig finally takes over and the host tree comes down.</p>
 <p><strong>How the phases connect.</strong> They form a dependency chain with an iterative loop at the end:</p>
 <ul>
@@ -484,42 +484,42 @@
 <p>Read left to right: the planner feeds the orchestrator one unit, the orchestrator loops generator and evaluator until the unit verifies (or escalates if it can’t), and the result flows back to the planner, which marks the unit done and releases the next. The inner loop is the <em>doer/checker</em> split that keeps any single unit honest; the outer loop is the <em>planner</em> that keeps the whole migration moving — and recoverable. Notice the human sits outside both loops, touched only twice: once to set strategy and sign off, and again when a unit genuinely needs judgment. That’s the WIP = 1 discipline and the HITL gate from earlier, wired into agents.</p>
 <h3 id="the-price">The price</h3>
 <p>The model is the one part of the harness you don’t engineer — you rent it. So the real question is <em>which tier goes where</em>. Anthropic’s lineup, at the time of writing, spans a 10× price range (per million tokens):</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Model</th><th>Input</th><th>Output</th><th>Where it fits in the harness</th></tr></thead><tbody><tr><td><strong>Fable 5</strong></td><td>$10</td><td>$50</td><td>The hardest long-horizon reasoning — a deeply tangled unit the orchestrator can’t crack at Opus tier</td></tr><tr><td><strong>Opus 4.8</strong></td><td>$5</td><td>$25</td><td>The orchestrator and planner — judgment, recovery, reading the as-is source, deciding what the skills missed</td></tr><tr><td><strong>Sonnet 4.6</strong></td><td>$3</td><td>$15</td><td>The generator and evaluator — high-volume, well-scoped code generation and verification</td></tr><tr><td><strong>Haiku 4.5</strong></td><td>$1</td><td>$5</td><td>Cheap mechanical sub-tasks — formatting, simple lookups, boilerplate</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Input</th>
+<th>Output</th>
+<th>Where it fits in the harness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fable 5</strong></td>
+<td>$10</td>
+<td>$50</td>
+<td>The hardest long-horizon reasoning — a deeply tangled unit the orchestrator can’t crack at Opus tier</td>
+</tr>
+<tr>
+<td><strong>Opus 4.8</strong></td>
+<td>$5</td>
+<td>$25</td>
+<td>The orchestrator and planner — judgment, recovery, reading the as-is source, deciding what the skills missed</td>
+</tr>
+<tr>
+<td><strong>Sonnet 4.6</strong></td>
+<td>$3</td>
+<td>$15</td>
+<td>The generator and evaluator — high-volume, well-scoped code generation and verification</td>
+</tr>
+<tr>
+<td><strong>Haiku 4.5</strong></td>
+<td>$1</td>
+<td>$5</td>
+<td>Cheap mechanical sub-tasks — formatting, simple lookups, boilerplate</td>
+</tr>
+</tbody>
+</table>
 <p>That table <em>is</em> the economics of the multi-agent pattern. You pay top-tier rates only where judgment lives — the orchestrator and planner, which run relatively few tokens making decisions — and you run the token-hungry roles (generator, evaluator, looping until green) on Sonnet, which is a third of Opus’s price and more than capable for scoped work. Spending Opus tokens to write a getter, or Sonnet tokens to make an architectural call, are both mistakes in opposite directions.</p>
 <p>There’s a caching reason to keep the split too: <strong>switching models mid-session invalidates the prompt cache</strong> (the cache is per-model). Because each role lives in its own subagent with its own model, each one’s cache stays warm across the loop — the tiering is cache-friendly by construction, not just budget-friendly.</p>
 <p>But the sharper point is the one in the heading my draft started with: <strong>a cheap or outdated model wastes both cost <em>and</em> time.</strong> Migration is verification-bound, not generation-bound — a unit isn’t done when code is written, it’s done when the evaluator passes it. A weaker model doesn’t just produce worse code; it produces more <em>rejected</em> attempts, so each unit takes more generate-and-verify loops. More loops means more wall-clock <em>and</em> more tokens. So the model with the lowest per-token price can easily be the most expensive end to end, because rework dominates the bill. You pay for weakness twice — once in tokens, once in the days it adds to the schedule.</p>
@@ -574,48 +574,48 @@
 <p>One tool for each.</p>
 <h3 id="understand-anything">Understand Anything</h3>
 <p>To understand the as-is system, a code <strong>knowledge graph</strong> beats grepping around: it parses the codebase into nodes (files, functions, tables, jobs) and edges (imports, calls, data flow), so the agent can ask “what depends on this?” instead of guessing. A few tools do this; here’s how they compare:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th></th><th><a href="https://github.com/safishamsi/graphify">Graphify</a></th><th><a href="https://github.com/abhigyanpatwari/GitNexus">GitNexus</a></th><th><a href="https://github.com/Egonex-AI/Understand-Anything">Understand-Anything</a></th></tr></thead><tbody><tr><td><strong>Extraction</strong></td><td>tree-sitter (36 grammars) for code; LLM for docs/PDF/media</td><td>tree-sitter (14 languages)</td><td>tree-sitter (structure) <strong>+ LLM agents</strong> (semantics)</td></tr><tr><td><strong>Clustering</strong></td><td>Leiden communities</td><td>Leiden communities</td><td>Louvain communities (batching)</td></tr><tr><td><strong>Storage / query</strong></td><td><code>graph.json</code> (+ Neo4j/FalkorDB export); MCP + CLI query</td><td>LadybugDB (graph + vector); Cypher + 16 MCP tools</td><td><code>knowledge-graph.json</code>; interactive dashboard + <code>/understand-*</code> commands</td></tr><tr><td><strong>Where it runs</strong></td><td>inside AI assistants (Claude Code, Cursor, …)</td><td>CLI + MCP, or fully in-browser via WASM</td><td>inside AI assistants; Vite dashboard</td></tr><tr><td><strong>Distinctive strength</strong></td><td>broadest inputs — code <em>and</em> docs, images, video; git-native (commit the graph)</td><td>agent-facing precomputed tools (impact, rename, context in one call)</td><td><strong>architectural layering + guided tours + business-domain flows</strong>; broad language coverage incl. mainframe</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><a href="https://github.com/safishamsi/graphify">Graphify</a></th>
+<th><a href="https://github.com/abhigyanpatwari/GitNexus">GitNexus</a></th>
+<th><a href="https://github.com/Egonex-AI/Understand-Anything">Understand-Anything</a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Extraction</strong></td>
+<td>tree-sitter (36 grammars) for code; LLM for docs/PDF/media</td>
+<td>tree-sitter (14 languages)</td>
+<td>tree-sitter (structure) <strong>+ LLM agents</strong> (semantics)</td>
+</tr>
+<tr>
+<td><strong>Clustering</strong></td>
+<td>Leiden communities</td>
+<td>Leiden communities</td>
+<td>Louvain communities (batching)</td>
+</tr>
+<tr>
+<td><strong>Storage / query</strong></td>
+<td><code>graph.json</code> (+ Neo4j/FalkorDB export); MCP + CLI query</td>
+<td>LadybugDB (graph + vector); Cypher + 16 MCP tools</td>
+<td><code>knowledge-graph.json</code>; interactive dashboard + <code>/understand-*</code> commands</td>
+</tr>
+<tr>
+<td><strong>Where it runs</strong></td>
+<td>inside AI assistants (Claude Code, Cursor, …)</td>
+<td>CLI + MCP, or fully in-browser via WASM</td>
+<td>inside AI assistants; Vite dashboard</td>
+</tr>
+<tr>
+<td><strong>Distinctive strength</strong></td>
+<td>broadest inputs — code <em>and</em> docs, images, video; git-native (commit the graph)</td>
+<td>agent-facing precomputed tools (impact, rename, context in one call)</td>
+<td><strong>architectural layering + guided tours + business-domain flows</strong>; broad language coverage incl. mainframe</td>
+</tr>
+</tbody>
+</table>
 <p>They’ve converged on the same shape — tree-sitter + community detection + a graph served to agents over MCP. The differences are emphasis: Graphify ingests the widest range of artifacts, GitNexus optimizes for an agent calling precomputed graph tools, and Understand-Anything adds the layer that matters most for migration — it assigns every file to an <strong>architectural layer</strong> and builds a <strong>guided tour</strong> through the system, which is exactly the “what is this and how is it organized?” an Expert needs on day one.</p>
 <p><strong>How it works.</strong> Understand-Anything runs a multi-phase pipeline (orchestrator + specialized subagents), hybrid by design: tree-sitter extracts deterministic structure (imports, definitions, call sites); LLM agents add the semantics tree-sitter can’t (plain-English summaries, layer assignments, domain flows). Roughly: <em>scan</em> (discover files, detect languages, build an import map) → <em>batch</em> (group files into cohesive analysis units via community detection) → <em>analyze</em> (a file-analyzer subagent per batch, run in concurrent waves, emitting nodes + edges) → <em>merge</em> into one graph → <em>architecture</em> (assign every node to one layer) → <em>tour</em> (an ordered, dependency-respecting narrative) → <em>validate</em> → <em>save</em>. The result lands in <code>.understand-anything/knowledge-graph.json</code> — committable, so teammates skip the run — and incremental updates re-analyze only the files a <code>git diff</code> says changed.</p>
 <p><strong>The output, on a real mainframe.</strong> I pointed it at AWS’s <a href="https://github.com/aws-samples/aws-mainframe-modernization-carddemo">CardDemo</a> — a reference COBOL/CICS credit-card system, the archetypal migration target. From <strong>245 files</strong> of COBOL, copybooks, JCL, BMS maps, DB2 DDL, IMS DBD/PSB, CICS CSD, and Assembler, it produced a graph of <strong>242 nodes and 433 edges</strong>, organized into <strong>8 architectural layers</strong> (Online/Presentation (CICS), Batch Processing, Job Control &#x26; Orchestration, Shared Copybooks &#x26; Data Structures, Data/Config/Resources, Build &#x26; Deployment Tooling, Optional Add-on Modules, Documentation) with a <strong>13-step guided tour</strong> from the sign-on screen through to batch posting and JCL scheduling. That’s the kind of map that turns “nobody here fully understands the mainframe” into something an agent — and a new engineer — can navigate.</p>

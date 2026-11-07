@@ -155,36 +155,36 @@
 <span class="line"><span>merge:  your feature → main   (you ship)</span></span></code></pre>
 <h4 id="there-are-three-layers-not-two">There are three layers, not two</h4>
 <p>Most confusion comes from thinking there are two things (local and GitHub) when there are really three:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>#</th><th>Layer</th><th>Where it lives</th><th>What it is</th></tr></thead><tbody><tr><td>1</td><td>Remote branch</td><td>GitHub’s servers</td><td>the source of truth — the real <code>main</code></td></tr><tr><td>2</td><td>Remote-tracking branch</td><td>your machine (read-only)</td><td><code>origin/main</code> — a cached copy, refreshed by <code>git fetch</code></td></tr><tr><td>3</td><td>Local branch</td><td>your machine</td><td><code>feature/...</code> — where you actually work</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Layer</th>
+<th>Where it lives</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Remote branch</td>
+<td>GitHub’s servers</td>
+<td>the source of truth — the real <code>main</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Remote-tracking branch</td>
+<td>your machine (read-only)</td>
+<td><code>origin/main</code> — a cached copy, refreshed by <code>git fetch</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Local branch</td>
+<td>your machine</td>
+<td><code>feature/...</code> — where you actually work</td>
+</tr>
+</tbody>
+</table>
 <p><strong><code>origin/main</code> is a local cache, not GitHub itself.</strong> It lives on your machine in <code>.git/refs/remotes/origin/main</code> — a read-only snapshot of what GitHub looked like the last time you ran <code>git fetch</code>.</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>GitHub (real): main → A-B-C-D</span></span>
 <span class="line"><span>        ↑</span></span>
@@ -192,24 +192,24 @@
 <span class="line"><span>        ↓</span></span>
 <span class="line"><span>Your machine: origin/main → A-B-C-D (cache, read-only)</span></span></code></pre>
 <p>Think of it like a news app: GitHub is the news server, <code>origin/main</code> is the articles cached on your phone, and <code>git fetch</code> is hitting refresh.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Command</th><th>What it updates</th></tr></thead><tbody><tr><td><code>git fetch</code></td><td>only <code>origin/*</code> (remote-tracking branches) — never your files</td></tr><tr><td><code>git pull</code></td><td><code>fetch</code> <strong>+</strong> auto-merge into your current local branch</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it updates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git fetch</code></td>
+<td>only <code>origin/*</code> (remote-tracking branches) — never your files</td>
+</tr>
+<tr>
+<td><code>git pull</code></td>
+<td><code>fetch</code> <strong>+</strong> auto-merge into your current local branch</td>
+</tr>
+</tbody>
+</table>
 <p><code>git fetch</code> is the safe one — it never touches your local branches or working tree. And here’s a senior-dev habit worth knowing: your local <code>main</code> goes stale the moment a teammate pushes, and you rarely actually need it — <code>origin/main</code> is always fresh after a fetch. Some people delete local <code>main</code> entirely and build from <code>origin/main</code> directly:</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> branch</span><span style="color:#79B8FF"> -d</span><span style="color:#9ECBFF"> main</span><span style="color:#6A737D">                  # you never edit main locally anyway</span></span>
 <span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> fetch</span></span>
@@ -251,32 +251,32 @@
 <span class="line"><span>pick   abc  add login feature</span></span>
 <span class="line"><span>squash def</span></span>
 <span class="line"><span>squash ghi          # 3 messy commits → 1 clean one</span></span></code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Command</th><th>What it does</th></tr></thead><tbody><tr><td><code>pick</code></td><td>keep the commit as-is</td></tr><tr><td><code>reword</code></td><td>keep the commit, edit its message</td></tr><tr><td><code>squash</code></td><td>fold into the previous commit</td></tr><tr><td><code>drop</code></td><td>delete the commit entirely</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pick</code></td>
+<td>keep the commit as-is</td>
+</tr>
+<tr>
+<td><code>reword</code></td>
+<td>keep the commit, edit its message</td>
+</tr>
+<tr>
+<td><code>squash</code></td>
+<td>fold into the previous commit</td>
+</tr>
+<tr>
+<td><code>drop</code></td>
+<td>delete the commit entirely</td>
+</tr>
+</tbody>
+</table>
 <p>Use plain <code>rebase origin/main</code> when your commits are already clean and you just need to catch up; use <code>rebase -i</code> right before opening a PR to turn “wip / fix / oops” into a history worth reading.</p>
 <h4 id="resolving-conflicts">Resolving conflicts</h4>
 <p>A conflict happens when two branches edit the <strong>same lines</strong>. Git can’t decide which version wins, so it stops and writes markers into the file:</p>
@@ -292,32 +292,32 @@
 <span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> rebase</span><span style="color:#79B8FF"> --continue</span><span style="color:#6A737D">   # do NOT run git commit during a rebase</span></span></code></pre>
 <p>VS Code gives you buttons above each block — <em>Accept Current / Incoming / Both</em> — then you stage the file and run <code>git rebase --continue</code> in the terminal.</p>
 <p>The one difference between the two to keep in your head:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th></th><th>Merge</th><th>Rebase</th></tr></thead><tbody><tr><td>Conflicts surface</td><td>once, all together</td><td>one commit at a time</td></tr><tr><td>Continue with</td><td><code>git merge --continue</code></td><td><code>git rebase --continue</code></td></tr><tr><td>Bail out</td><td><code>git merge --abort</code></td><td><code>git rebase --abort</code></td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Merge</th>
+<th>Rebase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Conflicts surface</td>
+<td>once, all together</td>
+<td>one commit at a time</td>
+</tr>
+<tr>
+<td>Continue with</td>
+<td><code>git merge --continue</code></td>
+<td><code>git rebase --continue</code></td>
+</tr>
+<tr>
+<td>Bail out</td>
+<td><code>git merge --abort</code></td>
+<td><code>git rebase --abort</code></td>
+</tr>
+</tbody>
+</table>
 <p>With rebase, if 2 of your 3 commits conflict, you resolve <strong>twice</strong> — once per commit as Git replays them. And if it ever gets too messy, <code>git rebase --abort</code> puts you back exactly where you started. No harm done.</p>
 <h4 id="the-golden-rules">The golden rules</h4>
 <blockquote>
@@ -660,28 +660,28 @@
 <span class="line"><span style="color:#9ECBFF">    "mkdocs-kroki-plugin>=0.8.0"</span><span style="color:#E1E4E8">,          </span><span style="color:#6A737D"># renders PlantUML, Mermaid, and more</span></span>
 <span class="line"><span style="color:#E1E4E8">]</span></span></code></pre>
 <p>The key idea is to keep everything as <strong>plain text in version control</strong>. Wherever you would normally reach for a binary format, replace it with its text equivalent:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Instead of</th><th>Use</th></tr></thead><tbody><tr><td>Excel spreadsheet</td><td>Markdown table</td></tr><tr><td>PNG / JPG diagram</td><td>PlantUML or Mermaid</td></tr><tr><td>Word document</td><td>Markdown file</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Instead of</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Excel spreadsheet</td>
+<td>Markdown table</td>
+</tr>
+<tr>
+<td>PNG / JPG diagram</td>
+<td>PlantUML or Mermaid</td>
+</tr>
+<tr>
+<td>Word document</td>
+<td>Markdown file</td>
+</tr>
+</tbody>
+</table>
 <p>This gives you a single source of truth that is human-readable in any editor, renderable by MkDocs into a hosted site for your team, and — thanks to <code>mkdocs-llmstxt</code> — also consumable by AI agents as an <code>llms.txt</code> file. The whole <code>docs/</code> folder becomes living documentation: versioned alongside the code, searchable, and never out of sync.</p>
 <h3 id="the-art-of-writing-code">The art of writing code</h3>
 <p><strong>Writing code is like writing a story — each commit message should carry semantic meaning and narrate what you were doing. Read the git graph six months later and you should be able to follow the plot: what was built, in what order, and why. That discipline makes a codebase maintainable not just for others, but for your future self.</strong></p>
@@ -885,36 +885,36 @@
 <p>A general-purpose memory SDK, not tied to any one agent. It organizes memory across three levels — <strong>user</strong> (long-term preferences), <strong>session</strong> (in-conversation context), and <strong>agent state</strong> (current operational data) — and retrieves with a blend of semantic search, BM25 keyword matching, and entity linking. The v3 algorithm uses single-pass ADD-only extraction: memories accumulate, nothing is overwritten, and agent-confirmed actions get the same priority as user-provided facts. The strength is generality — if you are building your own agent, mem0 gives you a memory plane without dictating an architecture.</p>
 <p><strong><a href="https://github.com/topoteretes/cognee">cognee</a> — knowledge graphs instead of vectors alone</strong></p>
 <p>Where mem0 treats memory as a set of retrievable facts, cognee treats it as a <strong>knowledge graph</strong>. It combines vector search, graph databases, and cognitive-science-inspired memory models, exposing four operations: <code>remember</code>, <code>recall</code>, <code>forget</code>, <code>improve</code>. Retrieval uses auto-routing — the engine picks vector-based or graph-based search depending on the query shape. The differentiator is relationship intelligence: a vector store can find “similar invoices”; cognee can reconstruct the timeline of an interaction, map resolution patterns, and detect contradictions that only surface when you see the edges, not just the nodes. Better suited when your memory has heavy structure — entities, timelines, cause/effect chains.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Tool</th><th>Storage</th><th>Best for</th><th>Tied to</th></tr></thead><tbody><tr><td>claude-mem</td><td>SQLite + Chroma</td><td>Continuity across Claude Code sessions</td><td>Claude Code (hook-based)</td></tr><tr><td>mem0</td><td>Vector + BM25 + entities</td><td>General agents, preference tracking</td><td>Any LLM</td></tr><tr><td>cognee</td><td>Vector + Graph DB</td><td>Relationship-heavy, structured knowledge</td><td>Any LLM</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Storage</th>
+<th>Best for</th>
+<th>Tied to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>claude-mem</td>
+<td>SQLite + Chroma</td>
+<td>Continuity across Claude Code sessions</td>
+<td>Claude Code (hook-based)</td>
+</tr>
+<tr>
+<td>mem0</td>
+<td>Vector + BM25 + entities</td>
+<td>General agents, preference tracking</td>
+<td>Any LLM</td>
+</tr>
+<tr>
+<td>cognee</td>
+<td>Vector + Graph DB</td>
+<td>Relationship-heavy, structured knowledge</td>
+<td>Any LLM</td>
+</tr>
+</tbody>
+</table>
 <div align="center">
 <pre><code class="language-mermaid">graph LR
     S1[Session 1] -->|observe + summarize| M[(Memory)]
