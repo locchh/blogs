@@ -26,8 +26,9 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# Claude config
-.claude/
+# Claude config (the project hook settings are shared; worktrees and review stamps stay local)
+.claude/*
+!.claude/settings.json
 .mcp.json
 .playwright-mcp
 
