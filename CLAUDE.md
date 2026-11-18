@@ -35,6 +35,18 @@ The main body of a post must read as **one argument**, not a stack of notes. Cou
 
 **When editing an existing post, do NOT touch:** the frontmatter, `mermaid` blocks, other code blocks and inline `code`, quoted text (keep quotes verbatim), links and their URLs, table structure, or the place of a personal thought in the post. You may simplify the words inside a table cell or a personal thought, but keep every row, column, link, and idea.
 
+## No Walls of Text
+
+A post can argue well and still be hard to read. In November 2026 three long posts had to be reworked because they were "quite plain text and hard to read" and "quite verbose": about 47,000 words with five diagrams between them, and paragraphs of 150 to 270 words. Never publish a post in that shape again.
+
+- **Draw every process.** A process, workflow, loop, decision, pipeline, lifecycle, or split of roles gets a mermaid diagram. Aim for at least one diagram per H2, and put one short sentence before each diagram saying what it shows. Never draw a diagram that only repeats a list.
+- **Keep paragraphs short.** No paragraph over about 80 words. One idea each.
+- **Show parallel items as a list or a table**, with a lead sentence that states the point. Criteria, options, steps, and risks are parallel items. The list supports the argument and never replaces it.
+- **Be direct.** Say each point once, in short sentences. Cut openers, hedges, bridges that say nothing, and prose that only restates the table or diagram beside it. A recap is two or three rule lines, not a second telling of the section.
+- **Write short from the start.** Cutting later is hard: once every sentence carries a fact, a rewrite removes only about 15 percent without dropping content. So decide what a section must say before drafting it, and leave the rest out.
+
+**Check before publishing.** Count the words, the diagrams, and the longest paragraph in each section. A section with several hundred words, no diagram, table, or list, and a paragraph over 80 words is a wall of text. Fix it before the clarity check.
+
 ## Clarity Check Before Publishing
 
 A post can be correct and still confuse. Reviews that ask "is this number right?" miss it, because the number *is* right. In November 2026 a published post set "finished all five items in 30 minutes" beside "50 minutes of worker time", and a reader asked how 50 minutes fit in 30. The post never said that one was clock time and the other was time summed over workers running side by side. So every post gets a second kind of review, which asks: **could a newcomer misread this?**
