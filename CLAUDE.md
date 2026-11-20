@@ -35,6 +35,21 @@ The main body of a post must read as **one argument**, not a stack of notes. Cou
 
 **When editing an existing post, do NOT touch:** the frontmatter, `mermaid` blocks, other code blocks and inline `code`, quoted text (keep quotes verbatim), links and their URLs, table structure, or the place of a personal thought in the post. You may simplify the words inside a table cell or a personal thought, but keep every row, column, link, and idea.
 
+## One Thread From Start to End
+
+A post is read from top to bottom, like a thread. Splitting text into headings, lists, tables, and diagrams makes it easier to scan, but it can also cut the thread: in November 2026 three reworked posts had good pieces whose titles and paragraphs "are likely not related to each other". Structure must carry the argument, never chop it up.
+
+- **The headings alone tell the story.** Read only the H2 and H3 titles, in order. They must read as one line of thought, where each title follows from the one before it: a question and then its answer, a problem and then its fix, a step and then the next step. If a title could be moved elsewhere without anyone noticing, it is a label, not a step. Rewrite it.
+- **A title says what the section claims or answers**, not just its topic. Prefer "Why a pilot fails without a named owner" to "Ownership". Sibling titles use the same grammar, so the reader sees they are parallel.
+- **Every section opens with a link back.** Its first sentence picks up the last point of the section before it, and says why this section comes next. Its last sentence leaves the question that the next section answers.
+- **Every paragraph opens by picking up the previous one.** Use the plain linking words a reader needs: so, but, because, then, that is why, for example. A paragraph that could be deleted without the next one noticing does not belong, or it is in the wrong place.
+- **Every sentence follows from the one before it.** Repeat the key word of the last sentence, or point back to it with "this" plus a noun ("this gap", "that rule"). Never start a new subject without saying how it connects.
+- **Lists, tables, and diagrams sit inside the thread.** One sentence leads in and says what the reader should look for. One sentence leads out and says what it means for the argument. Never put two lists, tables, or diagrams back to back without prose between them.
+- **No orphan sections.** A section that only holds reference material (a table of terms, a checklist) and does not move the argument goes to the end of the post, or out.
+- **Cut what is off the thread.** If a part does not serve the one question the post answers, cut it or move it to another post, even when it is correct and well written.
+
+**The thread test, before publishing.** (1) Read only the titles: do they tell the whole argument in order? (2) Read only the first sentence of each section: does each one connect to the section before? (3) Pick any three paragraphs and try to swap them: if nothing breaks, they are notes, not a thread.
+
 ## No Walls of Text
 
 A post can argue well and still be hard to read. In November 2026 three long posts had to be reworked because they were "quite plain text and hard to read" and "quite verbose": about 47,000 words with five diagrams between them, and paragraphs of 150 to 270 words. Never publish a post in that shape again.
