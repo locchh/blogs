@@ -20,64 +20,51 @@
 <li>Developers still use the tool as a faster autocomplete.</li>
 <li>Nobody measured anything before the pilot, so nobody can say whether it saved a single hour.</li>
 </ul>
-<p>Companies now send in a <strong>forward deployed engineer</strong>, or <strong>FDE</strong>. In 2023 the United States had fewer than 200 job postings with that title. The first nine months of 2026 had more than 7,300, and Amazon Web Services, OpenAI, and Anthropic have each committed large sums to FDE capacity.</p>
-<p>That speed raises three questions. What is it, really? Will it still exist in five years? And what would it take for a developer, a business analyst, a project manager, or a tester to do it? The definition comes first, because you cannot judge a job you cannot define.</p>
-<p>Two companion posts cover nearby ground. <a href="/blogs/blog/from_request_to_running_system/">From Request to Running System</a> covers the decisions that decide whether an AI solution survives in an enterprise. <a href="/blogs/blog/from_prototype_to_production/">From Prototype to Production</a> walks a developer from the first API call to a system a regulated customer can audit.</p>
-<p>Like them, this post uses Claude for its examples, because Anthropic has published a detailed training path and a concrete delivery method for the role. The ideas apply to any model provider. The market numbers come from labor data firms and press reports dated in the references; treat them as signals, not precise counts.</p>
-<h2 id="what-a-forward-deployed-engineer-is">What a forward deployed engineer is</h2>
-<h3 id="one-customer-many-capabilities">One customer, many capabilities</h3>
+<p>To fix problems like these, companies now send in a <strong>forward deployed engineer</strong>, or <strong>FDE</strong>. Lightcast, a labor market analytics firm, counted fewer than 200 United States job postings with that title in 2023, about 1,200 in 2025, and more than 7,300 in the first nine months of 2026. Treat the market numbers in this post as signals, not precise counts: they come from labor data and press reports.</p>
+<p>Still, that speed raises three questions. What is the job, really? Will it still exist in five years? And what would it take for a developer, a business analyst, a project manager, or a tester to do it? The definition comes first, because you cannot judge a job you cannot define.</p>
+<h2 id="what-a-forward-deployed-engineer-does">What a forward deployed engineer does</h2>
+<h3 id="many-capabilities-for-one-customer">Many capabilities for one customer</h3>
 <p>Palantir, which invented the role, defines it with one flip. A product engineer builds one capability for many customers. A forward deployed engineer builds many capabilities for one customer.</p>
-<pre><code class="language-mermaid">flowchart LR
-    subgraph PE["Product engineer"]
-        direction LR
-        P1["One capability"] --> P2["Many customers"]
-    end
-    subgraph FD["Forward deployed engineer"]
-        direction LR
-        F1["Many capabilities"] --> F2["One customer"]
-    end
-    PE ~~~ FD
-</code></pre>
-<p>Bob McGrew, an early Palantir executive and later chief research officer at OpenAI, says an FDE sits at the customer site and fills the gap between what the product does and what the customer needs. The word “deployed” is literal: the military’s forward deployed troops are stationed near the action, not at headquarters.</p>
-<p>What sets the FDE apart from other customer-facing people is production code: not a sales proof of concept or a slide about what to build, but working software in the customer’s real systems, on real data, under real security rules. First Round, which has helped many startups hire for the role, calls the best FDEs “compulsive builders”. Palantir’s job description compares the job to a startup CTO’s: small team, end-to-end ownership, high stakes.</p>
-<p>Building is not the whole week, though. Job ads for builder-type FDE roles advertise 70 to 90 percent of time coding. Gergely Orosz, reading a Google FDE job posting in 2026, estimated 25 percent coding, 50 percent integration and plumbing, and 25 percent meetings and customer hand-holding. Most people are probably nearer the second. The hard part is making the code run, and be used, inside someone else’s organization.</p>
-<h3 id="where-the-role-came-from-delta-and-echo">Where the role came from: Delta and Echo</h3>
-<p>Palantir created the role in the early 2010s out of necessity. Its first customers, intelligence and defense agencies, could not describe their problems openly, so normal product discovery (interviews, written requirements) was impossible. Engineers with clearance had to work inside their buildings, on the real problem.</p>
+<p>That flip puts the engineer at the customer site, as the military’s forward deployed troops are stationed near the action, not at headquarters. Bob McGrew, an early Palantir executive, says the FDE sits there to fill the gap between what the product does and what the customer needs.</p>
+<p>The FDE fills that gap with <strong>production code</strong>: not a sales proof of concept or a slide about what to build, but working software in the customer’s real systems, on real data, under real security rules. First Round, which has helped many startups hire for the role, calls the best FDEs “compulsive builders”.</p>
+<p>But building is not the whole week. Job ads for builder-type FDE roles advertise 70 to 90 percent of time coding. Gergely Orosz, reading a Google FDE job posting in 2026, estimated 25 percent coding, 50 percent integration and plumbing, and 25 percent meetings. Most people are probably nearer the second. So the hard part is making the code run, and be used, inside someone else’s organization. That second half, being used, was in the role from its first day.</p>
+<h3 id="a-builder-and-an-adopter-first-as-a-pair">A builder and an adopter, first as a pair</h3>
+<p>Palantir created the role in the early 2010s out of necessity. Its first customers, intelligence and defense agencies, could not describe their problems openly. So engineers with clearance had to work inside their buildings, on the real problem.</p>
 <p>The role came as a pair, with code names from the NATO phonetic alphabet:</p>
 <ul>
 <li>The <strong>Delta</strong>, the forward deployed engineer, built the system.</li>
 <li>The <strong>Echo</strong>, the deployment strategist, made sure it was adopted.</li>
 </ul>
-<p>The Echo was often no software engineer, but a former military officer, clinician, or forensic accountant who knew how the institution really worked: which departments distrusted each other, which data was politically untouchable, and why three teams would refuse a technically perfect pipeline. The modern FDE is often expected to carry both halves alone.</p>
-<p>Until around 2016, Palantir had more forward deployed engineers than conventional software engineers. When it launched its Foundry platform and standardized its product, many FDEs moved into core engineering, but the deployment function stayed. Outsiders long called this glorified consulting, since a real software company should not need so many people on site. Palantir’s later market value quieted them.</p>
-<h3 id="the-gravel-road-why-it-is-not-consulting">The gravel road: why it is not consulting</h3>
-<p>The real answer to the consulting charge is the feedback loop into the product. Palantir alumni say the FDE builds a <strong>gravel road</strong>: the minimum path that gets one customer to a real outcome, fast and a bit ugly but true. When the same road gets built at three or four customers, the product team paves it into a <strong>paved highway</strong>, a reusable platform feature the next customer gets for free.</p>
+<p>The Echo was often no software engineer, but a former military officer, clinician, or forensic accountant who knew why three teams would refuse a technically perfect pipeline. The modern FDE is often expected to carry both halves alone.</p>
+<p>Until around 2016, Palantir had more forward deployed engineers than conventional software engineers. That looked strange for a software company, and outsiders called it glorified consulting. Were they right?</p>
+<h3 id="a-feedback-loop-that-makes-the-role-more-than-consulting">A feedback loop that makes the role more than consulting</h3>
+<p>The answer to the consulting charge is what happens to the field work afterwards. Palantir alumni say the FDE builds a <strong>gravel road</strong>: the minimum path that gets one customer to a real outcome, fast and a bit ugly. When the same road gets built at three or four customers, the product team paves it into a <strong>paved highway</strong>, a reusable platform feature the next customer gets for free. The diagram shows this loop.</p>
 <pre><code class="language-mermaid">flowchart LR
-    A[Customer problem] --> B[FDE builds a gravel road&#x3C;br/>inside the customer's systems]
-    B --> C[Outcome in production]
-    B --> D[Field notes: what was hard,&#x3C;br/>what got rebuilt each time]
-    D --> E[Product team paves the&#x3C;br/>common path into the platform]
-    E --> F[Next customer starts&#x3C;br/>further down the road]
+    A["Customer problem"] --> B["FDE builds a gravel road&#x3C;br/>inside the customer's systems"]
+    B --> C["Outcome in production"]
+    B --> D["Field notes: what was hard,&#x3C;br/>what got rebuilt each time"]
+    D --> E["Product team paves the&#x3C;br/>common path into the platform"]
+    E --> F["Next customer starts&#x3C;br/>further down the road"]
     F --> B
 </code></pre>
 <p>Without that loop, an FDE is a contractor and the team is professional services with a trendier title. With it, every deployment improves the product, which is why investors accept the model’s lower early margins.</p>
-<h2 id="why-ai-turned-a-palantir-habit-into-an-industry-pattern">Why AI turned a Palantir habit into an industry pattern</h2>
-<p>For a decade the FDE was mostly a Palantir oddity. Three things changed that, and all three point the same way.</p>
+<p>The loop answers the consulting charge. It does not explain why, a decade later, so many other companies copied it.</p>
+<h2 id="why-ai-spread-the-role-beyond-palantir">Why AI spread the role beyond Palantir</h2>
+<p>For a decade the FDE was mostly a Palantir oddity. Three things changed that, and the diagram shows that all three point the same way.</p>
 <pre><code class="language-mermaid">flowchart TD
     A["Models got good enough&#x3C;br/>the bottleneck moved"] --> D["The remaining work sits&#x3C;br/>inside the customer"]
     B["Enterprise pilots stalled&#x3C;br/>impressive demos, slow production"] --> D
     C["Products are general&#x3C;br/>domain context is part of the product"] --> D
     D --> E["Companies send FDEs"]
 </code></pre>
-<p><strong>The bottleneck moved.</strong> A frontier model can read a legacy codebase, draft a migration, and write the tests. It cannot know which of the bank’s four customer databases is the real one, get a security exception, or persuade forty developers to change how they work. <a href="/blogs/blog/when_code_is_cheap/">When Code Is Cheap</a> argues that when code gets cheap, the expensive parts become judgment, context, and verification. The FDE supplies those at the customer.</p>
-<p><strong>Pilots stalled at scale.</strong> A widely quoted 2025 MIT report claimed that about 95 percent of enterprise generative AI pilots showed no measurable business impact. Whatever the exact figure, every vendor saw impressive demos and slow production. By October 2026 CNBC reported investors growing impatient with companies spending billions on AI without visible business outcomes.</p>
-<p><strong>The products are general</strong>, which is partly why pilots stalled. <strong>MCP</strong>, the Model Context Protocol, is a standard way for an AI agent to connect to tools and data. But a model, an agent framework, or MCP does nothing for a specific bank until someone wires it in. By hiring FDEs per industry (healthcare, legal, financial services), OpenAI and Anthropic admit that domain context is part of the product.</p>
-<p>So companies send FDEs because the models are strong, not weak: the better the model, the more of the remaining work sits inside the customer. That is also the first test of whether the job will last.</p>
-<h2 id="a-lasting-job-or-a-passing-title">A lasting job or a passing title?</h2>
-<p>If the hard part happens at the customer, demand for people who work there should last. But a hot title is not a lasting job.</p>
-<h3 id="what-the-numbers-and-the-money-say">What the numbers and the money say</h3>
-<p>The growth is real, even if the counts are rough. The posting counts in the introduction come from Lightcast, a labor market analytics firm. Its 2025 figure, about 1,200, shows most of the jump came in a single year. The median advertised salary over that period was about $195,000, more than three times the median for all US postings.</p>
-<p>The money is real too. In 2026 alone:</p>
+<p><strong>The bottleneck moved.</strong> A frontier model can read a legacy codebase, draft a migration, and write the tests. It cannot know which of the bank’s four customer databases is the real one, get a security exception, or persuade forty developers to change how they work. <a href="/blogs/blog/when_code_is_cheap/">When Code Is Cheap</a> argues that when code gets cheap, the expensive parts become judgment, context, and verification.</p>
+<p><strong>Pilots stalled at scale.</strong> A widely quoted 2025 MIT report claimed that about 95 percent of enterprise generative AI pilots showed no measurable business impact. Whatever the exact figure, every vendor saw impressive demos and slow production.</p>
+<p><strong>The products are general.</strong> A model or an agent framework does nothing for a specific bank until someone wires it in. By hiring FDEs per industry, OpenAI and Anthropic admit that domain context is part of the product.</p>
+<p>So companies send FDEs because the models are strong, not weak: the better the model, the more of the remaining work sits inside the customer. If that is true, the demand should last. Does it?</p>
+<h2 id="why-the-work-will-outlast-the-title">Why the work will outlast the title</h2>
+<p>A hot title is not a lasting job, so the claim needs a test, starting with the money.</p>
+<h3 id="what-the-money-and-the-hiring-show">What the money and the hiring show</h3>
+<p>The posting counts in the introduction are rough, but the growth is real, and so is the pay: Lightcast puts the median advertised salary for these postings at about $195,000, more than three times the median for all US postings. The budgets are real too. The table lists what four groups committed in 2026 alone.</p>
 <table>
 <thead>
 <tr>
@@ -89,18 +76,18 @@
 <tbody>
 <tr>
 <td>Amazon Web Services</td>
-<td>One billion dollars to a new FDE organization, launched in June 2026</td>
-<td>Starting with hundreds of engineers drawn from inside Amazon and outside, with thousands planned</td>
+<td>One billion dollars for a new FDE organization</td>
+<td>Hundreds of engineers from inside and outside Amazon, with thousands planned</td>
 </tr>
 <tr>
 <td>OpenAI</td>
-<td>A deployment business with more than four billion dollars of initial investment</td>
-<td>Hiring directly and acquiring Tomoro, an applied AI consultancy that brought about 150 deployment specialists</td>
+<td>More than four billion dollars of initial investment in a deployment business</td>
+<td>Hiring directly and buying Tomoro, a consultancy with about 150 deployment specialists</td>
 </tr>
 <tr>
 <td>Anthropic</td>
 <td>One hundred million dollars for the Claude Frontier Academy</td>
-<td>Training 10,000 engineers who already work at its customers and partners by the end of 2027</td>
+<td>Training 10,000 engineers who already work at its customers and partners, by the end of 2027</td>
 </tr>
 <tr>
 <td>Accenture and Google Cloud</td>
@@ -109,170 +96,101 @@
 </tr>
 </tbody>
 </table>
-<p>The table hides three strategies: AWS builds its own army, OpenAI buys a consultancy and builds a deployment business, and Anthropic trains engineers who work for someone else. For an IT services company, Anthropic’s model is an invitation; the other two are, at least partly, competition.</p>
-<p>Anthropic’s academy even renames the role: its graduates are “Frontier Deployed Engineers”, same initials, new first word. The first cohorts come from Accenture, Bain, Capgemini, Commonwealth Bank of Australia, Deloitte, McKinsey, Morgan Stanley, and Novo Nordisk, so five of the eight sell consulting or IT services. The program is modeled on medical residency:</p>
-<ol>
-<li>A simulated enterprise deployment and a graded assessment.</li>
-<li>Supervised casework.</li>
-<li>Twelve weeks of mentorship on real projects.</li>
-</ol>
-<p>The first credentials are expected in early 2027.</p>
-<p>Hiring tells the same story. The companies posting the most FDE jobs in 2026 were not AI labs: Lightcast counted more from Deloitte and Accenture than from Google, with KPMG close behind. Consulting and IT services have decided this is the shape of their next decade.</p>
-<h3 id="why-the-work-is-likely-to-last">Why the work is likely to last</h3>
-<p>Four features of the work suggest it will outlast the hype.</p>
-<p><strong>The last mile never goes away.</strong> Every enterprise has its own data, legacy systems, regulators, and politics. Better models shrink the integration code, not the need for someone who understands the business and has the authority to change it. Steve Corfield, Anthropic’s global head of business development and partnerships, called the scarce skill “an engineer who can understand how the business works and also build the system that changes it.” That holds as long as businesses differ.</p>
-<p><strong>Cheap code moves value toward context.</strong> The more coding agents take over, the larger the share of work that needs judgment and context. AI does not replace this job. It creates more of it.</p>
-<p><strong>The role has a track record.</strong> Palantir has run it through several technology cycles since the early 2010s.</p>
-<p><strong>It builds on existing skills.</strong> Lightcast estimates the FDE role shares roughly half its skills with software engineering, so supply can grow by retraining, as Accenture, AWS, and Anthropic are doing. Roles staffed by conversion tend to last. Roles that need a rare new species tend to collapse when the hype fades.</p>
-<h3 id="why-some-caution-is-fair">Why some caution is fair</h3>
-<p>None of this means every job with the title is that work.</p>
-<p><strong>The title is inflating.</strong> Many postings now call implementation, configuration, or customer support work “forward deployed”. Palantir alumni are blunt: configuring a product is not forward deployed engineering, which means discovering new things in the customer’s context and feeding them back to the product. Expect the title to split into variants such as Applied AI Engineer, Deployment Engineer, or Forward Deployed AI Engineer, some of them ordinary services jobs with a new label.</p>
-<p><strong>The consulting trap is real.</strong> If FDEs are measured on billable hours, report to sales, and leave their code in customer-specific repositories the product team never sees, the company has a services business that will never reach software margins. a16z (the venture firm Andreessen Horowitz), which coined the phrase “trading margin for moat”, is clear that the trade only works if the service work is designed to feed the product.</p>
-<p>The trap often starts with pay. a16z and practitioners both argue that tying FDE pay to bookings produces bad behavior. Measure FDEs on time to value, adoption, retention, and how much field work becomes reusable product. One founder playbook gives a warning sign: are more than 40 percent of your recent engineering hires FDEs, with code sitting in customer-specific repositories untouched for 90 days? Then you are building a consultancy by accident.</p>
-<p>The tension is older than AI. In the 1960s IBM bundled systems engineering with its mainframes, including on-the-job help for the customer’s staff. In 1969, as <a href="https://en.wikipedia.org/wiki/History_of_IBM">Wikipedia’s history of IBM</a> describes, it unbundled software and services from hardware and began charging separately for most systems engineering work. Priced on its own, field work had to pay for itself. The FDE question is the same: is the field work paying for a better product, or is it a services business of its own?</p>
-<p><strong>The returns are not proven yet.</strong> CNBC noted in October 2026 that FDE projects so far show productivity gains in company case studies, such as some engineering tasks at a mortgage lender running up to six times faster, but no independently verified financial returns. If the AI investment cycle cools, deployment teams could shrink with it.</p>
-<p><strong>The work is hard on people.</strong> Postings commonly require heavy travel; first-person accounts describe three to four days a week at the customer. Wikipedia’s entry on the role notes that some engineers find it undesirable because of the travel and the pressure to solve customer problems quickly. Those who love the customer’s building thrive. Those who only tolerate it as a career step often leave within a year.</p>
-<p><strong>There is also a quiet paradox.</strong> A vendor spends millions training humans to deploy a technology that promises to do more of the work itself. Some FDE tasks, such as integration glue and boilerplate configuration, will be automated. Will the judgment and adoption parts grow faster than the automatable parts shrink? So far they have.</p>
-<h3 id="where-the-role-is-heading">Where the role is heading</h3>
-<p>The likeliest outcome is that the title fades while the work stays. DevOps went the same way: a movement became a job title, got inflated, and settled into a family of roles (platform engineer, site reliability engineer, DevOps engineer), because the underlying work was permanent. The variants listed above are the start of that family. Expect a core of true FDEs at vendors and large integrators, and many more roles with forward deployed work as one part of the job.</p>
-<p>The work is shifting too. An analysis of about a thousand 2026 postings found the most-listed skills are no longer just Python and SQL but customer discovery, problem decomposition, and product judgment. The role is becoming customer-facing research: finding out what AI can do for a business by trying it inside that business.</p>
-<p>The growth path already has a shape:</p>
-<pre><code class="language-mermaid">flowchart TD
-    A[Software engineer, analyst,&#x3C;br/>or consultant] --> B[FDE on a pod]
-    B --> C[Lead FDE&#x3C;br/>supervises 5 to 6 engineers]
-    C --> D[Head of deployment&#x3C;br/>or field CTO]
-    B --> E[Product engineer or&#x3C;br/>product manager]
-    B --> F[Solutions architect]
-    B --> G[Founder]
-    C --> H[Engineering manager]
-</code></pre>
-<p>An executive recruiter quoted by CNBC suggested that FDEs with ten to fifteen successful deployments have the judgment to lead teams of five or six less experienced engineers. So supply scales not by finding thousands of unicorns, but by experienced FDEs multiplying through pods.</p>
-<p>The founder route is well worn too. An FDE sees, earlier than anyone, which problems repeat across customers and which customers would pay to solve them. Many of today’s applied AI startups were started by people who did exactly this job.</p>
-<h2 id="how-the-fde-differs-from-the-roles-you-already-have">How the FDE differs from the roles you already have</h2>
-<p>If the title fades but the work stays, where does that work sit among the people a company already employs? The FDE overlaps with those who talk to customers, write code, analyze requirements, and test, which is why the role confuses people. The table compares them on the questions that matter most.</p>
+<p>The table hides three strategies: AWS builds its own army, OpenAI buys a consultancy, and Anthropic trains engineers who work for someone else. For an IT services company, the last one is an invitation. And the services companies are hiring: Lightcast counted more FDE postings in 2026 from Deloitte and Accenture than from Google.</p>
+<p>But money and hiring can follow hype. The stronger evidence is in the work itself.</p>
+<h3 id="what-keeps-the-work-in-demand">What keeps the work in demand</h3>
+<p>Three features of the work suggest it will outlast the hype.</p>
+<ul>
+<li><strong>The last mile never goes away.</strong> Every enterprise has its own data, legacy systems, regulators, and politics. Better models shrink the integration code, not the need for what Steve Corfield of Anthropic called “an engineer who can understand how the business works and also build the system that changes it.”</li>
+<li><strong>The bottleneck keeps moving the same way.</strong> The more coding agents take over, the larger the share of work that needs judgment and context. AI does not replace this job. It creates more of it.</li>
+<li><strong>It builds on existing skills.</strong> Lightcast estimates the FDE role shares roughly half its skills with software engineering, so supply can grow by retraining. Roles staffed by conversion tend to last.</li>
+</ul>
+<p>None of this promises that every job with the title is that work.</p>
+<h3 id="what-could-still-shrink-the-role">What could still shrink the role</h3>
+<p>Five risks make some caution fair.</p>
+<p><strong>The title is inflating.</strong> Many postings now call implementation, configuration, or customer support work “forward deployed”. Palantir alumni are blunt: configuring a product is not forward deployed engineering. Without the feedback loop, it is services work with a new label.</p>
+<p><strong>The consulting trap is real.</strong> It closes when FDEs are measured on billable hours and leave their code in customer-specific repositories the product team never sees. The venture firm a16z, which coined the phrase “trading margin for moat”, is clear that the trade only works if the service work is designed to feed the product.</p>
+<p>One founder playbook gives a warning sign of that trap: more than 40 percent of recent engineering hires are FDEs, and their code sits in customer-specific repositories untouched for 90 days.</p>
+<p><strong>The returns are not proven yet.</strong> CNBC noted in October 2026 that FDE projects so far show productivity gains in company case studies, but no independently verified financial returns.</p>
+<p><strong>The work is hard on people.</strong> First-person accounts describe three to four days a week at the customer, and some engineers avoid the role because of the travel and the pressure.</p>
+<p><strong>There is also a quiet paradox.</strong> A vendor spends millions training humans to deploy a technology that promises to do more of the work itself. Will the judgment and adoption parts grow faster than the automatable parts shrink? So far they have.</p>
+<p>So the work has reasons to stay, and the title has reasons to blur.</p>
+<h3 id="what-the-title-becomes-next">What the title becomes next</h3>
+<p>The likeliest outcome is that the title fades while the work stays. DevOps went the same way: a movement became a job title, got inflated, and settled into a family of roles, because the underlying work was permanent.</p>
+<p>Expect the same here: variants such as Applied AI Engineer or Deployment Engineer, a core of true FDEs at vendors and large integrators, and many more roles with forward deployed work as one part of the job. The work is shifting too: an analysis of about a thousand 2026 postings found the most-listed skills are no longer just Python and SQL but customer discovery, problem decomposition, and product judgment.</p>
+<p>If forward deployed work becomes one part of many jobs, how does it differ from the jobs a company already has?</p>
+<h2 id="how-the-fde-differs-from-the-roles-around-it">How the FDE differs from the roles around it</h2>
+<p>The FDE overlaps with the people who talk to customers, write code, analyze requirements, and test, which is why the role confuses people. The table sets each familiar role beside the FDE.</p>
 <table>
 <thead>
 <tr>
 <th>Role</th>
-<th>Who is the work really for</th>
-<th>What do they hand over at the end</th>
-<th>Do they write production code</th>
-<th>Where do they spend their time</th>
-<th>How is success judged</th>
+<th>What they hand over</th>
 <th>What the FDE does differently</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Developer</strong> (product engineer)</td>
-<td>Many customers through one product</td>
+<td><strong>Developer</strong></td>
 <td>Features in a shared product</td>
-<td>Yes, in the product codebase</td>
-<td>With the product team</td>
-<td>Features shipped, quality, velocity</td>
 <td>Builds inside one customer’s systems and owns the outcome, not just the ticket</td>
 </tr>
 <tr>
 <td><strong>Business analyst</strong> (BA)</td>
-<td>The project team and the client</td>
 <td>Requirements, process maps, user stories</td>
-<td>No</td>
-<td>Workshops with the client, documents</td>
-<td>Clear, complete, agreed requirements</td>
 <td>Turns the requirement into working software in the same week, and tests it against real data</td>
 </tr>
 <tr>
 <td><strong>Project manager</strong> (PM)</td>
-<td>The client sponsor and the delivery team</td>
 <td>A plan delivered on time, budget, and scope</td>
-<td>No</td>
-<td>Planning, reporting, risk meetings</td>
-<td>On time, on budget, within scope</td>
-<td>Is accountable for a business result, not for the plan, and changes the scope when the result demands it</td>
+<td>Is accountable for a business result, not for the plan</td>
 </tr>
 <tr>
 <td><strong>Product manager</strong></td>
-<td>The users of one product</td>
 <td>A roadmap and priorities</td>
-<td>Rarely</td>
-<td>Discovery, analytics, roadmap</td>
-<td>Adoption, retention, revenue</td>
-<td>Does discovery by building inside the customer, and feeds the findings to the product manager</td>
+<td>Does discovery by building inside the customer</td>
 </tr>
 <tr>
 <td><strong>Tester</strong> (QA)</td>
-<td>The delivery team</td>
 <td>Test plans, defects, a quality signal</td>
-<td>Test code, not product code</td>
-<td>Test environments</td>
-<td>Defects found before release</td>
 <td>Designs evaluations for non-deterministic AI output and owns the verification, not just the reporting</td>
 </tr>
 <tr>
 <td><strong>Solutions architect</strong></td>
-<td>The customer, before and after the sale</td>
 <td>A reference architecture and design advice</td>
-<td>Rarely</td>
-<td>Design sessions, reviews</td>
-<td>A sound design the customer accepts</td>
 <td>Stays to build it, and lives with the consequences of the design</td>
 </tr>
 <tr>
 <td><strong>Sales engineer</strong> (presales)</td>
-<td>The deal</td>
-<td>Demos, proofs of concept, answers to technical questions</td>
-<td>Demo code</td>
-<td>Sales meetings</td>
-<td>Deals won</td>
-<td>Starts where the sale ends and writes code that must survive production, not just a demo</td>
+<td>Demos and proofs of concept</td>
+<td>Starts where the sale ends and writes code that must survive production</td>
 </tr>
 <tr>
 <td><strong>Consultant</strong></td>
-<td>The client, under a statement of work</td>
 <td>Recommendations or delivered scope</td>
-<td>Sometimes</td>
-<td>At the client</td>
-<td>Scope delivered, client satisfied</td>
-<td>Is paid to solve the problem, not to execute the statement of work, and brings reusable lessons back to a product</td>
+<td>Is paid to solve the problem, not to execute the statement of work</td>
 </tr>
 <tr>
 <td><strong>BrSE</strong> (bridge engineer between an offshore team and a Japanese client)</td>
-<td>The client and the offshore team</td>
-<td>Translated, clarified requirements and coordination</td>
-<td>Sometimes</td>
-<td>Between client and team</td>
-<td>Smooth communication, few misunderstandings</td>
-<td>Bridges business and technology by building, not only by translating, and carries the same “close to the client” instinct further</td>
+<td>Translated, clarified requirements</td>
+<td>Bridges business and technology by building, not only by translating</td>
 </tr>
 <tr>
 <td><strong>DevOps or platform engineer</strong></td>
-<td>Internal engineering teams</td>
 <td>Pipelines, infrastructure, reliability</td>
-<td>Infrastructure code</td>
-<td>Internal platforms</td>
-<td>Uptime, deployment speed</td>
-<td>Applies the same skills inside a customer’s environment, with that customer’s security and approval rules</td>
+<td>Applies the same skills under one customer’s security and approval rules</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Only the FDE answers for the customer’s business outcome.</strong> The FDE owns “is this actually working and being used”. No other row owns that completely, as the diagram shows.</p>
-<pre><code class="language-mermaid">flowchart LR
-    PM["Project manager"] --> O1["Owns the plan"]
-    DEV["Developer"] --> O2["Owns the code"]
-    QA["Tester"] --> O3["Owns the defects"]
-    CON["Consultant"] --> O4["Owns the scope"]
-    FDE["FDE"] --> O5["Owns the outcome"]
-</code></pre>
-<p><strong>The FDE does several of these jobs at once, in compressed form.</strong> In one week an FDE may run a discovery workshop like a BA, write an integration like a developer, design an evaluation like a tester, and present results to an executive like a PM. That breadth is the role’s attraction and its biggest risk: it rewards generalists and punishes people who want deep focus.</p>
-<h2 id="moving-into-the-role-and-out-of-it">Moving into the role, and out of it</h2>
-<p>The FDE mixes all those roles, so almost nobody starts a career as one. People arrive from one of the roles above, and some later leave for another.</p>
-<h3 id="into-the-role">Into the role</h3>
-<p>Each starting role brings strengths and gaps:</p>
+<p><strong>Only the FDE answers for the customer’s business outcome.</strong> A project manager owns the plan, a developer the code, a tester the defects, a consultant the scope. The FDE owns “is this actually working and being used”.</p>
+<p>To own that, the FDE may do several of these jobs in one week: a discovery workshop like a BA, an integration like a developer, an evaluation like a tester, a results presentation like a PM. That breadth rewards generalists and punishes people who want deep focus. It also means almost nobody starts a career as an FDE. So where do FDEs come from?</p>
+<h2 id="how-people-move-into-the-role-and-out-of-it">How people move into the role and out of it</h2>
+<h3 id="how-each-role-gets-in">How each role gets in</h3>
+<p>People arrive from one of the roles in the table above, each with some of the skills. The next table shows the gap and a first step for each.</p>
 <table>
 <thead>
 <tr>
 <th>Coming from</th>
-<th>What you already have</th>
 <th>What you are probably missing</th>
 <th>A good first step</th>
 </tr>
@@ -280,77 +198,66 @@
 <tbody>
 <tr>
 <td>Developer</td>
-<td>Production coding, debugging, systems thinking</td>
-<td>Customer conversations, business framing, presenting results to executives, tolerance for ambiguity</td>
-<td>Volunteer for the next customer-facing integration or pilot, and own the readout, not just the code</td>
+<td>Customer conversations, business framing, presenting to executives</td>
+<td>Volunteer for the next customer-facing pilot, and own the readout (the closing report to the customer’s executives)</td>
 </tr>
 <tr>
 <td>Business analyst</td>
-<td>Domain knowledge, discovery, requirements, stakeholder trust</td>
-<td>Enough coding to build and debug agents and integrations, evaluation design</td>
-<td>Learn to build small agents and MCP connectors with a coding agent; prototype your next requirement instead of documenting it</td>
+<td>Enough coding to build and debug agents, evaluation design</td>
+<td>Prototype your next requirement with a coding agent instead of documenting it</td>
 </tr>
 <tr>
 <td>Project manager</td>
-<td>Stakeholder management, planning, risk, executive communication</td>
-<td>Hands-on technical depth, which is the credibility badge of the role</td>
-<td>Pair with an engineer on a pilot and take ownership of the success criteria and ROI measurement, then build technical skill steadily; or move toward the Echo half of the role</td>
+<td>Hands-on technical depth, the credibility badge of the role</td>
+<td>Pair with an engineer on a pilot and own the success criteria; or move toward the Echo half of the role</td>
 </tr>
 <tr>
 <td>Tester</td>
-<td>Verification mindset, edge cases, test automation</td>
 <td>Building production features, customer-facing work</td>
-<td>Specialize in evaluation of AI output (test sets, graders, regression checks), the part of AI delivery most teams do badly</td>
+<td>Specialize in evaluating AI output, the part most teams do badly</td>
 </tr>
 <tr>
 <td>Solutions architect or presales</td>
-<td>Customer credibility, architecture, demos</td>
-<td>Staying through production, owning messy implementation details</td>
-<td>Ask to stay with one account past signature and deliver the first production use case yourself</td>
+<td>Staying through production, owning messy details</td>
+<td>Stay with one account past signature and deliver the first production use case yourself</td>
 </tr>
 <tr>
 <td>Consultant</td>
-<td>Client handling, structured problem solving, domain range</td>
 <td>Production engineering, product feedback habits</td>
-<td>Build, do not recommend: deliver a working system on your next engagement and write up what should become reusable</td>
+<td>Build, do not recommend: deliver a working system and write up what should become reusable</td>
 </tr>
 <tr>
 <td>BrSE</td>
-<td>Living between client and team, translation of intent, domain</td>
 <td>Building autonomously, owning outcomes rather than communication</td>
-<td>Use coding agents to prototype what the client describes during the meeting, then hand the team a working draft instead of a specification</td>
+<td>Hand the team a working draft of what the client describes, not a specification</td>
 </tr>
 <tr>
 <td>DevOps or platform engineer</td>
-<td>Environments, security, automation, reliability</td>
 <td>Business discovery and adoption work</td>
-<td>Lead the deployment configuration and governance of an AI rollout, then take on the use case work around it</td>
+<td>Lead the configuration and governance of an AI rollout, then take on the use case work around it</td>
 </tr>
 </tbody>
 </table>
 <p>Read down the last column: most first steps swap what your role usually hands over (a spec, a plan, a demo, a recommendation) for a working result at a real customer.</p>
-<p>The starting roles fall onto two roads, shown in the diagram.</p>
-<pre><code class="language-mermaid">flowchart LR
-    D["Developer&#x3C;br/>easier start"] --> D2["Longer road on the human side&#x3C;br/>nothing shortens it"]
-    B["BA or PM&#x3C;br/>has the human side"] --> B2["Must earn technical credibility&#x3C;br/>coding agents shorten this road"]
-    D2 --> F["FDE"]
-    B2 --> F
+<p>Behind the eight rows there are only two roads. The developer’s looks easier, because this is first an engineering role. But the developer’s gap is the human side, and nothing shortens that. The CEO of one AWS consulting partner said “the hardest thing to teach is the customer EQ, without question,” and added that “there is no compression algorithm for experience.”</p>
+<p>The BA or PM has the human side and must earn technical credibility, and coding agents have shortened that road a great deal. Someone with strong domain knowledge and enough engineering judgment can now build systems that needed a full team a few years ago.</p>
+<p>Both roads matter, because supply is the real limit on the market. “Experienced FDEs cannot simply be recruited at the scale clients need,” as Accenture’s FDE lead put it. So the opportunity is largest for people who already have half the skills. And where does the role lead after that?</p>
+<h3 id="where-fdes-go-next">Where FDEs go next</h3>
+<p>An FDE collects first-hand knowledge of what breaks at real customers, and other teams want it. The diagram shows where FDEs go; a <strong>pod</strong> is a small deployment team.</p>
+<pre><code class="language-mermaid">flowchart TD
+    A["Software engineer, analyst,&#x3C;br/>or consultant"] --> B["FDE on a pod"]
+    B --> C["Lead FDE&#x3C;br/>supervises 5 to 6 engineers"]
+    C --> D["Head of deployment&#x3C;br/>or field CTO"]
+    B --> E["Product engineer or&#x3C;br/>product manager"]
+    B --> F["Solutions architect"]
+    B --> G["Founder"]
+    C --> H["Engineering manager"]
 </code></pre>
-<p>The developer’s conversion is easiest on paper, because this is first an engineering role: Palantir’s FDEs passed the same technical interview as its product engineers. The hardest skill to teach is the opposite one. The CEO of one AWS consulting partner said “the hardest thing to teach is the customer EQ, without question,” and added that “there is no compression algorithm for experience.”</p>
-<p>Coding agents have narrowed the technical gap a great deal. Someone with strong domain knowledge and enough engineering judgment can now build systems that needed a full team a few years ago. So the developer’s head start may be shrinking.</p>
-<p>Supply is the real constraint on the whole market. “Experienced FDEs cannot simply be recruited at the scale clients need,” as Accenture’s FDE lead put it. The opportunity is largest for people with half the skills already: experienced developers who can learn the customer side, and experienced analysts and bridge engineers who can learn to build with coding agents.</p>
-<h3 id="out-of-the-role">Out of the role</h3>
-<p>The growth-path chart above shows where FDEs go next, but not why those teams want them. The reason is always first-hand knowledge of what breaks at real customers. Each next role spends it differently:</p>
-<ul>
-<li><strong>On design.</strong> An FDE back in <strong>product engineering</strong> designs APIs that are easy to integrate, having suffered through ones that are not. Palantir’s early FDEs made this move.</li>
-<li><strong>On judgment.</strong> An FDE who becomes a <strong>product manager</strong> has done years of discovery by building, and knows which feature requests are real and which are the customer’s guess at a solution.</li>
-<li><strong>On breadth.</strong> A <strong>solutions architect</strong> or <strong>field CTO</strong> keeps the customer focus but trades daily building for reach across many accounts.</li>
-<li><strong>On staffing.</strong> An <strong>engineering manager</strong> or <strong>head of deployment</strong> has led pods under pressure, and usually knows how to staff and measure a deployment team without falling into the consulting trap.</li>
-<li><strong>On a company.</strong> Founders build on the repeating problems described earlier.</li>
-</ul>
-<p>Moving back is not a failure either. A developer who returns to a product team after two years as an FDE is a better developer. A BA who spent a year building is a far more useful BA, because their requirements now come with prototypes.</p>
-<h2 id="what-you-need-to-know-from-model-to-organization">What you need to know, from model to organization</h2>
-<p>Whichever road you take, you arrive at the same knowledge stack; only your gaps differ. Anthropic’s partner training path, the <a href="https://anthropic-partners.skilljar.com/path/claude-fde">Claude Forward Deployed Engineer learning path</a>, lists ten topics. They make a good skeleton, with a few pieces added that the path assumes you already have. They fall into five layers, from the model up to the organization, and the order matters, as the diagram shows.</p>
+<p>The lead branch is how supply grows: an executive recruiter quoted by CNBC suggested that FDEs with ten to fifteen successful deployments have the judgment to lead teams of five or six less experienced engineers.</p>
+<p>The side branches spend the same knowledge elsewhere. A former FDE in product engineering designs APIs that are easy to integrate, having suffered through ones that are not. A founder has seen earlier than anyone which problems repeat across customers. And moving back is not a failure: a BA who spent a year building now writes requirements that come with prototypes.</p>
+<p>The roads in and out differ. The knowledge in the middle is the same for everyone.</p>
+<h2 id="what-an-fde-needs-to-know-from-model-to-organization">What an FDE needs to know, from model to organization</h2>
+<p>Whichever road you take, you arrive at the same knowledge stack; only your gaps differ. Anthropic’s partner training path, the <a href="https://anthropic-partners.skilljar.com/path/claude-fde">Claude Forward Deployed Engineer learning path</a>, lists ten topics. The examples here use Claude for that reason, but the ideas apply to any model provider. The topics fall into five layers, plus a few pieces the path assumes you already have. The diagram shows the order, from the model up to the organization.</p>
 <pre><code class="language-mermaid">flowchart BT
     subgraph LOW["Learned from documentation and practice"]
         direction BT
@@ -364,7 +271,7 @@
     end
     L4 --> L5
 </code></pre>
-<p>Retraining programs can cover the lower layers in weeks. The top layer, with domain knowledge and customer judgment, is what makes the role valuable. The table says why the customer needs each layer.</p>
+<p>Retraining programs can cover the lower layers in weeks. The top takes the longest and is what makes the role valuable. The table says what each layer holds and why the customer needs it.</p>
 <table>
 <thead>
 <tr>
@@ -376,27 +283,27 @@
 <tbody>
 <tr>
 <td>1. Model behavior and AI fluency</td>
-<td>The four properties of models, and the 4D framework</td>
+<td>How a model predicts text and how far instructions steer it; how people delegate to AI and judge its output</td>
 <td>So you can explain failures and teach people to use AI well</td>
 </tr>
 <tr>
 <td>2. Platform decisions</td>
-<td>Entry point, features, model, context; the API and agent loop; limits and administration</td>
+<td>Entry point, features, model, and context; the API, its limits and administration</td>
 <td>So the deployment is set up right before anyone writes a prompt</td>
 </tr>
 <tr>
 <td>3. Coding agents</td>
-<td>Plan mode, context management, CLAUDE.md, commands, skills, hooks, headless runs, verification</td>
+<td>Expert daily use, including <strong>plan mode</strong> (the agent proposes a plan before changing any file) and <strong>CLAUDE.md</strong> (the project memory file the agent reads at the start of every session)</td>
 <td>So you can lead developer adoption from experience</td>
 </tr>
 <tr>
 <td>4. Enterprise connection</td>
-<td>MCP servers, agent skills, integration, security, evals</td>
+<td><strong>MCP</strong> servers (a standard way to connect an agent to tools and data), <strong>agent skills</strong> (packaged customer know-how), security, and <strong>evals</strong> (test sets and graders that show whether the system is good enough)</td>
 <td>So the AI can reach real systems safely and you can prove it works</td>
 </tr>
 <tr>
 <td>5. Delivery and adoption</td>
-<td>Qualification, pilots, ROI, adoption curve, internal owners, rollout phases</td>
+<td>Qualification, pilots, return on investment, the adoption curve, internal owners, rollout phases</td>
 <td>So the result is measurable and survives after you leave</td>
 </tr>
 <tr>
@@ -406,62 +313,10 @@
 </tr>
 </tbody>
 </table>
-<h3 id="layer-1-how-models-actually-behave">Layer 1. How models actually behave</h3>
-<p>To explain why the agent did something strange, you need a working mental model of the machine. Anthropic frames it as four properties:</p>
-<ul>
-<li><strong>Next-token prediction</strong>: the model writes text one piece at a time, choosing likely continuations, so it can sound confident and still be wrong.</li>
-<li><strong>Knowledge</strong>: broad, but frozen at a training date and uneven in depth.</li>
-<li><strong>Working memory</strong>: the model sees only its context window, and quality drops when that window is crowded with irrelevant material.</li>
-<li><strong>Steerability</strong>: instructions, examples, and structure change behavior a great deal, but not without limit.</li>
-</ul>
-<p>When two collide, for example when a long conversation pushes an important instruction out of focus, you get the failures customers complain about. An FDE should look at a bad output and name the property that caused it and the fix.</p>
-<p>The human side is <strong>AI fluency</strong>, taught as four competencies, the <strong>4D framework</strong>:</p>
-<ul>
-<li><strong>Delegation</strong>: deciding what to hand to the AI and what to keep.</li>
-<li><strong>Description</strong>: explaining the task clearly enough.</li>
-<li><strong>Discernment</strong>: judging whether the output is any good.</li>
-<li><strong>Diligence</strong>: taking responsibility for what you ship, and being honest about how AI was used.</li>
-</ul>
-<p>These sound soft, but you will teach them to forty developers at a customer in week one.</p>
-<h3 id="layer-2-the-platform-and-its-decisions">Layer 2. The platform and its decisions</h3>
-<p>On top of the model sits the platform. At every customer an FDE makes four decisions quickly:</p>
-<ul>
-<li>The <strong>entry point</strong>: chat product, coding agent, API, or cloud marketplace.</li>
-<li>The <strong>capability features</strong> to switch on: tools, search, code execution, files, memory.</li>
-<li>The <strong>model</strong>: a large one for hard reasoning, a small fast one for volume.</li>
-<li>The <strong>context</strong>: what the model needs to know and how it gets there.</li>
-</ul>
-<p>These choices set the quality ceiling before anyone writes a prompt.</p>
-<p>Below them sits the API, with three things to know:</p>
-<ul>
-<li>The message format and the <strong>agent loop</strong>: the model asks for a tool, the application runs it and returns the result, and this repeats until the task is done.</li>
-<li>The built-in tools.</li>
-<li>The operational limits (rate limits, workspaces, spend controls) an enterprise administrator asks about on day one.</li>
-</ul>
-<h3 id="layer-3-coding-agents-in-daily-practice">Layer 3. Coding agents in daily practice</h3>
-<p>Most enterprise AI deployments today start with developers, so an FDE must be an expert user of a coding agent such as Claude Code, not someone who has only tried it. You should be able to:</p>
-<ul>
-<li>Run long sessions without losing the plot, managing context by compaction and rewinding.</li>
-<li>Agree on a plan in <strong>plan mode</strong> before any file changes.</li>
-<li>Write a good <strong>CLAUDE.md</strong>, the project memory file the agent reads at the start of every session.</li>
-<li>Package repeatable work as commands and skills, with <strong>hooks</strong> that enforce rules automatically.</li>
-<li>Run the agent headless in CI pipelines.</li>
-<li>Above all, verify the agent’s work instead of trusting it.</li>
-</ul>
-<p>The playbook below depends on this: you cannot coach a team out of a usage plateau you have not been through yourself.</p>
-<h3 id="layer-4-connecting-to-the-enterprise">Layer 4. Connecting to the enterprise</h3>
-<p>This is where the “forward deployed” part becomes concrete. MCP, introduced earlier, lets you expose a customer’s systems, such as a ticketing tool, a document store, or an internal API, to an agent through a standard server, with clear tool definitions and permissions. <strong>Agent skills</strong> let you package a customer’s know-how, such as how their team writes a migration plan or reviews a contract, as folders of instructions and scripts the agent loads only when relevant. Anthropic’s FDE job postings literally list “MCP servers, sub-agents, and agent skills” as deliverables.</p>
-<p>The training path assumes the classic integration knowledge around this: APIs and data formats, identity and single sign-on, network and data residency rules, logging and audit trails, and enough security understanding to get an agent approved by a skeptical security team.</p>
-<p>Add <strong>evals</strong>: test sets and graders that tell you whether the system is good enough, and whether it got worse after a change. Customers will ask “how do you know it works?” and the answer must be data, not anecdotes.</p>
-<h3 id="layer-5-delivery-and-adoption">Layer 5. Delivery and adoption</h3>
-<p>The last two topics are not technical, and they separate an FDE from a skilled engineer. <strong>Delivery methodology</strong> covers one engagement: the seven steps of the playbook below. <strong>Enterprise adoption</strong> covers the whole organization: phases of rollout, governance, a center of excellence, and the communication that makes people actually change how they work.</p>
-<h3 id="beyond-the-training-path">Beyond the training path</h3>
-<p>Three more things matter, and none comes from a training path.</p>
-<p><strong>Domain knowledge.</strong> An FDE in banking who understands reconciliation, or one in manufacturing who understands production planning, is worth several who do not.</p>
-<p><strong>Customer judgment.</strong> Reading a room, saying no to a sponsor without losing them, noticing that the real blocker is a department head who feels threatened. This is the “customer EQ” quoted earlier.</p>
-<p><strong>Writing and presenting.</strong> An FDE’s work ends in a readout to an executive. If you cannot turn “PR cycle time dropped 34 percent” into a sentence a CIO will repeat in a board meeting, the work does not land.</p>
-<h2 id="the-30-day-delivery-playbook">The 30-day delivery playbook</h2>
-<p>Knowing the technology is the entry ticket; the delivery method makes an engagement succeed. Anthropic teaches partners a 30-day activation playbook for coding-agent rollouts. It is a concrete picture of what an FDE does at a customer, and it fits any AI deployment. The diagram shows its seven steps, each explained below with a worked example from the course.</p>
+<p>Read the right column again: every layer answers something the customer will ask. One of those questions is “how do you know it works?”, and the answer must be data, not anecdotes.</p>
+<p>I do not go deeper into the lower layers, because two companion posts do. <a href="/blogs/blog/from_request_to_running_system/">From Request to Running System</a> covers the decisions that decide whether an AI solution survives in an enterprise. <a href="/blogs/blog/from_prototype_to_production/">From Prototype to Production</a> walks a developer from the first API call to a system a regulated customer can audit. That leaves layer 5 and the judgment beyond it: how an engagement is actually run.</p>
+<h2 id="how-an-fde-delivers-in-thirty-days">How an FDE delivers in thirty days</h2>
+<p>Knowing the technology is the entry ticket; the delivery method makes an engagement succeed. Anthropic teaches partners a 30-day activation playbook for coding-agent rollouts, and it fits any AI deployment. The diagram shows its seven steps.</p>
 <pre><code class="language-mermaid">flowchart LR
     S1["Step 1&#x3C;br/>Qualify the&#x3C;br/>use case"] --> S2["Step 2&#x3C;br/>Design&#x3C;br/>the pilot"]
     S2 --> S3["Step 3&#x3C;br/>Measure&#x3C;br/>the return"]
@@ -470,202 +325,70 @@
     S5 --> S6["Step 6&#x3C;br/>Preempt the&#x3C;br/>failure modes"]
     S6 --> S7["Step 7&#x3C;br/>Run the&#x3C;br/>thirty days"]
 </code></pre>
-<h3 id="step-1-qualify-the-use-case">Step 1. Qualify the use case</h3>
-<p>Not every use case deserves a pilot. First ask whether it produces a <strong>marginal gain</strong> or a <strong>structural gain</strong>.</p>
-<ul>
-<li>Marginal: the same work gets done faster (autocomplete, boilerplate, inline documentation). It helps adoption but is hard to isolate in a month.</li>
-<li>Structural: the unit of work changes. A job that needed a team of four for six weeks now needs two developers for two weeks.</li>
-</ul>
-<p>Only structural gains produce a story that survives an executive readout.</p>
-<p>Economic history explains why. In 1990 the economist Paul David compared the computer with the electric dynamo. Factories that swapped steam engines for electric motors but kept their old layout gained little. The payoff came only after they reorganized work around the new technology, which took many years. His paper, <a href="https://econpapers.repec.org/RePEc:aea:aecrev:v:80:y:1990:i:2:p:355-61">“The Dynamo and the Computer”</a>, makes the argument. A coding agent used as a faster autocomplete is the motor in the old layout. A structural gain is the reorganized factory.</p>
-<p>Three engagement patterns reliably produce structural gains with coding agents:</p>
-<ul>
-<li><strong>code modernization</strong>: upgrading or translating a legacy stack.</li>
-<li><strong>new feature builds</strong>: the whole loop from scaffolding to review.</li>
-<li><strong>code migration</strong>: between frameworks, clouds, or architectures.</li>
-</ul>
-<p>Each candidate is then scored on four criteria:</p>
-<ul>
-<li><strong>Volume</strong>: the task recurs often enough to generate data in thirty days.</li>
-<li><strong>Complexity</strong>: it takes a senior engineer weeks, not a junior an afternoon.</li>
-<li><strong>Measurability</strong>: you can capture a baseline before day one.</li>
-<li><strong>Readiness</strong>: the team will change its workflow, not just try a tool.</li>
-</ul>
-<p>The diagram puts the two checks in order.</p>
-<pre><code class="language-mermaid">flowchart TD
-    A["Candidate use case"] --> B{"Does the unit&#x3C;br/>of work change?"}
-    B -->|"No, same work faster"| C["Marginal gain"]
-    B -->|"Yes"| D["Structural gain"]
-    D --> E{"Strong on volume, complexity,&#x3C;br/>measurability and readiness?"}
-    E -->|"Yes"| F["Pilot candidate"]
-    E -->|"No"| G["A risk, not a pilot"]
-    class B,E check
-    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
-</code></pre>
-<p>A use case strong on complexity but weak on measurability is not a pilot candidate; it is a risk. In the worked example, a team proposed adding unit tests to a codebase already at 82 percent coverage, or a Java to Spring Boot migration it had been scoping for eight months. The migration qualifies, the tests are marginal, and running both dilutes the result.</p>
-<p>The engagement mode matters too. A two-day training event produces adoption signals but no return-on-investment data: no baseline, no owner, no measurement period. Evidence comes from a 30 to 45 day program with setup, a defined use case, a midpoint check around day 20 to 25, and a closing readout presented by the customer’s internal owner.</p>
-<h3 id="step-2-design-the-pilot">Step 2. Design the pilot</h3>
-<p>“A pilot that can’t be evaluated is not a pilot.” Four design decisions follow.</p>
-<p>The <strong>cohort</strong> is chosen by who owns the work, not by enthusiasm. Volunteers and early adopters give glowing feedback that does not represent the typical developer. People who already own the target work give before-and-after data that can be traced to the tool. In the worked example, a C++ to Rust migration, that meant the eight developers who owned the backlog, not fifteen from mixed teams, and not all forty-five in an awareness group.</p>
-<p>The <strong>scope</strong> is precise and locked: not “code modernization” but “Java to Spring Boot migration of the authentication service”. New ideas that appear mid-pilot go on a list for phase two.</p>
-<p>The <strong>duration</strong> follows the task cycle: at least two complete ticket-to-merge cycles per developer, which for most migration work is 25 to 30 days.</p>
-<p><strong>Success criteria</strong> exist before day one:</p>
-<ul>
-<li>A baseline metric.</li>
-<li>A target threshold (“25 percent reduction in PR cycle time” is a claim; “PR cycle time improved” is not).</li>
-<li>A measurement method using existing tools such as git and the ticket system, not self-reporting.</li>
-<li>A named assessment date.</li>
-</ul>
-<h3 id="step-3-measure-the-return">Step 3. Measure the return</h3>
-<p>The baseline is the criterion teams skip. “What you don’t measure before day one you can’t prove at day thirty.” A baseline reconstructed after the pilot starts is always contested, because sponsors remember the past as better or worse depending on what they want the pilot to show. Two or three baselines are enough: cycle time from ticket to merge for the target work, hours spent on that task category, and a developer satisfaction score.</p>
-<p>Metrics fall into four groups:</p>
-<ul>
-<li>Developer productivity.</li>
-<li>Code quality, to show speed did not cost quality.</li>
-<li>Usage and adoption, to show adoption is real, not just on paper.</li>
-<li>Sentiment, a leading indicator for expansion.</li>
-</ul>
-<p>The readout leads with one headline number and one business translation. In the worked example, PR cycle time fell from 8.2 to 5.4 days, satisfaction rose from 6.2 to 7.8, and lines of code per developer rose 55 percent. Cycle time is the headline, satisfaction is supporting evidence, and lines of code is misleading and stays out of the headline.</p>
-<p>The translation turns “cycle time dropped 34 percent” into “the team can ship about 1.5 times the features in the same sprint”, which is the sentence the CIO repeats.</p>
-<h3 id="step-4-manage-the-adoption-curve">Step 4. Manage the adoption curve</h3>
-<p>Adoption does not move in a straight line, so neither do the numbers. An FDE who treats it like a normal software rollout will intervene at the wrong moments. The curve has four stages, shown in the diagram: <strong>supervised use</strong>, <strong>increasing autonomy</strong>, <strong>agentic delegation</strong>, and an <strong>institutionalized pattern</strong>.</p>
+<p>The steps run roughly in order, so I walk through them that way, with worked examples from Anthropic’s course.</p>
+<h3 id="choosing-a-use-case-and-locking-the-pilot">Choosing a use case and locking the pilot</h3>
+<p>Step 1, <strong>qualify the use case</strong>, asks one question: is the gain <strong>marginal</strong> or <strong>structural</strong>? A marginal gain means the same work gets done faster, as with autocomplete. A structural gain means the unit of work changes: a job that needed a team of four for six weeks now needs two developers for two weeks. Only structural gains produce a story that survives an executive readout.</p>
+<p>Economic history explains why. In <a href="https://econpapers.repec.org/RePEc:aea:aecrev:v:80:y:1990:i:2:p:355-61">“The Dynamo and the Computer”</a>, the economist Paul David describes factories that swapped steam engines for electric motors but kept their old layout. They gained little until they reorganized work around the new technology. A coding agent used as a faster autocomplete is the motor in the old layout.</p>
+<p>A structural gain is still not enough. The task must also recur often enough to generate data in thirty days, have a baseline you can capture before day one, and belong to a team ready to change its workflow.</p>
+<p>In the worked example, a team proposed adding unit tests to a codebase already at 82 percent coverage, or a Java to Spring Boot migration it had been scoping for eight months. The migration qualifies, the tests are marginal, and running both dilutes the result.</p>
+<p>Step 2, <strong>design the pilot</strong>, then fixes that choice so it can be judged. “A pilot that can’t be evaluated is not a pilot.” The <strong>cohort</strong> is the people who already own the target work, not volunteers. The <strong>scope</strong> is locked: not “code modernization” but “Java to Spring Boot migration of the authentication service”. The last design decision is the success criteria, and they need a number from before the pilot.</p>
+<h3 id="measuring-before-day-one">Measuring before day one</h3>
+<p>Step 3, <strong>measure the return</strong>, begins with the <strong>baseline</strong>: the value of a metric measured before the pilot starts. “What you don’t measure before day one you can’t prove at day thirty.” A baseline reconstructed later is always contested, because sponsors remember the past the way they want the pilot to look.</p>
+<p>Two or three baselines are enough, such as cycle time from ticket to merge. Each gets a target that is a number: “25 percent reduction in PR cycle time” is a claim; “PR cycle time improved” is not. (PR means pull request.)</p>
+<p>The closing readout then leads with one headline number and one business translation. In the worked example, PR cycle time fell from 8.2 to 5.4 days. The translation turns “cycle time dropped 34 percent” into “the team can ship about 1.5 times the features in the same sprint”, which is the sentence a chief information officer repeats.</p>
+<p>Between the baseline and the readout, though, the numbers do not climb in a straight line.</p>
+<h3 id="coaching-through-the-dip-and-the-plateau">Coaching through the dip and the plateau</h3>
+<p>Step 4, <strong>manage the adoption curve</strong>, exists because an FDE who treats adoption like a normal software rollout will intervene at the wrong moments. The diagram shows the four stages a team passes through.</p>
 <pre><code class="language-mermaid">flowchart LR
     A["Week 1&#x3C;br/>Supervised use&#x3C;br/>approve every action&#x3C;br/>often slower than before"] --> B["Weeks 2 and 3&#x3C;br/>Increasing autonomy&#x3C;br/>more plan mode, larger tasks"]
     B --> C["Weeks 3 and 4&#x3C;br/>Agentic delegation&#x3C;br/>of well-defined task types&#x3C;br/>cycle-time gains appear"]
     C --> D["After day 30&#x3C;br/>Institutionalized pattern&#x3C;br/>team norms on what to delegate"]
 </code></pre>
-<p>Two dynamics are specific to AI:</p>
-<ul>
-<li>The <strong>week one dip</strong>: velocity falls before it rises, because people are learning a new way of working, not a new button. Do not intervene on velocity in week one.</li>
-<li>The <strong>plateau</strong>: after the dip, many developers find one or two patterns that work and stop experimenting. Usage looks healthy but the ceiling stays low. “Plateau is not adoption.” The fix is a structured second-level session and coaching on delegation patterns.</li>
-</ul>
-<p>The diagram shows the test for when to step in.</p>
-<pre><code class="language-mermaid">flowchart TD
-    A["A developer is not getting results"] --> B{"What is going wrong?"}
-    B -->|"Cannot get the agent&#x3C;br/>to do what they want"| C["Technical problem&#x3C;br/>wrong output or context&#x3C;br/>help now"]
-    B -->|"Same tasks as always&#x3C;br/>agent as faster autocomplete"| D["Workflow design problem&#x3C;br/>rethink what they delegate,&#x3C;br/>not how they prompt"]
-    class B check
-    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
-</code></pre>
-<p>The second branch is the old factory layout again. In the worked example, cycle time is flat at day sixteen, daily usage is a steady 45 minutes, and prompting patterns are unchanged. That is the plateau signature, and exactly the time to act.</p>
-<p>At organization scale the same shape is called the <strong>productivity J-curve</strong>: performance dips during the learning period before it climbs above the old level. It is the lag David described, compressed into months. Leaders who expect it and say so in advance keep the sponsorship alive through the dip.</p>
-<h3 id="step-5-hand-over-to-a-named-internal-owner">Step 5. Hand over to a named internal owner</h3>
-<p>Sponsorship carries the pilot through thirty days. After the FDE leaves, something else must. “Every deployment needs someone whose job is to keep it working.” That is the <strong>internal owner</strong>, a named person inside the customer, with four duties:</p>
-<ul>
-<li>Maintaining the project memory files as the codebase changes.</li>
-<li>Running weekly office hours.</li>
-<li>Onboarding new developers.</li>
-<li>Escalating blockers.</li>
-</ul>
-<p>The owner is not the team’s help desk; if they become the only expert, the deployment is fragile.</p>
-<p>The best candidates are senior enough to shape team norms, technical enough to write good project instructions, and motivated rather than assigned: the role is formal, but the person should want it. They usually reveal themselves by engaging deeply mid-pilot. The most technically advanced developer is often the wrong choice, because their habits may not generalize.</p>
-<p>The owner inherits three artifacts:</p>
-<ul>
-<li>An organization-level CLAUDE.md with company conventions.</li>
-<li>At least one repository-level CLAUDE.md for the pilot project.</li>
-<li>A catalog of at least three to five documented custom commands.</li>
-</ul>
-<p>CLAUDE.md is not documentation. It is institutional memory the agent reads every session, and a generic file produces a generic agent. “The quality of a deployment 90 days after you leave is determined by the quality of the CLAUDE.md you hand over.”</p>
-<h3 id="step-6-preempt-the-failure-modes">Step 6. Preempt the failure modes</h3>
-<p>Six failure modes appear again and again. None is technical, and almost every row is one of the steps above, skipped:</p>
-<table>
-<thead>
-<tr>
-<th>Failure</th>
-<th>What it looks like</th>
-<th>How to prevent it</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>No baseline captured</td>
-<td>The readout has no “before” number and the renewal cannot land</td>
-<td>Run a baseline sprint in the week before kickoff; treat it as non-negotiable</td>
-</tr>
-<tr>
-<td>No internal owner named</td>
-<td>Usage collapses 30 to 60 days after the engagement ends</td>
-<td>Name the owner by day 15 and start handoff preparation mid-pilot</td>
-</tr>
-<tr>
-<td>Use case too marginal</td>
-<td>High usage, flat metrics, executive support evaporates</td>
-<td>Run the structural versus marginal check before scoping</td>
-</tr>
-<tr>
-<td>Stuck in supervised mode</td>
-<td>Developers say the tool is slow or not useful</td>
-<td>Weekly usage review and workflow coaching for stalled developers</td>
-</tr>
-<tr>
-<td>Project memory not maintained</td>
-<td>The agent drifts back to generic behavior and trust erodes</td>
-<td>Make a weekly review of CLAUDE.md a named responsibility of the internal owner</td>
-</tr>
-<tr>
-<td>Readout not tied to business</td>
-<td>Usage charts and testimonials, no business number; talk turns to cost</td>
-<td>Agree on the executive narrative with the sponsor in week one</td>
-</tr>
-</tbody>
-</table>
-<h3 id="step-7-run-the-thirty-days">Step 7. Run the thirty days</h3>
-<p>The thirty days are a rhythm with exit conditions, not a task list: each phase ends with one thing that must be true before the next starts. The diagram below shows the phases. The list adds each exit condition and what the diagram leaves out.</p>
-<ul>
-<li><strong>Pre-kickoff discovery</strong> also confirms the cohort. It ends when the baseline is captured.</li>
-<li><strong>Week one</strong> holds the first office hours on day three or four. It ends when everyone is installed, connected to the approved configuration, and working in supervised mode.</li>
-<li><strong>Weeks two and three</strong> have touchpoints with the <strong>center of excellence</strong>, a small team that sets standards, shares patterns, and supports other teams. They review usage and agree on one concrete coaching action per stalled developer. These weeks end with the internal owner named by day 15.</li>
-<li><strong>Week four</strong> ends when the readout reaches the sponsor 48 hours before the showcase, not during it.</li>
-<li><strong>Day thirty</strong> is the showcase, in three ten-minute parts: a live demo by two or three developers on real code (rough edges are the point), the metrics with the headline first and any missed criteria named before the sponsor asks, and phase two. If the sponsor cannot attend, reschedule.</li>
-</ul>
+<p>Two moments on that curve mislead people. The first is the <strong>week one dip</strong>: velocity falls before it rises, because people are learning a new way of working, not a new button. Do not intervene on velocity in week one.</p>
+<p>The second is the <strong>plateau</strong>. After the dip, many developers find one or two patterns that work and stop experimenting. “Plateau is not adoption.” In the worked example, cycle time is flat at day sixteen while daily usage holds at a steady 45 minutes. That is the time to act.</p>
+<p>How to act depends on the cause. A developer who cannot get the agent to do what they want has a technical problem, and needs help now. A developer who uses the agent as a faster autocomplete has a workflow design problem. That is the old factory layout again, and the fix is coaching on what they delegate, not on how they prompt.</p>
+<p>The coaching lasts thirty days. Then the FDE leaves, and something else must keep the deployment working.</p>
+<h3 id="handing-over-to-a-named-owner">Handing over to a named owner</h3>
+<p>Step 5, <strong>hand over to an internal owner</strong>, answers that. “Every deployment needs someone whose job is to keep it working.” The <strong>internal owner</strong> is a named person inside the customer who maintains the project memory files, runs weekly office hours, onboards new developers, and escalates blockers.</p>
+<p>The owner inherits the CLAUDE.md files, and a generic file produces a generic agent. “The quality of a deployment 90 days after you leave is determined by the quality of the CLAUDE.md you hand over.”</p>
+<p>The handover happens in the office hours: the FDE leads the first session, the owner co-facilitates the second, and the owner runs the third while the FDE observes. Handoff is not a meeting about ownership. It is doing the job while still supported.</p>
+<p>That leaves two steps, and both look at the pilot as a whole.</p>
+<h3 id="running-the-thirty-days-as-a-rhythm">Running the thirty days as a rhythm</h3>
+<p>Step 6, <strong>preempt the failure modes</strong>, is mostly a look back. The course names six failure modes, none of them technical, and almost every one is an earlier step, skipped, such as no baseline, no named owner, or a readout with no business number. So most of the prevention is doing each step on time.</p>
+<p>Step 7, <strong>run the thirty days</strong>, puts the steps on a calendar. The thirty days are a rhythm with exit conditions, not a task list: each phase ends with one thing that must be true before the next starts. The diagram shows the phases.</p>
 <pre><code class="language-mermaid">flowchart LR
-    P[Pre-kickoff&#x3C;br/>qualify, baseline,&#x3C;br/>draft CLAUDE.md] --> W1[Week 1&#x3C;br/>onboarding,&#x3C;br/>supervised use]
-    W1 --> W2[Weeks 2 to 3&#x3C;br/>active pilot,&#x3C;br/>touchpoints day 8 and 15]
-    W2 --> W4[Week 4&#x3C;br/>metrics, readout,&#x3C;br/>owner handoff]
-    W4 --> D30[Day 30&#x3C;br/>demo, headline number,&#x3C;br/>phase two decision]
+    P["Pre-kickoff&#x3C;br/>qualify, baseline,&#x3C;br/>draft CLAUDE.md"] --> W1["Week 1&#x3C;br/>onboarding,&#x3C;br/>supervised use"]
+    W1 --> W2["Weeks 2 to 3&#x3C;br/>active pilot,&#x3C;br/>touchpoints day 8 and 15"]
+    W2 --> W4["Week 4&#x3C;br/>metrics, readout,&#x3C;br/>owner handoff"]
+    W4 --> D30["Day 30&#x3C;br/>demo, headline number,&#x3C;br/>phase two decision"]
 </code></pre>
-<p>The handoff is simple and effective: the owner takes over the office hours one session at a time, as the diagram shows.</p>
-<pre><code class="language-mermaid">flowchart LR
-    H1["First office hours&#x3C;br/>the FDE leads"] --> H2["Second session&#x3C;br/>the internal owner&#x3C;br/>co-facilitates"]
-    H2 --> H3["Third session&#x3C;br/>the owner runs it&#x3C;br/>the FDE observes"]
-</code></pre>
-<p>Handoff is not a meeting about ownership. It is doing the job while still supported.</p>
-<h3 id="scaling-beyond-one-pilot">Scaling beyond one pilot</h3>
-<p>One successful pilot is the start, not the end. At organization scale, the rollout moves through three phases:</p>
-<ol>
-<li><strong>Activation</strong> sets up the technical foundation and organizational readiness.</li>
-<li><strong>Acceleration</strong> scales impact through governance and the center of excellence.</li>
-<li><strong>Expansion</strong> takes the proven approach to more advanced capabilities and new use cases.</li>
-</ol>
-<p>Programs such as <strong>networks of internal experts</strong> and <strong>train-the-trainer</strong> spread the skills without the FDE in every room. Three principles hold it together:</p>
+<p>The exit conditions are what the diagram leaves out:</p>
 <ul>
-<li>Leaders explain why the organization is adopting AI.</li>
-<li>The culture treats experiments and early failures as learning.</li>
-<li>Wins are shared systematically so other teams can copy them.</li>
+<li><strong>Pre-kickoff</strong> ends when the baseline is captured.</li>
+<li><strong>Week one</strong> ends when everyone is installed and working in supervised use.</li>
+<li><strong>Weeks two and three</strong> hold touchpoints on day 8 and day 15 to review usage, and end with the internal owner named by day 15.</li>
+<li><strong>Week four</strong> ends when the readout reaches the customer’s sponsor 48 hours before the showcase, not during it.</li>
+<li><strong>Day thirty</strong> is the showcase: a live demo on real code, the headline number, and the decision on phase two, the wider rollout.</li>
 </ul>
 <p>None of the playbook is about the model. All of it decides whether the model’s value reaches the business.</p>
-<h2 id="the-job-behind-the-title">The job behind the title</h2>
-<p>The forward deployed engineer is what happens when a general technology meets specific businesses at speed. The model can write the code. Someone still has to know which code is worth writing, connect it to the right systems, prove that it helped, and leave behind a team that keeps it working.</p>
+<h2 id="what-stays-when-the-title-changes">What stays when the title changes</h2>
+<p>That is also what stays when the title changes. The model can write the code. Someone still has to know which code is worth writing, connect it to the right systems, prove that it helped, and leave behind a team that keeps it working.</p>
 <p>That person needs an engineer’s hands, an analyst’s curiosity, a project manager’s discipline about measurement, and a consultant’s comfort in someone else’s building. The title may change. The job, I think, is here for as long as businesses differ, which is to say for good.</p>
+<p>So do not wait for the title. Find your row in the first-step table and take that step on your next project.</p>
 <h2 id="glossary">Glossary</h2>
-<p><strong>4D framework</strong>: four AI fluency competencies: Delegation, Description, Discernment, Diligence.</p>
-<p><strong>Agent loop</strong>: the cycle in which a model requests a tool, the application runs it and returns the result, and the model continues until the task is done.</p>
 <p><strong>Agent skills</strong>: packaged know-how (instructions, scripts, reference files) that an agent loads only when a task needs it.</p>
 <p><strong>AI fluency</strong>: the human ability to work with AI effectively, efficiently, ethically, and safely.</p>
 <p><strong>Baseline</strong>: the value of a metric measured before a pilot starts, used as the “before” in any return-on-investment claim.</p>
-<p><strong>Center of excellence</strong>: a small internal team that sets standards, shares patterns, and supports other teams during an AI rollout.</p>
 <p><strong>CLAUDE.md</strong>: the project memory file a coding agent reads at the start of every session; the place where team conventions and domain context live.</p>
 <p><strong>Delta and Echo</strong>: Palantir’s code names for the forward deployed engineer (Delta) and the deployment strategist who handles domain and organizational adoption (Echo).</p>
 <p><strong>Evals</strong>: test sets and graders that measure whether an AI system’s output is good enough and whether it changed after an update.</p>
 <p><strong>Forward deployed engineer (FDE)</strong>: a software engineer who works inside one customer at a time, builds what that customer needs to get value from a general product, and feeds the lessons back to the product.</p>
 <p><strong>Gravel road and paved highway</strong>: the quick, customer-specific solution an FDE builds (gravel road), and the reusable product feature it becomes once the pattern repeats (paved highway).</p>
-<p><strong>Hooks</strong>: rules attached to a coding agent’s actions that run automatically, for example blocking writes to certain files or running tests after edits.</p>
 <p><strong>Internal owner</strong>: a named person inside the customer who owns the deployment after the FDE leaves. They maintain project memory files, run office hours, and onboard newcomers.</p>
 <p><strong>Marginal gain and structural gain</strong>: a marginal gain does the same work faster; a structural gain changes the unit of work, such as a four-person, six-week job becoming a two-person, two-week job.</p>
 <p><strong>MCP (Model Context Protocol)</strong>: an open standard for connecting AI agents to tools and data through servers with defined capabilities.</p>
 <p><strong>Plan mode</strong>: a coding agent mode in which the agent proposes a plan for approval before changing any files.</p>
 <p><strong>Plateau</strong>: the stage after initial adoption where developers stop experimenting and usage stabilizes below its potential.</p>
-<p><strong>Productivity J-curve</strong>: the pattern where performance dips while people learn a new way of working, then rises above the previous level.</p>
 <p><strong>Supervised use and agentic delegation</strong>: the two ends of the adoption curve, from approving every agent action to handing off whole task types with light oversight.</p>
 <p><strong>Week one dip</strong>: the temporary drop in developer velocity in the first week of a coding-agent rollout, caused by learning a new way of working.</p>
 <h2 id="references">References</h2>
@@ -678,7 +401,7 @@
 </ul>
 <p><strong>Market reporting</strong></p>
 <ul>
-<li>CNBC, <a href="https://www.cnbc.com/2026/10/15/aws-anthropic-racing-to-deploy-army-of-specialized-ai-engineers.html">“AWS, Anthropic race to deploy specialized engineers to prove AI payoff”</a>, 15 October 2026. The source of the Lightcast figures in this post (posting counts, salary, the companies posting the most, and the skills shared with software engineering), the quotes from Steve Corfield of Anthropic, Accenture’s FDE lead, and the AWS partner CEO, investor impatience with AI spending, the mortgage-lender case study, and the recruiter’s view that ten to fifteen deployments prepare an FDE to lead a pod.</li>
+<li>CNBC, <a href="https://www.cnbc.com/2026/10/15/aws-anthropic-racing-to-deploy-army-of-specialized-ai-engineers.html">“AWS, Anthropic race to deploy specialized engineers to prove AI payoff”</a>, 15 October 2026. The source of the Lightcast figures in this post (posting counts, salary, the companies posting the most, and the skills shared with software engineering), the quotes from Steve Corfield of Anthropic, Accenture’s FDE lead, and the AWS partner CEO, the lack of independently verified returns, and the recruiter’s view that ten to fifteen deployments prepare an FDE to lead a pod.</li>
 <li>CNBC, <a href="https://www.cnbc.com/2026/10/02/anthropic-to-invest-100-million-to-train-ai-engineer-talent.html">“Anthropic to invest $100 million to train AI engineer talent”</a>, 2 October 2026. The Claude Frontier Academy, its funding, and its goal of 10,000 trained engineers.</li>
 <li>Business Insider, <a href="https://www.businessinsider.com/forward-deployed-engineer-jobs-in-demand-2026-5">“Job postings for this tech job have grown over 700% in the last year”</a>, May 2026. The year-over-year jump in FDE postings.</li>
 <li>The New Stack, <a href="https://thenewstack.io/aws-forward-deployed-engineering">“AWS just put $1 billion into forward deployed engineers”</a>, 30 June 2026. The launch and scale of AWS’s FDE organization.</li>
@@ -703,7 +426,6 @@
 </ul>
 <p><strong>Older history this post leans on</strong></p>
 <ul>
-<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/History_of_IBM">“History of IBM”</a>. Includes IBM’s 1969 decision to unbundle software and services, such as systems engineering, from its hardware prices.</li>
 <li>Paul David, <a href="https://econpapers.repec.org/RePEc:aea:aecrev:v:80:y:1990:i:2:p:355-61">“The Dynamo and the Computer: An Historical Perspective on the Modern Productivity Paradox”</a>, American Economic Review, 1990. Compares the slow payoff of electrification with that of computers: the gains came only after work was reorganized around the new technology.</li>
 <li>Wikipedia, <a href="https://en.wikipedia.org/wiki/Productivity_paradox">“Productivity paradox”</a>. Covers the lag between a new technology and its productivity gains, and the time needed to reorganize around it; lists David’s paper among its sources.</li>
 </ul>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
