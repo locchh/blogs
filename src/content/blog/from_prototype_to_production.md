@@ -236,7 +236,7 @@ The description should then say when to use the tool and when not to. "Use this 
 
 The input schema needs the same care. Mark a field as required only when the call makes no sense without it. If every field is required, the model invents values it has no basis for. And when two tools take the same parameter shape, routing falls back on the descriptions alone, so add language that separates their domains.
 
-A developer spent a morning wondering why the model kept calling `search_docs` when the answer was already in the conversation. The senior engineer asked what the two descriptions said. One read "Use this to find information about the product." The other read "Use this to retrieve relevant information from the current session." From the model's side, both said "find information." The fix was two sentences per tool: when to call it, and when not to.
+Overlapping descriptions are the usual reason the wrong tool runs. A developer spent a morning wondering why the model kept calling `search_docs` when the answer was already in the conversation. The senior engineer asked what the two descriptions said. One read "Use this to find information about the product." The other read "Use this to retrieve relevant information from the current session." From the model's side, both said "find information." The fix was two sentences per tool: when to call it, and when not to.
 
 If descriptions cannot be separated even with exclusions, the tools probably should be merged into one with a type parameter. And exclusions only work when the model sees the full history, so truncating earlier turns silently breaks them.
 
@@ -288,7 +288,7 @@ flowchart TD
 
 Why wait for the block to close? A tool call's input is a JSON string spread across many deltas, and it is not valid until then. Parse it early, and you crash or run the tool with half its arguments.
 
-One team's agent streamed so operators could watch it work, and its handler appended the turn whenever the read loop ended. On a fast local connection the loop always ended at message-stop. In production, a network blip ended one stream after a tool call had opened but before its input finished. The handler appended a turn with truncated JSON, the operator retried, and the retry failed validation on the corrupted turn.
+This bug hides in testing, because a fast local connection almost never cuts a stream short. One team's agent streamed so operators could watch it work, and its handler appended the turn whenever the read loop ended. On a fast local connection the loop always ended at message-stop. In production, a network blip ended one stream after a tool call had opened but before its input finished. The handler appended a turn with truncated JSON, the operator retried, and the retry failed validation on the corrupted turn.
 
 The team spent an afternoon on the schema and the retry logic, because the error appeared on the retry. The cause was upstream: a stream ending is not the same as a message completing. Where nobody is watching, as in short responses or backend jobs, a plain non-streamed call avoids the whole problem.
 
@@ -839,7 +839,7 @@ def is_retriable(status):
 
 Check what the SDK does before adding retries. Claude's SDKs already retry transient failures with growing delays, and a second loop around theirs multiplies attempts against the rate limit you just hit. So decide where retries live. Rate-limit responses carry a header saying how long to wait, and honoring it beats guessing. Without it, fall back to **exponential backoff** with jitter and a cap.
 
-One customer-facing feature called the API in a loop with no error handling, because nothing had ever failed in development. At the first traffic peak a rate-limit response raised an unhandled exception, and the whole request failed. The first fix, immediate retries in a tight loop, made it worse: every retry counted against the same limit. The right fix classified the error as retriable, backed off with a cap, and honored the wait header.
+Skipping that decision fails at the first traffic peak. One customer-facing feature called the API in a loop with no error handling, because nothing had ever failed in development. At the first traffic peak a rate-limit response raised an unhandled exception, and the whole request failed. The first fix, immediate retries in a tight loop, made it worse: every retry counted against the same limit. The right fix classified the error as retriable, backed off with a cap, and honored the wait header.
 
 Two failures never arrive as an error status:
 
@@ -889,7 +889,7 @@ Anthropic reported that its multi-agent research system, with Opus as lead and S
 
 So the pattern fits broad tasks that split into independent parts, such as research across many sources. It fits tightly coupled work poorly, such as coding, where each step depends on the last. Each subagent needs its own retry and fallback handling, and a cheaper worker model reduces the multiplier.
 
-A developer who split a slow task across parallel subagents saw latency drop slightly, the bill triple, and answers barely improve. Each step depended on the previous one, so the subagents mostly waited on each other while each consumed its own tokens. A single agent with good context cut the bill and kept the quality.
+On coupled work, fanning out only multiplies the bill. A developer who split a slow task across parallel subagents saw latency drop slightly, the bill triple, and answers barely improve. Each step depended on the previous one, so the subagents mostly waited on each other while each consumed its own tokens. A single agent with good context cut the bill and kept the quality.
 
 But how far can cost be cut?
 
@@ -972,7 +972,7 @@ The most common wrong form is an agent shipped as loose scripts. Every customer 
 
 Then document what the code cannot say: the environment the asset assumes, the inputs it expects, the failures it already handles, and the eval that defines working. Bundle the audit story too: what data the asset touches, what identity it acts under, and what it logs. Without those, an accelerator passes a demo and stalls at the first security review.
 
-One team shipped an agent template under deadline with the repository path, model name, review thresholds, and a few domain-specific prompt fragments hardcoded, then filed it as reusable. Months later a second team found nothing to configure, no note of which values were customer-specific, and no eval to tell them whether their edits worked. They rewrote it from scratch.
+It also fails the next team that tries to reuse it. One team shipped an agent template under deadline with the repository path, model name, review thresholds, and a few domain-specific prompt fragments hardcoded, then filed it as reusable. Months later a second team found nothing to configure, no note of which values were customer-specific, and no eval to tell them whether their edits worked. They rewrote it from scratch.
 
 **Lesson:** a template that runs has not been packaged. The warning signs are no parameters, no documented assumptions, and no bundled eval.
 
@@ -1098,6 +1098,10 @@ A seam is easy to miss. Two developers wired three components that each passed t
 
 The end-to-end fix for a code-review accelerator on Bedrock, for a regulated AWS customer, shows this stage's main lessons in four steps:
 
+<div class="example">
+
+**Example · A code-review accelerator on Bedrock**
+
 1. Parameterize the hardcoded repository path.
 2. Pin the full Bedrock model ID and keep the previous version for rollback.
 3. Wrap fetched content as data before it reaches the next call.
@@ -1120,6 +1124,8 @@ next_call(input=treat_as_data(fetched))              # untrusted is data
 
 assert eval_suite.run(model="us.anthropic.claude-opus-4-8") >= baseline_score
 ```
+
+</div>
 
 Those few lines close the last stage. So what can you do this week? Write the one-page design document for the feature you are building now, and turn its success criteria into twenty eval cases with awkward inputs. Every other stage then has something to check against.
 

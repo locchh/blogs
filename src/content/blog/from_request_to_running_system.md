@@ -53,11 +53,13 @@ Each answer becomes a row in a **translation table**: the statement as said, the
 | "Clinicians will review the output anyway" | A mandatory authorization gate |
 | "We're in healthcare, so be careful with data" | A formal proof obligation from day one |
 
-No row is a design yet. The trap is discovery that turns into design halfway. A hospital network asked for a model that drafts clinical notes from nurses' dictation.
+No row is a design yet. The trap is discovery that turns into design halfway. Here is that trap in one case.
+
+A hospital network asked for a model that drafts clinical notes from nurses' dictation.
 
 The architect heard "a clean augmented pattern," promised a prototype for next week, and agreed to "add a review step." Two weeks later, compliance found three things. The "quick check" was a legal requirement: a licensed clinician must authorize every note before it reaches the record. The dictations carried **protected health information** through the context window without proper handling. And the network spanned two states with different retention rules.
 
-One direct must-prove or must-not-do question would have surfaced each item. But a stakeholder who hears a confident sketch assumes the questions are answered.
+One direct must-prove or must-not-do question would have surfaced each item. But a stakeholder who hears a confident sketch assumes the questions are answered. So the questions were asked anyway, two weeks later and by compliance, when the answers cost more.
 
 Software measured this price long ago. In the 1970s, [Barry Boehm](https://en.wikipedia.org/wiki/Barry_Boehm) published data from several large projects: a requirements mistake found after delivery cost many times more to fix than one caught while the requirement was being written. It became a central argument of his book Software Engineering Economics (1981). AI only speeds up the build, so a misunderstood request reaches production sooner, where a fix costs the most.
 
@@ -74,9 +76,11 @@ The translation table says what the business needs. Whether a model can supply i
 
 Each property forces a consequence that a later section picks up. Outputs vary from run to run, so behavior seen once cannot be certified: hence evaluations. The context window is finite, so what goes in, and in what order, is a design decision with a cost. A wrong answer sounds as fluent as a right one, so where a person checks the output is an architectural choice, not an afterthought. And knowledge has edges: hence retrieval and tools.
 
-The first consequence is the easiest to forget. An architect watched a demo run cleanly five times in a row and concluded the behavior was deterministic. So the team shipped a financial reconciliation pipeline that treated every model output as fixed, with no checks. In the second week of production, the same statement processed twice came back with two different categories. Nobody noticed until an analyst happened to re-run a batch.
+The first consequence is the easiest to forget. Behavior seen once cannot be certified, and one team learned it in production.
 
-The model was not broken. A demo is not evidence of determinism.
+An architect watched a demo run cleanly five times in a row and concluded the behavior was deterministic. So the team shipped a financial reconciliation pipeline that treated every model output as fixed, with no checks. In the second week of production, the same statement processed twice came back with two different categories. Nobody noticed until an analyst happened to re-run a batch.
+
+The model was not broken. A demo is not evidence of determinism. So outputs that vary need the eval checks built later, but first the four properties have one more job: the feasibility test.
 
 ### Giving a verdict instead of a promise
 
@@ -118,7 +122,9 @@ The answers give one of three verdicts. "Feasible as scoped" means every capabil
 
 Subtract the monthly run cost from the sizing model. State the payback period, including build cost, and how it moves if volume or the gain per task is wrong. Name the kind of value each claim represents: efficiency, transformation, productivity, solution cost, or service levels.
 
-The trap is to answer the capability question and stop. On one discovery call, a customer asked for a contract-review assistant, and the architect said six weeks. Two weeks into the build, the customer mentioned 800 contracts a day, framework agreements of 300 pages, and a 30-second response requirement.
+The trap is to answer the capability question and stop. That means skipping the cost model's inputs and the boundary conditions, as one architect did.
+
+On one discovery call, a customer asked for a contract-review assistant, and the architect said six weeks. Two weeks into the build, the customer mentioned 800 contracts a day, framework agreements of 300 pages, and a 30-second response requirement.
 
 None made the project impossible. Whether a 300-page contract fits depends on the model's window, and 800 a day is one request every 108 seconds, so volume pressured cost more than latency. But each was an input to the verdict, and the verdict comes first.
 
@@ -172,16 +178,21 @@ flowchart LR
     classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
 ```
 
-The threshold is set before the run. Setting it afterward is writing the acceptance criteria after the build.
+The threshold is set before the run. Setting it afterward is writing the acceptance criteria after the build. One model swap shows a threshold set in advance at work.
 
 One document-intelligence team was spending its budget on Sonnet, Claude's middle tier, and wanted to move to Haiku, the smaller and cheaper tier. They built 250 hand-validated documents, broken down by type, and ran both models. The average score fell from 0.94 to 0.86, and the drop sat in two document types that scored 0.71 and 0.74.
 
 Their rule, set in advance, was that no type could fall below 0.85, so the migration as proposed was rejected. The breakdown also showed the way forward: route those two types to Sonnet and the rest to Haiku. Costs fell substantially without the regression.
 
-The suite must change when the system does, or it measures a system that no longer exists. Two teams show how it falls behind:
+So the fixed threshold turned a cost cut into a measured choice, though a threshold is only as good as the suite it scores.
 
-- **A stale suite.** A summarization team revised its prompt but not its evals. Everything passed. Two days into production, field reports showed multi-clause legal sentences being cut short.
-- **A narrow suite.** Another team tested a different contract-review assistant on ten contracts it knew well and declared it ready. Two weeks later it was extracting obligations from the wrong section on contracts with non-standard structures, a class nobody had tested.
+The suite must change when the system does, or it measures a system that no longer exists. A suite falls behind in two ways. The first is that it stops matching the system:
+
+A summarization team revised its prompt but not its evals. Everything passed. Two days into production, field reports showed multi-clause legal sentences being cut short.
+
+The second way is quieter: the suite never matched the inputs the system would meet.
+
+Another team tested a different contract-review assistant on ten contracts it knew well and declared it ready. Two weeks later it was extracting obligations from the wrong section on contracts with non-standard structures, a class nobody had tested.
 
 The riskiest moment for a regression is not when evals are missing. It is when they exist but no longer match the system or its inputs.
 
@@ -201,9 +212,21 @@ Every solution has three owners, and assigning them early is most of the battle:
 
 The common mistake is to collapse all three into "what the model does." That almost always makes the process more expensive, slower, and harder to debug.
 
-The fix is a delegation map: for each piece, not whether the model can do it but whether it should own it. Three questions decide: can a wrong call be undone, what does it cost, and who answers for it?
+The fix is a delegation map: for each piece, not whether the model can do it but whether it should own it. Three questions decide: can a wrong call be undone, what does it cost, and who answers for it? Here is the delegation map at work on one request.
+
+<div class="example">
+
+**Example · A claims triage request**
 
 Take a request for a "claims triage assistant that reads a claim, decides priority, looks up policy coverage, and emails the adjuster." Instinct gives the model all four steps. The model's four properties draw a different map.
+
+Only the first step stays fully with the model. Reading the claim is language work, and with a constrained output **schema** the model is in its comfort zone. Deciding priority only looks like language work. It is a **deterministic rule** the customer already keeps in a rules engine, so the model does not guess.
+
+Looking up coverage is the same problem with higher stakes, because coverage tables change and the model cannot know its memory is stale. And emailing the adjuster splits: drafting is language work, sending is not.
+
+</div>
+
+The diagram shows the map that case ends with: one owner, or a split, for each step.
 
 ```mermaid
 flowchart LR
@@ -215,13 +238,9 @@ flowchart LR
     E --> H["Person approves<br/>above a value threshold"]
 ```
 
-Only the first step stays fully with the model. Reading the claim is language work, and with a constrained output **schema** the model is in its comfort zone. Deciding priority only looks like language work. It is a **deterministic rule** the customer already keeps in a rules engine, so the model does not guess.
-
-Looking up coverage is the same problem with higher stakes, because coverage tables change and the model cannot know its memory is stale. And emailing the adjuster splits: drafting is language work, sending is not.
-
 So the useful question is never "where can the model help?" It is "where do the four properties argue for the model over the system that already does this right?"
 
-A wrong split is costly. Every lookup a database could answer becomes a paid model call. Logic moved from a table into a prompt stops failing in traceable ways. And when the model becomes the source of truth, answers drift with no error and no warning.
+A wrong split is costly. Every lookup a database could answer becomes a paid model call. Logic moved from a table into a prompt stops failing in traceable ways. And when the model becomes the source of truth, answers drift with no error and no warning. The delegation map above showed the split done right. The next case shows it done wrong, and the second of those costs: logic moved from a table into a prompt.
 
 One customer sent any claim over £5,000 to a senior adjuster, enforced by a SQL check. On a scoping call, the architect suggested the model extract the amount and route the claim in one step: simpler, and a nicer demo. Three months later, an audit found 41 misrouted claims out of 14,000.
 
@@ -229,9 +248,13 @@ Every one had the amount written in a sentence, such as "damages estimated aroun
 
 No monitoring caught it either, because ordinary logs do not record the choices a model makes inside one request.
 
+So the rule stopped failing in traceable ways once it left the SQL check, and the split must be right before anything is built on it.
+
 ### Agreeing on names for the building blocks
 
-The split now has to be described in parts, and people use one word for different things. In one review, someone said "we'll use an agent," and five people heard five different architectures. Twenty minutes passed before anyone noticed. A short list of primitives prevents that:
+The split now has to be described in parts, and people use one word for different things. In one review, someone said "we'll use an agent," and five people heard five different architectures. Twenty minutes passed before anyone noticed.
+
+A short list of primitives prevents that:
 
 - **Tools** let the model act or fetch a result by calling a function in your code.
 - The **Model Context Protocol** (MCP) exposes a set of tools once, so many clients can use them.
@@ -286,11 +309,15 @@ Two more checks belong here. First, apply the delegation questions to the patter
 
 Second, if prompting feels unreliable, fine-tuning is usually the wrong first move. Improve the prompt, then add tools or retrieval, then move to a stronger pattern such as evaluator-optimizer, and only then consider fine-tuning. Fine-tuning earns its place mainly at very high volume, for strict latency, or for a format prompting cannot pin down.
 
-The classic failure is choosing an agent because the task feels open-ended. One team picked an agent to avoid constraining it too early, and its 90-day retrospective had three findings. By month two the team had bolted on so many guardrail tools that it had rebuilt a workflow inside the agent loop, minus the logging.
+The classic failure is choosing an agent because the task feels open-ended. It ignores the first and third of the five factors: whether the steps can be listed, and whether anyone can rebuild what happened.
+
+One team picked an agent to avoid constraining it too early, and its 90-day retrospective had three findings. By month two the team had bolted on so many guardrail tools that it had rebuilt a workflow inside the agent loop, minus the logging.
 
 When compliance asked which step had approved a disbursement, the team could only point at a model turn. And when they finally mined their traces, the real paths fell into four shapes.
 
-A router and four chains would have done the job with a clean audit trail and saved six months. Choose an agent when the path cannot be written down, not when nobody has tried to write it.
+A router and four chains would have done the job with a clean audit trail and saved six months.
+
+Choose an agent when the path cannot be written down, not when nobody has tried to write it.
 
 ### Splitting a large job across several agents
 
@@ -319,9 +346,13 @@ What matters is where each failure can be recovered. A failed subagent usually c
 - Pass one trace ID through every agent, so a run can be rebuilt end to end.
 - Put a human checkpoint before any irreversible action a subagent might take.
 
-The dangerous failure is the silent one. A compliance team checked a 50-section vendor contract with one subagent per section. The summary said "48 sections reviewed, 3 flagged" and went to the legal lead. Two sections were never reviewed: one subagent timed out, and another could not parse a scanned page and returned nothing.
+The dangerous failure is the silent one. A failed subagent can be recovered only if someone sees the gap.
 
-The orchestrator counted what came back, and nobody had told it to reconcile against what was sent. The fix is the coverage check in the diagram, run when results are combined.
+A compliance team checked a 50-section vendor contract with one subagent per section. The summary said "48 sections reviewed, 3 flagged" and went to the legal lead. Two sections were never reviewed: one subagent timed out, and another could not parse a scanned page and returned nothing.
+
+The orchestrator counted what came back, and nobody had told it to reconcile against what was sent.
+
+The fix is the coverage check in the diagram, run when results are combined.
 
 ### Starting from a reference architecture
 
@@ -343,7 +374,9 @@ Real problems often sit between two architectures: a routing workflow that hands
 
 Combine when the two parts break in different ways worth managing separately. If the real reason is that you have not decided what problem you are solving, adapt one pattern instead. Each added architecture brings its own eval contract and roughly doubles what you must maintain.
 
-The most common failure by far is retrieval where a tool call belongs. An electronics retailer's assistant was asked "Where's my order?" Retrieval returned two chunks: one said the order had shipped on the 12th, the other that it was still being processed. The model answered confidently that it had shipped.
+The most common failure by far is retrieval where a tool call belongs. It is the RAG row of the table: retrieval used for live state.
+
+An electronics retailer's assistant was asked "Where's my order?" Retrieval returned two chunks: one said the order had shipped on the 12th, the other that it was still being processed. The model answered confidently that it had shipped.
 
 In fact the parcel had been returned to the depot with a damaged label and was waiting to be re-sent. The index held two stale snapshots and no record of the present, and the order-status API that knew the answer was never called. A better embedding model or a shorter refresh interval would not have helped.
 
@@ -375,11 +408,21 @@ flowchart LR
 - Sparse keyword indexes such as BM25 match exact tokens: part numbers, statute citations, error codes.
 - Hybrid indexes do both, the usual production case. The standard, low-tuning way to merge the two ranked lists is **reciprocal rank fusion**.
 
-A professional-services firm shows both choices. It has three kinds of document: section-numbered client contracts, long project write-ups, and a structured methodology handbook. Its people ask three kinds of question: "what does our methodology say about X?", "find the termination clause in the Acme contract," and "summarize how we've handled engagements like this."
+A professional-services firm shows both choices.
+
+<div class="example">
+
+**Example · A professional-services firm**
+
+The firm has three kinds of document: section-numbered client contracts, long project write-ups, and a structured methodology handbook. Its people ask three kinds of question: "what does our methodology say about X?", "find the termination clause in the Acme contract," and "summarize how we've handled engagements like this."
 
 The documents decide the chunking. Contracts and the handbook want hierarchical chunking, so a clause or procedure comes back intact. Write-ups want semantic chunking, because prose has no numbering and fixed-size chunks would cut ideas in half. The questions decide the index: it must be hybrid, because they mix exact lookups with conceptual ones.
 
-The price is extra retrieval compute and a fusion step, worth paying because the variety of questions is the binding constraint. Every retrieval design trades quality against latency and maintenance. And retrieval quality never shows in the output, so measure it against a labeled set.
+The price is extra retrieval compute and a fusion step, worth paying because the variety of questions is the binding constraint.
+
+</div>
+
+Every retrieval design trades quality against latency and maintenance. And retrieval quality never shows in the output, so measure it against a labeled set.
 
 **Lesson: assign owners before choosing technology, choose an agent only when the path cannot be written down, and never let retrieval stand in for live state.** In multi-agent designs, reconcile what came back against what was sent. The design now says what the model owns and how the work flows. It does not say which model, what that model sees, or how anyone reaches it.
 
@@ -404,9 +447,13 @@ The document team in the eval section moved down this way.
 
 Extended reasoning is a separate choice: a billed pass of thinking tokens before the answer, adding latency on every call. Newer Claude models control it with an **effort level**, not a token budget. Run your evals without it first, improve the prompt, and enable it only when a measured accuracy gap remains.
 
-One launch made neither choice. Ninety days later, the monthly bill was seven times the forecast and median latency was 2.3 seconds against an 800-millisecond target, with no gain in customer satisfaction. Every call used the largest model, with extended reasoning even on a routing classifier that needed none. No one had decided per step, and no eval existed.
+One launch made neither choice.
 
-So the team built an eval set after the fact. It moved the classifier to the smallest tier and summarization to the middle tier, and kept the largest model only for final response composition, the one place it measurably helped. Cost fell 71 percent, latency fell to 940 milliseconds, and satisfaction did not change. Not choosing a model is choosing the most expensive one.
+Ninety days later, the monthly bill was seven times the forecast and median latency was 2.3 seconds against an 800-millisecond target, with no gain in customer satisfaction. Every call used the largest model, with extended reasoning even on a routing classifier that needed none. No one had decided per step, and no eval existed.
+
+So the team built an eval set after the fact. It moved the classifier to the smallest tier and summarization to the middle tier, and kept the largest model only for final response composition, the one place it measurably helped. Cost fell 71 percent, latency fell to 940 milliseconds, and satisfaction did not change.
+
+Not choosing a model is choosing the most expensive one.
 
 ### Keeping the context to what the next step needs
 
@@ -452,9 +499,11 @@ Each step down the table adds tokens and latency, so a two-sentence summary of a
 
 **Caching** works on a stable prefix: large, fixed instructions first, per-request content after the cache breakpoint. One team saw no savings at all because the document being analyzed sat at the top of the prompt, so the prefix changed on every call.
 
-**Packaging** depends on who reuses the prompt. A modular prompt library suits fragments that engineers assemble and tweak within one codebase. A versioned skill suits a stable procedure that many teams run identically and that needs approval, versioning, and rollback.
+**Packaging** depends on who reuses the prompt. A modular prompt library suits fragments that engineers assemble and tweak within one codebase. A versioned skill suits a stable procedure that many teams run identically and that needs approval, versioning, and rollback. One case puts the choices of this section together.
 
 A support organization drafting hundreds of replies a day from a ticket and a manual section, with a firm rule never to promise refunds or timelines, is a clear case for a skill. Its stable instructions are cached first, and the refund rule is built into the output contract, not stated in a sentence.
+
+So the prompt works as a shared asset: the rule lives in its structure, and its stable part sits first for the cache.
 
 ### Separating the entry point, the interface, and the delivery route
 
@@ -485,11 +534,21 @@ A coding agent brings a second decision: which customization goes where. **What 
 
 **What it may touch** goes into hooks as deterministic gates it cannot skip, permission modes that range from asking before every action to read-only planning to tightly restricted CI runs, and sandboxing that enforces boundaries in the environment itself.
 
-One proposal blurred the layers. A regional bank wanted an "operations assistant" for branch staff to look up balances, schedule appointments, and answer policy questions. The proposal put Claude Code on branch laptops with a per-branch instruction file, MCP servers for the customer database, appointments, and policies, and subagents running compliance checks on every interaction. Its justification was that "it's all Claude."
+One proposal blurred the layers. It mixed up the entry point, the interface, and where the rules should live.
+
+<div class="example">
+
+**Example · A regional bank**
+
+A regional bank wanted an "operations assistant" for branch staff to look up balances, schedule appointments, and answer policy questions. The proposal put Claude Code on branch laptops with a per-branch instruction file, MCP servers for the customer database, appointments, and policies, and subagents running compliance checks on every interaction. Its justification was that "it's all Claude."
 
 The model underneath is the same, but the wrapper is not. Branch staff do not run terminals, so the entry point did not fit the user. No other client in the bank would use those tools, so MCP paid for reuse nobody needed. And compliance, the highest-consequence path, went to the component with the weakest deterministic guarantees.
 
 The right answer was there from the start: a web application calling the API, behind the bank's single sign-on, with compliance in server-side code and every tool call audited at the server.
+
+</div>
+
+So the model was never the question: each layer had to fit its own user, team, or risk.
 
 ### Letting the governing constraint choose the route
 
@@ -519,9 +578,13 @@ Even then, large deployments often span routes. The question becomes which route
 
 So write an **entry-point responsibility map** before any integration code: which entry point owns which task and why, so one chosen for one job does not quietly take on another.
 
-### Checking the choices together on one law firm
+A 180-lawyer firm shows all the choices of this part, from the model tier to the route, working together.
 
-A 180-lawyer firm shows these choices working together. It wants to cut contract review time by 60 percent while keeping a senior associate as the final reviewer. It stores documents in iManage, has an LLM gateway approved by its CIO, and is bound by privilege rules that exclude consumer tools. One design holds against all of that:
+<div class="example">
+
+**Example · A 180-lawyer law firm**
+
+The firm wants to cut contract review time by 60 percent while keeping a senior associate as the final reviewer. It stores documents in iManage, has an LLM gateway approved by its CIO, and is bound by privilege rules that exclude consumer tools. One design holds against all of that:
 
 - A thin internal web app on the API or SDK, behind the firm's single sign-on and gateway.
 - A parallel workflow that reviews the contract section by section, with an evaluator pass enforcing a strict schema on flagged clauses.
@@ -529,6 +592,8 @@ A 180-lawyer firm shows these choices working together. It wants to cut contract
 - The playbook stays in the firm's systems as a versioned source of truth, retrieved per clause.
 - Sonnet by default with progressive context, and extended reasoning only where an eval justifies it.
 - The senior associate signs off on every output, with low-confidence clauses flagged.
+
+</div>
 
 Each alternative fails on exactly one decision. A chat product breaks the privilege rule. Loading the whole playbook into every prompt goes stale and wastes tokens. An open-ended agent running the largest model on every call buys unpredictability and cost the task does not need.
 
@@ -557,15 +622,19 @@ A capabilities demo answers "what can this system do?" A scenario demo answers "
 
 Prepare as much when you **scope jointly** with a vendor's specialist team. Arrive with a written view of requirements and constraints, a proposed pattern or two with their trade-offs, and a short list of questions only they can answer. Technical objections come in three kinds: capability, governance and compliance, and design choice. Answer a design-choice objection with the same gain, loss, and reversal frame.
 
-One approval shows the frame missing. An architect recommended a larger context window so the full policy document stayed in view on every call, which kept the design simple. The CTO asked about cost per call and was told about four cents, possibly less with caching. He approved.
+One approval shows the frame missing.
+
+An architect recommended a larger context window so the full policy document stayed in view on every call, which kept the design simple. The CTO asked about cost per call and was told about four cents, possibly less with caching. He approved.
 
 Six weeks later the invoice showed a five-figure monthly line, and he wrote to the account team that he had approved a direction, not a number. Nobody had multiplied four cents by the call volume, asked why a static document was not being cached, or told him what unwinding the decision would cost.
+
+So the frame was missing where it mattered most: the cost at volume and the cost of reversal.
 
 **Lesson: start in the middle tier and choose a model per step, and treat the context window like a working set.** Choose the entry point by the work, the interface by the team, and the route by the customer's commitments. Present every decision with its reversal cost. What the CTO never saw was the design at volume.
 
 ## Making it hold up in production
 
-The four-cents approval is what happens when nobody models a design at real volume. The eval says the system behaves correctly, not that you can afford it at the customer's volume or that it survives a security review.
+The CTO approved four cents a call because nobody showed him that number multiplied by the real volume. That gap is what this part closes. An eval tells you the system behaves correctly. It does not tell you the customer can afford it at their volume, or that it will pass a security review.
 
 ### Modeling cost, latency, and failure at real volume
 
@@ -598,7 +667,9 @@ Beyond the design failures of each reference architecture, production adds failu
 - **RAG systems** drift as documents are added without reindexing, so retrieval precision and recall belong in your metrics.
 - **Document pipelines** without an exception path produce wrong outputs on edge cases at the same rate as right ones on clean documents.
 
-A document-triage team learned all of this in one bad quarter. Its cost estimate came from the prototype's bill at a few dozen requests a day, never scaled to production with error bounds. It assumed every document was about the same length, and the long documents in the tail used 80 percent of the tokens. On day three, the endpoint returned an overload error at peak and the whole workflow went down. No one had tested what happens when a call fails.
+A document-triage team learned all of this in one bad quarter: the long tail, the real volume, and the failing call.
+
+The team's cost estimate came from the prototype's bill at a few dozen requests a day, never scaled to production with error bounds. It assumed every document was about the same length, and the long documents in the tail used 80 percent of the tokens. On day three, the endpoint returned an overload error at peak and the whole workflow went down. No one had tested what happens when a call fails.
 
 So a prototype answers "can it do this?" It does not answer "what does it cost at scale?" or "what happens when a dependency breaks?"
 
@@ -638,13 +709,21 @@ The five constraints that narrowed the route return here as four questions: who 
 - **Government workloads**: inside an authorized boundary.
 - **Internal policy**: the approved cloud, feeding the existing logging.
 
-A healthcare-adjacent team skipped the fields question. It built a patient-intake summarizer that worked perfectly. Its prompt asked for presenting concerns, medications, and allergies. Yet every request carried the patient's name, date of birth, social security number, and insurance ID. The summary needed none of them, and all landed in plain text in the application's request logs, thousands of entries deep, and were found at the certification review.
+A healthcare-adjacent team skipped the fields question.
 
-The fix was a redaction step on the server and a retrieval function that supplies only the fields the task needs. The test for what goes into the context window is necessity, not convenience.
+The team built a patient-intake summarizer that worked perfectly. Its prompt asked for presenting concerns, medications, and allergies. Yet every request carried the patient's name, date of birth, social security number, and insurance ID. The summary needed none of them, and all landed in plain text in the application's request logs, thousands of entries deep, and were found at the certification review.
 
-### Finding the binding constraint in one consulting firm's request
+The fix was a redaction step on the server and a retrieval function that supplies only the fields the task needs.
 
-A 600-person consulting firm shows the checks so far producing one verdict. It wants an internal assistant over 12,000 past reports, from 5 to 80 pages each, to answer methodology questions and draft RFP responses. It expects 800 requests a day, with a $3,000 monthly ceiling and an 8-second target at the 95th percentile. It sits behind Okta and SharePoint, and some documents are covered by client NDAs. Four decisions follow:
+The test for what goes into the context window is necessity, not convenience.
+
+That case tested one check. A 600-person consulting firm shows all the checks so far, from the eval to the integration, producing one verdict.
+
+<div class="example">
+
+**Example · A 600-person consulting firm**
+
+The firm wants an internal assistant over 12,000 past reports, from 5 to 80 pages each, to answer methodology questions and draft RFP responses. It expects 800 requests a day, with a $3,000 monthly ceiling and an 8-second target at the 95th percentile. It sits behind Okta and SharePoint, and some documents are covered by client NDAs. Four decisions follow:
 
 - **Eval:** the citation schema is checked in code and draft relevance by a judge, on a golden set built from past RFPs with client names removed.
 - **Cost:** at around 24,000 requests a month, with a cached system prompt on the middle tier, the cost fits, but only under the assumed distribution. That needs a sensitivity check, because report lengths likely bunch at two ends, many short and many long.
@@ -654,6 +733,10 @@ A 600-person consulting firm shows the checks so far producing one verdict. It w
 Together the four give a verdict of feasible with constraints. The binding constraint is retrieval index coverage and freshness, which belongs in the statement of work.
 
 One decision waits for launch. A test of a new retrieval setup that aims to lift acceptance from 70 to 75 percent will need about 1,500 sessions per group, roughly four days of traffic, with groups balanced by RFP complexity. A later section shows how to size it.
+
+</div>
+
+So the checks, run together on one request, end in a verdict with a named constraint, not a promise.
 
 **Lesson: design to the slow tail, not the average, put each reliability control in its layer, and integrate from the server outward.** But holding up is not the same as behaving well.
 
@@ -678,9 +761,13 @@ Those deployment rules are **enforced at inference time** by controls you build:
 
 Every layer costs latency and engineering, and the system prompt and screening logic drift apart if nobody governs them.
 
-The most dangerous failure is a rule that lives in no layer. One customer's policy forbade users from seeing other business units' records. In testing, the team's internal assistant refused every harmful prompt, so they assumed cross-unit access was covered too and built no authorization check.
+The most dangerous failure is a rule that lives in no layer.
 
-In production, an ordinary in-domain request asked for a forbidden record. Nothing about it looked harmful, so the model answered. The rule had never existed anywhere: not in training, not in a classifier, not in the prompt, not in the application.
+One customer's policy forbade users from seeing other business units' records. In testing, the team's internal assistant refused every harmful prompt, so they assumed cross-unit access was covered too and built no authorization check.
+
+In production, an ordinary in-domain request asked for a forbidden record. Nothing about it looked harmful, so the model answered.
+
+The rule had never existed anywhere: not in training, not in a classifier, not in the prompt, not in the application.
 
 ### Writing down the risks each layer must stop
 
@@ -744,7 +831,11 @@ For the controls you build, choose deliberately between failing open and **faili
 
 A guardrail that passes traffic when it errors breaks the first principle. A tool call that skips authorization breaks the second. And a guardrail that silently fails open is worse than one that blocks, because it gives the reassurance of control without the protection.
 
-One trace shows why a single filter is not a design. A customer-service agent with a refund tool received a request with no input screening configured. The model called the refund tool, which ran with no authorization gate, and money moved. Only then did the output filter inspect the model's text, find nothing unsafe, and pass it. The only control sat downstream of the only action that could not be undone.
+One trace shows why a single filter is not a design.
+
+A customer-service agent with a refund tool received a request with no input screening configured. The model called the refund tool, which ran with no authorization gate, and money moved. Only then did the output filter inspect the model's text, find nothing unsafe, and pass it. The only control sat downstream of the only action that could not be undone.
+
+That is why the checks must be chained: an output filter alone arrives after the action, too late.
 
 ### Auditing skills and plugins as a supply chain
 
@@ -781,7 +872,11 @@ Too many approvals defeat their purpose. Anthropic's research on agent autonomy 
 
 The better pattern moves review to higher-value checkpoints, such as approving a plan instead of each step, and keeps people watching with the ability to step in. The discipline is diligence: keeping explicit human accountability in place, and noticing when automation pressure erodes it.
 
-One queue shows both faults at once. A reviewer told her lead she had four hundred items in her queue, the same as the day before. She saw only the output and an approve button, never the inputs or the reason an item was there, and after the first hour she approved everything to keep up. The volume made careful review impossible, and the missing context made it pointless. Fixing only one fault still leaves review broken.
+One queue shows both faults at once: too many approvals, and too little context on screen.
+
+A reviewer told her lead she had four hundred items in her queue, the same as the day before. She saw only the output and an approve button, never the inputs or the reason an item was there, and after the first hour she approved everything to keep up.
+
+The volume made careful review impossible, and the missing context made it pointless. Fixing only one fault still leaves review broken.
 
 ### Tracing unequal outcomes through a decision log
 
@@ -809,9 +904,13 @@ For a credit-decision system, the checklist is short, and a "no" anywhere is a d
 - Can you show a regulator that similar applicants were treated alike?
 - Can your team pull the trace for any flagged decision?
 
-The decision log is itself sensitive data and belongs in the compliance register, with minimization, retention limits, and access controls. Logging for transparency and limiting data for compliance do not conflict. They are the same log, governed carefully.
+The applicant, the regulator, and the team behind those questions all draw on that one decision log. The decision log is itself sensitive data and belongs in the compliance register, with minimization, retention limits, and access controls. Logging for transparency and limiting data for compliance do not conflict. They are the same log, governed carefully.
 
-The usual failure is treating fairness as the vendor's problem. One team used a model that had passed the vendor's fairness evaluations and assumed that settled it. The skew came from their own retrieval corpus, which over-represented some cases. When outcomes were questioned, they had logged so little that they could neither explain individual decisions nor rule out the corpus as the cause, the only question the regulator was asking.
+The usual failure is treating fairness as the vendor's problem.
+
+One team used a model that had passed the vendor's fairness evaluations and assumed that settled it. The skew came from their own retrieval corpus, which over-represented some cases. When outcomes were questioned, they had logged so little that they could neither explain individual decisions nor rule out the corpus as the cause, the only question the regulator was asking.
+
+So the vendor's tests settled nothing: the skew entered through the corpus, and only the decision log, governed in the compliance register, could have traced it.
 
 ### Turning compliance into controls with evidence
 
@@ -838,19 +937,29 @@ The **evidence artifact** is the part most often forgotten and the part a review
 
 Two cautions keep these rows honest. Data excluded from training may still be retained for logging, abuse prevention, or audit, so keep those two claims separate. And the register needs revalidating, because configurations drift and evidence goes stale.
 
-This fails quietly. A team chose a compliant route for a regulated workload and considered compliance done. Controls were mapped once, in a design document, with no owners and no logging to show they were running. Months later, a logging change began writing request metadata to a store in a second region.
+This fails quietly. A register that is never revalidated shows nothing when a configuration drifts.
+
+A team chose a compliant route for a regulated workload and considered compliance done. Controls were mapped once, in a design document, with no owners and no logging to show they were running. Months later, a logging change began writing request metadata to a store in a second region.
 
 Nothing noticed, because no one owned the residency control and nothing tracked where data landed. At the audit, a reviewer asked for proof that data stayed in-region, and the team had a design document, not a data-flow record.
 
-### Stacking the controls on one benefits assistant
+So a control with no owner and no evidence is a control on paper only.
 
-A public-sector benefits assistant shows the whole stack in one design. It recommends approving, denying, or referring applications, under FedRAMP and a rule that every denied applicant gets the specific reason. Each part of this section becomes one decision:
+That case broke one control. A public-sector benefits assistant shows the whole stack in one design, from policy to compliance evidence.
+
+<div class="example">
+
+**Example · A benefits assistant**
+
+The assistant recommends approving, denying, or referring applications, under FedRAMP and a rule that every denied applicant gets the specific reason. Each part of this section becomes one decision:
 
 - **Policy:** the eligibility rules are application policy, not trained behavior.
 - **Guardrails:** input screening, output screening, and deterministic tool authorization all fail closed, because a screen that fails open lets an unscreened denial through.
 - **Fairness:** the four fairness entry points are instrumented with one decision log that serves the applicant, the regulator, the team, and the compliance register.
 - **Review:** a low-confidence, hard-to-reverse denial near the threshold goes to approval before it takes effect.
 - **Compliance:** each FedRAMP obligation has a control, an owner, and the evidence a reviewer will accept.
+
+</div>
 
 No single line would be enough alone, and that is the point of a stack.
 
@@ -876,9 +985,11 @@ The rest of the design protects you from yourself:
 
 When one bad output is too risky, or traffic is too low for a live split, use **shadow testing**. Send a copy of live traffic to the new version, serve every user the current version, and score the shadow outputs offline. You lose real user reactions, but in regulated settings it is often the only acceptable option.
 
-Why so much protection? Richard Feynman named the reason in his 1974 Caltech commencement talk, ["Cargo Cult Science"](https://calteches.library.caltech.edu/51/2/CargoCult.htm): "The first principle is that you must not fool yourself—and you are the easiest person to fool." Whoever wrote the new prompt wants it to win, so any choice left open until the data arrives will lean their way.
+Why so much protection? Richard Feynman named the reason in his 1974 Caltech commencement talk, ["Cargo Cult Science"](https://calteches.library.caltech.edu/51/2/CargoCult.htm): "The first principle is that you must not fool yourself—and you are the easiest person to fool." Whoever wrote the new prompt wants it to win, so any choice left open until the data arrives will lean their way. One team's prompt test shows those open choices leaning toward the new prompt.
 
-A team once compared a revised prompt on 50 sessions against 50 sessions of the old one, saw 68 percent success against 62, and shipped it. Two weeks later it had settled at 61. The sample was too small to separate a six-point difference from noise, the treatment group happened to get fewer hard cases, and the metric was chosen because it moved in the right direction. That is confirmation, not evidence.
+A team once compared a revised prompt on 50 sessions against 50 sessions of the old one, saw 68 percent success against 62, and shipped it. Two weeks later it had settled at 61. The sample was too small to separate a six-point difference from noise, the treatment group happened to get fewer hard cases, and the metric was chosen because it moved in the right direction.
+
+That is confirmation, not evidence.
 
 ### Turning signals into decisions
 
@@ -929,7 +1040,7 @@ Write all of this down before launch in a **governance table**. It maps every si
 | Cost passes its envelope | Find the driver and bring a trade-off back to the stakeholder |
 | A residency check comes due on its date | It is recorded |
 
-No signal triggers the last row. Regulated deployments add scheduled reviews that run even when nothing has gone wrong, such as a periodic audit of outputs against a documentation standard, or a check that the environment still meets residency rules. As design-time obligations, they belong in the table too.
+No signal triggers the last row. Regulated deployments add scheduled reviews that run even when nothing has gone wrong, such as a periodic audit of outputs against a documentation standard, or a check that the environment still meets residency rules. As design-time obligations, they belong in the table too. One case shows what a missing row costs.
 
 Over a ninety-day window, one deployment's eval score drifted down week after week from week four. The error rate stayed flat, so no alert fired, and no review was scheduled. By week eight the stakeholder said the output felt "less useful lately," and the quarterly review in week twelve finally surfaced it.
 
@@ -949,9 +1060,13 @@ This post builds on that form and calls it a **design decision record**, to keep
 
 The completeness test: after reading the documents, could a competent architect who was not in the room make a safe change? Writing the reasoning down takes time. Rebuilding it from email threads costs more, and failing to rebuild it costs a wrong reversal in production.
 
-That wrong reversal happened at a financial-services customer twelve weeks after launch. The original architect left a thorough diagram with no rationale. A performance issue led the replacement to switch context strategies, which brought back a data-handling pattern that broke the data-residency rule. The original strategy had been chosen to keep regulated data in-region, but that was never written down as a decision with a named trade-off and a rejected alternative.
+That wrong reversal happened at a financial-services customer twelve weeks after launch.
 
-The replacement was competent and acted reasonably. The diagram told them what the system was, not why. With a design decision record, changing the strategy would have meant marking the old record superseded, and reading why it existed.
+The original architect left a thorough diagram with no rationale. A performance issue led the replacement to switch context strategies, which brought back a data-handling pattern that broke the data-residency rule. The original strategy had been chosen to keep regulated data in-region, but that was never written down as a decision with a named trade-off and a rejected alternative.
+
+The replacement was competent and acted reasonably. The diagram told them what the system was, not why.
+
+With a design decision record, changing the strategy would have meant marking the old record superseded, and reading why it existed.
 
 ### Proving what the system changed
 
@@ -968,13 +1083,21 @@ Every sponsor eventually asks: what did this change? The **outcome document** an
 
 Technical metrics alone do not make an outcome document. The before-and-after on the business metric and the reuse notes turn it into an asset.
 
-The common failure is writing the document from whatever is easiest to export. One sponsor took a document listing forty thousand requests a month, sub-two-second latency, and an error rate under half a percent to the CFO to justify expansion. The CFO asked what claim processing time had been before and what it was now, because that number justified spending more. The document could not answer. It showed the system ran, not what it changed.
+The common failure is writing the document from whatever is easiest to export.
+
+One sponsor took a document listing forty thousand requests a month, sub-two-second latency, and an error rate under half a percent to the CFO to justify expansion. The CFO asked what claim processing time had been before and what it was now, because that number justified spending more. The document could not answer.
+
+That document showed the system ran, not what it changed.
 
 The "before" number the CFO wanted is the baseline from the sizing step. If nobody measured it before launch, no later document can supply it.
 
-### Holding the expansion gate until the numbers exist
+That sponsor had a document but no baseline. A two-state healthcare network shows the habits of running a system on one deployment, including how its value gets measured.
 
-A two-state healthcare network shows the habits of this section on one deployment. The network deploys a dictation-to-note assistant under a health-privacy rule, with an audit trail and residency requirements. The customer is standardized on AWS but runs some non-regulated work on the vendor's API. Four weeks in, the CFO wants to know what the deployment is worth. Six decisions lead to the answer:
+<div class="example">
+
+**Example · A two-state healthcare network**
+
+The network deploys a dictation-to-note assistant under a health-privacy rule, with an audit trail and residency requirements. The customer is standardized on AWS but runs some non-regulated work on the vendor's API. Four weeks in, the CFO wants to know what the deployment is worth. Six decisions lead to the answer:
 
 - **Discovery:** the must-prove constraint is an auditable record of every clinician-authorized note.
 - **Trade-off:** trimming logs against keeping the audit trail must include the reversal cost: a redesigned interaction layer and a disclosed compliance gap.
@@ -984,6 +1107,10 @@ A two-state healthcare network shows the habits of this section on one deploymen
 - **Value:** the outcome document measures time from dictation to authorized note, before and after, backed by the timestamped authorization log.
 
 At week four the expansion gate is not yet met, because the "after" number needs more runtime. The right move is to name the measurement owner, confirm the control is logging, and schedule the document for a defined milestone.
+
+</div>
+
+So the expansion waits until the "after" number exists, however keen the sponsor is.
 
 **Lesson: run experiments that can prove you wrong, turn signals into decisions, write down what you rejected, and prove value in business terms.** All four habits still lean on the architect. Who keeps them up when the architect moves on?
 
@@ -1006,9 +1133,13 @@ Reusable assets come next. Packaging a team workflow as a skill turns local know
 
 Choose by who needs the asset and how much control you need over changes.
 
-A platform team skipped that choice. It packaged its release-notes procedure as a skill and pushed it to a forty-engineer group as a flat bundle. A week later, a well-meant edit to the prompt started producing notes in the wrong format for every team that used it.
+A platform team skipped that choice.
 
-With no versioned updates and no rollback, the fix took a manual re-edit while bad output kept shipping. A shared asset with no version and no way back becomes a liability the moment more than one person depends on it.
+The team packaged its release-notes procedure as a skill and pushed it to a forty-engineer group as a flat bundle. A week later, a well-meant edit to the prompt started producing notes in the wrong format for every team that used it.
+
+With no versioned updates and no rollback, the fix took a manual re-edit while bad output kept shipping.
+
+A shared asset with no version and no way back becomes a liability the moment more than one person depends on it.
 
 Bounded spending is the third need, so set the **spend posture** before the first bill. It covers the default model, which models people may switch to, guidance on reasoning effort, and spend, rate, and per-user caps. Left unmanaged, model choice drifts to more capable and more expensive tiers than tasks require, multiplied across every person and every request.
 
@@ -1021,7 +1152,9 @@ flowchart LR
     C --> D["Broad rollout"]
 ```
 
-The real workflow might be a code-review assist or a test-generation step. By the broad rollout, every department has a working example, a local expert, and a tuned instruction file. The same rollout by mass email would have produced a spike of confused first prompts and a quiet retreat to old habits.
+The real workflow might be a code-review assist or a test-generation step. By the broad rollout, every department has a working example, a local expert, and a tuned instruction file.
+
+The same rollout by mass email would have produced a spike of confused first prompts and a quiet retreat to old habits.
 
 Adoption research found the reason long ago. In [Diffusion of Innovations](https://en.wikipedia.org/wiki/Diffusion_of_innovations) (1962), Everett Rogers pulled together hundreds of studies. Announcements make people aware of a new practice, but peers persuade them to adopt it. The people who carry it are early adopters others already respect, not the most eager enthusiasts. So pick each first user for their standing in the team, not their excitement about AI.
 
@@ -1055,9 +1188,13 @@ Write it down as a **verification checklist** that every AI-generated change mus
 
 Automate whatever you can with tests and evals, so the checklist becomes a gate that runs on every change, not a judgment call each time.
 
-The last item of the checklist matters most. A team adopted AI-assisted coding and shipped noticeably faster. Three weeks in, a generated change passed review and tests, reached production, and leaked data through an input it never validated.
+The last item of the checklist matters most.
 
-In the post-incident review, the author could not explain why the code handled that input the way it did. It had looked plausible, the tests were green, and no one had asked the one question the checklist would have forced. Speed had quietly replaced understanding.
+A team adopted AI-assisted coding and shipped noticeably faster. Three weeks in, a generated change passed review and tests, reached production, and leaked data through an input it never validated.
+
+In the post-incident review, the author could not explain why the code handled that input the way it did. It had looked plausible, the tests were green, and no one had asked the one question the checklist would have forced.
+
+Speed had quietly replaced understanding.
 
 ### Teaching the path from symptom to cause
 
@@ -1083,11 +1220,13 @@ flowchart LR
     classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
 ```
 
-A **runbook** captures the known paths from symptom to cause to action, for recurring issues. An **escalation path** covers the rest. The goal is a team that needs you for new problems, not for the ones you have already taught them to solve.
+A **runbook** captures the known paths from symptom to cause to action, for recurring issues. An **escalation path** covers the rest. The goal is a team that needs you for new problems, not for the ones you have already taught them to solve. The first row of the symptom table shows what a missing runbook entry costs.
 
 One support team watched green dashboards for an entire quarter while answer quality slid. The cause was a growing retrieval corpus that the index had not kept up with. The symptoms were visible all along, but no runbook entry said that gradual quality loss with no code change points to the model, the prompt, or retrieval drift.
 
-With that one line written down, a first-line engineer could have fixed it in an afternoon. Without it, the problem waited for the quarterly review. A governance table tells someone quality is sliding. A runbook tells the team what to do about it.
+With that one line written down, a first-line engineer could have fixed it in an afternoon. Without it, the problem waited for the quarterly review.
+
+A governance table tells someone quality is sliding. A runbook tells the team what to do about it.
 
 **Lesson: settle the team setup before rollout, roll out through first users, then batches, keep understanding in the loop, and leave runbooks, not dependence.**
 
