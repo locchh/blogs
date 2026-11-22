@@ -252,16 +252,45 @@
 <p>So what can you do this week? Write down every check you did by hand on agent output in the last five days. Take the one you did most often, and turn it into a hook or an eval that runs without you.</p>
 <h2 id="appendix-with-the-files-behind-each-check">Appendix with the files behind each check</h2>
 <p>Whichever check you pick, it ends up as a file. The argument above says which checks to build and why. This appendix shows what each one looks like on disk, in the same order as the seven steps. The snippets are shortened from the course’s examples and use Claude Code’s formats. File names, flags, and setting keys change, so check the current documentation before you copy one.</p>
-<p>The diagram maps each step of the post to the file that carries it.</p>
-<pre><code class="language-mermaid">flowchart LR
-    S1["Run more work"] --> F1[".claude/agents/*.md&#x3C;br/>one file per subagent"]
-    S2["Let each run&#x3C;br/>check itself"] --> F2["CLAUDE.md&#x3C;br/>verification block"]
-    S3["Test the&#x3C;br/>configuration"] --> F3["evals/*.json&#x3C;br/>and a CI workflow"]
-    S4["Turn rules&#x3C;br/>into gates"] --> F4["settings.json hooks,&#x3C;br/>managed settings"]
-    S5["Ship up to the&#x3C;br/>production gate"] --> F5["Pipeline jobs, .mcp.json,&#x3C;br/>REVIEW.md"]
-    S6["Let monitoring&#x3C;br/>start the loop"] --> F6["bands.yaml&#x3C;br/>and intent.md"]
-    S7["Keep cost flat"] --> F7["Effort and cache&#x3C;br/>settings per request"]
-</code></pre>
+<p>The table maps each step of the post to the file that carries it.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>File</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Run more work</td>
+<td><code>.claude/agents/*.md</code>, one file per subagent</td>
+</tr>
+<tr>
+<td>Let each run check itself</td>
+<td>The verification block in <code>CLAUDE.md</code></td>
+</tr>
+<tr>
+<td>Test the configuration</td>
+<td><code>evals/*.json</code> and a CI workflow</td>
+</tr>
+<tr>
+<td>Turn rules into gates</td>
+<td>Hooks in <code>settings.json</code>, and managed settings</td>
+</tr>
+<tr>
+<td>Ship up to the production gate</td>
+<td>Pipeline jobs, <code>.mcp.json</code>, and <code>REVIEW.md</code></td>
+</tr>
+<tr>
+<td>Let monitoring start the loop</td>
+<td><code>bands.yaml</code> and <code>intent.md</code></td>
+</tr>
+<tr>
+<td>Keep cost flat</td>
+<td>Effort and cache settings on each request</td>
+</tr>
+</tbody>
+</table>
 <p>So nothing here is a new system to install. Each check is a small text file in the repository, reviewed like any other change.</p>
 <h3 id="a-subagent-that-knows-when-to-stop">A subagent that knows when to stop</h3>
 <p>A subagent is one markdown file in <code>.claude/agents/</code>. The frontmatter says when to use it and which tools it may touch, and the body is its system prompt. This is the verifier from “Give the session a check it can run itself.”</p>
