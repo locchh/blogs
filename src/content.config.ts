@@ -15,6 +15,8 @@ const blog = defineCollection({
 			heroImage: image().optional(),
 			// Drafts are committed but never built/listed (see pages + rss).
 			draft: z.boolean().default(false),
+			// A post heavy with wide tables and long cells: smaller type on a wider page (see `.dense` in global.css).
+			dense: z.boolean().default(false),
 		}),
 });
 

@@ -8,7 +8,7 @@ import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, dense } = Astro.props;
 ---
 
 <html lang="en">
@@ -19,6 +19,13 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				width: min(calc(100% - 2rem), 1040px);
 				max-width: 100%;
 				margin: 2em auto;
+			}
+			/* dense: true in a post's frontmatter. The page and the text column both get wider. */
+			main.dense {
+				width: min(calc(100% - 2rem), 1280px);
+			}
+			main.dense .prose {
+				max-width: 1040px;
 			}
 			.hero-image {
 				width: 100%;
@@ -62,7 +69,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 
 	<body>
 		<Header />
-		<main>
+		<main class:list={[{ dense }]}>
 			<article>
 				<div class="hero-image">
 					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
