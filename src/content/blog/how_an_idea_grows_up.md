@@ -2,6 +2,7 @@
 title: "How an Idea Grows Up"
 description: "The transformer is a 2017 paper. Claude Code is 2026. That's nine years for one idea to grow up — and almost none of it was the idea getting better. A rule for how a breakthrough matures into real impact: four gaps, two rules, then run forward onto quantum computing."
 pubDate: "2026-07-22"
+dense: true
 author: "locchh"
 tags: ["transformer", "technology-maturity", "technology-adoption", "claude-code", "quantum-computing", "economics", "labor", "2026"]
 draft: false

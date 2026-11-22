@@ -3,6 +3,7 @@ title: "I learn Nihongo!"
 description: "Some thoughts about Nihongo"
 pubDate: "2026-08-03"
 updatedDate: "2026-10-28"
+dense: true
 author: "locchh"
 tags: ["languages", "ai", "llm"]
 draft: false

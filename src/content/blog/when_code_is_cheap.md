@@ -3,6 +3,7 @@ title: "When Code Is Cheap"
 description: "An agent writes the first version in twenty minutes. The question on a senior's desk is no longer how to build it, but whether a project should use AI at all, what it will cost to own, how to pilot it, and how to keep it safe and good. Eleven questions with the sources to go deeper, how they apply to five kinds of delivery work, and two personal notes."
 pubDate: "2026-10-24"
 updatedDate: "2026-10-28"
+dense: true
 author: "locchh"
 draft: false
 ---

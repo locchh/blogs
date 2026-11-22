@@ -3,6 +3,7 @@ title: "How to build a knowledge base"
 description: "Storage is not knowledge. On the inference layer a real knowledge base needs, where to put it, how to assemble knowledge like packages, and how to grade it."
 pubDate: "2026-07-11"
 updatedDate: "2026-10-20"
+dense: true
 author: "locchh"
 tags: ["knowledge-base", "vector-db", "graph-db", "dikw", "agent-memory", "inference", "knowledge-hub", "hebbian-learning"]
 draft: false
