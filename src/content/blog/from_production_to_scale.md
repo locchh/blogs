@@ -396,18 +396,17 @@ So what can you do this week? Write down every check you did by hand on agent ou
 
 Whichever check you pick, it ends up as a file. The argument above says which checks to build and why. This appendix shows what each one looks like on disk, in the same order as the seven steps. The snippets are shortened from the course's examples and use Claude Code's formats. File names, flags, and setting keys change, so check the current documentation before you copy one.
 
-The diagram maps each step of the post to the file that carries it.
+The table maps each step of the post to the file that carries it.
 
-```mermaid
-flowchart LR
-    S1["Run more work"] --> F1[".claude/agents/*.md<br/>one file per subagent"]
-    S2["Let each run<br/>check itself"] --> F2["CLAUDE.md<br/>verification block"]
-    S3["Test the<br/>configuration"] --> F3["evals/*.json<br/>and a CI workflow"]
-    S4["Turn rules<br/>into gates"] --> F4["settings.json hooks,<br/>managed settings"]
-    S5["Ship up to the<br/>production gate"] --> F5["Pipeline jobs, .mcp.json,<br/>REVIEW.md"]
-    S6["Let monitoring<br/>start the loop"] --> F6["bands.yaml<br/>and intent.md"]
-    S7["Keep cost flat"] --> F7["Effort and cache<br/>settings per request"]
-```
+| Step | File |
+| --- | --- |
+| Run more work | `.claude/agents/*.md`, one file per subagent |
+| Let each run check itself | The verification block in `CLAUDE.md` |
+| Test the configuration | `evals/*.json` and a CI workflow |
+| Turn rules into gates | Hooks in `settings.json`, and managed settings |
+| Ship up to the production gate | Pipeline jobs, `.mcp.json`, and `REVIEW.md` |
+| Let monitoring start the loop | `bands.yaml` and `intent.md` |
+| Keep cost flat | Effort and cache settings on each request |
 
 So nothing here is a new system to install. Each check is a small text file in the repository, reviewed like any other change.
 
