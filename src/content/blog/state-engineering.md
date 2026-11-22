@@ -58,15 +58,15 @@ Its definition is the cleanest I've found:
 
 And it names five subsystems. Five, not six: permissions live inside Tools, rather than in a separate guardrail layer.
 
-```mermaid
-flowchart TD
-    H["<b>the harness</b><br/>everything outside the model weights"]
-    H --> I["<b>Instructions</b><br/>the entry file, and what it links to"]
-    H --> T["<b>Tools</b><br/>real access, least privilege"]
-    H --> E["<b>Environment</b><br/>pinned versions, a reproducible box"]
-    H --> S["<b>State</b><br/>what survives the session"]
-    H --> F["<b>Feedback</b><br/>the command that proves it worked"]
-```
+| Subsystem | What it covers |
+| --- | --- |
+| **Instructions** | The entry file, and what it links to |
+| **Tools** | Real access, least privilege |
+| **Environment** | Pinned versions, a reproducible box |
+| **State** | What survives the session |
+| **Feedback** | The command that proves it worked |
+
+Together the five are the harness: everything outside the model weights.
 
 The course's rule is that missing any one of the five gives you an incomplete harness, and the agent "will always feel awkward to use." Its diagnostic advice is the line I'd put on a wall:
 

@@ -102,27 +102,14 @@ Now the punchline I promised. A week before I found these papers, I published [a
 
 ## The three doors, side by side
 
-<div align="center">
-
-```mermaid
-graph TD
-    Wall["The wall<br/>compute cost exploding · data running out · benchmarks bending"]
-    Wall --> D1["Door 1 · MoE<br/>keep the paradigm, cut cost per token"]
-    Wall --> D2["Door 2 · World models<br/>change what is learned:<br/>predict the world, in representation space"]
-    Wall --> D3["Door 3 · Memory and sleep<br/>change how it learns over time:<br/>a spectrum of timescales"]
-    D1 --> S1["Status: already won.<br/>Nearly every frontier model is sparse."]
-    D2 --> S2["Status: real physics learned,<br/>zero-shot robots — no language yet"]
-    D3 --> S3["Status: strong results<br/>at research scale, not yet frontier"]
-```
-
-</div>
+All three doors open from the same wall: compute cost exploding, data running out, benchmarks bending. The table sets the doors side by side.
 
 | | MoE | World models (JEPA) | Titans / Hope / Sleep |
 |---|---|---|---|
 | Attacks | Cost per token | What the model learns from | Frozen weights, forgetting |
-| Core move | Route each token to few experts | Predict in representation space | Memory at many update frequencies |
+| Core move | Keep the paradigm and route each token to few experts | Change what is learned: predict the world in representation space | Change how it learns over time: memory at a spectrum of update frequencies |
 | Changes the paradigm? | No — a patch inside it | Yes — replaces generation as the goal | Partly — transformer plus a memory system |
-| Where it is today | In production everywhere | Research + robotics demos | Research scale only |
+| Where it is today | Already won: nearly every frontier model is sparse, in production everywhere | Real physics learned and zero-shot robots, in research and robotics demos. No language yet | Strong results at research scale, not yet frontier |
 | Doesn't fix | Frozen weights, long-context cost | Language, planning | Still a transformer at heart, unproven at frontier scale |
 
 The neat part: **these three don't compete, they compose.** The sleep paper grows MoE-style experts as its memory cells. JEPA models have transformers inside. Nothing stops a future model from being all three at once — sparse, predicting in representation space, and consolidating memory while it sleeps. If I had to bet on "the model of 2028," that's the shape I'd sketch.

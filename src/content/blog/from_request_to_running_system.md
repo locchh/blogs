@@ -226,17 +226,14 @@ Looking up coverage is the same problem with higher stakes, because coverage tab
 
 </div>
 
-The diagram shows the map that case ends with: one owner, or a split, for each step.
+The table shows the map that case ends with: one owner, or a split, for each step.
 
-```mermaid
-flowchart LR
-    R["Read the claim"] --> M1["Model<br/>with a constrained<br/>output schema"]
-    P["Decide priority"] --> S1["Rules engine<br/>the model calls it"]
-    C["Look up coverage"] --> S2["Live system<br/>through a tool"]
-    E["Email the adjuster"] --> M2["Model drafts"]
-    E --> S3["Email system sends"]
-    E --> H["Person approves<br/>above a value threshold"]
-```
+| Step | Owner |
+| --- | --- |
+| Read the claim | The model, with a constrained output schema |
+| Decide priority | The rules engine, which the model calls |
+| Look up coverage | The live system, through a tool |
+| Email the adjuster | Split three ways: the model drafts, the email system sends, and a person approves above a value threshold |
 
 So the useful question is never "where can the model help?" It is "where do the four properties argue for the model over the system that already does this right?"
 

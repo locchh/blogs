@@ -108,21 +108,14 @@ A single call becomes reliable in three steps: diagnose the prompt, move control
 
 When a prompt breaks, the instinct is to add more words and try again. That rarely helps, because rewording does not add the missing structural piece. Clearer phrasing will not stop a model from blurring your instructions with your input data. And "please format this correctly" will not stop a drifting output format.
 
-So diagnose first, then add the one technique that addresses the failure. Four failures are common, and each points to a fix, as the diagram shows.
+So diagnose first, then add the one technique that addresses the failure. Four failures are common, and each points to a fix, as the table shows.
 
-```mermaid
-flowchart LR
-    P["The prompt fails"] --> A["Wrong shape<br/>a sentence, not a label<br/>prose, not JSON"]
-    P --> B["Scope or tone drifts,<br/>worse deeper into<br/>the conversation"]
-    P --> C["Task understood,<br/>structure invented"]
-    P --> D["Clean on tested cases,<br/>breaks on a variant"]
-    A --> A2["Add an<br/>output constraint"]
-    B --> B2["Sharpen the system prompt<br/>it is too vague"]
-    C --> C2["Add examples"]
-    D --> D2["Add a constraint or example<br/>that covers the variant"]
-    class A,B,C,D check
-    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
-```
+| The failure | The fix |
+| --- | --- |
+| Wrong shape: a sentence, not a label, or prose, not JSON | Add an output constraint |
+| Scope or tone drifts, worse deeper into the conversation | Sharpen the system prompt, because it is too vague |
+| Task understood, structure invented | Add examples |
+| Clean on tested cases, breaks on a variant | Add a constraint or example that covers the variant |
 
 An **output constraint** names the form, the field names, and the stopping point. The **system prompt** is the behavioral contract for the whole session. Examples are needed because the model cannot infer an exact shape from a description.
 
@@ -304,19 +297,14 @@ The answer is **context engineering**: deciding in advance what enters the windo
 
 Context engineering starts with the model choice, which sets the price and speed floor, and with an honest view of the window as working memory. Production fills that memory sooner than development: inputs are longer, production tool outputs are often three to five times longer than test fixtures, and sessions run longer.
 
-Four strategies keep a session in budget. The diagram shows the situation each one fits and what it costs.
+Four strategies keep a session in budget. The table shows the situation each one fits and what it costs.
 
-```mermaid
-flowchart LR
-    A["After an<br/>unproductive detour"] --> P["Pruning"]
-    B["Same work, near<br/>the ceiling"] --> C["Compaction"]
-    D["Next task is unrelated,<br/>old context would bias it"] --> L["Clearing"]
-    E["Exploration: long journey,<br/>short answer"] --> S["Subagent handoff"]
-    P --> P2["Lose what was learned<br/>along the way"]
-    C --> C2["Lose what the<br/>summary leaves out"]
-    L --> L2["What must persist<br/>needs a durable home"]
-    S --> S2["Lose sight of how<br/>it got there"]
-```
+| Situation | Strategy | What it costs |
+| --- | --- | --- |
+| After an unproductive detour | Pruning | You lose what was learned along the way |
+| Same work, near the ceiling | Compaction | You lose what the summary leaves out |
+| Next task is unrelated, and old context would bias it | Clearing | What must persist needs a durable home |
+| Exploration: a long journey, a short answer | Subagent handoff | You lose sight of how it got there |
 
 **Pruning** rewinds to an earlier message and drops what came after. **Compaction** summarizes history into a shorter version that keeps what matters. In Claude Code it is a command. On the API it is a server-side option in beta, or a summarizer you write yourself. **Clearing** starts fresh. A **subagent** handoff gives a self-contained task to a separate agent with its own context window and only what it needs, and gets back a short result.
 
