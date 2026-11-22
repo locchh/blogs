@@ -45,6 +45,22 @@ A post is read from top to bottom, like a thread. Splitting text into headings, 
 - **Every paragraph opens by picking up the previous one.** Use the plain linking words a reader needs: so, but, because, then, that is why, for example. A paragraph that could be deleted without the next one noticing does not belong, or it is in the wrong place.
 - **Every sentence follows from the one before it.** Repeat the key word of the last sentence, or point back to it with "this" plus a noun ("this gap", "that rule"). Never start a new subject without saying how it connects.
 - **Lists, tables, and diagrams sit inside the thread.** One sentence leads in and says what the reader should look for. One sentence leads out and says what it means for the argument. Never put two lists, tables, or diagrams back to back without prose between them.
+- **Every example is tied to its point at both ends.** A post may have many examples, but each one opens by naming the claim it tests, in the words of the paragraph before ("That is the trap in one real case:"), and closes by saying what it proved and handing over to the next point ("So the rule had not changed; what enforced it had."). The closing sentence must not just repeat the opening one. An example that a reader could move to another section without noticing is not tied to anything.
+- **Show each example in an example box**, so the reader sees where the argument stops and the example starts. The opening sentence stays above the box, the closing sentence below it, and the story goes inside:
+
+  ```
+  <div class="example">
+
+  **Example · A 180-lawyer law firm**
+
+  The story, in normal markdown.
+
+  </div>
+  ```
+
+  Box only a worked case: one situation followed through several of the post's decisions, like a firm whose goal, constraints and design are walked through together. Use few boxes, a handful per post at most, or the box stops meaning anything. A short story that proves one sentence (a failure, an anecdote, a before-and-after) stays in the text as a normal paragraph, tied to its point at both ends. So do a hypothetical, a checklist, and a general description.
+
+  Keep the blank lines, or the markdown inside will not render. A case gets a box inside the section it proves, not an H3 of its own. Keep mermaid diagrams outside the box. The style lives in `src/styles/global.css` (`.example`).
 - **No orphan sections.** A section that only holds reference material (a table of terms, a checklist) and does not move the argument goes to the end of the post, or out.
 - **Cut what is off the thread.** If a part does not serve the one question the post answers, cut it or move it to another post, even when it is correct and well written.
 
