@@ -200,15 +200,33 @@
 <p>Only the first step stays fully with the model. Reading the claim is language work, and with a constrained output <strong>schema</strong> the model is in its comfort zone. Deciding priority only looks like language work. It is a <strong>deterministic rule</strong> the customer already keeps in a rules engine, so the model does not guess.</p>
 <p>Looking up coverage is the same problem with higher stakes, because coverage tables change and the model cannot know its memory is stale. And emailing the adjuster splits: drafting is language work, sending is not.</p>
 </div>
-<p>The diagram shows the map that case ends with: one owner, or a split, for each step.</p>
-<pre><code class="language-mermaid">flowchart LR
-    R["Read the claim"] --> M1["Model&#x3C;br/>with a constrained&#x3C;br/>output schema"]
-    P["Decide priority"] --> S1["Rules engine&#x3C;br/>the model calls it"]
-    C["Look up coverage"] --> S2["Live system&#x3C;br/>through a tool"]
-    E["Email the adjuster"] --> M2["Model drafts"]
-    E --> S3["Email system sends"]
-    E --> H["Person approves&#x3C;br/>above a value threshold"]
-</code></pre>
+<p>The table shows the map that case ends with: one owner, or a split, for each step.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read the claim</td>
+<td>The model, with a constrained output schema</td>
+</tr>
+<tr>
+<td>Decide priority</td>
+<td>The rules engine, which the model calls</td>
+</tr>
+<tr>
+<td>Look up coverage</td>
+<td>The live system, through a tool</td>
+</tr>
+<tr>
+<td>Email the adjuster</td>
+<td>Split three ways: the model drafts, the email system sends, and a person approves above a value threshold</td>
+</tr>
+</tbody>
+</table>
 <p>So the useful question is never “where can the model help?” It is “where do the four properties argue for the model over the system that already does this right?”</p>
 <p>A wrong split is costly. Every lookup a database could answer becomes a paid model call. Logic moved from a table into a prompt stops failing in traceable ways. And when the model becomes the source of truth, answers drift with no error and no warning. The delegation map above showed the split done right. The next case shows it done wrong, and the second of those costs: logic moved from a table into a prompt.</p>
 <p>One customer sent any claim over £5,000 to a senior adjuster, enforced by a SQL check. On a scoping call, the architect suggested the model extract the amount and route the claim in one step: simpler, and a nicer demo. Three months later, an audit found 41 misrouted claims out of 14,000.</p>

@@ -70,14 +70,37 @@
 <p>Harness: Everything outside the model — instructions, tools, environment, state management, verification feedback. If it’s not model weights, it’s harness.</p>
 </blockquote>
 <p>And it names five subsystems. Five, not six: permissions live inside Tools, rather than in a separate guardrail layer.</p>
-<pre><code class="language-mermaid">flowchart TD
-    H["&#x3C;b>the harness&#x3C;/b>&#x3C;br/>everything outside the model weights"]
-    H --> I["&#x3C;b>Instructions&#x3C;/b>&#x3C;br/>the entry file, and what it links to"]
-    H --> T["&#x3C;b>Tools&#x3C;/b>&#x3C;br/>real access, least privilege"]
-    H --> E["&#x3C;b>Environment&#x3C;/b>&#x3C;br/>pinned versions, a reproducible box"]
-    H --> S["&#x3C;b>State&#x3C;/b>&#x3C;br/>what survives the session"]
-    H --> F["&#x3C;b>Feedback&#x3C;/b>&#x3C;br/>the command that proves it worked"]
-</code></pre>
+<table>
+<thead>
+<tr>
+<th>Subsystem</th>
+<th>What it covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Instructions</strong></td>
+<td>The entry file, and what it links to</td>
+</tr>
+<tr>
+<td><strong>Tools</strong></td>
+<td>Real access, least privilege</td>
+</tr>
+<tr>
+<td><strong>Environment</strong></td>
+<td>Pinned versions, a reproducible box</td>
+</tr>
+<tr>
+<td><strong>State</strong></td>
+<td>What survives the session</td>
+</tr>
+<tr>
+<td><strong>Feedback</strong></td>
+<td>The command that proves it worked</td>
+</tr>
+</tbody>
+</table>
+<p>Together the five are the harness: everything outside the model weights.</p>
 <p>The course’s rule is that missing any one of the five gives you an incomplete harness, and the agent “will always feel awkward to use.” Its diagnostic advice is the line I’d put on a wall:</p>
 <blockquote>
 <p>When things fail, don’t swap the model first — check the harness.</p>

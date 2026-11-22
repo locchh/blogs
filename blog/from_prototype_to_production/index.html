@@ -75,19 +75,33 @@
 <p>A single call becomes reliable in three steps: diagnose the prompt, move control into the API where you can, and decide how much the model should think first. Each step guards against a failure that is easy to miss in development and expensive to fix once it ships.</p>
 <h3 id="diagnose-the-failure-before-you-re-prompt">Diagnose the failure before you re-prompt</h3>
 <p>When a prompt breaks, the instinct is to add more words and try again. That rarely helps, because rewording does not add the missing structural piece. Clearer phrasing will not stop a model from blurring your instructions with your input data. And “please format this correctly” will not stop a drifting output format.</p>
-<p>So diagnose first, then add the one technique that addresses the failure. Four failures are common, and each points to a fix, as the diagram shows.</p>
-<pre><code class="language-mermaid">flowchart LR
-    P["The prompt fails"] --> A["Wrong shape&#x3C;br/>a sentence, not a label&#x3C;br/>prose, not JSON"]
-    P --> B["Scope or tone drifts,&#x3C;br/>worse deeper into&#x3C;br/>the conversation"]
-    P --> C["Task understood,&#x3C;br/>structure invented"]
-    P --> D["Clean on tested cases,&#x3C;br/>breaks on a variant"]
-    A --> A2["Add an&#x3C;br/>output constraint"]
-    B --> B2["Sharpen the system prompt&#x3C;br/>it is too vague"]
-    C --> C2["Add examples"]
-    D --> D2["Add a constraint or example&#x3C;br/>that covers the variant"]
-    class A,B,C,D check
-    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
-</code></pre>
+<p>So diagnose first, then add the one technique that addresses the failure. Four failures are common, and each points to a fix, as the table shows.</p>
+<table>
+<thead>
+<tr>
+<th>The failure</th>
+<th>The fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wrong shape: a sentence, not a label, or prose, not JSON</td>
+<td>Add an output constraint</td>
+</tr>
+<tr>
+<td>Scope or tone drifts, worse deeper into the conversation</td>
+<td>Sharpen the system prompt, because it is too vague</td>
+</tr>
+<tr>
+<td>Task understood, structure invented</td>
+<td>Add examples</td>
+</tr>
+<tr>
+<td>Clean on tested cases, breaks on a variant</td>
+<td>Add a constraint or example that covers the variant</td>
+</tr>
+</tbody>
+</table>
 <p>An <strong>output constraint</strong> names the form, the field names, and the stopping point. The <strong>system prompt</strong> is the behavioral contract for the whole session. Examples are needed because the model cannot infer an exact shape from a description.</p>
 <p>Across all four, <strong>XML tags</strong> with descriptive names, such as <code>&#x3C;my_code></code> and <code>&#x3C;docs></code>, mark where instructions end and data begins, so the model does not read one as the other. Each failure is a missing piece of structure, which is why more words cannot supply it.</p>
 <p>Of the four fixes, examples need a rule of their own.</p>
@@ -243,17 +257,38 @@
 <p>The answer is <strong>context engineering</strong>: deciding in advance what enters the window, what comes back out as a summary, and what never enters at all.</p>
 <h3 id="decide-what-leaves-the-window">Decide what leaves the window</h3>
 <p>Context engineering starts with the model choice, which sets the price and speed floor, and with an honest view of the window as working memory. Production fills that memory sooner than development: inputs are longer, production tool outputs are often three to five times longer than test fixtures, and sessions run longer.</p>
-<p>Four strategies keep a session in budget. The diagram shows the situation each one fits and what it costs.</p>
-<pre><code class="language-mermaid">flowchart LR
-    A["After an&#x3C;br/>unproductive detour"] --> P["Pruning"]
-    B["Same work, near&#x3C;br/>the ceiling"] --> C["Compaction"]
-    D["Next task is unrelated,&#x3C;br/>old context would bias it"] --> L["Clearing"]
-    E["Exploration: long journey,&#x3C;br/>short answer"] --> S["Subagent handoff"]
-    P --> P2["Lose what was learned&#x3C;br/>along the way"]
-    C --> C2["Lose what the&#x3C;br/>summary leaves out"]
-    L --> L2["What must persist&#x3C;br/>needs a durable home"]
-    S --> S2["Lose sight of how&#x3C;br/>it got there"]
-</code></pre>
+<p>Four strategies keep a session in budget. The table shows the situation each one fits and what it costs.</p>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Strategy</th>
+<th>What it costs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>After an unproductive detour</td>
+<td>Pruning</td>
+<td>You lose what was learned along the way</td>
+</tr>
+<tr>
+<td>Same work, near the ceiling</td>
+<td>Compaction</td>
+<td>You lose what the summary leaves out</td>
+</tr>
+<tr>
+<td>Next task is unrelated, and old context would bias it</td>
+<td>Clearing</td>
+<td>What must persist needs a durable home</td>
+</tr>
+<tr>
+<td>Exploration: a long journey, a short answer</td>
+<td>Subagent handoff</td>
+<td>You lose sight of how it got there</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Pruning</strong> rewinds to an earlier message and drops what came after. <strong>Compaction</strong> summarizes history into a shorter version that keeps what matters. In Claude Code it is a command. On the API it is a server-side option in beta, or a summarizer you write yourself. <strong>Clearing</strong> starts fresh. A <strong>subagent</strong> handoff gives a self-contained task to a separate agent with its own context window and only what it needs, and gets back a short result.</p>
 <p>When you write your own compaction, the summarizer prompt decides what the agent will know next. “Summarize the conversation so far” tends to drop task-critical state: which files changed, what was decided at a branch point, and which errors were hit and fixed.</p>
 <p>By contrast, “Summarize the conversation, preserving every file path modified, every decision made, and every error encountered with its resolution” produces a summary the agent can use. An under-specified summarizer is one of the most common reasons agents fail across sessions.</p>
