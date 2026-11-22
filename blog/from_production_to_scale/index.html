@@ -250,6 +250,445 @@
 <p>The default model was lowered for the role the team’s members hold, and the cap was left alone. The next month the team ran under its cap, with the same volume of work. So the review asks one question before a cap moves: is a setting wasting the spend, or was the cap set below what the work needs? Change the setting in the first case, and re-base the cap only in the second.</p>
 <p><strong>Lesson: at scale, the person stops working inside the loop and writes its checks.</strong> Parallel streams are bounded by review, runs check themselves, evals test the configuration, hooks hold the rules, the pipeline stops at production, monitoring starts the next loop, and defaults keep the bill flat. The person writes those checks and reads what they send back.</p>
 <p>So what can you do this week? Write down every check you did by hand on agent output in the last five days. Take the one you did most often, and turn it into a hook or an eval that runs without you.</p>
+<h2 id="appendix-with-the-files-behind-each-check">Appendix with the files behind each check</h2>
+<p>Whichever check you pick, it ends up as a file. The argument above says which checks to build and why. This appendix shows what each one looks like on disk, in the same order as the seven steps. The snippets are shortened from the course’s examples and use Claude Code’s formats. File names, flags, and setting keys change, so check the current documentation before you copy one.</p>
+<p>The diagram maps each step of the post to the file that carries it.</p>
+<pre><code class="language-mermaid">flowchart LR
+    S1["Run more work"] --> F1[".claude/agents/*.md&#x3C;br/>one file per subagent"]
+    S2["Let each run&#x3C;br/>check itself"] --> F2["CLAUDE.md&#x3C;br/>verification block"]
+    S3["Test the&#x3C;br/>configuration"] --> F3["evals/*.json&#x3C;br/>and a CI workflow"]
+    S4["Turn rules&#x3C;br/>into gates"] --> F4["settings.json hooks,&#x3C;br/>managed settings"]
+    S5["Ship up to the&#x3C;br/>production gate"] --> F5["Pipeline jobs, .mcp.json,&#x3C;br/>REVIEW.md"]
+    S6["Let monitoring&#x3C;br/>start the loop"] --> F6["bands.yaml&#x3C;br/>and intent.md"]
+    S7["Keep cost flat"] --> F7["Effort and cache&#x3C;br/>settings per request"]
+</code></pre>
+<p>So nothing here is a new system to install. Each check is a small text file in the repository, reviewed like any other change.</p>
+<h3 id="a-subagent-that-knows-when-to-stop">A subagent that knows when to stop</h3>
+<p>A subagent is one markdown file in <code>.claude/agents/</code>. The frontmatter says when to use it and which tools it may touch, and the body is its system prompt. This is the verifier from “Give the session a check it can run itself.”</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
+<span class="line"><span style="color:#E1E4E8">name: verifier</span></span>
+<span class="line"><span style="color:#E1E4E8">description: Runs the app and checks the change works before the session reports done</span></span>
+<span class="line"><span style="color:#E1E4E8">tools: Bash, Read</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
+<span class="line"><span style="color:#E1E4E8">Start the app with make run. Exercise the changed behavior and the two</span></span>
+<span class="line"><span style="color:#E1E4E8">nearest neighboring flows. Report what you ran, what you saw, and any</span></span>
+<span class="line"><span style="color:#E1E4E8">behavior that does not match plan.md. Do not fix anything; report only.</span></span></code></pre>
+<p>The <code>description</code> does two jobs: the main session reads it to decide when to launch the subagent, and uses it again to write the task it hands over. The diagram shows both uses, and what comes back.</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant M as Main session
+    participant S as Subagent
+    Note over M: Reads every subagent's name&#x3C;br/>and description
+    M->>S: Launches it with a task written&#x3C;br/>from the description
+    Note over S: Works in its own context:&#x3C;br/>file reads, searches, commands
+    S-->>M: Returns only a summary,&#x3C;br/>in the output format
+    Note over M: The in-between steps&#x3C;br/>never enter its context
+</code></pre>
+<p>So put the handover rule in the description too, such as “tell the agent exactly which files to review.”</p>
+<p>For a subagent that returns findings, end its prompt with an output format. The format is what tells it the work is finished. A reviewer’s might be:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#E1E4E8">Provide your review in this structure:</span></span>
+<span class="line"><span style="color:#FFAB70">1.</span><span style="color:#E1E4E8"> Summary: what you reviewed and your overall assessment</span></span>
+<span class="line"><span style="color:#FFAB70">2.</span><span style="color:#E1E4E8"> Critical issues: security, data integrity, or logic errors</span></span>
+<span class="line"><span style="color:#FFAB70">3.</span><span style="color:#E1E4E8"> Major issues: quality or architecture problems</span></span>
+<span class="line"><span style="color:#FFAB70">4.</span><span style="color:#E1E4E8"> Minor issues: style and documentation</span></span>
+<span class="line"><span style="color:#FFAB70">5.</span><span style="color:#E1E4E8"> Approval status: ready to merge, or needs changes</span></span>
+<span class="line"><span style="color:#FFAB70">6.</span><span style="color:#E1E4E8"> Obstacles encountered: setup problems, workarounds, commands that</span></span>
+<span class="line"><span style="color:#E1E4E8">   needed special flags</span></span></code></pre>
+<p>The tool list then follows the job, as the table shows.</p>
+<table>
+<thead>
+<tr>
+<th>Subagent</th>
+<th>Tools</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Research</td>
+<td><code>Glob, Grep, Read</code></td>
+<td>It cannot change a file by accident</td>
+</tr>
+<tr>
+<td>Code reviewer</td>
+<td><code>Bash, Glob, Grep, Read</code></td>
+<td>It needs <code>git diff</code>, and still cannot edit</td>
+</tr>
+<tr>
+<td>Code modifier</td>
+<td>adds <code>Edit, Write</code></td>
+<td>Changing code is its job</td>
+</tr>
+</tbody>
+</table>
+<p>One more field matters once skills exist: a subagent does not see skills the main session already loaded. List the ones it needs in a <code>skills:</code> field, and keep <code>Skill</code> in its tool list.</p>
+<h3 id="a-verification-block-the-session-reads">A verification block the session reads</h3>
+<p>The one-command check lives in CLAUDE.md, where every session finds it. The block names each command with what a healthy run prints, and states the rule that protects the tests.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold">## Verifying your work</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> Build: make build (must finish with "Build succeeded")</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> Test: make test (all green; never skip or delete a failing test)</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> Lint: make lint (zero warnings)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Run all three before reporting any task complete, and paste the output.</span></span>
+<span class="line"><span style="color:#E1E4E8">If a test fails, fix the code, not the test.</span></span></code></pre>
+<p>The last line is advice until a hook backs it. The hooks further down do that.</p>
+<h3 id="an-eval-as-a-task-with-checks">An eval as a task with checks</h3>
+<p>An eval for the configuration is one JSON file per task. This one is the logging case from “Rerun the evals whenever the configuration changes,” shortened.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  "name"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"status-no-pii-in-logs"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  "from"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"9d04e7a"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  "prompt"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Add debug logging to the claim status endpoint so on-call can see which claim was asked for and what we returned. Run the tests before you finish."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  "may_change"</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">"claims-api/routes"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"claims-api/tests"</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#79B8FF">  "checks"</span><span style="color:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#E1E4E8">    { </span><span style="color:#79B8FF">"name"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"tests pass"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"run"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"make test"</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#E1E4E8">    { </span><span style="color:#79B8FF">"name"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"lint clean"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"run"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"make lint"</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#E1E4E8">    { </span><span style="color:#79B8FF">"name"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"no pii in logs"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"run"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"scripts/check-endpoints.sh claims-api/routes/status.py"</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">  ]</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>Each field has one job.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What it holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>from</code></td>
+<td>The commit the run starts from: the code just before the real task</td>
+</tr>
+<tr>
+<td><code>prompt</code></td>
+<td>The request, as a person would type it</td>
+</tr>
+<tr>
+<td><code>may_change</code></td>
+<td>The only folders the run may touch. A change anywhere else fails the eval</td>
+</tr>
+<tr>
+<td><code>checks</code></td>
+<td>Commands that must each exit zero</td>
+</tr>
+</tbody>
+</table>
+<p>The workflow that runs the suite needs two triggers: any change to the configuration, and a schedule.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#79B8FF">on</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  pull_request</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    paths</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">'CLAUDE.md'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'.claude/**'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'evals/**'</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#85E89D">  schedule</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">cron</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'0 2 * * *'</span></span></code></pre>
+<p>For each eval, the job checks out the <code>from</code> commit, copies in the CLAUDE.md and <code>.claude/</code> folder of the branch under test, and runs the prompt non-interactively. Three details keep the result honest:</p>
+<ul>
+<li>Delete the <code>evals/</code> folder from the run’s checkout, so the agent never sees its own checks.</li>
+<li>Run the checks from a copy made before the run, so the agent cannot edit them.</li>
+<li>Do not start the run in bare mode. Bare mode skips CLAUDE.md, skills, and hooks, which are the files under test.</li>
+</ul>
+<h3 id="a-hook-that-returns-a-decision">A hook that returns a decision</h3>
+<p>A hook is registered in a settings file: an event, a matcher for the tools it watches, and the script to run. This entry puts the release gate in front of the release tool on every deploy server.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  "hooks"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">    "PreToolUse"</span><span style="color:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#E1E4E8">      {</span></span>
+<span class="line"><span style="color:#79B8FF">        "matcher"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"mcp__deploy-.*__release"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">        "hooks"</span><span style="color:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#E1E4E8">          { </span><span style="color:#79B8FF">"type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"command"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">            "command"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"${CLAUDE_PROJECT_DIR}/.claude/hooks/release-gate.sh"</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">        ]</span></span>
+<span class="line"><span style="color:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#E1E4E8">    ]</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>The script answers in one of two ways. The simple way is the exit code.</p>
+<table>
+<thead>
+<tr>
+<th>Exit code</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>The action goes ahead. JSON on standard output is read as a decision</td>
+</tr>
+<tr>
+<td>2</td>
+<td>The action is blocked, and standard error goes back to the session</td>
+</tr>
+<tr>
+<td>Anything else</td>
+<td>Not a block. The error is logged and the action runs</td>
+</tr>
+</tbody>
+</table>
+<p>The fuller way is to exit 0 and print a decision as JSON. A pre-tool hook can allow, deny, or ask.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  "hookSpecificOutput"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">    "hookEventName"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"PreToolUse"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">    "permissionDecision"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"deny"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">    "permissionDecisionReason"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Production needs an approved change ticket. Open one for this version, wait for the release manager to approve it, then call release again with the ticket number."</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>The diagram puts the two ways together. Follow the branch on the left to see why exit 1 is a trap.</p>
+<pre><code class="language-mermaid">flowchart TD
+    T["The session wants&#x3C;br/>to call a tool"] --> H["The pre-tool hook runs"]
+    H --> X{"Exit code?"}
+    X -->|"Any other code"| R1["Error is logged,&#x3C;br/>the tool runs anyway"]
+    X -->|"2"| B["Blocked&#x3C;br/>stderr goes to the session"]
+    X -->|"0"| J{"JSON decision&#x3C;br/>on stdout?"}
+    J -->|"None"| N["Normal permission&#x3C;br/>rules apply"]
+    J -->|"allow"| A["The tool runs"]
+    J -->|"deny"| B2["Blocked&#x3C;br/>the reason goes to the session"]
+    J -->|"ask"| Q["The person is asked&#x3C;br/>denied if nobody is there"]
+    class X,J check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p>The reason on a deny is shown to the session, so it should name the route to approval. The reason on an ask is shown to the person. To rewrite a call instead of blocking it, return <code>updatedInput</code> with the whole input, including the fields that did not change.</p>
+<p>A few events cover most gates.</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>When it fires</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PreToolUse</code></td>
+<td>Before a tool call</td>
+<td>Block, ask, or rewrite</td>
+</tr>
+<tr>
+<td><code>PostToolUse</code></td>
+<td>After a tool call succeeds</td>
+<td>Format, lint, run a policy script</td>
+</tr>
+<tr>
+<td><code>Stop</code></td>
+<td>When the session tries to end its turn</td>
+<td>Run the tests and refuse on failure</td>
+</tr>
+<tr>
+<td><code>SessionStart</code></td>
+<td>At the start, and after compaction</td>
+<td>Put key state back into context</td>
+</tr>
+</tbody>
+</table>
+<p>Hooks in a project file can be switched off locally, which is why the must-hold ones move to managed settings.</p>
+<h3 id="managed-settings-for-a-regulated-team">Managed settings for a regulated team</h3>
+<p>Managed settings are one JSON file that an administrator deploys. The table lists the keys behind each job in “Lock the gates where nobody can switch them off.”</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>What it enforces</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>permissions.deny</code></td>
+<td>No reads of <code>.env</code> files or secrets folders, no web fetches, no <code>curl</code> or <code>wget</code></td>
+</tr>
+<tr>
+<td><code>permissions.allow</code></td>
+<td>The safe inner work runs unasked: git, build, test, lint</td>
+</tr>
+<tr>
+<td><code>disableBypassPermissionsMode</code> and <code>allowManagedPermissionRulesOnly</code></td>
+<td>No engineer, project file, or flag can widen the rules</td>
+</tr>
+<tr>
+<td><code>sandbox</code> with <code>failIfUnavailable</code></td>
+<td>The agent refuses to start without the sandbox, and a failed command cannot be retried outside it</td>
+</tr>
+<tr>
+<td><code>sandbox.network.allowedDomains</code></td>
+<td>Shell commands reach only the listed hosts</td>
+</tr>
+<tr>
+<td><code>sandbox.credentials</code></td>
+<td>SSH and cloud key files are unreadable, and named secrets are stripped from the environment</td>
+</tr>
+<tr>
+<td><code>allowManagedHooksOnly</code></td>
+<td>Only hooks defined here run, so the gates must live in this file</td>
+</tr>
+<tr>
+<td><code>allowManagedMcpServersOnly</code> and <code>strictKnownMarketplaces</code></td>
+<td>Tools and plugins come only from the approved list</td>
+</tr>
+<tr>
+<td><code>requiredMinimumVersion</code></td>
+<td>The agent refuses to start below the assessed version</td>
+</tr>
+</tbody>
+</table>
+<p>Two of these enforce one goal at different layers. The permission rule blocks the web-fetch tool, and the sandbox’s domain list blocks a shell command that tries the same thing.</p>
+<h3 id="a-pipeline-job-that-cannot-wait-for-an-answer">A pipeline job that cannot wait for an answer</h3>
+<p>In CI the agent runs with <code>claude -p</code>, which takes a prompt, works, and exits. The first jobs only read.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#E1E4E8">- </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Triage failed build</span></span>
+<span class="line"><span style="color:#85E89D">  if</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">failure()</span></span>
+<span class="line"><span style="color:#85E89D">  run</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">></span></span>
+<span class="line"><span style="color:#9ECBFF">    claude -p "Read the build log at out/build.log. Identify the most</span></span>
+<span class="line"><span style="color:#9ECBFF">    likely cause, say whether the failure looks flaky or real, and write</span></span>
+<span class="line"><span style="color:#9ECBFF">    a three-line summary for the PR thread." >> triage.md</span></span></code></pre>
+<p>A job that acts names every tool it may use and runs in do-not-ask mode, so anything off the list is denied and the job never hangs.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#E1E4E8">- </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Release to staging and roll back if unhealthy</span></span>
+<span class="line"><span style="color:#85E89D">  env</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    DEPLOY_STAGING_TOKEN</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">${{ secrets.DEPLOY_STAGING_TOKEN }}</span></span>
+<span class="line"><span style="color:#85E89D">  run</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">></span></span>
+<span class="line"><span style="color:#9ECBFF">    claude -p "Release version ${{ github.sha }} to staging, then call</span></span>
+<span class="line"><span style="color:#9ECBFF">    status. If the 5xx rate on any endpoint is over 1%, roll back.</span></span>
+<span class="line"><span style="color:#9ECBFF">    Finish with three lines for the release notes."</span></span>
+<span class="line"><span style="color:#9ECBFF">    --allowedTools "mcp__deploy-staging__release,mcp__deploy-staging__status,mcp__deploy-staging__rollback"</span></span>
+<span class="line"><span style="color:#9ECBFF">    --permission-mode dontAsk >> release-notes.md</span></span></code></pre>
+<p>The job holds only the staging credential, because each environment has its own server entry in <code>.mcp.json</code>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  "mcpServers"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">    "deploy-staging"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">      "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"http"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      "url"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"https://deploy.example.com/mcp/staging"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      "headers"</span><span style="color:#E1E4E8">: { </span><span style="color:#79B8FF">"Authorization"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Bearer ${DEPLOY_STAGING_TOKEN}"</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>A few more flags make such runs easier to check.</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--output-format json</code></td>
+<td>A result a script can read, with an error field and a session ID</td>
+</tr>
+<tr>
+<td><code>--json-schema</code></td>
+<td>Forces the answer into your schema</td>
+</tr>
+<tr>
+<td><code>--max-turns</code></td>
+<td>A hard cap on the loop</td>
+</tr>
+<tr>
+<td><code>--resume</code></td>
+<td>Continues an earlier run by its session ID, for work in two passes</td>
+</tr>
+<tr>
+<td><code>--bare</code></td>
+<td>Skips project configuration for identical runs on every machine. Not for evals of that configuration</td>
+</tr>
+</tbody>
+</table>
+<p>The review policy is one more file in this pipeline, <code>REVIEW.md</code> at the repository root:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold"># Review instructions</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Passes</span></span>
+<span class="line"><span style="color:#E1E4E8">Run three passes and tag each finding with its pass:</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> Bugs: logic errors, broken edge cases, subtle regressions</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> Security: injection risks, authentication gaps, personal data in logs</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> Compliance: the change matches spec.md, plan.md and our design principles</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## What Important means here</span></span>
+<span class="line"><span style="color:#E1E4E8">Reserve Important for findings that would break behavior, leak data</span></span>
+<span class="line"><span style="color:#E1E4E8">or breach a policy. Style and naming are nits.</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Cap the nits</span></span>
+<span class="line"><span style="color:#E1E4E8">Report at most five nits per review; summarize the rest as a count.</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Do not report</span></span>
+<span class="line"><span style="color:#E1E4E8">Generated files under src/gen/ and anything CI already enforces.</span></span></code></pre>
+<p>The cap on nits matters more than it looks: a review that buries two real findings under thirty style notes gets skimmed.</p>
+<h3 id="alert-levels-and-the-finding-they-produce">Alert levels and the finding they produce</h3>
+<p>The alert levels from “Let rarer readings unlock more action” are a short config file, kept in version control beside the detection script.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">metric</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">status_5xx_rate</span></span>
+<span class="line"><span style="color:#85E89D">baseline</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">rolling_30d</span></span>
+<span class="line"><span style="color:#85E89D">rules</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">western_electric</span></span>
+<span class="line"><span style="color:#85E89D">tiers</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  1sigma</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">action</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">log</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">  2sigma</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">action</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">diagnose</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#85E89D">            tools</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Read,Grep,Bash(gh run view *)"</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">  3sigma</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">action</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">propose</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#85E89D">            routes</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">pull_request</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">runbook:rollback-deploy</span><span style="color:#E1E4E8">] }</span></span></code></pre>
+<p>The script that reads it needs only a mean, a standard deviation, and a handful of comparisons. Give it a floor for σ, so a perfectly flat metric does not turn every tiny blip into a breach, and at least a day of readings before it judges anything.</p>
+<p>What the agent writes back is <code>intent.md</code>. The headings are fixed, so a person can triage it in a minute.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold"># Intent: status endpoint 5xx after release 4f2c9e1</span></span>
+<span class="line"><span style="color:#E1E4E8">Author: monitoring agent (status_5xx_rate, 3 sigma). Status: draft.</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Problem</span></span>
+<span class="line"><span style="color:#E1E4E8">The 5xx rate read 1.9% at 14:00. The 30-day mean is 0.2%.</span></span>
+<span class="line"><span style="color:#E1E4E8">Release 4f2c9e1 went out at 13:52 and set the panel's cache to zero.</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Proposed outcome</span></span>
+<span class="line"><span style="color:#E1E4E8">Customers get fresher status without passing the claims-core limit.</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Affected users and systems</span></span>
+<span class="line"><span style="color:#E1E4E8">Portal customers, claims-api, claims-core.</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Constraints</span></span>
+<span class="line"><span style="color:#E1E4E8">Status may be up to 60 seconds old. The claims-core limit is fixed.</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Action already taken</span></span>
+<span class="line"><span style="color:#E1E4E8">Ran the rollback-deploy runbook at 14:02. Previous version live at 14:04.</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Open questions</span></span>
+<span class="line"><span style="color:#E1E4E8">Who asked for live status, and is 60 seconds too slow for them?</span></span></code></pre>
+<p>The “Action already taken” heading is the audit trail: it is the only place the agent acted, and it names the runbook that allowed it.</p>
+<h3 id="effort-cache-counts-and-scripted-tool-calls">Effort, cache counts, and scripted tool calls</h3>
+<p>The cost levers are settings, not files. Effort has named levels, from low through medium and high to extra-high and max, and several places to set it.</p>
+<table>
+<thead>
+<tr>
+<th>Where</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One run</td>
+<td>The <code>--effort</code> flag</td>
+</tr>
+<tr>
+<td>This and later sessions</td>
+<td>The <code>/effort</code> command, or <code>effortLevel</code> in settings</td>
+</tr>
+<tr>
+<td>One skill or subagent</td>
+<td>An <code>effort</code> field in its frontmatter</td>
+</tr>
+<tr>
+<td>An API request</td>
+<td>The effort field inside <code>output_config</code></td>
+</tr>
+</tbody>
+</table>
+<p>Start each task type at the default, and move one level at a time.</p>
+<p>Caching the tool definitions takes one line, on the last tool in the list:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#79B8FF">TOOLS</span><span style="color:#E1E4E8">[</span><span style="color:#F97583">-</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">][</span><span style="color:#9ECBFF">"cache_control"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span><span style="color:#9ECBFF">"type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"ephemeral"</span><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>After that, a request’s real input is three numbers added together, and the first one alone will mislead you:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">u </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> resp.usage</span></span>
+<span class="line"><span style="color:#E1E4E8">total_input </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> (u.input_tokens</span></span>
+<span class="line"><span style="color:#F97583">               +</span><span style="color:#E1E4E8"> u.cache_read_input_tokens</span></span>
+<span class="line"><span style="color:#F97583">               +</span><span style="color:#E1E4E8"> u.cache_creation_input_tokens)</span></span></code></pre>
+<p>Programmatic tool calling takes four changes to an ordinary tool loop:</p>
+<ol>
+<li>Add the code-execution tool to the tool list.</li>
+<li>Mark each tool the script may call with an <code>allowed_callers</code> field naming that tool.</li>
+<li>Read the container ID from each response and send it back with the next request.</li>
+<li>Say in each tool’s description what shape its result takes, because a script now has to parse it.</li>
+</ol>
+<p>The diagram shows where the tool results go after those changes. Note that they never reach the model.</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant C as Your code
+    participant M as Model
+    participant K as Container
+    C->>M: Question and tool definitions
+    M->>K: Writes a script that calls the tools
+    K-->>C: The script asks for a tool call
+    C->>K: Tool result, with the container ID
+    Note over K,C: Repeats for every call.&#x3C;br/>Results stay in the container
+    K-->>M: Only what the script prints
+    M-->>C: Final answer
+</code></pre>
+<p>So the model pays for one short printout instead of every result.</p>
+<p>It does not work with every model or every tool setting, so test it on a slice of real traffic and compare the billed input tokens with and without it.</p>
+<p>These files are small. The work is in deciding what each one must check, which is the argument of the post above.</p>
 <h2 id="glossary">Glossary</h2>
 <p>The terms used in this post, in alphabetical order.</p>
 <table>
