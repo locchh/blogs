@@ -314,3 +314,23 @@ date {
 	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }
+
+/* Example box: a story that proves the point made just above it.
+   In a post: <div class="example"> + blank line + **Example · Name** + blank line + markdown + blank line + </div> */
+.example {
+	background: rgb(var(--gray-light));
+	border-left: 4px solid rgb(var(--gray));
+	border-radius: 6px;
+	padding: 0.8em 1.25em;
+	margin: 1.5em 0;
+}
+.example > p:first-child {
+	font-size: 0.8em;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: rgb(var(--gray));
+	margin: 0 0 0.4em;
+}
+.example > :last-child {
+	margin-bottom: 0;
+}
