@@ -392,6 +392,394 @@ The default model was lowered for the role the team's members hold, and the cap 
 
 So what can you do this week? Write down every check you did by hand on agent output in the last five days. Take the one you did most often, and turn it into a hook or an eval that runs without you.
 
+## Appendix with the files behind each check
+
+Whichever check you pick, it ends up as a file. The argument above says which checks to build and why. This appendix shows what each one looks like on disk, in the same order as the seven steps. The snippets are shortened from the course's examples and use Claude Code's formats. File names, flags, and setting keys change, so check the current documentation before you copy one.
+
+The diagram maps each step of the post to the file that carries it.
+
+```mermaid
+flowchart LR
+    S1["Run more work"] --> F1[".claude/agents/*.md<br/>one file per subagent"]
+    S2["Let each run<br/>check itself"] --> F2["CLAUDE.md<br/>verification block"]
+    S3["Test the<br/>configuration"] --> F3["evals/*.json<br/>and a CI workflow"]
+    S4["Turn rules<br/>into gates"] --> F4["settings.json hooks,<br/>managed settings"]
+    S5["Ship up to the<br/>production gate"] --> F5["Pipeline jobs, .mcp.json,<br/>REVIEW.md"]
+    S6["Let monitoring<br/>start the loop"] --> F6["bands.yaml<br/>and intent.md"]
+    S7["Keep cost flat"] --> F7["Effort and cache<br/>settings per request"]
+```
+
+So nothing here is a new system to install. Each check is a small text file in the repository, reviewed like any other change.
+
+### A subagent that knows when to stop
+
+A subagent is one markdown file in `.claude/agents/`. The frontmatter says when to use it and which tools it may touch, and the body is its system prompt. This is the verifier from "Give the session a check it can run itself."
+
+```markdown
+---
+name: verifier
+description: Runs the app and checks the change works before the session reports done
+tools: Bash, Read
+---
+Start the app with make run. Exercise the changed behavior and the two
+nearest neighboring flows. Report what you ran, what you saw, and any
+behavior that does not match plan.md. Do not fix anything; report only.
+```
+
+The `description` does two jobs: the main session reads it to decide when to launch the subagent, and uses it again to write the task it hands over. The diagram shows both uses, and what comes back.
+
+```mermaid
+sequenceDiagram
+    participant M as Main session
+    participant S as Subagent
+    Note over M: Reads every subagent's name<br/>and description
+    M->>S: Launches it with a task written<br/>from the description
+    Note over S: Works in its own context:<br/>file reads, searches, commands
+    S-->>M: Returns only a summary,<br/>in the output format
+    Note over M: The in-between steps<br/>never enter its context
+```
+
+So put the handover rule in the description too, such as "tell the agent exactly which files to review."
+
+For a subagent that returns findings, end its prompt with an output format. The format is what tells it the work is finished. A reviewer's might be:
+
+```markdown
+Provide your review in this structure:
+1. Summary: what you reviewed and your overall assessment
+2. Critical issues: security, data integrity, or logic errors
+3. Major issues: quality or architecture problems
+4. Minor issues: style and documentation
+5. Approval status: ready to merge, or needs changes
+6. Obstacles encountered: setup problems, workarounds, commands that
+   needed special flags
+```
+
+The tool list then follows the job, as the table shows.
+
+| Subagent | Tools | Why |
+| --- | --- | --- |
+| Research | `Glob, Grep, Read` | It cannot change a file by accident |
+| Code reviewer | `Bash, Glob, Grep, Read` | It needs `git diff`, and still cannot edit |
+| Code modifier | adds `Edit, Write` | Changing code is its job |
+
+One more field matters once skills exist: a subagent does not see skills the main session already loaded. List the ones it needs in a `skills:` field, and keep `Skill` in its tool list.
+
+### A verification block the session reads
+
+The one-command check lives in CLAUDE.md, where every session finds it. The block names each command with what a healthy run prints, and states the rule that protects the tests.
+
+```markdown
+## Verifying your work
+
+- Build: make build (must finish with "Build succeeded")
+- Test: make test (all green; never skip or delete a failing test)
+- Lint: make lint (zero warnings)
+
+Run all three before reporting any task complete, and paste the output.
+If a test fails, fix the code, not the test.
+```
+
+The last line is advice until a hook backs it. The hooks further down do that.
+
+### An eval as a task with checks
+
+An eval for the configuration is one JSON file per task. This one is the logging case from "Rerun the evals whenever the configuration changes," shortened.
+
+```json
+{
+  "name": "status-no-pii-in-logs",
+  "from": "9d04e7a",
+  "prompt": "Add debug logging to the claim status endpoint so on-call can see which claim was asked for and what we returned. Run the tests before you finish.",
+  "may_change": ["claims-api/routes", "claims-api/tests"],
+  "checks": [
+    { "name": "tests pass", "run": "make test" },
+    { "name": "lint clean", "run": "make lint" },
+    { "name": "no pii in logs", "run": "scripts/check-endpoints.sh claims-api/routes/status.py" }
+  ]
+}
+```
+
+Each field has one job.
+
+| Field | What it holds |
+| --- | --- |
+| `from` | The commit the run starts from: the code just before the real task |
+| `prompt` | The request, as a person would type it |
+| `may_change` | The only folders the run may touch. A change anywhere else fails the eval |
+| `checks` | Commands that must each exit zero |
+
+The workflow that runs the suite needs two triggers: any change to the configuration, and a schedule.
+
+```yaml
+on:
+  pull_request:
+    paths: ['CLAUDE.md', '.claude/**', 'evals/**']
+  schedule:
+    - cron: '0 2 * * *'
+```
+
+For each eval, the job checks out the `from` commit, copies in the CLAUDE.md and `.claude/` folder of the branch under test, and runs the prompt non-interactively. Three details keep the result honest:
+
+- Delete the `evals/` folder from the run's checkout, so the agent never sees its own checks.
+- Run the checks from a copy made before the run, so the agent cannot edit them.
+- Do not start the run in bare mode. Bare mode skips CLAUDE.md, skills, and hooks, which are the files under test.
+
+### A hook that returns a decision
+
+A hook is registered in a settings file: an event, a matcher for the tools it watches, and the script to run. This entry puts the release gate in front of the release tool on every deploy server.
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__deploy-.*__release",
+        "hooks": [
+          { "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/release-gate.sh" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+The script answers in one of two ways. The simple way is the exit code.
+
+| Exit code | Effect |
+| --- | --- |
+| 0 | The action goes ahead. JSON on standard output is read as a decision |
+| 2 | The action is blocked, and standard error goes back to the session |
+| Anything else | Not a block. The error is logged and the action runs |
+
+The fuller way is to exit 0 and print a decision as JSON. A pre-tool hook can allow, deny, or ask.
+
+```json
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Production needs an approved change ticket. Open one for this version, wait for the release manager to approve it, then call release again with the ticket number."
+  }
+}
+```
+
+The diagram puts the two ways together. Follow the branch on the left to see why exit 1 is a trap.
+
+```mermaid
+flowchart TD
+    T["The session wants<br/>to call a tool"] --> H["The pre-tool hook runs"]
+    H --> X{"Exit code?"}
+    X -->|"Any other code"| R1["Error is logged,<br/>the tool runs anyway"]
+    X -->|"2"| B["Blocked<br/>stderr goes to the session"]
+    X -->|"0"| J{"JSON decision<br/>on stdout?"}
+    J -->|"None"| N["Normal permission<br/>rules apply"]
+    J -->|"allow"| A["The tool runs"]
+    J -->|"deny"| B2["Blocked<br/>the reason goes to the session"]
+    J -->|"ask"| Q["The person is asked<br/>denied if nobody is there"]
+    class X,J check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+```
+
+The reason on a deny is shown to the session, so it should name the route to approval. The reason on an ask is shown to the person. To rewrite a call instead of blocking it, return `updatedInput` with the whole input, including the fields that did not change.
+
+A few events cover most gates.
+
+| Event | When it fires | Typical use |
+| --- | --- | --- |
+| `PreToolUse` | Before a tool call | Block, ask, or rewrite |
+| `PostToolUse` | After a tool call succeeds | Format, lint, run a policy script |
+| `Stop` | When the session tries to end its turn | Run the tests and refuse on failure |
+| `SessionStart` | At the start, and after compaction | Put key state back into context |
+
+Hooks in a project file can be switched off locally, which is why the must-hold ones move to managed settings.
+
+### Managed settings for a regulated team
+
+Managed settings are one JSON file that an administrator deploys. The table lists the keys behind each job in "Lock the gates where nobody can switch them off."
+
+| Key | What it enforces |
+| --- | --- |
+| `permissions.deny` | No reads of `.env` files or secrets folders, no web fetches, no `curl` or `wget` |
+| `permissions.allow` | The safe inner work runs unasked: git, build, test, lint |
+| `disableBypassPermissionsMode` and `allowManagedPermissionRulesOnly` | No engineer, project file, or flag can widen the rules |
+| `sandbox` with `failIfUnavailable` | The agent refuses to start without the sandbox, and a failed command cannot be retried outside it |
+| `sandbox.network.allowedDomains` | Shell commands reach only the listed hosts |
+| `sandbox.credentials` | SSH and cloud key files are unreadable, and named secrets are stripped from the environment |
+| `allowManagedHooksOnly` | Only hooks defined here run, so the gates must live in this file |
+| `allowManagedMcpServersOnly` and `strictKnownMarketplaces` | Tools and plugins come only from the approved list |
+| `requiredMinimumVersion` | The agent refuses to start below the assessed version |
+
+Two of these enforce one goal at different layers. The permission rule blocks the web-fetch tool, and the sandbox's domain list blocks a shell command that tries the same thing.
+
+### A pipeline job that cannot wait for an answer
+
+In CI the agent runs with `claude -p`, which takes a prompt, works, and exits. The first jobs only read.
+
+```yaml
+- name: Triage failed build
+  if: failure()
+  run: >
+    claude -p "Read the build log at out/build.log. Identify the most
+    likely cause, say whether the failure looks flaky or real, and write
+    a three-line summary for the PR thread." >> triage.md
+```
+
+A job that acts names every tool it may use and runs in do-not-ask mode, so anything off the list is denied and the job never hangs.
+
+```yaml
+- name: Release to staging and roll back if unhealthy
+  env:
+    DEPLOY_STAGING_TOKEN: ${{ secrets.DEPLOY_STAGING_TOKEN }}
+  run: >
+    claude -p "Release version ${{ github.sha }} to staging, then call
+    status. If the 5xx rate on any endpoint is over 1%, roll back.
+    Finish with three lines for the release notes."
+    --allowedTools "mcp__deploy-staging__release,mcp__deploy-staging__status,mcp__deploy-staging__rollback"
+    --permission-mode dontAsk >> release-notes.md
+```
+
+The job holds only the staging credential, because each environment has its own server entry in `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "deploy-staging": {
+      "type": "http",
+      "url": "https://deploy.example.com/mcp/staging",
+      "headers": { "Authorization": "Bearer ${DEPLOY_STAGING_TOKEN}" }
+    }
+  }
+}
+```
+
+A few more flags make such runs easier to check.
+
+| Flag | Use |
+| --- | --- |
+| `--output-format json` | A result a script can read, with an error field and a session ID |
+| `--json-schema` | Forces the answer into your schema |
+| `--max-turns` | A hard cap on the loop |
+| `--resume` | Continues an earlier run by its session ID, for work in two passes |
+| `--bare` | Skips project configuration for identical runs on every machine. Not for evals of that configuration |
+
+The review policy is one more file in this pipeline, `REVIEW.md` at the repository root:
+
+```markdown
+# Review instructions
+## Passes
+Run three passes and tag each finding with its pass:
+- Bugs: logic errors, broken edge cases, subtle regressions
+- Security: injection risks, authentication gaps, personal data in logs
+- Compliance: the change matches spec.md, plan.md and our design principles
+## What Important means here
+Reserve Important for findings that would break behavior, leak data
+or breach a policy. Style and naming are nits.
+## Cap the nits
+Report at most five nits per review; summarize the rest as a count.
+## Do not report
+Generated files under src/gen/ and anything CI already enforces.
+```
+
+The cap on nits matters more than it looks: a review that buries two real findings under thirty style notes gets skimmed.
+
+### Alert levels and the finding they produce
+
+The alert levels from "Let rarer readings unlock more action" are a short config file, kept in version control beside the detection script.
+
+```yaml
+metric: status_5xx_rate
+baseline: rolling_30d
+rules: western_electric
+tiers:
+  1sigma: { action: log }
+  2sigma: { action: diagnose,
+            tools: "Read,Grep,Bash(gh run view *)" }
+  3sigma: { action: propose,
+            routes: [pull_request, runbook:rollback-deploy] }
+```
+
+The script that reads it needs only a mean, a standard deviation, and a handful of comparisons. Give it a floor for σ, so a perfectly flat metric does not turn every tiny blip into a breach, and at least a day of readings before it judges anything.
+
+What the agent writes back is `intent.md`. The headings are fixed, so a person can triage it in a minute.
+
+```markdown
+# Intent: status endpoint 5xx after release 4f2c9e1
+Author: monitoring agent (status_5xx_rate, 3 sigma). Status: draft.
+## Problem
+The 5xx rate read 1.9% at 14:00. The 30-day mean is 0.2%.
+Release 4f2c9e1 went out at 13:52 and set the panel's cache to zero.
+## Proposed outcome
+Customers get fresher status without passing the claims-core limit.
+## Affected users and systems
+Portal customers, claims-api, claims-core.
+## Constraints
+Status may be up to 60 seconds old. The claims-core limit is fixed.
+## Action already taken
+Ran the rollback-deploy runbook at 14:02. Previous version live at 14:04.
+## Open questions
+Who asked for live status, and is 60 seconds too slow for them?
+```
+
+The "Action already taken" heading is the audit trail: it is the only place the agent acted, and it names the runbook that allowed it.
+
+### Effort, cache counts, and scripted tool calls
+
+The cost levers are settings, not files. Effort has named levels, from low through medium and high to extra-high and max, and several places to set it.
+
+| Where | How |
+| --- | --- |
+| One run | The `--effort` flag |
+| This and later sessions | The `/effort` command, or `effortLevel` in settings |
+| One skill or subagent | An `effort` field in its frontmatter |
+| An API request | The effort field inside `output_config` |
+
+Start each task type at the default, and move one level at a time.
+
+Caching the tool definitions takes one line, on the last tool in the list:
+
+```python
+TOOLS[-1]["cache_control"] = {"type": "ephemeral"}
+```
+
+After that, a request's real input is three numbers added together, and the first one alone will mislead you:
+
+```python
+u = resp.usage
+total_input = (u.input_tokens
+               + u.cache_read_input_tokens
+               + u.cache_creation_input_tokens)
+```
+
+Programmatic tool calling takes four changes to an ordinary tool loop:
+
+1. Add the code-execution tool to the tool list.
+2. Mark each tool the script may call with an `allowed_callers` field naming that tool.
+3. Read the container ID from each response and send it back with the next request.
+4. Say in each tool's description what shape its result takes, because a script now has to parse it.
+
+The diagram shows where the tool results go after those changes. Note that they never reach the model.
+
+```mermaid
+sequenceDiagram
+    participant C as Your code
+    participant M as Model
+    participant K as Container
+    C->>M: Question and tool definitions
+    M->>K: Writes a script that calls the tools
+    K-->>C: The script asks for a tool call
+    C->>K: Tool result, with the container ID
+    Note over K,C: Repeats for every call.<br/>Results stay in the container
+    K-->>M: Only what the script prints
+    M-->>C: Final answer
+```
+
+So the model pays for one short printout instead of every result.
+
+It does not work with every model or every tool setting, so test it on a slice of real traffic and compare the billed input tokens with and without it.
+
+These files are small. The work is in deciding what each one must check, which is the argument of the post above.
+
 ## Glossary
 
 The terms used in this post, in alphabetical order.
