@@ -1,10 +1,10 @@
 ---
 title: "Toward an Agent Fleet"
-description: "Some though about running a fleet of coding agents"
+description: "Some thoughts about running a fleet of coding agents"
 pubDate: "2026-11-23"
 dense: true
 author: "locchh"
-tags: ["agent", "morden", "2027"]
+tags: ["agent", "modern", "2027"]
 ---
 
 ## A contest where nobody may touch the machine
@@ -319,207 +319,36 @@ These are the lessons we took from the match records, the reviews after each mat
 
 ## Open ideas for the next match
 
-None of these ideas is built or tested yet. They come in two groups. The first group is borrowed from how other people run agents. The second group is our own: what our review of the official match already planned, and what we worked out afterwards when we asked how to win a match we have never seen.
-
-We can test them properly now. Our offline copy of the contest has an exam rebuilt from the official match: the same 17 items, 40 minutes, and five waves. So each idea becomes one change in one version, run twice on that exam, and judged on three numbers: points on the three unfixed faults, credit, and the minute of the last submission.
+None of these ideas is built or tested yet, so I keep them short. The details will come when we start. They come in two groups: ideas borrowed from how other people run agents, and our own.
 
 ### Ideas borrowed from other people's systems
 
-These ideas are not ours. Each one is a principle taken from someone else's system and fitted to our pack. The table lists the six sources we read: what each one is about, its main idea, and what we learn from it.
+Each row is one idea, where it comes from, and the problem of ours it would fix.
 
-| # | Source | What it is about | Its main idea | What we learn from it |
-| --- | --- | --- | --- | --- |
-| 1 | Steve Yegge, [Welcome to Gas Town](https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04) (January 2026), and the [Gas Town repository](https://github.com/gastownhall/gastown) | A system for running 20 to 30 coding agents at once. Seven roles: one agent takes the requests, worker agents do the tasks, one agent merges their branches one at a time, and watcher agents check on the others. A background process pings the top watcher every few minutes | "An agent is not a session." A worker's identity and its task are stored outside the session, so when a session crashes or fills its context, the next one finds the task and carries on. A long job is stored as a chain of small tasks that the agent checks off one by one. His rule is "If there is work on your hook, YOU MUST RUN IT" | He found what we found. The agent sometimes ignores that rule and "just sits there", so a separate mechanism nudges every new session 30 to 60 seconds after it starts. Wording did not fix it for him either. We take ideas 1, 2, and 4. We do not take his trade: he accepts that "some work gets lost" and calls it "expensive as hell". Our scoring punishes one lost item, and credit breaks ties |
-| 2 | [Beads](https://github.com/gastownhall/beads) | A task tracker made for agents, which Gas Town is built on. It began as one line per task in a file tracked by git. The current version keeps tasks in a versioned database, and the file is only an export | Tasks form a graph. A task can be blocked by another, and one command lists only the tasks that nothing blocks. An agent claims a task in one step, so two agents never take the same one. Its page tells agents not to keep task lists in markdown | Our link between items is found by matching sentences in a notes file. A typed link is something code can act on, and free text is not (idea 6) |
-| 3 | [StateM](https://github.com/henryqin1997/statem) | A command-line tool that keeps the steps of a long agent run in a file: a list of states, the allowed moves between them, and the checks for each move | The procedure lives outside the model. At any moment the agent can ask the tool what to do now, which moves are allowed, and what proof is needed first. A move is "a transaction": the checks run, and if one fails the agent stays where it is, with the failure recorded. A move can have a maximum number of tries. After the context is cleared, the agent asks again and continues | This is our main lesson, built as a tool: what the model can forget goes into code. We take the step map with a check on every move (idea 2). Its own comparison table marks the difference from a plain to-do list: a to-do list also survives a restart, but it does not block a move that should not happen |
-| 4 | [Claude DevFleet](https://github.com/LEC-AI/claude-devfleet) | A platform that sends coding agents to work on tasks it calls missions, each in its own git worktree, with at most 3 running at once by default | Every mission carries its own limits (a maximum number of turns and a maximum cost in dollars) and the list of missions it waits for. A watcher starts a mission only when those are done. Each agent ends by filing a report with fixed fields: files changed, what was done, what is open, what was tested, what was not tested | We take the fixed field for "what was not tested" (idea 3). Its own notes admit a gap we know: its completion check "only checks work happened, not that it's correct" |
-| 5 | TypeSafe AI, [Patterns](https://docs.typesafe.ai/patterns) | Six ways to use a small, fast model for decisions inside a larger program. The model answers a fixed question, and the answer is always one of the options the program listed, with a probability | Ask for "one snap judgment per question", and combine the answers in code. Ask a cheap yes-or-no question first to decide whether an expensive step is needed. A multiple-choice question always picks something, so pair it with a second question that asks whether any option fits. Act only above a set probability, and send the uncertain middle to a slower path | We take the fixed form filled in when an item opens (idea 5), and the split behind it: the model judges one small thing, and code decides what happens. We cannot take the probabilities, because as we read the match rules only the agents in our session may call a model |
-| 6 | [The handbook's Codex page](https://locchh.github.io/handbook/ai/tool_tip/codex/) | A guide to the Codex coding agent, built around six habits, with a table that maps each Claude Code feature to its Codex version | Most features exist in both tools under other names. A few differ: Codex sets the sandbox and the approval policy as two separate dials, and its rules files are enforced, not advice. A hook that fires when the agent tries to stop can block it and make it continue | Our pack runs on Codex and uses none of its hooks. A stop hook could keep a worker from ending its turn before it has handed in, which today is only a line in the prompt. Two things to check first: a hook must be approved before it runs, and the match rules must allow it. The page also warns that hooks are "a guardrail, not a complete enforcement boundary" |
+| # | Idea | Borrowed from | What it would fix |
+| --- | --- | --- | --- |
+| 1 | The worker writes each answer to disk the moment it knows it | [Gas Town](https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04) by Steve Yegge, where "an agent is not a session": work lives outside the session, so a crash loses nothing | Two incidents scored 0 for the answer, because it was still in the worker's context when time ran out |
+| 2 | The helper keeps the steps of an item, and the worker asks it where it is | [StateM](https://github.com/henryqin1997/statem), a tool that keeps the steps of a long run in a file and checks every move | A worker gathered data for five minutes before writing any answer |
+| 3 | The worker hands in "what I did not test" and "what I am unsure about" as fields | [Claude DevFleet](https://github.com/LEC-AI/claude-devfleet), where every agent ends with a report in fixed fields | A worker wrote "it could be 3000" in free text and submitted 0 |
+| 4 | The second agent gets a different job from the worker | The "Rule of Five" in Gas Town: a review with a different focus each time finds more | Our second agent repeated the worker's work and its mistakes |
+| 5 | When an item opens, the helper decides which checks it needs | TypeSafe AI's [patterns](https://docs.typesafe.ai/patterns): ask small fixed questions, and let code decide | One check ran on every item, was switched off for all, and cost 63 points |
+| 6 | "This item waits for that one" is recorded as data | [Beads](https://github.com/gastownhall/beads), a task tracker for agents where a task can be blocked by another | The link is found today by matching sentences in a notes file |
+| 7 | A stop hook keeps a worker from ending its turn before it has handed in | [The handbook's Codex page](https://locchh.github.io/handbook/ai/tool_tip/codex/), which shows that a Codex hook can block an agent from stopping and make it continue | Today this rule is only a line in the prompt |
 
-Six ideas came out of that reading. The "From" line of each one links back to its source.
-
-**1. Write each answer to disk the moment it is known.**
-
-- **Today:** a worker keeps its answers in its own context until its final hand-in. When time runs out, the helper submits whatever is in the answer file. In the official match, two items that had written their answers to the file got full points. Two incidents whose answers were still in the worker's context got 0 for the answer.
-- **Change:** one new kit call, `k.set(field, value)`, writes one answer field into the answer file at once. The brief tells the worker to call it the moment a value is known, even a first guess. When the deadline hand-in fires, the helper also runs the item's own script on the official data, if the worker has written one.
-- **From:** [Gas Town](https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04)'s rule that "an agent is not a session". A session can end at any moment, so the work must live outside it.
-- **Cost:** one short call per field. This is the cheapest idea on the list, and it aims at the 71 points lost on incidents.
-
-**2. Keep the steps of an item in the helper, and let the worker ask where it is.**
-
-- **Today:** the order of work lives in the worker's prompt. One incident worker wrote its fix in the first minute and then gathered data for five. Nothing in the helper tracks which step a worker is on.
-- **Change:** one small file per kind of item lists its steps and the check for leaving each step. For an incident: find the window, write a first answer to disk, fix the code and its test, refine the answer, hand in. The helper stores the current step in the record it already keeps for each worker. Two new kit calls do the rest. `k.step()` returns the current step and one paragraph of instruction. `k.next()` asks the helper to run that step's check, which is a command or a look at a file. The helper then moves to the next step, or returns the reason it did not. Each step has a time budget and a limit on tries.
-- **From:** [StateM](https://github.com/henryqin1997/statem), which calls a move between steps "a transaction": the checks run first, and the move is recorded only if they pass. [Gas Town](https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04) does the same with chains of small tasks. Yegge writes that on his 20-step release process agents "would always skip steps", until each step became its own task to check off.
-- **Why it helps twice:** after the worker's context is compressed, it calls `k.step()` and knows where it is.
-- **Risk:** our own first lesson. A wrong rule in code is wrong on every item, and the pack's own procedure once slowed every item down. So the chain stays under six steps, a check may only test something the grader scores, and it starts with incidents only.
-
-**3. Make doubt a field, not a word search.**
-
-- **Today:** the helper searches the worker's hand-in summary for words such as "not sure" or "could also be". The hand-in also has a list called `risks`, which is stored and never read by any code. A worker who phrases its doubt another way passes straight through.
-- **Change:** the hand-in takes two typed lists. `unsure` holds an answer field, the other value the worker considered, and one line of why. `untested` holds what the tests do not cover. Code then acts on them. An unsure answer field waits for the second agent, for at most the 60 seconds the pack already allows, and never past the deadline hand-in. An `untested` entry about large inputs starts the helper's test-strength check, described under our own ideas below.
-- **From:** [Claude DevFleet](https://github.com/LEC-AI/claude-devfleet), where every agent must end with a report that has fixed fields, among them "what tested" and "what untested".
-- **What we will not do:** hold an item because the worker marked something as not met. We tried that. It held a finished item for five minutes over something the grader never reads, and we switched it off.
-
-**4. Give the second agent a different job from the worker.**
-
-- **Today:** the second agent gets the same brief and computes the same answer again. In the records we could read, it never once turned a wrong answer into a right one. It was also the first thing cut when the 10 threads ran out.
-- **Change:** its brief becomes an attack on the worker's result, from another direction. It starts from the knowledge base and the data, not from the worker's method. It looks for a code in the data that no cited article explains, and for one large input that should break the tests. One of the 10 threads is reserved for it. To stay out of the worker's way, it reads only what the helper has already stored and makes no searches of its own.
-- **From:** the "Rule of Five", an observation by Jeffrey Emanuel that Yegge builds into [Gas Town](https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04): a review repeated five times, with a different focus each time, gives a better result than the same review run again.
-- **To measure:** if the helper's own checks on test strength and on knowledge-base references work, this agent may not be worth its credit. Run it with them and without.
-
-**5. Decide when an item opens which checks it needs.**
-
-- **Today:** a check runs on every item or on none. The check for large inputs cost time on every item, so we switched it off for all of them, and then lost 63 points on the items that needed it. Every one of those items had said so in its own text.
-- **Change:** when an item opens, the helper fills in a short fixed form. Does the item ask for tests that must fail on broken code? Does it name documents or codes? Does it have a page to capture? Is its deadline under ten minutes? Plain text search answers most of these. Where the search is unsure, a waiting worker answers with yes, no, or unsure, and the code counts unsure as yes. The form decides which of the helper's three new jobs, described under our own ideas below, run for that item.
-- **From:** TypeSafe AI's [patterns](https://docs.typesafe.ai/patterns): ask one small fixed question at a time, allow only the listed answers, and let code combine them. One of its patterns asks a cheap question first to decide whether an expensive step is needed at all.
-- **What does not carry over:** TypeSafe's answers are probabilities from its own small model, and its code acts above a set line such as 0.7. As we read the match rules, only the agents in our session may call a model, so the helper cannot ask a model by itself. We get yes, no, or unsure, not a number.
-
-**6. Record "this item waits for that one" as data.**
-
-- **Today:** the helper already tracks it, but by matching sentences like "X depends on Y" in the shared notes. In one test run the worker worded it differently and nothing was recorded.
-- **Change:** a kit call, `k.blockedBy(item)`, records the link directly. When items open, the helper also scans each item's text for the names of other items, and starts the blocking item first.
-- **From:** [Beads](https://github.com/gastownhall/beads), where "blocked by" is a link between two tasks and one command lists only the tasks that nothing blocks.
-
-Ideas 1 and 3 need no extra model requests, so they go first. Idea 2 is the largest change and the one most likely to hurt if it is wrong, so it gets the most test runs.
-
-One idea did not survive checking: finding a bad merge by testing half the batch at a time, as the merge queue in the [Gas Town repository](https://github.com/gastownhall/gastown) does. On one codebase our full test suite took about five minutes, so several rounds of it do not fit in a 40-minute match.
+Ideas 1 and 3 cost no extra model requests, so they go first.
 
 ### Our own ideas
 
-The borrowed ideas above each fix one thing. Our own ideas start from a bigger worry, so I state the worry first.
+Our own ideas start from one worry. Every new match brings a new kind of problem, we fix it, and the next match brings another. Our first score on each new exam was 960, 984, 928, then 779, while on exams we had replayed we reached 1000. So the loop makes the pack good at exams it has already seen, and a final is one it has not.
 
-**The worry: fixing after every match never ends.** Every new match brings a new codebase and a new kind of problem in the team, the kit, or the helper. We fix it, and the next match brings another. Our first score on each new exam shows it: 960, 984, 928, then 779, while on exams we had replayed we reached 1000.
+The ideas below are aimed at that.
 
-The loop makes the pack good at exams it has already seen. A final is an exam it has not seen. So we need another way, not one more round of fixes.
+1. **Three more jobs for the helper.** The helper prepares the logs for an incident, measures how well the tests catch faults, and follows every reference in the knowledge base. These are the three faults we did not fix.
+2. **More unseen practice exams.** New mock codebases and new kinds of grading, with some exams held back and run only once. The number to watch is the first score on an exam we have never seen.
+3. **Visible work.** The helper records every event as data, and a screen shows where each item and each worker is. Its first use is replaying a finished match to debug it.
+4. **More credit, spent on thinking.** We spent 198 credit for 779 points, and credit only breaks a tie. We would pay 250 or 300 if it buys judgment, not longer runs.
+5. **A supervisor agent.** One agent watches the whole match and adjusts a worker that is going the wrong way, on problems no rule was written for. It only watches at first, and gets its powers one at a time.
+6. **A new split of the ten threads.** One orchestrator, three workers that take incidents first, five general workers, and one supervisor.
+7. **A loop that tests every fix on traps.** When we fix a lost point, another agent builds the same fault in another form, a look-alike that is not the fault, and the worst case. A fix counts only if it passes all of them. The test runs in a small lab of a few items, not a whole match.
 
-Looking back, our problems were of two kinds, and only one kind runs out.
-
-| Kind of problem | Examples | Does fixing it converge? |
-| --- | --- | --- |
-| How the team runs | The crash at 128 tool calls, the rate limit, the thread limit, the orchestrator's memory | Yes. It is a short list tied to the platform, and we have found most of it |
-| What this exam grades | Tests run on code broken for large inputs, a rule hidden in an annex, a month of logs | No. Each exam grades something new, so each fix is a fix for the last exam |
-
-All 202 points we gave away in the official match were the second kind. The ideas below are aimed at it.
-
-**Three jobs the helper takes from the worker.** These come from our review of the official match. Each one moves work from the worker into the helper's code, and each one starts the moment an item opens, before any worker has spent a request.
-
-**A. The helper prepares the logs for an incident.**
-
-- **Today:** the worker pulls the logs itself. In the official match one worker asked for 35 days from every service: 840 searches and 5.2 minutes.
-- **Change:** when an incident opens, the helper finds the incident's window with a few searches, using the release entries and the first error. It pulls only that window and that service, waits when the organizers' server says "too many requests", and does this once per match. The worker receives a small stored dataset.
-- **Not known yet:** whether the helper's own pull stays under the rate limit when three incidents open at once. That has to be measured on the rebuilt exam.
-
-**B. The helper measures how well the tests catch faults.**
-
-- **Today:** nobody measures it. The worker writes tests and judges them itself.
-- **Change:** after the worker's first passing check, the helper runs two things in the background. It runs the item's own tests on scaled-up inputs: many lines, large amounts, deep nesting. And it makes a few broken copies of the changed functions, each with one small change, and runs the tests on each. The worker gets one message listing the broken copies that no test noticed.
-- **Not known yet:** the grader reports only the names of its broken versions, not what they change. So our probe may catch some of them and miss others.
-
-**C. The helper follows every reference in the knowledge base.**
-
-- **Today:** the worker reads the few articles its first searches return, and stops when it has enough to compute.
-- **Change:** when an item opens, the helper collects every code, prefix, customer group, and document name that appears in the item text and in its data. It searches the knowledge base for each one. Every article that comes back can name new references, so it repeats until nothing new appears. The worker gets a list of article titles, and opens the ones it needs.
-- **Risk:** an item with hundreds of codes would flood the rate limit, so the search needs a budget.
-
-**1. More mock codebases and harder challenges, with some we never replay.** We need more unseen material to practice on, built from what we now know about how the organizers grade. Four conditions keep it honest:
-
-- Vary the kind of grading, not only the codebase. Our losses came from grading we had not met, not from code we had not met.
-- Build each mock exam around a worst case: long noisy logs with a short deadline, or a rule that only an annex states.
-- Have someone other than the pack's author plant the faults, or the exam only holds faults we already think of.
-- Hold some exams back and run each one once. The number to watch is the first score on an exam we have not seen, not the best score on one we know.
-
-**2. Make the work visible.** Most of our hard problems were invisible while they happened: a worker pulling logs for five minutes, a main branch broken for nine. So the helper should record every event as data: a step change, a hand-in, a refusal, a wait.
-
-A screen then reads that record and shows three things on one clock: where each item is, what each worker is doing, and how full each shared resource is. The first use is replaying a finished match to debug it, because our first diagnosis after a match was often wrong. Watching a live run comes almost free after that. The record matters more than the screen. With it, even plain text is enough to debug.
-
-**3. Pay more credit, but for thinking, not for running longer.** We spent 198 credit for 779 points. Credit only breaks a tie, and we gave away 202 points, so 250 or 300 credit is a good trade if it buys judgment. Our weakest area needed judgment: code graded directly scored 507 of 507, and answers computed from data scored 47 percent. The extra credit would go to four things:
-
-- A reading step when an item opens, before any code is touched: what will be graded, what is unusual here, what could go wrong.
-- Two solvers on an item whose answer is computed from data, kept apart and started from different ends, one from the documents and one from the data.
-- A challenger that runs only where there is doubt.
-- The supervisor described next.
-
-Credit is not the tightest limit, though. The session has 10 threads, the match has 40 minutes, and the organizers' server limits our calls. So "smarter" has to mean thinking early and thinking in place of something else. And every thinking step must end in a typed result that code reads, or it is credit burned.
-
-**4. A supervisor that adjusts the workers while they run.** The helper is code. It can only react to what someone wrote a rule for. A supervisor is an agent with one goal, the best score for this match. It decides for itself what to look at, forms its own picture of this exam, and steps in when a worker is going the wrong way on something nobody has seen before.
-
-The helper stays, and does three jobs around it: it shows the supervisor the whole match, it carries out what the supervisor decides, and it keeps the deadlines whatever the supervisor does. The diagram shows the loop.
-
-```mermaid
-flowchart LR
-    B["Helper's board<br/>every item, every worker,<br/>every shared resource"] --> S["Supervisor reads it<br/>and opens a worker's steps<br/>when something looks off"]
-    S --> J{"Is this worker<br/>on a good path?"}
-    J -->|"Yes"| B
-    J -->|"No"| A["Supervisor decides<br/>what to change"]
-    A --> H["Helper carries it out<br/>narrow a pull, hand over data,<br/>cut a long call, add a second solver"]
-    H --> W["Worker meets the change<br/>in its next tool reply"]
-    W --> B
-    class J check
-    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
-```
-
-The hard part is reaching a worker in time. A message attached to its next tool reply lands in seconds, but not while the worker is inside one long call. In the official match one log pull was a single call of 5.2 minutes. Only the helper, which runs that call, can cut it short. So adjusting in time depends on the helper being able to interrupt, more than on how clever the supervisor is.
-
-Would a supervisor have saved the official match? Only part of it, because it sees behaviour, not omissions.
-
-| Fault | Points | Could a watcher see it happen? | Would a supervisor have helped? |
-| --- | --- | --- | --- |
-| Incident answers late | 71 | Yes. A worker with its fix done started a month-long log pull with minutes left | Probably, for a good part of it |
-| Tests with no large-volume case | 63 | No. The workers looked healthy and their tests passed | Only if it read the item texts itself and saw that many said the same thing |
-| Knowledge base read in part | 68 | No. The worker ran four searches, computed, and looked finished | Unlikely |
-
-So a supervisor is the right tool for a worker doing the wrong thing, which was 71 of our 202 points. For a worker that leaves something out, the right tool is an agent that reads the item and the data by itself and looks for what is missing. That is the reading step and the challenger from the idea above about paying for thinking.
-
-Adding a supervisor is also a trap. It touches every other part, so it has more ways to break the team than anything we have added before. Yegge's system shows where that leads: he added an agent to watch the workers, then helpers for that agent, then one more agent to check on the watcher. Five rules keep us out of it:
-
-- It talks only to the helper. It never messages a worker, never searches the organizers' server, and never writes an answer.
-- One setting turns it off, and with it off the pack runs exactly as today.
-- It watches first and only writes down what it would have done. It gets one power at a time after that.
-- Who wins a disagreement is settled beforehand: the helper's deadlines beat the supervisor, and the supervisor beats a worker's own plan.
-- Before it is switched on, we list everything it will share: a thread, the model quota, and the workers' attention.
-
-We can also check its judgment before building the live part. We replay the official match, show it the board minute by minute, and record what it would have done. That tells us how many of the 71 points it really catches.
-
-**5. A new split of the ten threads.** Today the session runs one orchestrator and nine worker slots, and second agents share those nine threads. The split we want to try is in the table.
-
-| Thread | Count | What it does |
-| --- | --- | --- |
-| Orchestrator | 1 | Starts, messages, and closes agents for the helper, and nothing else, so it stays fast |
-| Incident-first workers | 3 | Take an incident the moment it opens. The official match had three open at once. While none is open, they challenge or re-solve other items |
-| General workers | 5 | All other items |
-| Supervisor | 1 | Watches the whole match. Its own thread means its slow thinking never holds up the orchestrator |
-
-Two things have to be measured before we trust it. With five general workers, is every item still submitted, and at what minute is the last one? The official match had 13 items that were not incidents, and an unsubmitted item scores zero. And how many minutes do the three incident threads sit idle, which is the time they have for challenging other items?
-
-**6. Change the loop: every fix must also pass traps it has never seen.** Today a fix is tested on the item that lost the points, sometimes in a small run and often in a whole replayed match. That has two weak spots. A fix can pass its own item and still be a patch for that one form of the problem. And a whole match costs about 200 credit and 40 minutes to learn something about one fix.
-
-The new rule: a fix is a claim about a whole kind of problem, so it is tested on members of that kind it has not seen. When we fix a lost point, a separate agent, not the one writing the fix, builds three sorts of test item from it.
-
-| Test item | What it is | What a good fix does |
-| --- | --- | --- |
-| The same fault in another form | The same kind of problem, on another codebase or with other names, files, and numbers | Fixes it there too. A fix that only matches the original form fails here |
-| A look-alike that is not the fault | An item that resembles the problem, where the fix must do nothing | Leaves it alone. A fix that fires here will fire on every item in a real match |
-| The worst case | The same problem at full size: a month of logs, hundreds of codes, a deadline of a few minutes | Still works. Our log fix passed on six days of one service and failed on a month of all of them |
-
-The fix counts only if it passes the original and all three. If it passes the original and fails a trap, it is a patch, and it does not go in. The agent that writes the fix never sees the traps beforehand, or it would tune the fix to them too.
-
-The second change is where the test runs. We stop replaying a whole match for one fix. A **lab** is a small run with one item, or a few. The diagram shows the new loop.
-
-```mermaid
-flowchart LR
-    L["A lost point,<br/>traced to its cause"] --> F["One agent writes<br/>the fix"]
-    L --> T["Another agent builds the traps:<br/>another form, a look-alike,<br/>the worst case"]
-    F --> LAB{"Lab: the original item,<br/>the traps, and a few<br/>neighbouring items.<br/>Run twice"}
-    T --> LAB
-    LAB -->|"Fails the original<br/>or any trap"| F
-    LAB -->|"Passes all"| M["Full match replay,<br/>only before a real match"]
-    M -->|"A new lost point"| L
-    class LAB check
-    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
-```
-
-The saving is large. A match of 17 items cost us 198 credit, so one item costs about 12. A lab of five items is about 60 credit and a few minutes, where a full match is about 200 credit and 40 minutes. Run twice, the lab still costs less than one match.
-
-A lab has one danger, and we have met it before. Eight versions in a row each fixed their own item and broke something else, because each was judged only against its own target. A lab that holds only the fixed item repeats that mistake. So every lab also holds a few neighbouring items: ones that use the part of the pack the fix changes. And the full match replay stays, as the last gate before a real match, not as the test for every fix.
-
-Parts of this exist already. We run labs today, and our plan for harder practice exams already says each kind of problem should appear "each time in a different form". What is new is the rule: no fix is accepted without its traps, and the traps are written by someone else and kept from the fixer.
+Each idea will be one change in one version, tested the way the loop above describes.
