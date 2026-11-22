@@ -259,7 +259,7 @@ Economic history explains why. In ["The Dynamo and the Computer"](https://econpa
 
 A structural gain is still not enough. The task must also recur often enough to generate data in thirty days, have a baseline you can capture before day one, and belong to a team ready to change its workflow.
 
-In the worked example, a team proposed adding unit tests to a codebase already at 82 percent coverage, or a Java to Spring Boot migration it had been scoping for eight months. The migration qualifies, the tests are marginal, and running both dilutes the result.
+In one of the course's worked examples, a team proposed adding unit tests to a codebase already at 82 percent coverage, or a Java to Spring Boot migration it had been scoping for eight months. The migration qualifies, the tests are marginal, and running both dilutes the result.
 
 Step 2, **design the pilot**, then fixes that choice so it can be judged. "A pilot that can't be evaluated is not a pilot." The **cohort** is the people who already own the target work, not volunteers. The **scope** is locked: not "code modernization" but "Java to Spring Boot migration of the authentication service". The last design decision is the success criteria, and they need a number from before the pilot.
 
@@ -269,7 +269,7 @@ Step 3, **measure the return**, begins with the **baseline**: the value of a met
 
 Two or three baselines are enough, such as cycle time from ticket to merge. Each gets a target that is a number: "25 percent reduction in PR cycle time" is a claim; "PR cycle time improved" is not. (PR means pull request.)
 
-The closing readout then leads with one headline number and one business translation. In the worked example, PR cycle time fell from 8.2 to 5.4 days. The translation turns "cycle time dropped 34 percent" into "the team can ship about 1.5 times the features in the same sprint", which is the sentence a chief information officer repeats.
+The closing readout then leads with one headline number and one business translation. In another of the course's examples, PR cycle time fell from 8.2 to 5.4 days. The translation turns "cycle time dropped 34 percent" into "the team can ship about 1.5 times the features in the same sprint", which is the sentence a chief information officer repeats.
 
 Between the baseline and the readout, though, the numbers do not climb in a straight line.
 
@@ -286,7 +286,7 @@ flowchart LR
 
 Two moments on that curve mislead people. The first is the **week one dip**: velocity falls before it rises, because people are learning a new way of working, not a new button. Do not intervene on velocity in week one.
 
-The second is the **plateau**. After the dip, many developers find one or two patterns that work and stop experimenting. "Plateau is not adoption." In the worked example, cycle time is flat at day sixteen while daily usage holds at a steady 45 minutes. That is the time to act.
+The second is the **plateau**. After the dip, many developers find one or two patterns that work and stop experimenting. "Plateau is not adoption." In a third course example, cycle time is flat at day sixteen while daily usage holds at a steady 45 minutes. That is the time to act.
 
 How to act depends on the cause. A developer who cannot get the agent to do what they want has a technical problem, and needs help now. A developer who uses the agent as a faster autocomplete has a workflow design problem. That is the old factory layout again, and the fix is coaching on what they delegate, not on how they prompt.
 
