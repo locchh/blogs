@@ -3,7 +3,7 @@ title: "From Production to Scale"
 description: "What changes after a model feature ships and succeeds: more runs than anyone can watch. How the person moves from working inside each loop to writing its checks, with parallel sessions, self-checking runs, evals on the configuration, hooks as gates, a pipeline that stops at production, monitoring that starts the next loop, and cost that stays flat. Written around Claude, true for any model. With a glossary."
 pubDate: "2026-11-22"
 author: "locchh"
-draft: true
+draft: false
 ---
 
 A feature that passes the checks a team runs before launch has a new problem a few months later: it worked. More teams use it, more agents run it, and more runs happen at night with nobody at the keyboard. The person who used to read every output, start every job, and approve every step cannot keep up.

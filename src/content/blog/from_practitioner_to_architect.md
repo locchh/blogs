@@ -3,7 +3,7 @@ title: "From Practitioner to Architect"
 description: "A guide to four posts on putting AI into real delivery work, read as one path through three roles: the practitioner who judges where AI fits, the developer who makes it work and keeps it working at scale, and the architect who designs the system around it. What changes at each role, the one habit that never changes, and where to read the detail."
 pubDate: "2026-11-22"
 author: "locchh"
-draft: true
+draft: false
 ---
 
 Most people meet AI at work as **practitioners**: they use it in their own delivery work and judge where it helps. The good ones get asked to build with it, and become **developers**. The good developers get asked to design whole systems around it, and become **architects**. Each move feels like more of the same job. It is not. The habits that served one role do not answer the next role's question.
