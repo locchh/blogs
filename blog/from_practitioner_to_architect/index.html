@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><script>
+	(() => {
+		let theme;
+		try {
+			theme = localStorage.getItem('blog-theme');
+		} catch {
+			// Storage can be blocked in private or restricted browser contexts.
+		}
+		if (!['light', 'dark', 'reading'].includes(theme)) {
+			theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		}
+		document.documentElement.dataset.theme = theme;
+	})();
+</script><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg?v=9"><link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon.png?v=9"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.2"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/from_practitioner_to_architect/"><!-- Primary Meta Tags --><title>From Practitioner to Architect</title><meta name="title" content="From Practitioner to Architect"><meta name="description" content="A guide to four posts on putting AI into real delivery work, read as one path through three roles: the practitioner who judges where AI fits, the developer who makes it work and keeps it working at scale, and the architect who designs the system around it. What changes at each role, the one habit that never changes, and where to read the detail."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/from_practitioner_to_architect/"><meta property="og:title" content="From Practitioner to Architect"><meta property="og:description" content="A guide to four posts on putting AI into real delivery work, read as one path through three roles: the practitioner who judges where AI fits, the developer who makes it work and keeps it working at scale, and the architect who designs the system around it. What changes at each role, the one habit that never changes, and where to read the detail."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/from_practitioner_to_architect/"><meta property="twitter:title" content="From Practitioner to Architect"><meta property="twitter:description" content="A guide to four posts on putting AI into real delivery work, read as one path through three roles: the practitioner who judges where AI fits, the developer who makes it work and keeps it working at scale, and the architect who designs the system around it. What changes at each role, the one habit that never changes, and where to read the detail."><link rel="stylesheet" href="/blogs/_astro/about.U9BOVk76.css">
+<style>main[data-astro-cid-bvzihdzo]{width:min(calc(100% - 2rem),1040px);max-width:100%;margin:2em auto}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:100%;max-width:var(--prose-width);margin:auto;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}@media(max-width:768px){main[data-astro-cid-bvzihdzo]{width:100%;margin:0}}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/blogs/" data-astro-cid-3ef6ksr2>Locch&#39;s Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/blogs/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blogs/blog/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/blogs/about/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="theme-switcher" role="group" aria-label="Display mode" hidden data-astro-cid-dz5h74bc> <button type="button" data-theme-choice="light" aria-pressed="false" data-astro-cid-dz5h74bc>Light</button> <button type="button" data-theme-choice="dark" aria-pressed="false" data-astro-cid-dz5h74bc>Dark</button> <button type="button" data-theme-choice="reading" aria-pressed="false" data-astro-cid-dz5h74bc>Reading</button> </div> <script type="module">const n=["light","dark","reading"],c=document.querySelector(".theme-switcher"),s=document.querySelectorAll("[data-theme-choice]"),o=window.matchMedia("(prefers-color-scheme: dark)");function r(){for(const e of s)e.setAttribute("aria-pressed",String(e.dataset.themeChoice===document.documentElement.dataset.theme))}function t(e,l=!1){if(n.includes(e)){if(document.documentElement.dataset.theme=e,l)try{localStorage.setItem("blog-theme",e)}catch{}r(),document.dispatchEvent(new CustomEvent("theme-change"))}}function i(){if(!a){try{if(n.includes(localStorage.getItem("blog-theme")??""))return}catch{}t(o.matches?"dark":"light")}}let a=!1;for(const e of s)e.addEventListener("click",()=>{a=!0,t(e.dataset.themeChoice??"light",!0)});window.addEventListener("storage",e=>{e.key!=="blog-theme"&&e.key!==null||(a=!1,e.newValue&&n.includes(e.newValue)?t(e.newValue):t(o.matches?"dark":"light"))});o.addEventListener("change",i);r();c&&(c.hidden=!1);</script>  <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo>  </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2026-11-22T00:00:00.000Z"> Nov 22, 2026 </time>  </div> <h1 data-astro-cid-bvzihdzo>From Practitioner to Architect</h1> <hr data-astro-cid-bvzihdzo> </div>  <p>Most people meet AI at work as <strong>practitioners</strong>: they use it in their own delivery work and judge where it helps. The good ones get asked to build with it, and become <strong>developers</strong>. The good developers get asked to design whole systems around it, and become <strong>architects</strong>. Each move feels like more of the same job. It is not. The habits that served one role do not answer the next role’s question.</p>
+<p>Four posts on this blog cover that path. Each one is long, because each one is a working reference. This post is the map: it reads them as one path through three roles, and says where to go for the detail.</p>
+<p>The diagram shows the three roles and the question each one answers. The developer’s role takes two posts, because building a feature and keeping it working at scale are different jobs.</p>
+<pre><code class="language-mermaid">graph LR
+    P["Practitioner&#x3C;br/>where does AI help,&#x3C;br/>and how would I know?"] --> D1["Developer&#x3C;br/>does this feature work,&#x3C;br/>on inputs nobody tried?"]
+    D1 --> D2["Developer at scale&#x3C;br/>does it keep working&#x3C;br/>when nobody watches?"]
+    D2 --> A["Architect&#x3C;br/>will the system around&#x3C;br/>the model hold?"]
+</code></pre>
+<p><strong>At each role, the work moves from judging, to building, to designing, and what you answer for grows.</strong> The practitioner answers for one decision. The developer answers for code that runs without them. The architect answers for a system other people must approve and live with.</p>
+<p>You can read the four posts in that order, or jump to the role you are in. Each section below starts with the question that role answers, then says what changes for the person, then gives the sections to read.</p>
+<h2 id="judging-where-ai-helps-as-a-practitioner">Judging where AI helps, as a practitioner</h2>
+<p>The path starts before any code, with someone who wants to use AI in their work. An agent can build a first version in minutes, so the hard part is no longer the build. The question is <strong>where does AI help this work, what will it cost to own, and how would I know it worked?</strong></p>
+<p>The shift at this role is from trying a tool to judging it. <a href="/blogs/blog/when_code_is_cheap/">When Code Is Cheap</a> takes Fred Brooks’s line from 1986, that the hard part of software is deciding what to build, and turns it into eleven questions to ask before and after saying yes. Its rule: when code is cheap, pay for what stayed expensive, which is deciding, owning, checking, and understanding.</p>
+<p>The questions come in five groups, in the order a decision meets them. The table points to each group.</p>
+<table>
+<thead>
+<tr>
+<th>If the question is</th>
+<th>Read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Is there a real problem, does it need AI, and what shape fits?</td>
+<td><a href="/blogs/blog/when_code_is_cheap/#before-you-say-yes">Before you say yes</a>: questions 1 to 4, from the problem to the decisions that are hard to undo</td>
+</tr>
+<tr>
+<td>What will it cost to own, not only to build?</td>
+<td><a href="/blogs/blog/when_code_is_cheap/#counting-the-cost-of-owning-it">Counting the cost of owning it</a>: question 5, cost per good outcome</td>
+</tr>
+<tr>
+<td>How do we pilot it, and how will we know it worked?</td>
+<td><a href="/blogs/blog/when_code_is_cheap/#running-the-pilot-and-measuring-it">Running the pilot and measuring it</a>: questions 6 and 7, the hardest step first and a measured comparison</td>
+</tr>
+<tr>
+<td>How much may it do alone, and how do we keep it safe?</td>
+<td><a href="/blogs/blog/when_code_is_cheap/#controlling-risk-authority-and-safety">Controlling risk: authority and safety</a>: questions 8 and 9, risk tiers and least privilege</td>
+</tr>
+<tr>
+<td>Who checks it, and how does it stay good?</td>
+<td><a href="/blogs/blog/when_code_is_cheap/#controlling-quality-checking-and-drift">Controlling quality: checking and drift</a>: questions 10 and 11, review capacity and drift</td>
+</tr>
+<tr>
+<td>How do the answers change with the kind of delivery work?</td>
+<td><a href="/blogs/blog/when_code_is_cheap/#applying-the-questions-to-five-kinds-of-delivery-work">Applying the questions to five kinds of delivery work</a>: who keeps the saved hour in each kind of deal</td>
+</tr>
+</tbody>
+</table>
+<p>For a five-minute version, <a href="/blogs/blog/when_code_is_cheap/#all-eleven-questions-on-one-page">All eleven questions on one page</a> holds the whole post in one table. Those questions say whether to build, but not how. Once the answer is yes, someone has to make it hold up on inputs nobody tried.</p>
+<h2 id="building-it-as-a-developer">Building it as a developer</h2>
+<p>The developer takes the practitioner’s yes and turns it into code that runs without anyone reading each answer. That job has two stages. First one feature has to work. Then, if it succeeds, it has to keep working at a scale no one person can watch.</p>
+<h3 id="making-one-feature-work-in-production">Making one feature work in production</h3>
+<p>The first question is narrow: <strong>does this call do what I meant, every time, on inputs I never tried?</strong> The shift is from chatting with a model to writing code that uses one. In a chat you read the answer and adjust. In a program nobody reads the answer, so the output has to hold up on its own.</p>
+<p>The habit that carries this stage is in <a href="/blogs/blog/from_prototype_to_production/">From Prototype to Production</a>: diagnose what is missing before you add more words, and test what must hold, not the exact text. The post follows a build as it grows, so its sections answer the problems in the order they appear.</p>
+<table>
+<thead>
+<tr>
+<th>If the problem is</th>
+<th>Read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The same prompt gives different answers, and tests flicker</td>
+<td><a href="/blogs/blog/from_prototype_to_production/#understanding-how-a-model-behaves">Understanding how a model behaves</a>: tokens, sampling, tiers, and request shapes</td>
+</tr>
+<tr>
+<td>A prompt that worked breaks on a new input</td>
+<td><a href="/blogs/blog/from_prototype_to_production/#making-one-call-reliable">Making one call reliable</a>: diagnose the failure, add the fewest examples, enforce the format in the API</td>
+</tr>
+<tr>
+<td>The model picks the wrong tool, or the tool loop fails validation</td>
+<td><a href="/blogs/blog/from_prototype_to_production/#giving-the-model-tools">Giving the model tools</a>: the pairing rule, descriptions that tell tools apart, streamed tool calls</td>
+</tr>
+<tr>
+<td>An agent gets worse after a fixed number of turns</td>
+<td><a href="/blogs/blog/from_prototype_to_production/#keeping-context-inside-its-budget">Keeping context inside its budget</a>: pruning, compaction, caching, retrieval, batches</td>
+</tr>
+<tr>
+<td>You are not sure you need an agent</td>
+<td><a href="/blogs/blog/from_prototype_to_production/#choose-an-agent-only-when-the-path-is-unknown">Choose an agent only when the path is unknown</a>: one test, and three ways to wire the loop</td>
+</tr>
+<tr>
+<td>A coding agent must be safe on a team’s repository</td>
+<td><a href="/blogs/blog/from_prototype_to_production/#working-through-a-coding-agent">Working through a coding agent</a>: permission modes, the CLAUDE.md instruction file and hooks, plugins, credentials</td>
+</tr>
+<tr>
+<td>It works on your machine and must prove itself in production</td>
+<td><a href="/blogs/blog/from_prototype_to_production/#proving-it-works-in-production">Proving it works in production</a>: the design document, evals, retries, cost, and the security boundary</td>
+</tr>
+<tr>
+<td>It must be reused, reviewed, and deployed for a customer</td>
+<td><a href="/blogs/blog/from_prototype_to_production/#shipping-it-for-reuse-and-audit">Shipping it for reuse and audit</a>: accelerators, platform choice, pinned versions, trust boundaries</td>
+</tr>
+</tbody>
+</table>
+<p>That post ends with one feature that runs and passed review, with one person still checking it closely. Then the feature succeeds, and that person cannot keep up.</p>
+<h3 id="keeping-it-working-when-nobody-watches">Keeping it working when nobody watches</h3>
+<p>Success multiplies runs: more teams, more agents, more jobs at night. The question changes to <strong>does it keep working when nobody is watching each run?</strong> The developer who read every output is now the slowest part of the system.</p>
+<p>The shift is from doing the checks to writing them. <a href="/blogs/blog/from_production_to_scale/">From Production to Scale</a> puts it in one line: at scale, a person stops working inside the loop and writes its checks instead. Its sections follow a running system as it grows into a fleet, every session and job running at once.</p>
+<table>
+<thead>
+<tr>
+<th>If the problem is</th>
+<th>Read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One person has more work than one session can hold</td>
+<td><a href="/blogs/blog/from_production_to_scale/#running-more-work-than-one-person-can-watch">Running more work than one person can watch</a>: worktrees, when a subagent helps, managed agents</td>
+</tr>
+<tr>
+<td>Every mistake still reaches a person first</td>
+<td><a href="/blogs/blog/from_production_to_scale/#letting-each-run-check-its-own-work">Letting each run check its own work</a>: a one-command check, protected tests, reading the diff</td>
+</tr>
+<tr>
+<td>A change to the agent’s instructions breaks something nobody noticed</td>
+<td><a href="/blogs/blog/from_production_to_scale/#testing-the-configuration-like-code">Testing the configuration like code</a>: evals on every configuration change, one per incident</td>
+</tr>
+<tr>
+<td>A rule in the instructions is followed only most of the time</td>
+<td><a href="/blogs/blog/from_production_to_scale/#turning-rules-from-advice-into-gates">Turning rules from advice into gates</a>: hooks, approval gates, managed settings</td>
+</tr>
+<tr>
+<td>The agent should help ship, but never ship alone</td>
+<td><a href="/blogs/blog/from_production_to_scale/#shipping-through-the-pipeline-up-to-the-production-gate">Shipping through the pipeline up to the production gate</a>: read-only jobs first, deploy tools per environment, review without self-approval</td>
+</tr>
+<tr>
+<td>Incidents wait for someone to wake up</td>
+<td><a href="/blogs/blog/from_production_to_scale/#letting-monitoring-start-the-next-loop">Letting monitoring start the next loop</a>: control bands, alert levels, findings written as plans</td>
+</tr>
+<tr>
+<td>The bill grows with every run</td>
+<td><a href="/blogs/blog/from_production_to_scale/#keeping-cost-flat-as-the-fleet-grows">Keeping cost flat as the fleet grows</a>: the smallest passing model, effort, what each request resends, defaults before caps</td>
+</tr>
+</tbody>
+</table>
+<p>Both developer posts take the system’s shape as given. But someone chose what the model owns, which route the data takes, and what the system must prove before anyone wrote code. That someone is the architect.</p>
+<h2 id="designing-the-system-around-it-as-an-architect">Designing the system around it, as an architect</h2>
+<p>The architect meets the work at a stakeholder’s first sentence, before any code exists. The question is <strong>will everything around the model hold:</strong> the request, the design, the security review, and the team that runs it a year later?</p>
+<p>The shift at this role is from building things to making decisions that others must approve and live with. The model can usually do the task. What fails is the request nobody translated, the rule handed to the model that belonged to a database, or the decision nobody wrote down. <a href="/blogs/blog/from_request_to_running_system/">From Request to Running System</a> follows a project from that first sentence to a team running the system alone.</p>
+<p>Its sections come in the order a project meets them. Use the table to find the decision on your desk.</p>
+<table>
+<thead>
+<tr>
+<th>If the decision is</th>
+<th>Read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What the stakeholder actually asked for, and whether it fits the budget</td>
+<td><a href="/blogs/blog/from_request_to_running_system/#understanding-the-request-before-designing-anything">Understanding the request before designing anything</a>: the translation table, the model’s four properties, a verdict instead of a promise</td>
+</tr>
+<tr>
+<td>How anyone will know the system is right</td>
+<td><a href="/blogs/blog/from_request_to_running_system/#deciding-how-to-judge-it-before-building-it">Deciding how to judge it before building it</a>: the eval before the code, every change through it</td>
+</tr>
+<tr>
+<td>What the model owns, and whether it needs an agent</td>
+<td><a href="/blogs/blog/from_request_to_running_system/#designing-what-the-model-owns-and-how-the-work-flows">Designing what the model owns and how the work flows</a>: the ownership split, call versus workflow versus agent, reference architectures</td>
+</tr>
+<tr>
+<td>Which model, what context, and which route</td>
+<td><a href="/blogs/blog/from_request_to_running_system/#choosing-the-model-the-context-and-the-way-in">Choosing the model, the context, and the way in</a>: tiers per step, context as a working set, entry points and routes, reversal cost</td>
+</tr>
+<tr>
+<td>Whether it survives real volume and the security review</td>
+<td><a href="/blogs/blog/from_request_to_running_system/#making-it-hold-up-in-production">Making it hold up in production</a>: the slow tail, reliability layers, integration from the server outward</td>
+</tr>
+<tr>
+<td>Whether it stays safe, fair, and accountable</td>
+<td><a href="/blogs/blog/from_request_to_running_system/#keeping-it-safe-fair-and-accountable">Keeping it safe, fair, and accountable</a>: the layer stack, guardrails that fail closed, review by stakes, compliance evidence</td>
+</tr>
+<tr>
+<td>How it stays on course after launch</td>
+<td><a href="/blogs/blog/from_request_to_running_system/#running-it-after-launch">Running it after launch</a>: experiments, the feedback loop, decision records, proof of value</td>
+</tr>
+<tr>
+<td>How a team runs it without the architect</td>
+<td><a href="/blogs/blog/from_request_to_running_system/#handing-it-to-the-team">Handing it to the team</a>: shared defaults, staged rollout, runbooks</td>
+</tr>
+</tbody>
+</table>
+<p>The architect’s questions sound new, but many are the practitioner’s questions asked again, with more at stake. The practitioner asked what shape the work should take. The architect draws that shape and defends it. One habit runs through all three roles.</p>
+<h2 id="deciding-how-you-will-judge-it-in-every-role">Deciding how you will judge it, in every role</h2>
+<p>The questions grow with each role, but the first move stays the same. <strong>Before you build, decide how you will judge the result.</strong> What grows is what the check covers: a project’s business result for the practitioner, one feature’s output and then a fleet’s configuration for the developer, and a whole system’s acceptance for the architect.</p>
+<p>The diagram shows the same habit in each role.</p>
+<pre><code class="language-mermaid">flowchart LR
+    P["Practitioner&#x3C;br/>a baseline and a&#x3C;br/>measured comparison"] --> D1["Developer&#x3C;br/>an eval on one&#x3C;br/>feature's output"]
+    D1 --> D2["Developer at scale&#x3C;br/>evals on every&#x3C;br/>configuration change"]
+    D2 --> A["Architect&#x3C;br/>an eval with a threshold&#x3C;br/>set before the build"]
+</code></pre>
+<p>Each post puts that habit first, in its own words. The table shows where.</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Where the check comes first</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Practitioner</td>
+<td><a href="/blogs/blog/when_code_is_cheap/#1-what-is-the-problem-before-ai">What is the problem, before AI?</a> records the baseline, and <a href="/blogs/blog/when_code_is_cheap/#7-how-will-we-know-it-worked">How will we know it worked?</a> measures against it</td>
+</tr>
+<tr>
+<td>Developer</td>
+<td><a href="/blogs/blog/from_prototype_to_production/#write-the-decisions-down-first">Write the decisions down first</a>, then <a href="/blogs/blog/from_prototype_to_production/#turn-the-success-criteria-into-a-score">turn the success criteria into a score</a></td>
+</tr>
+<tr>
+<td>Developer at scale</td>
+<td><a href="/blogs/blog/from_production_to_scale/#rerun-the-evals-whenever-the-configuration-changes">Rerun the evals whenever the configuration changes</a>, and <a href="/blogs/blog/from_production_to_scale/#turn-every-incident-into-an-eval">turn every incident into an eval</a></td>
+</tr>
+<tr>
+<td>Architect</td>
+<td><a href="/blogs/blog/from_request_to_running_system/#writing-the-eval-before-the-code">Writing the eval before the code</a>, with the threshold set before the run</td>
+</tr>
+</tbody>
+</table>
+<p>So the path is less a change of skill than a change of reach. A practitioner who measured a baseline before trying a tool already holds the habit the developer and the architect need. They only point it at something larger.</p>
+<p><strong>Lesson: each role answers a bigger question, but the first move never changes: decide how you will judge it before you build it.</strong></p>
+<p>So what can you do this week? Find the role you are in, and take the question of the role after it. Write down that role’s first artifact for the project on your desk: for a practitioner moving to developer, a one-page design document with success criteria; for a developer moving to architect, a translation table of what the stakeholder said, what it implies, and what nobody has confirmed. The post for that role shows how.</p>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2026 Locch. All rights reserved.
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.9GFZ96Qh.js"></script> </body> </html>

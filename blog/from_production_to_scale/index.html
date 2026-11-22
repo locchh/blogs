@@ -1,0 +1,399 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><script>
+	(() => {
+		let theme;
+		try {
+			theme = localStorage.getItem('blog-theme');
+		} catch {
+			// Storage can be blocked in private or restricted browser contexts.
+		}
+		if (!['light', 'dark', 'reading'].includes(theme)) {
+			theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		}
+		document.documentElement.dataset.theme = theme;
+	})();
+</script><link rel="icon" type="image/svg+xml" href="/blogs/favicon.svg?v=9"><link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon.png?v=9"><link rel="sitemap" href="/blogs/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Locch's Blog" href="https://locchh.github.io/rss.xml"><meta name="generator" content="Astro v5.18.2"><!-- Font preloads --><link rel="preload" href="/blogs/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/blogs/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://locchh.github.io/blogs/blog/from_production_to_scale/"><!-- Primary Meta Tags --><title>From Production to Scale</title><meta name="title" content="From Production to Scale"><meta name="description" content="What changes after a model feature ships and succeeds: more runs than anyone can watch. How the person moves from working inside each loop to writing its checks, with parallel sessions, self-checking runs, evals on the configuration, hooks as gates, a pipeline that stops at production, monitoring that starts the next loop, and cost that stays flat. Written around Claude, true for any model. With a glossary."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://locchh.github.io/blogs/blog/from_production_to_scale/"><meta property="og:title" content="From Production to Scale"><meta property="og:description" content="What changes after a model feature ships and succeeds: more runs than anyone can watch. How the person moves from working inside each loop to writing its checks, with parallel sessions, self-checking runs, evals on the configuration, hooks as gates, a pipeline that stops at production, monitoring that starts the next loop, and cost that stays flat. Written around Claude, true for any model. With a glossary."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://locchh.github.io/blogs/blog/from_production_to_scale/"><meta property="twitter:title" content="From Production to Scale"><meta property="twitter:description" content="What changes after a model feature ships and succeeds: more runs than anyone can watch. How the person moves from working inside each loop to writing its checks, with parallel sessions, self-checking runs, evals on the configuration, hooks as gates, a pipeline that stops at production, monitoring that starts the next loop, and cost that stays flat. Written around Claude, true for any model. With a glossary."><link rel="stylesheet" href="/blogs/_astro/about.U9BOVk76.css">
+<style>main[data-astro-cid-bvzihdzo]{width:min(calc(100% - 2rem),1040px);max-width:100%;margin:2em auto}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:100%;max-width:var(--prose-width);margin:auto;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}@media(max-width:768px){main[data-astro-cid-bvzihdzo]{width:100%;margin:0}}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/blogs/" data-astro-cid-3ef6ksr2>Locch&#39;s Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/blogs/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blogs/blog/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/blogs/about/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="theme-switcher" role="group" aria-label="Display mode" hidden data-astro-cid-dz5h74bc> <button type="button" data-theme-choice="light" aria-pressed="false" data-astro-cid-dz5h74bc>Light</button> <button type="button" data-theme-choice="dark" aria-pressed="false" data-astro-cid-dz5h74bc>Dark</button> <button type="button" data-theme-choice="reading" aria-pressed="false" data-astro-cid-dz5h74bc>Reading</button> </div> <script type="module">const n=["light","dark","reading"],c=document.querySelector(".theme-switcher"),s=document.querySelectorAll("[data-theme-choice]"),o=window.matchMedia("(prefers-color-scheme: dark)");function r(){for(const e of s)e.setAttribute("aria-pressed",String(e.dataset.themeChoice===document.documentElement.dataset.theme))}function t(e,l=!1){if(n.includes(e)){if(document.documentElement.dataset.theme=e,l)try{localStorage.setItem("blog-theme",e)}catch{}r(),document.dispatchEvent(new CustomEvent("theme-change"))}}function i(){if(!a){try{if(n.includes(localStorage.getItem("blog-theme")??""))return}catch{}t(o.matches?"dark":"light")}}let a=!1;for(const e of s)e.addEventListener("click",()=>{a=!0,t(e.dataset.themeChoice??"light",!0)});window.addEventListener("storage",e=>{e.key!=="blog-theme"&&e.key!==null||(a=!1,e.newValue&&n.includes(e.newValue)?t(e.newValue):t(o.matches?"dark":"light"))});o.addEventListener("change",i);r();c&&(c.hidden=!1);</script>  <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo>  </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2026-11-22T00:00:00.000Z"> Nov 22, 2026 </time>  </div> <h1 data-astro-cid-bvzihdzo>From Production to Scale</h1> <hr data-astro-cid-bvzihdzo> </div>  <p>A feature that passes the checks a team runs before launch has a new problem a few months later: it worked. More teams use it, more agents run it, and more runs happen at night with nobody at the keyboard. The person who used to read every output, start every job, and approve every step cannot keep up.</p>
+<p>That person is now the slowest part of the system. Adding agents does not help, because each one hands the same person more to read.</p>
+<p>The trouble sits in the <strong>loop</strong>: give an agent a task, let it run, check the result, decide the next step. Today a person does the checking and the deciding, by hand, every time. So scale is not mainly a question of servers. <strong>At scale, a person stops working inside the loop and writes its checks instead.</strong> The checks run every time. The person reads only what they send back.</p>
+<p>This post follows that move from the developer’s side. It starts where <a href="/blogs/blog/from_prototype_to_production/">From Prototype to Production</a> ends, with one feature that runs and passed review, and it points back to that post instead of repeating it. The architect’s side of running a system after launch is in <a href="/blogs/blog/from_request_to_running_system/">From Request to Running System</a>.</p>
+<p>I write it around Claude and Claude Code, Anthropic’s command-line coding agent, because Anthropic’s developer training documents these patterns in detail. Most examples come from that training. Its companies are fictional: the numbers from its recorded demos are measured runs, and its stories are worked cases, not reports of real events. Product names and limits change often, so check current documentation before you build.</p>
+<p>The diagram shows the seven steps, in the order a running system grows into a <strong>fleet</strong>: every session, pipeline job, and triggered agent running at once.</p>
+<pre><code class="language-mermaid">graph LR
+    A["Run more work&#x3C;br/>than one person&#x3C;br/>can watch"] --> B["Let each run&#x3C;br/>check itself"]
+    B --> C["Test the&#x3C;br/>configuration&#x3C;br/>like code"]
+    C --> D["Turn rules&#x3C;br/>into gates"]
+    D --> E["Ship up to the&#x3C;br/>production gate"]
+    E --> F["Let monitoring&#x3C;br/>start the next loop"]
+    F --> G["Keep cost flat&#x3C;br/>as the fleet grows"]
+</code></pre>
+<p>Each step begins where the one before it hit a limit, and the first limit is attention.</p>
+<h2 id="running-more-work-than-one-person-can-watch">Running more work than one person can watch</h2>
+<p>The first sign of scale is that one engineer has more work in progress than one session can hold. The fix is to run several streams at once. The catch is that every stream ends on the same person’s desk. <strong>The number of streams is set by review, not by compute.</strong></p>
+<h3 id="give-each-parallel-session-its-own-worktree">Give each parallel session its own worktree</h3>
+<p>A <strong>parallel session</strong> is a second full Claude Code instance working a separate task. Sessions know nothing about each other. The engineer steering them is the only thing they share.</p>
+<p>Two sessions in one folder fight over the same files. So each one gets its own <strong>worktree</strong>: a separate checkout of the repository on its own branch. One terminal runs <code>claude --worktree feature-auth</code>, another runs <code>claude --worktree fix-rate-limit</code>, and neither can overwrite the other’s changes.</p>
+<p>The diagram shows the shape. Look at where the arrows end.</p>
+<pre><code class="language-mermaid">flowchart TD
+    P["One engineer&#x3C;br/>steers and reviews"] --> S1["Session 1&#x3C;br/>worktree feature-auth"]
+    P --> S2["Session 2&#x3C;br/>worktree fix-rate-limit"]
+    P --> S3["Session 3&#x3C;br/>worktree docs-update"]
+    S1 --> R["Review queue&#x3C;br/>one person reads it all"]
+    S2 --> R
+    S3 --> R
+    R --> P
+    class R check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p>Every arrow ends at the same review queue. So the ceiling is how many streams one person can review properly, not how many the machine can run. <a href="/blogs/blog/when_code_is_cheap/">When Code Is Cheap</a> makes the same point about who checks the output: review hours must be planned like any other capacity.</p>
+<p>So split the work so tasks touch different files. Tasks that share files run in one session, one after another. Start with two or three sessions, and add one only while review keeps up.</p>
+<h3 id="delegate-to-a-subagent-only-when-the-result-is-all-you-need">Delegate to a subagent only when the result is all you need</h3>
+<p>Inside one session, a <strong>subagent</strong> runs a scoped job in its own context window and returns only a summary. So one question decides when to use it: does the in-between work matter to you?</p>
+<p>If you only need the result, delegate. Research is the classic case. “Where is the token validated?” may take dozens of file reads, and the main session needs one line back. Code review is another. A reviewer in a fresh context has not watched the code being written, so it does not share the author’s assumptions.</p>
+<p>If you need to see and react to the steps, keep the work in the main session. Three common uses fail. The first adds nothing, and the other two hide the steps you need:</p>
+<ul>
+<li><strong>Expert personas.</strong> “You are a Kubernetes expert” adds nothing the main session does not already know.</li>
+<li><strong>Sequential pipelines.</strong> One subagent reproduces a bug, the next debugs it, a third fixes it. Each step depends on what the last one found, and the findings get lost in the handoffs.</li>
+<li><strong>Test runners.</strong> A subagent that reports “tests failed” hides the output you need to fix them.</li>
+</ul>
+<p>A subagent that is worth having still needs four things. A description that tells the main session when to launch it and what to ask for. An output format in its system prompt, which gives it a natural place to stop. A section in that format for obstacles it hit, so the main session does not rediscover a workaround. And only the tools its job needs: read-only for research, no edit rights for a reviewer.</p>
+<h3 id="hand-the-longest-loops-to-a-managed-runtime">Hand the longest loops to a managed runtime</h3>
+<p>Some loops outgrow a session altogether, and once they run unattended for hours, nobody watches them at all. They work across many tools, write files, keep state, and must survive a dropped connection. Running that loop on your own server means owning its sandbox, its state, and its recovery.</p>
+<p>A <strong>managed agent</strong> hands that loop to the provider. You define the agent once (model, system prompt, tools), give it an environment (a sandbox with the packages and network rules it needs), and start a run, which the API calls a session. Then you send events in and read events out.</p>
+<p>The provider stores each run’s history, so a client that drops can fetch what it missed and carry on. From Prototype to Production compared this option with writing the loop yourself.</p>
+<p>So more sessions, more subagents, and longer loops all raise output, and none of them raises review. What can each run check before a person sees it?</p>
+<h2 id="letting-each-run-check-its-own-work">Letting each run check its own work</h2>
+<p>A run that cannot check itself sends every mistake to a person. A run that can check itself sends only the ones its check could not fix. <strong>Give every run a way to verify its own work, and the reviewer stops being the first test.</strong></p>
+<h3 id="give-the-session-a-check-it-can-run-itself">Give the session a check it can run itself</h3>
+<p>The check has to be one command, with a clear pass and fail. If checking the work today takes three commands and some knowledge of the environment, wrap them in one command such as <code>make test</code> that exits non-zero on failure. Then list each command in CLAUDE.md, the instruction file every Claude Code session reads at the start, with an example of a healthy output.</p>
+<p>Next, state the target as something checkable: “all tests in <code>test_status.py</code> pass,” or “the endpoint returns 200 with the new field.” For interface work, give the session a browser or screenshot tool and the design mockup to match. Two or three rounds of build, screenshot, compare is normal.</p>
+<p>The diagram shows the loop this creates, and the one step outside it.</p>
+<pre><code class="language-mermaid">flowchart LR
+    T["Clear target&#x3C;br/>tests pass, screenshot&#x3C;br/>matches the mockup"] --> W["Session changes&#x3C;br/>the code"]
+    W --> C{"Run the&#x3C;br/>one-command check"}
+    C -->|"Fails"| W
+    C -->|"Passes"| V["Verifier in a fresh context&#x3C;br/>runs the app once"]
+    V --> E["Engineer reviews&#x3C;br/>intent and risk"]
+    class C check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p>The loop and the verifier are different things. The loop runs as often as the work needs. The <strong>verifier</strong> is the fresh-context reviewer from the subagent advice above, run once after the session thinks it is done.</p>
+<h3 id="protect-the-check-from-the-code-it-checks">Protect the check from the code it checks</h3>
+<p>A check the session can edit is not a check. An agent asked to make a test pass can also make it pass by changing the test. So the loop needs one more rule.</p>
+<p>For a bug fix, write the failing test first. Ask the session to reproduce the bug as a test, confirm it fails for the expected reason, and commit it. Only then ask for the fix, with a <strong>hook</strong> (your own script that runs at a fixed point in the session) that blocks edits to test files during the fix. A test that existed before the fix, and that the agent could not rewrite, is proof the bug is gone.</p>
+<h3 id="check-the-run-in-proportion-to-how-little-you-watched">Check the run in proportion to how little you watched</h3>
+<p>Even a self-checked run ends with a summary, and a summary is the run’s own account of itself. The trap is a tidy summary over a diff that touched a file nobody expected. So the engineer’s own check grows with how little of the run they saw.</p>
+<p>A short session you watched needs a glance. An overnight run needs a real check:</p>
+<ul>
+<li>Read the diff first. Look at the files in the plan, then for anything outside it.</li>
+<li>Confirm the tests ran, from the hook’s output, not from the summary’s claim.</li>
+<li>For a headless run (one started from a script with <code>claude -p</code>, nobody at the terminal), read its JSON result and exit code, not its prose.</li>
+<li>For anything that matters, ask a fresh session for a cold review of the changed code.</li>
+</ul>
+<p>That last step is the verifier again, pointed at work nobody saw being done.</p>
+<p>So each run now arrives already checked against its own target. But all runs read the same CLAUDE.md, skills (instruction files a session loads when a task needs them), and hooks. What checks the configuration that steers them?</p>
+<h2 id="testing-the-configuration-like-code">Testing the configuration like code</h2>
+<p>A single line in CLAUDE.md changes the behavior of every session that reads it. So does a skill, a hook, or a tool description. That gives the configuration the widest reach of any code in the repository. <strong>Configuration that steers every run deserves the regression tests that ordinary code gets.</strong></p>
+<h3 id="rerun-the-evals-whenever-the-configuration-changes">Rerun the evals whenever the configuration changes</h3>
+<p>From Request to Running System gates every prompt and model change on an <strong>eval</strong>. Configuration is the change it left out. An eval here is a real task plus the checks that define an acceptable result. Collect 20 to 50 tasks from recent work, each with its accepted outcome. Write each one down as a prompt, the folders it may change, and its checks: tests pass, lint is clean, behavior is unchanged, policy is followed.</p>
+<p>Then run the suite in CI (continuous integration, the pipeline that builds and tests every change), on a schedule and on every change to CLAUDE.md, skills, or hooks. The diagram shows one eval’s run. Note the two ways it can fail.</p>
+<pre><code class="language-mermaid">flowchart LR
+    CH["A pull request changes&#x3C;br/>CLAUDE.md, a skill, or a hook"] --> CO["Check out the old commit&#x3C;br/>the eval starts from"]
+    CO --> CF["Copy in the new&#x3C;br/>configuration under test"]
+    CF --> RUN["Run the task&#x3C;br/>non-interactively"]
+    RUN --> ST{"Changed files outside&#x3C;br/>the allowed folders?"}
+    ST -->|"Yes"| F["Fail"]
+    ST -->|"No"| CK{"Every check&#x3C;br/>passes?"}
+    CK -->|"No"| F
+    CK -->|"Yes"| P["Pass"]
+    F --> M["Merge check fails,&#x3C;br/>the reviewer sees which eval"]
+    class ST,CK check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p>Those two failure checks make the suite trustworthy. Each eval starts from the commit just before the real past task it was copied from, so the agent works on the code as it stood then. And the run fails if it touched anything outside its allowed folders, so the agent cannot pass by rewriting the Makefile or the checks. The check scripts themselves run from a copy taken before the agent starts, so the agent cannot edit them either.</p>
+<p>The value shows on a change that looks safe. In a worked case from the course, a team trims CLAUDE.md to fit on one page and drops the line saying not to log request or response bodies. It looks redundant, because a skill and a hook already keep fields tagged as personal data out of the logs.</p>
+<p>The suite runs because CLAUDE.md changed. One eval asks for debug logging on a claim-status endpoint, and this time the session logs the whole response. The personal-data check still passes, because no field in the response is tagged. But a free-text field holds a customer’s name and phone number, and a second check that looks for whole response bodies in the logs fails. The line goes back in before the merge.</p>
+<p>So the dropped line was not redundant: the tags covered fields, and only the line covered free text.</p>
+<p>The same suite measures gains, not only losses, because tool descriptions are configuration too. In one of the course’s recorded demos, a team merged four overlapping tools, each returning one fact about a project, into one tool with a parameter, and rewrote the descriptions. Same model, same 30 test questions: the number answered with the right tool calls rose from 14 to 26. So a description rewrite deserves the same eval run as a model change.</p>
+<h3 id="turn-every-incident-into-an-eval">Turn every incident into an eval</h3>
+<p>A suite built once goes stale. As models improve, every setup passes the old cases, so they stop showing a difference. The suite needs new cases, and the best source is production.</p>
+<p>The rule is simple: every production incident leaves an eval behind, written by the team that owned the incident. The eval replays the request that caused the incident, from the commit before it, and fails if the mistake comes back. Then the same class of incident should stop repeating, and a falling repeat rate is the sign the suite is working.</p>
+<p>So the configuration is now under test. But an eval only samples 20 to 50 tasks, and it sees a broken rule only after a session has broken it. What stops a live session from breaking the rule in the first place?</p>
+<h2 id="turning-rules-from-advice-into-gates">Turning rules from advice into gates</h2>
+<p>An eval sees a broken rule after the fact, because to a session an instruction is only a request. It follows the request most of the time, and at scale “most of the time” means a steady trickle of violations. <strong>A rule that must hold every time needs a gate: a check that runs every time and can stop the action.</strong></p>
+<h3 id="back-every-must-hold-rule-with-a-hook">Back every must-hold rule with a hook</h3>
+<p>From Prototype to Production drew the line between a convention and a guardrail: a rule in CLAUDE.md is followed most of the time, a hook every time it fires. A skill sits on the convention side. It makes a policy likely, because it loads the policy while the code is written. A hook is what turns the policy into a gate.</p>
+<p>The plainest case is “done.” An instruction in CLAUDE.md asks the session to run the tests before reporting a task complete. A <strong>stop hook</strong>, which runs when the session tries to end its turn, enforces it: it runs the tests and refuses to let the turn end on a failure.</p>
+<p>At scale, three details decide whether a hook really holds. First, the hook script’s exit code. Exit 2 blocks the action and sends the reason back to the session. Exit 1 feels like an error but does not block: the action runs anyway. A guardrail that exits 1 is a log line, not a gate.</p>
+<p>Second, a hook can rewrite instead of refuse. A pre-tool hook can return a changed input, for example a shell command with a live secret replaced by a placeholder. The command still runs, but the secret never leaves the machine. The rewrite replaces the whole input, so it must copy back the fields it does not change.</p>
+<p>Third, every hook has a blind spot. A hook that runs after an edit cannot undo it, though its message lets the session fix the line. And a hook on the edit tools does not fire when a shell command rewrites the file. The diagram shows how the layers cover each other’s gaps.</p>
+<pre><code class="language-mermaid">flowchart LR
+    S["Skill&#x3C;br/>applies the policy&#x3C;br/>while code is written"] --> H["Hook on each edit&#x3C;br/>blocks or reports&#x3C;br/>the violating line"]
+    H --> PR["Required check&#x3C;br/>on the pull request&#x3C;br/>runs the same script"]
+    PR --> M["Merge"]
+    X["A shell command&#x3C;br/>rewrites the file"] -.->|"skips the edit hook"| PR
+    class H,PR check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p>So the same check script runs in two places: at the edit, where it is fast and scoped to one file, and on the pull request, where it catches anything that reached the branch another way.</p>
+<h3 id="let-a-gate-ask-or-wait-and-name-the-way-through">Let a gate ask or wait, and name the way through</h3>
+<p>Some gates should not just allow or block. They should ask, or wait for someone else’s approval. A release gate, a hook on the release tool, is the clearest case. In development it allows. In staging, a pipeline run on the main branch is allowed outright, and a session someone is driving gets asked. In production it looks for an approved change ticket for that exact version, and blocks until one exists.</p>
+<p>A block that only says “denied” stalls the run. So every block names the route to approval: “Open a change ticket for this version, wait for the release manager to approve it, then call release again with the ticket number.” The session can pass that on, and the person knows exactly what to do.</p>
+<p>Two cautions keep such a gate honest. In a non-interactive run nobody can answer an “ask,” so it becomes a denial, which is why staging allows the pipeline outright. And the gate only works if the agent has no way to write to the records it reads, such as the change tickets.</p>
+<h3 id="lock-the-gates-where-nobody-can-switch-them-off">Lock the gates where nobody can switch them off</h3>
+<p>A hook in the project’s settings holds only while each engineer leaves it on. One engineer with a local override can switch it off. So the rules that must hold for everyone go into the enterprise managed settings that From Prototype to Production described, which an administrator deploys and nobody can override.</p>
+<p>A locked-down setup for a regulated team does at least these jobs:</p>
+<ul>
+<li>Deny reads of secrets and block network calls through tools, while pre-approving the safe inner work (build, test, lint) so the deny list does not become a stream of approval prompts.</li>
+<li>Turn on the operating-system sandbox and refuse to start without it, because a tool-level deny on web fetches does not stop a shell command from reaching the network.</li>
+<li>Keep credential files such as SSH keys and cloud keys unreadable from sandboxed commands, and strip named secrets from their environment.</li>
+<li>Let only managed hooks run, so the release gate cannot be bypassed by a project file.</li>
+<li>Allow tools, plugins, and MCP servers only from the organization’s approved list.</li>
+<li>Refuse to start on a version below the one the organization assessed.</li>
+</ul>
+<p>Each deny removes some capability, so treat such a setup as a starting point, tuned to the data the repository holds.</p>
+<p>Managed settings can also fix the permission mode, which sets what the agent may do without asking. Of the six modes in From Prototype to Production, two fit unattended work. Do-not-ask runs reads and pre-approved tools and denies anything that would prompt, so a pipeline never hangs on a question. Auto judges intent, not correctness, so pair it with the stop hook from “Back every must-hold rule with a hook.”</p>
+<p>So the gates now hold inside every session, for everyone. But a session on a laptop is not where most work ships. How far can the pipeline itself be trusted?</p>
+<h2 id="shipping-through-the-pipeline-up-to-the-production-gate">Shipping through the pipeline up to the production gate</h2>
+<p>A laptop session is watched at least once. A pipeline job starts on an event, with nobody watching at all. That raises the stakes of every earlier step. <strong>The agent may act up to the production gate and cannot pass it.</strong> The one thing it may do in production on its own is roll back, because a person approved that procedure in advance.</p>
+<h3 id="start-the-pipeline-with-read-only-judgment">Start the pipeline with read-only judgment</h3>
+<p>Pipelines already run scripts. What they lack is judgment: why did the build break, is this test flaky, what goes in the changelog. Those jobs used to wait for a person, and they are where the agent starts.</p>
+<p>The order matters. First, read-only jobs: run the agent non-interactively with <code>claude -p</code> to triage a failed build or draft release notes. Then write jobs behind the existing gates: fix lint, update generated docs, address a review comment. Anything the agent writes arrives as a pull request, through branch protection (the repository rules that require review before a merge), with no route to push to the main branch.</p>
+<p>Whatever the job, it runs in a container with a network policy and short-lived credentials. By default it holds no production credentials at all. So how does an agent with no production credentials deploy anything?</p>
+<h3 id="give-each-environment-its-own-deploy-tools">Give each environment its own deploy tools</h3>
+<p>It deploys through tools, exposed through MCP (the Model Context Protocol, a standard way for a server to offer tools to any client): release, status, and rollback. The design choice that makes this safe is one MCP server per environment, each with its own access key.</p>
+<p>Why separate servers? A permission rule that allows an MCP tool names the server and the tool, not the tool’s arguments. So “release to staging” and “release to production” can only be told apart if they live on different servers. The staging job then holds only the staging key, and the other servers refuse it.</p>
+<p>The diagram shows the three environments. Note that rollback reaches production without passing the gate, and release does not.</p>
+<pre><code class="language-mermaid">flowchart LR
+    D["Development&#x3C;br/>the agent releases freely"] --> S["Staging&#x3C;br/>allowed from the pipeline&#x3C;br/>on main, else a person is asked"]
+    S --> G{"Production gate&#x3C;br/>approved change ticket&#x3C;br/>for this version?"}
+    G -->|"Yes"| P["Release"]
+    G -->|"No"| B["Denied, with the&#x3C;br/>route to approval"]
+    G -->|"The hook fails&#x3C;br/>to run"| C["Denied&#x3C;br/>fails closed"]
+    R["Rollback&#x3C;br/>approved in advance,&#x3C;br/>rehearsed in staging"] -.-> P
+    class G check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p>In production, release is left off the list of tools that may run without asking. So the release gate from the previous section is the only thing that can say yes. If that hook crashes or never runs, nothing says yes, and the release is denied. That is <strong>failing closed</strong>, the rule From Request to Running System traces to Saltzer and Schroeder. It is the opposite of the exit-1 trap, where a broken check lets the action through.</p>
+<p>Rollback stays on the list, because it is a <strong>runbook</strong>: a written procedure approved in advance. That makes it the path to rehearse most, as one command the agent can run, exercised regularly in staging.</p>
+<h3 id="keep-the-approval-with-a-person-who-did-not-write-the-code">Keep the approval with a person who did not write the code</h3>
+<p>Automated review ranks findings, but it never approves. Approval stays with a code owner, a person named as responsible for that part of the code, who did not write it. The review’s job is to tell that person where to look, so their attention moves up a level: does the change do what the plan intended, and is the risk acceptable?</p>
+<p>The review policy lives in a file at the repository root, often called <code>REVIEW.md</code>. It names the review passes (bugs, security, and compliance with the plan), says what counts as important and what is a nit (a minor style comment), caps the nits, and lists what to skip. When a finding repeats, its correction goes into CLAUDE.md, so the next session avoids the mistake.</p>
+<p>A pass that reads the plan catches what a diff alone cannot. In one course case, a pull request added a status panel to a customer portal that fetched new data on every render. Nothing in the diff looked wrong. But the plan file committed with the task said the panel must cache, because the system behind it allows 50 requests a second. The compliance pass read the plan and flagged it.</p>
+<p>So the review earned its place by reading what the reviewer of a diff would not have open. One gap remains when an agent opens pull requests under an app’s name, as Anthropic’s Slack agent does. Branch protection stops a pull request’s author from approving it, and the author is now the app. So the person who asked for the change could approve their own request.</p>
+<p>The fix is two required approvals, so at least one approver is someone other than the requester. Also dismiss approvals when new commits arrive, or the agent can push after a person has approved.</p>
+<p>So the pipeline now ships up to production and stops there. After the release, the system is live with nobody watching. Who notices when it breaks?</p>
+<h2 id="letting-monitoring-start-the-next-loop">Letting monitoring start the next loop</h2>
+<p>So far every loop starts from a person or a code event. Nothing yet starts one from what production does: an alert still wakes someone, and a ticket still waits for someone to pick it up. <strong>The last step is to let a signal from production start the agent, while a person triages what it finds.</strong> This is the feedback loop from From Request to Running System, with the agent doing the first diagnosis.</p>
+<h3 id="let-rarer-readings-unlock-more-action">Let rarer readings unlock more action</h3>
+<p>A trigger that fires on every blip buries the team in noise. A trigger that waits for disaster fires too late. That problem is a century old.</p>
+<p>In a 1924 memo at Western Electric, a year before its engineers became Bell Telephone Laboratories, <a href="https://en.wikipedia.org/wiki/Walter_A._Shewhart">Walter Shewhart</a> drew the first control chart. His point was that a process always varies by chance, and only variation outside its normal range has a cause worth chasing.</p>
+<p>A <strong>control band</strong> applies that idea to a metric. Take the mean of the last 30 days of hourly readings, and measure how far readings usually stray from it: the standard deviation, or <strong>σ</strong>. The 1σ line is the mean plus one σ, the 2σ line the mean plus two, and so on.</p>
+<p>Chance alone crosses each line now and then. If a steady metric’s readings follow a bell curve, then at 720 hourly readings a month (30 days of 24), about four a day land more than 1σ above the mean, about 16 a month more than 2σ above, and about one a month more than 3σ above.</p>
+<p>So each line unlocks a little more. A reading past 1σ is only logged: at four a day, acting on it would be noise. A reading past 2σ starts a read-only diagnosis, cheap enough to waste 16 times a month. Only a reading past 3σ, which chance reaches about once a month, lets the agent act, and then only through a pull request or an approved runbook.</p>
+<p>A spike is not the only danger. A slow drift may never cross 3σ. The <a href="https://en.wikipedia.org/wiki/Western_Electric_rules">Western Electric rules</a>, from a 1956 quality-control handbook, include drift rules that catch it: flag four of the last five readings past the 1σ line, or eight in a row above the mean. A drift counts as a 2σ reading.</p>
+<p>The diagram shows the alert levels a team writes in version-controlled config. Note that the model appears only after a plain script has sorted the reading.</p>
+<pre><code class="language-mermaid">flowchart TD
+    M["Detection script&#x3C;br/>runs every hour,&#x3C;br/>no model involved"] --> T{"How far above&#x3C;br/>the mean is the&#x3C;br/>newest reading?"}
+    T -->|"Past 1σ"| L["Log only"]
+    T -->|"Past 2σ, or a&#x3C;br/>drift rule trips"| D["Agent diagnoses,&#x3C;br/>read-only tools"]
+    T -->|"Past 3σ"| A["Agent may open a pull request&#x3C;br/>or run an approved runbook"]
+    D --> I["Finding written&#x3C;br/>as intent.md"]
+    A --> I
+    I --> Q["Triage queue&#x3C;br/>fix now, schedule, or dismiss"]
+    Q -->|"Dismissals tune&#x3C;br/>the bands"| M
+    class T check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p>So detection stays deterministic: a short script, version-controlled and unit-tested, with no model in it. And the loop tunes itself. Each finding a person dismisses as noise is a reason to adjust that metric’s band, so the same blip stops waking the agent.</p>
+<h3 id="write-the-finding-as-a-plan-not-a-fix">Write the finding as a plan, not a fix</h3>
+<p>What the agent produces matters as much as when it starts. A fix pushed in the middle of the night skips every gate built so far. So the agent writes its diagnosis as <strong>intent.md</strong>, a short problem statement in four parts: the anomaly and its evidence, the outcome it proposes, the systems affected, and the open questions. These are the parts a person would write to propose new work.</p>
+<p>From there the finding goes through the same pipeline as anything else. A person triages the queue: fix now, schedule, or dismiss. A fix goes through review. And the incident leaves an eval behind, as in “Turn every incident into an eval.”</p>
+<p>A worked case from the course shows why the agent writes a plan even when it can fix the symptom. The rollback is safe, but the real question is one only a person can answer.</p>
+<div class="example">
+<p><strong>Example · A cache set to zero</strong></p>
+<p>An insurer’s customer portal shows claim status and caches each answer for 60 seconds. A release at 13:52 sets the cache to zero. Every page view now reaches the older claims system behind it, which allows 50 requests a second, and it starts refusing requests.</p>
+<p>At 14:00 the hourly check reads the status endpoint’s error rate at 1.9 percent. The 30-day mean is 0.2 percent, and σ is 0.02 percentage points. So the reading sits about 85σ above the mean, far past the 3σ line, and the agent may take one of two routes: open a pull request, or run an approved runbook.</p>
+<p>A release went out minutes before the breach, so the agent runs the rollback runbook at 14:02. The earlier version is live again at 14:04. Then it writes intent.md: the problem with its numbers, the release that caused it, the constraint that status may be up to 60 seconds old, and one open question: who asked for live status, and is 60 seconds too slow for them?</p>
+<p>The fix goes through review like any other change. The incident leaves an eval that asks a session to make the panel “feel live” and fails if the cache is gone.</p>
+</div>
+<p>So the agent acted only through a rehearsed route, and the real decision, what “live” should mean, went back to a person.</p>
+<p>The same work can also arrive in a chat channel instead of from a script. An agent with its own identity in the on-call channel picks up each alert, posts what broke and a proposed fix in the alert’s thread, and drafts the postmortem once the incident closes. Where no rollback runbook has been approved in advance, it waits for the on-call engineer to approve the rollback in that thread.</p>
+<p>Now the loop starts itself. But a loop that runs without anyone starting it also spends money without anyone noticing.</p>
+<h2 id="keeping-cost-flat-as-the-fleet-grows">Keeping cost flat as the fleet grows</h2>
+<p>Every earlier step adds runs: parallel sessions, evals on every configuration change, agents in CI, agents woken by monitoring. While one team uses a feature, the bill is small. Across a fleet, a small waste per run multiplies by every run. <strong>At scale, cost is set by what every run does by default: the model it starts on, what it resends each turn, and the settings nobody changes.</strong></p>
+<h3 id="start-on-the-smallest-model-and-tune-effort-before-moving-up">Start on the smallest model and tune effort before moving up</h3>
+<p>From Prototype to Production starts on the balanced tier and steps down for high-volume work. For a fleet, make the bottom the starting point of the search. The course’s rule is to run 20 to 30 real examples through the smallest tier first, and stop at the cheapest model whose output you would ship. At volume, every step up is multiplied by every run.</p>
+<p><strong>Effort</strong>, the request setting From Prototype to Production introduced, is the second dial. It sets how hard the model works on a task, not what it knows. Too low, and it stops early with unfinished work, which costs a second request. Too high, and it overthinks, finds tasks you never assigned, and takes longer. The diagram shows which dial to turn.</p>
+<pre><code class="language-mermaid">flowchart TD
+    S["Start at the default effort"] --> Q{"What went wrong?"}
+    Q -->|"Stopped early,&#x3C;br/>work unfinished"| U["Raise effort one level"]
+    Q -->|"Overthought,&#x3C;br/>did more than asked"| D["Lower effort one level"]
+    Q -->|"Did not know enough,&#x3C;br/>even at high effort"| M["Move up one model,&#x3C;br/>back to the default effort"]
+    U --> S2["Rerun and compare"]
+    D --> S2
+    M --> S2
+    class Q check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p>So change the model only when more effort did not fix the problem. And when you change models, start again at the default effort, because the same level name means a different amount of work on a different model. When a new model ships, rerun the tasks: it may do the same work at a lower effort, for less.</p>
+<h3 id="stop-paying-for-the-same-tokens-on-every-turn">Stop paying for the same tokens on every turn</h3>
+<p>The second default is what each request resends. An agent that uses tools sends everything again on every request: the tool definitions, the system prompt, the question, and every tool result so far. So its cost grows with each call. In one recorded demo, an agent’s first request carried 606 input tokens, and its 37th carried 47,905, almost all of it the 36 earlier tool calls and their results.</p>
+<p>Prompt caching cuts the part that never changes. From Prototype to Production gave the prices and the conditions for a cache hit. One trap matters once you track spend across a fleet: with caching on, the input-token count leaves out the cached part, so the true total adds the cache reads and writes to it. Watch all three counts, or a cache that silently stopped working looks like a cheaper month.</p>
+<p><strong>Programmatic tool calling</strong> cuts the part that grows. The model writes a short script that calls your tools, the script runs in a code-execution container, and only what the script prints reaches the model. The tool results stay with the script.</p>
+<p>The difference is large when lookups do not depend on each other. One demo asked which of 40 engineers were under 70 percent utilization in a month. That took 41 tool calls: one to list the engineers and one per engineer.</p>
+<p>The ordinary tool loop sent 42 requests to the model and about 1.1 million input tokens in total, for $2.29. The scripted run sent 3 requests and about 28,000 input tokens, for under 7 cents, plus separately billed execution time.</p>
+<p>It helps little when the model must reason over each result before the next call. And independent calls save clock time as well as tokens: the loop answers every call in one message, as From Prototype to Production described, and runs the read-only ones at once. In another demo, a job-site check with three independent lookups went from 19.9 seconds to 10.8, measured from question to answer.</p>
+<h3 id="change-the-defaults-before-you-raise-a-cap">Change the defaults before you raise a cap</h3>
+<p>The last default is the one nobody changes. From Request to Running System set the spend posture before rollout: the default model, effort guidance, and caps. At fleet scale, the default is the lever, because most people never touch the model picker. If the default is the most capable model at a high effort, that expensive setup is what most usage runs on.</p>
+<p>That makes a request to raise a spend cap a reason to look, not an automatic yes. In a worked case from the course’s admin lessons, a platform team hit its monthly cap in the second month and asked for more. The review showed most of that spend was the most capable model writing routine pull-request summaries.</p>
+<p>The default model was lowered for the role the team’s members hold, and the cap was left alone. The next month the team ran under its cap, with the same volume of work. So the review asks one question before a cap moves: is a setting wasting the spend, or was the cap set below what the work needs? Change the setting in the first case, and re-base the cap only in the second.</p>
+<p><strong>Lesson: at scale, the person stops working inside the loop and writes its checks.</strong> Parallel streams are bounded by review, runs check themselves, evals test the configuration, hooks hold the rules, the pipeline stops at production, monitoring starts the next loop, and defaults keep the bill flat. The person writes those checks and reads what they send back.</p>
+<p>So what can you do this week? Write down every check you did by hand on agent output in the last five days. Take the one you did most often, and turn it into a hook or an eval that runs without you.</p>
+<h2 id="glossary">Glossary</h2>
+<p>The terms used in this post, in alphabetical order.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Auto mode</td>
+<td>A permission mode in which a classifier, a second model, stops actions that go beyond the request. It judges intent, not correctness</td>
+</tr>
+<tr>
+<td>Branch protection</td>
+<td>Repository rules that require review and passing checks before a change can merge</td>
+</tr>
+<tr>
+<td>CI</td>
+<td>Continuous integration: the pipeline that builds and tests every change</td>
+</tr>
+<tr>
+<td>CLAUDE.md</td>
+<td>The instruction file every Claude Code session reads at the start</td>
+</tr>
+<tr>
+<td>Code owner</td>
+<td>A person named as responsible for part of the code, whose approval a merge needs</td>
+</tr>
+<tr>
+<td>Control band</td>
+<td>A range around a metric’s normal level, measured in σ from its recent mean. A reading far outside it suggests a real change, not chance</td>
+</tr>
+<tr>
+<td>Do-not-ask mode</td>
+<td>A permission mode for unattended runs: reads and pre-approved tools run, and anything that would prompt is denied</td>
+</tr>
+<tr>
+<td>Effort</td>
+<td>A request setting for how hard a model works on a task: how many tokens, tool calls, and checks it spends. It does not change what the model knows</td>
+</tr>
+<tr>
+<td>Eval</td>
+<td>A real task plus the checks that define an acceptable result, run automatically to compare setups</td>
+</tr>
+<tr>
+<td>Fail closed</td>
+<td>A gate that blocks the action when the gate itself fails to run</td>
+</tr>
+<tr>
+<td>Fleet</td>
+<td>Every session, pipeline job, and triggered agent running at once</td>
+</tr>
+<tr>
+<td>Gate</td>
+<td>A check that runs every time and can stop the action</td>
+</tr>
+<tr>
+<td>Headless run</td>
+<td>A run started from a script, such as <code>claude -p</code>, with nobody at the terminal</td>
+</tr>
+<tr>
+<td>Hook</td>
+<td>Your own script that runs at a fixed point in the agent’s loop, every time it fires, and can block, rewrite, or report an action</td>
+</tr>
+<tr>
+<td>intent.md</td>
+<td>A short problem statement an agent writes instead of pushing a fix: anomaly and evidence, proposed outcome, systems affected, open questions</td>
+</tr>
+<tr>
+<td>Loop</td>
+<td>The cycle of giving an agent a task, letting it run, checking the result, and deciding the next step</td>
+</tr>
+<tr>
+<td>Managed agent</td>
+<td>An agent loop run on the provider’s infrastructure: you define the agent and its environment, start a run, and exchange events</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>Model Context Protocol: a standard way for a server to offer tools to any client</td>
+</tr>
+<tr>
+<td>Parallel session</td>
+<td>A separate full coding-agent instance working its own task at the same time as others</td>
+</tr>
+<tr>
+<td>Programmatic tool calling</td>
+<td>The model writes a script that calls your tools in a container, so only the script’s printout reaches the model</td>
+</tr>
+<tr>
+<td>Runbook</td>
+<td>A written procedure approved in advance, such as a rollback, that an agent may run</td>
+</tr>
+<tr>
+<td>σ (sigma)</td>
+<td>Standard deviation: how far readings usually stray from their mean</td>
+</tr>
+<tr>
+<td>Skill</td>
+<td>An instruction file a session loads when a task needs it</td>
+</tr>
+<tr>
+<td>Stop hook</td>
+<td>A hook that runs when the agent tries to end its turn, and can refuse until a condition holds, such as passing tests</td>
+</tr>
+<tr>
+<td>Subagent</td>
+<td>A helper inside one session that works in its own context window and returns only a summary</td>
+</tr>
+<tr>
+<td>Verifier</td>
+<td>A subagent that checks finished work once, in a fresh context, so the author’s assumptions do not shape the verdict</td>
+</tr>
+<tr>
+<td>Western Electric rules</td>
+<td>Rules from a 1956 quality-control handbook that flag patterns, such as a slow drift, a single limit would miss</td>
+</tr>
+<tr>
+<td>Worktree</td>
+<td>A separate checkout of a repository on its own branch, so parallel sessions cannot overwrite each other’s files</td>
+</tr>
+</tbody>
+</table>
+<h2 id="references">References</h2>
+<p><strong>Anthropic partner training</strong> (sign-in required)</p>
+<ul>
+<li>Anthropic, <a href="https://anthropic-partners.skilljar.com/path/claude-certified-developer-professional">Claude Certified Developer – Professional</a> prep courses: production integration, agent architecture and orchestration, observability, evaluation engineering, runtime guardrails and security, debugging and incident response, agent fleet operations, and cost and latency at scale. The source of most examples here, including the demo measurements and the worked cases; this post reorders the material into the order a running system grows.</li>
+</ul>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="https://code.claude.com/docs">Claude Code documentation</a>. How worktrees, subagents, hooks and their exit codes, permission modes, managed settings, sandboxing, and non-interactive runs work.</li>
+<li><a href="https://platform.claude.com/docs">Claude platform documentation</a>. The reference for managed agents, prompt caching, programmatic tool calling, parallel tool use, and the effort setting.</li>
+</ul>
+<p><strong>Older ideas this post leans on</strong></p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Walter_A._Shewhart">Walter Shewhart</a> (1924). His memo at Western Electric, a year before Bell Labs was formed, introduced the control chart, to tell chance variation from variation with a cause worth chasing.</li>
+<li><a href="https://en.wikipedia.org/wiki/Western_Electric_rules">Western Electric rules</a> (1956). Decision rules from a quality-control handbook that flag a slow drift a single limit would miss.</li>
+</ul>
+<p><strong>Related posts on this blog</strong></p>
+<ul>
+<li><a href="/blogs/blog/from_prototype_to_production/">From Prototype to Production</a>. The step before this one: from the first API call to one feature that passes production review, including hooks, permission modes, caching, and effort.</li>
+<li><a href="/blogs/blog/from_request_to_running_system/">From Request to Running System</a>. The architect’s view after launch: evals as the gate for every change, fail-closed guardrails, the feedback loop from signals to decisions, and the spend posture.</li>
+<li><a href="/blogs/blog/when_code_is_cheap/">When Code Is Cheap</a>. Its question 10 argues that review capacity, not generation, sets how much work a team can take on, and that review hours must be planned.</li>
+</ul>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2026 Locch. All rights reserved.
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.9GFZ96Qh.js"></script> </body> </html>
