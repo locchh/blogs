@@ -2,6 +2,7 @@
 title: "Toward an Agent Fleet"
 description: "Some though about running a fleet of coding agents"
 pubDate: "2026-11-23"
+dense: true
 author: "locchh"
 tags: ["agent", "morden", "2027"]
 ---
