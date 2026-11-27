@@ -35,3 +35,6 @@ pnpm-debug.log*
 # Temporary files, folders
 *PLAN.md
 *PROMPT.md.mmcheck*
+
+# Local source material, not for the repo
+tmp/
