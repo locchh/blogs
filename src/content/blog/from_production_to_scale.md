@@ -16,7 +16,7 @@ This post follows that move from the developer's side. It starts where [From Pro
 
 I write it around Claude and Claude Code, Anthropic's command-line coding agent, because Anthropic's developer training documents these patterns in detail. Most examples come from that training. Its companies are fictional: the numbers from its recorded demos are measured runs, and its stories are worked cases, not reports of real events. Product names and limits change often, so check current documentation before you build.
 
-The diagram shows the seven steps, in the order a running system grows into a **fleet**: every session, pipeline job, and triggered agent running at once.
+The diagram shows the eight steps, in the order a running system grows into a **fleet**: every session, pipeline job, and triggered agent running at once.
 
 ```mermaid
 graph LR
@@ -24,7 +24,8 @@ graph LR
     B --> C["Test the<br/>configuration<br/>like code"]
     C --> D["Turn rules<br/>into gates"]
     D --> E["Ship up to the<br/>production gate"]
-    E --> F["Let monitoring<br/>start the next loop"]
+    E --> H["Hold up under<br/>real traffic"]
+    H --> F["Let monitoring<br/>start the next loop"]
     F --> G["Keep cost flat<br/>as the fleet grows"]
 ```
 
@@ -59,6 +60,8 @@ Every arrow ends at the same review queue. So the ceiling is how many streams on
 
 So split the work so tasks touch different files. Tasks that share files run in one session, one after another. Start with two or three sessions, and add one only while review keeps up.
 
+When the branches come back, merge them one at a time onto the main branch, and run the tests after each merge. Two branches that pass alone can still fail together, and merging one at a time shows which pair it was.
+
 ### Delegate to a subagent only when the result is all you need
 
 Inside one session, a **subagent** runs a scoped job in its own context window and returns only a summary. So one question decides when to use it: does the in-between work matter to you?
@@ -80,6 +83,47 @@ Some loops outgrow a session altogether, and once they run unattended for hours,
 A **managed agent** hands that loop to the provider. You define the agent once (model, system prompt, tools), give it an environment (a sandbox with the packages and network rules it needs), and start a run, which the API calls a session. Then you send events in and read events out.
 
 The provider stores each run's history, so a client that drops can fetch what it missed and carry on. From Prototype to Production compared this option with writing the loop yourself.
+
+Long loops also start without a person. A run can work toward a goal until a check passes, run on a schedule, or start on an event such as a failed build. Each of these needs the same three things: a saved checkpoint so it can resume, a notification when it finishes or stalls, and a named person it hands over to when it cannot go on.
+
+### Make a long run resumable after any interruption
+
+A run that lasts hours will be interrupted: by a crash, a rate limit, a deploy, or a new model version. **A long run is only as durable as the state it keeps outside the model.** So the state is saved at every step, not held in the model's context.
+
+Three habits make a run resumable:
+
+- **Save a checkpoint after each step.** Write what is done, what is next, and the key results to a file or a database. A restarted run reads the checkpoint and continues from there.
+- **Make each step safe to run twice.** A step retried after a crash must not send the email twice or charge the card twice. Give each action an ID, and skip any action whose ID is already recorded.
+- **Treat a person's approval as a pause, not a wait.** When a step needs approval, save the state and stop. The approval restarts the run from the checkpoint, so nobody holds a session open for hours.
+
+The diagram shows how the three fit together. Note that after a crash and after an approval, the run restarts the same way: from the last checkpoint.
+
+```mermaid
+flowchart LR
+    S["Run the<br/>next step"] --> C["Save a checkpoint<br/>done, next, results"]
+    C --> Q{"Needs a<br/>person's approval?"}
+    Q -->|"No"| S
+    Q -->|"Yes"| P["Pause and<br/>release the session"]
+    P -->|"Approved"| R["Restart from<br/>the checkpoint"]
+    X["A crash, a limit,<br/>or a deploy"] -.-> R
+    R --> S
+    class Q check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+```
+
+A new model version is an interruption too. A run that resumes on a different model may read its own checkpoint differently. So pin the model for the length of a run, and test a model change on saved checkpoints before it picks up runs already in flight.
+
+### Keep a long run's context small enough to stay sharp
+
+A resumable run can still drown in its own context. Every tool result stays in the window, and every tool definition is sent with every request. From Prototype to Production covered pruning, compaction, and memory in one session. At scale, three features of the API do that work on the server, as the table shows.
+
+| Feature | What it takes out of the window | Watch out for |
+| --- | --- | --- |
+| Context editing | Old tool results, replaced by a short note that they were cleared, once the context passes a size you set | A result the agent needs later must be saved somewhere else first |
+| Compaction | Old turns, replaced by a summary | The summary can drop a detail that was mentioned once |
+| Tool search | Tool definitions, which stay out of the window until the agent searches for one | Keep the few tools used most always loaded |
+
+What must survive between sessions goes into a **memory** store instead: decisions, notes, and what the agent learned. The agent reads it at the start and writes to it at the end.
 
 So more sessions, more subagents, and longer loops all raise output, and none of them raises review. What can each run check before a person sees it?
 
@@ -170,6 +214,35 @@ A suite built once goes stale. As models improve, every setup passes the old cas
 
 The rule is simple: every production incident leaves an eval behind, written by the team that owned the incident. The eval replays the request that caused the incident, from the commit before it, and fails if the mistake comes back. Then the same class of incident should stop repeating, and a falling repeat rate is the sign the suite is working.
 
+A suite also goes stale in two quieter ways. A case can leak into a prompt or an example, and then it passes because it is known, not because the work is right. So keep the cases out of prompts and rotate fresh ones in. And the cases can miss whole kinds of input. So compare the mix of the suite with the mix of production traffic, and add cases where production has inputs the suite does not.
+
+### Trust a model judge only after it agrees with people
+
+Some checks need judgment, so a second model grades the output. **A model judge may gate a release only after it agrees with people, and only while it keeps agreeing.** From Prototype to Production showed how to make a judge explain its reasoning before it scores, and how to check it once against human labels. At scale the judge becomes a release gate, and two more failures matter.
+
+The first is bias. A judge that compares two answers often prefers the one shown first, which is called **position bias**, or the longer one. So show each pair in both orders. If the verdict flips with the order, the judge is guessing.
+
+The second is drift. A judge is a model too, and a new version can grade differently. So keep a fixed set of cases that people have labeled, and measure agreement on it after every change to the judge, the same way you would compare two human graders.
+
+The exam guide for Anthropic's developer course has a practice question about this trap. Like the course's stories, its team is made up. A team gated prompt releases with a judge that picked the better of two answers. Every new prompt passed, yet users saw no gain. Checked against people, the judge agreed on only slightly more than half of the pairs, barely better than a coin toss. And it picked the first answer far more often than people did.
+
+The right first move was not a bigger judge model. It was to randomize the order, measure agreement again, and take away the judge's power to gate until agreement was good enough. So a judge that gates releases is itself under test.
+
+### Measure quality on live traffic too
+
+An offline suite only knows the inputs someone collected, and live traffic brings inputs nobody thought of. So a small sample of real requests is graded too, with the same checks and the same judge you checked against people, and the score is watched over time. From Request to Running System covered experiments that compare two versions on live traffic. Here the point is steady measurement, not a one-off test.
+
+The measure has to fit the task, as the table shows.
+
+| Kind of task | A measure that fits |
+| --- | --- |
+| Extraction | An exact match on each field |
+| Writing | The score of a judge checked against people, using a rubric |
+| An agent's task | Whether it finished, and how many steps and how much cost it took |
+| An answer from retrieved sources | Whether every claim is backed by a cited source |
+
+User feedback, such as a thumbs-down or a correction, is a signal too, but a lopsided one, because unhappy users click more. Use it to find cases worth adding to the suite, not to score the system.
+
 So the configuration is now under test. But an eval only samples 20 to 50 tasks, and it sees a broken rule only after a session has broken it. What stops a live session from breaking the rule in the first place?
 
 ## Turning rules from advice into gates
@@ -225,6 +298,43 @@ Each deny removes some capability, so treat such a setup as a starting point, tu
 
 Managed settings can also fix the permission mode, which sets what the agent may do without asking. Of the six modes in From Prototype to Production, two fit unattended work. Do-not-ask runs reads and pre-approved tools and denies anything that would prompt, so a pipeline never hangs on a question. Auto judges intent, not correctness, so pair it with the stop hook from "Back every must-hold rule with a hook."
 
+### Break the mix of private data, untrusted input, and a way out
+
+Gates stop what someone foresaw. An attacker works through what nobody foresaw: the content an agent reads. From Prototype to Production explained prompt injection, an instruction hidden in a web page, a document, or a tool result that the model takes as a command. At scale, the question is not whether one gets through, but what it can do when it does.
+
+Simon Willison named the dangerous case the [lethal trifecta](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/): an agent that can read private data, reads content an attacker can write, and can send data out. With all three, one hidden instruction can copy the private data to the attacker. **So give an agent at most two of the three. If it needs all three, put the sending step behind a check in code or a person's approval, which a hidden instruction cannot talk its way past.**
+
+The diagram shows where that gate sits.
+
+```mermaid
+flowchart LR
+    U["Untrusted input<br/>a ticket, a page,<br/>a tool result"] --> A["Agent"]
+    D["Private data<br/>records, files,<br/>other customers"] --> A
+    A --> O{"An outbound action<br/>an email, a web request,<br/>a public post"}
+    O -->|"To an allowed<br/>recipient"| S["Sent"]
+    O -->|"Anywhere else"| H["Blocked, or<br/>a person approves"]
+    class O check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+```
+
+The exam guide has a practice question with exactly this shape. A support agent read tickets, could look up any customer's record, and could send email. A hidden instruction in one ticket made it email another customer's record to an outside address. A stronger line in the prompt did not close the path. A recipient allowlist or human approval on the email tool did, together with limiting the lookup to the ticket's own account.
+
+Two more routes open once agents keep state. In **tool poisoning**, the instruction arrives in a tool's description or result, so a tool from an outside server is untrusted input too. In **memory poisoning**, an injected note is written into the agent's memory and comes back in every later session. So a memory write from a run that read untrusted content is untrusted too, and what the memory holds gets reviewed.
+
+The layers around the model then catch what gets through. Each has its own job: screening input and output, removing personal data before anything is logged or sent, blocking destructive actions in code, and a fixed path for a request the model refuses. From Request to Running System covered these layers and the risk register behind them.
+
+Every filter fails both ways. It blocks good requests, which are false positives, and it lets bad ones through, which are false negatives. So tune each filter on labeled examples, and measure both rates.
+
+Filters only catch the attacks someone thought of. So the new work at scale is a **red-team exercise**: your own team attacks the system on purpose. Start with the agents that have two of the three, and draw the attacks from public lists of risks such as the [OWASP Top 10 for LLM Applications](https://genai.owasp.org/llm-top-10/) and NIST's [Generative AI Profile](https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence).
+
+### Give each agent its own identity, never a shared key
+
+A gate can only check what it can see, and what it sees is an identity. When every agent and every pipeline job uses one shared API key, nothing tells them apart. A log cannot say which agent did what, and a leaked key opens everything. **So each agent gets its own identity, with the narrowest access its job needs.** Three practices follow:
+
+- **No long-lived keys in pipelines.** With workload identity federation, a CI job proves who it is with a short-lived token from its own platform, so no API key is stored in the pipeline at all.
+- **Least privilege per tool.** Each agent's tools and data match its job, as the deploy servers in the next section show.
+- **An audit log of security-relevant actions.** Every write, send, and permission change is logged with the identity that did it, so an incident can be traced to one agent.
+
 So the gates now hold inside every session, for everyone. But a session on a laptop is not where most work ships. How far can the pipeline itself be trusted?
 
 ## Shipping through the pipeline up to the production gate
@@ -275,15 +385,121 @@ So the review earned its place by reading what the reviewer of a diff would not 
 
 The fix is two required approvals, so at least one approver is someone other than the requester. Also dismiss approvals when new commits arrive, or the agent can push after a person has approved.
 
-So the pipeline now ships up to production and stops there. After the release, the system is live with nobody watching. Who notices when it breaks?
+An automated reviewer earns its place the same way a judge does. Start it in shadow mode: it reviews every pull request, but its findings go to a log, not to the author, and nothing waits on it. Compare its findings with what human reviewers found on the same pull requests. Only when it catches real problems without burying them in noise does it post comments, and only after that may it block a merge.
+
+### Roll a prompt or model change out to a slice of traffic first
+
+Code passes through review and the gate. A prompt or a model change can skip both, because it is not code, and yet it changes every run. **So a prompt or model change ships like code: versioned, tested, and released to a slice of traffic at a time.** From Prototype to Production covered pinning the model and promoting through the eval. At scale the release itself becomes a process, as the diagram shows.
+
+```mermaid
+flowchart LR
+    V["A new prompt or model,<br/>with a version number"] --> E{"Passes the eval<br/>and the migration tests?"}
+    E -->|"No"| X["Stays on the<br/>current version"]
+    E -->|"Yes"| C["A small slice<br/>of live traffic"]
+    C --> W{"Quality, cost, and<br/>errors hold?"}
+    W -->|"No"| R["Roll back to the<br/>pinned version"]
+    W -->|"Yes"| F["Widen the slice,<br/>then all traffic"]
+    class E,W check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+```
+
+Migration tests look for what a new model changes on purpose: a different default length, stricter refusals, a changed output format. Each known change gets a case before the switch.
+
+The same discipline covers the tools agents call. An MCP server is a dependency like any other. So version its tool schemas, keep the old version working while clients move, and test the agents against the new schema before the switch. A remote MCP server checks who is calling, using the agent's own identity from "Give each agent its own identity, never a shared key."
+
+Large teams send every model call through one gateway, which holds the keys, picks the model and the platform, and applies the rollout. A gateway that can send a request to the vendor's API or to a cloud platform must also check that every feature the request uses exists where it sends it, because cloud platforms can get new features later than the vendor's API.
+
+So the pipeline now ships up to production and stops there. After the release, the system meets real traffic. What keeps it up when that traffic hits the limits?
+
+## Holding up under real traffic
+
+Real traffic does what tests do not. It arrives in bursts, hits rate limits, and asks about things nobody indexed. **At scale, reliability is mostly about telling one kind of failure from another, because each kind needs a different answer.**
+
+### Branch on why a call stopped, not only on whether it failed
+
+From Prototype to Production sorted errors into those a retry can clear and those it cannot. A model call has a second signal: the **stop reason**, which says why a response ended, even when the HTTP status says success. A retry path that ignores it treats very different problems the same way. The table pairs each signal with its answer.
+
+| What happened | The signal | The right answer |
+| --- | --- | --- |
+| Rate limited, overloaded, or a passing server fault | HTTP 429, 529, or a 500-range error | Wait as long as the response's retry-after header says, retry with backoff, then fall back |
+| The request itself is wrong | Another 400-range error | Fix the request. A retry fails the same way |
+| The output hit its limit | Stop reason `max_tokens` | Raise the limit or continue the answer. A plain retry stops at the same place |
+| The context window ran out | Stop reason `model_context_window_exceeded` | Treat the answer as cut off, and shorten or compact the input |
+| The model declined | Stop reason `refusal`, with a success status | Never the same request again. Send it to a safety path, or to a fallback model where policy allows |
+| A tool that runs on the provider's side paused a long loop | Stop reason `pause_turn` | Send the response back so it continues |
+
+Another practice question from the exam guide shows the cost of skipping this. A team's fallback path sent every unwanted result to a second model, with backoff: errors, cut-off answers, and refusals alike.
+
+After a model update its cost jumped, and the traces showed three causes mixed in that one path: rate limits, answers cut off at the output limit, and refusals. Retrying the cut-off answers repeated the cut and wasted tokens, and retrying the refusals repeated the refusal at extra cost.
+
+More retries would have made the cost spike worse. The fix was to branch on the stop condition, as in the table.
+
+Retries handle one call. When a whole dependency is failing, a **circuit breaker** stops calling it for a while, so the system fails fast instead of piling up retries. A fallback then takes over: another model, another region, or another platform. From Request to Running System put each control in its own layer.
+
+The new risk at scale is a fallback that cannot do what the main model does. A fallback that lacks a feature the main model uses, such as a tool type or a beta option, fails on exactly the requests it was meant to save. So test each fallback with real request shapes, not with a simple hello-world call.
+
+### Shape the load before it reaches the limit
+
+Retries answer a limit after it is hit. Shaping the load keeps it from being hit. **First find the limit you will hit first: requests per minute, tokens per minute, or the budget.** Many short calls hit the request limit. A few long documents hit the token limit. A large nightly job hits the budget.
+
+Then four tools, each for its own case:
+
+- **A queue with backpressure.** Requests wait in a queue, and when the queue grows past a set length, new work is slowed or refused at the door, instead of everything failing at the API.
+- **Priority classes.** A user waiting for an answer goes ahead of a background job, so a nightly burst cannot starve the interactive path.
+- **Batch for work nobody is waiting for.** From Prototype to Production introduced the batch API. At scale, moving deferrable work there frees the live limits for live traffic, at a lower price per token.
+- **A quota per tenant.** In a shared system, each customer or team gets its own share of the limits and its own key, so one heavy tenant cannot use up everyone's capacity, and spend can be traced to whoever caused it.
+
+The diagram shows the four together, as one path a request takes.
+
+```mermaid
+flowchart LR
+    R["A request<br/>arrives"] --> T{"Tenant within<br/>its quota?"}
+    T -->|"No"| L["Slowed or refused<br/>at the door"]
+    T -->|"Yes"| P{"Is someone<br/>waiting for it?"}
+    P -->|"No"| B["Batch queue<br/>or the batch API"]
+    P -->|"Yes"| Q{"Live queue<br/>past its limit?"}
+    Q -->|"Yes"| L
+    Q -->|"No"| A["Model API"]
+    B --> A
+    class T,P,Q check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+```
+
+Size capacity from the peak, not the average. Take the busiest minute of the busiest hour, count its requests and tokens, and compare them with your account's per-minute rate limits.
+
+### Keep answers grounded as the knowledge grows
+
+The last kind of failure gives no error at all: an answer that sounds right and is not backed by anything. From Request to Running System built the retrieval pipeline: chunking, and hybrid search that combines keyword and meaning. From Prototype to Production compared a prepared index with agentic search, where the model searches as it goes. At scale, three practices keep answers grounded:
+
+- **Rerank before the model reads.** Retrieve more candidates than you need, let a reranking model order them by how well each answers the question, and pass only the best few.
+- **Make the answer show its sources and its doubt.** Ask for a citation on every claim, and allow the answer "not found in the sources". A model that is allowed to say so is less pushed to fill the gap.
+- **Diagnose a bad answer stage by stage.** Ask in order: was the document in the index, did search find it, did ranking keep it near the top, and did the model use it? Each "no" points to a different fix.
+
+So the service now tells its failures apart, shapes its load, and grounds what it says. But when it breaks anyway, at night, nobody is watching. Who notices?
 
 ## Letting monitoring start the next loop
 
 So far every loop starts from a person or a code event. Nothing yet starts one from what production does: an alert still wakes someone, and a ticket still waits for someone to pick it up. **The last step is to let a signal from production start the agent, while a person triages what it finds.** This is the feedback loop from From Request to Running System, with the agent doing the first diagnosis.
 
+### Trace every run and set the line it must hold
+
+A signal needs something to measure first. **Every run leaves a trace, and every service states the level it must hold.** A trace records each step of a run as a **span**, one timed entry: each model call with its tokens, cost, cache reads, and time, and each tool call with its result. One trace ID runs through the agent and all its subagents, so a run that crosses several agents can be followed end to end.
+
+From the traces come the numbers the team watches, called **service level indicators**: the task success rate, the share of answers that pass the live checks, latency at the 95th percentile, and cost per task. A **service level objective** sets the line each one must hold, such as "95 percent of tasks finish without a person". Alerts and dashboards follow from those lines, cost lines included, so a cost jump arrives as an alert, not as an invoice.
+
+Traces can hold sensitive content, and some customers require that none is kept. Under such a rule, keep the shape of the trace and drop the content: timings, token counts, tool names, and stop reasons stay, and prompts and outputs are left out or redacted. Most diagnosis needs only the shape.
+
+### Find the pattern no single trace shows
+
+One trace shows one run. Some failures only show across many runs: a tool that fails one time in fifty, or a model version that does worse on one kind of input. So keep every failed trace and a random sample of the rest.
+
+Then group the failures by what they share: model version, prompt version, tool, tenant, and kind of input. A **cohort** that fails far more often than the rest points to a cause no single trace reveals. Compare the same groups before and after a model update, and a drop in quality caused by the update shows up.
+
+Traces of many runs also answer an architecture question. From Request to Running System told of a team that chose an agent, then found in its traces that the real paths fell into four shapes. If most runs follow a few fixed paths, turn those paths into a fixed workflow and keep the agent for the rest. If a workflow keeps meeting cases its steps never planned for, replace that part with an agent.
+
 ### Let rarer readings unlock more action
 
-A trigger that fires on every blip buries the team in noise. A trigger that waits for disaster fires too late. That problem is a century old.
+Cohorts and service levels say what to watch. The next question is how far a reading must move before it starts the agent. A trigger that fires on every blip buries the team in noise. A trigger that waits for disaster fires too late. That problem is a century old.
 
 In a 1924 memo at Western Electric, a year before its engineers became Bell Telephone Laboratories, [Walter Shewhart](https://en.wikipedia.org/wiki/Walter_A._Shewhart) drew the first control chart. His point was that a process always varies by chance, and only variation outside its normal range has a cause worth chasing.
 
@@ -339,6 +555,21 @@ So the agent acted only through a rehearsed route, and the real decision, what "
 
 The same work can also arrive in a chat channel instead of from a script. An agent with its own identity in the on-call channel picks up each alert, posts what broke and a proposed fix in the alert's thread, and drafts the postmortem once the incident closes. Where no rollback runbook has been approved in advance, it waits for the on-call engineer to approve the rollback in that thread.
 
+### Find which layer failed before fixing anything
+
+Whoever picks up a finding, agent or person, checks its diagnosis before acting on it, because the first guess is often wrong. **Before fixing anything, find which layer the failure came from: the model, the harness, a tool, or the data.** Each layer needs a different fix, and a fix in the wrong layer only moves the problem. The table says where to look for each.
+
+| Layer | What it looks like | Where to look |
+| --- | --- | --- |
+| The model | A wrong or made-up answer from correct inputs | The same inputs on the pinned model version, and the eval cases |
+| The harness | Lost context, a skipped step, steps in the wrong order | The trace: what the model was actually sent |
+| A tool | An error, an empty result, or a wrong value | The tool's own logs, and its result in the trace |
+| The data | A stale or missing document, or a bad record | The index, or the source system |
+
+Two kinds of failure hide from normal error counts, so track each on its own. A refusal arrives with a success status. A grounding failure is an answer that ignored or misread the source it was given, and nothing errors at all. From Request to Running System gave a table from symptom to cause, and finding the layer first tells you which row of it to read.
+
+When the failure is live, the order is assess, mitigate, communicate, then learn. Assessing decides how many users are hit, and how badly. Mitigation stops the harm before the cause is known: roll back the release, switch to the fallback, or turn the feature off. Communication tells users and stakeholders what happened and when it will be fixed. Learning comes last: the incident leaves an eval, an alert where monitoring missed it, and a postmortem.
+
 Now the loop starts itself. But a loop that runs without anyone starting it also spends money without anyone noticing.
 
 ## Keeping cost flat as the fleet grows
@@ -348,6 +579,8 @@ Every earlier step adds runs: parallel sessions, evals on every configuration ch
 ### Start on the smallest model and tune effort before moving up
 
 From Prototype to Production starts on the balanced tier and steps down for high-volume work. For a fleet, make the bottom the starting point of the search. The course's rule is to run 20 to 30 real examples through the smallest tier first, and stop at the cheapest model whose output you would ship. At volume, every step up is multiplied by every run.
+
+Routing can go further. A **cascade** sends each request to the small model first, and escalates to a larger one only when a check fails or the small model reports low confidence. If most requests pass the small model's check, most pay the small price.
 
 **Effort**, the request setting From Prototype to Production introduced, is the second dial. It sets how hard the model works on a task, not what it knows. Too low, and it stops early with unfinished work, which costs a second request. Too high, and it overthinks, finds tasks you never assigned, and takes longer. The diagram shows which dial to turn.
 
@@ -372,6 +605,8 @@ The second default is what each request resends. An agent that uses tools sends 
 
 Prompt caching cuts the part that never changes. From Prototype to Production gave the prices and the conditions for a cache hit. One trap matters once you track spend across a fleet: with caching on, the input-token count leaves out the cached part, so the true total adds the cache reads and writes to it. Watch all three counts, or a cache that silently stopped working looks like a cheaper month.
 
+A long run needs one more rule to keep its cache. Changing the system prompt halfway through a conversation changes the cached prefix, so the next request pays full price for all of it again. Add a new instruction as a message at the end instead, and the cached part stays the same.
+
 **Programmatic tool calling** cuts the part that grows. The model writes a short script that calls your tools, the script runs in a code-execution container, and only what the script prints reaches the model. The tool results stay with the script.
 
 The difference is large when lookups do not depend on each other. One demo asked which of 40 engineers were under 70 percent utilization in a month. That took 41 tool calls: one to list the engineers and one per engineer.
@@ -380,21 +615,34 @@ The ordinary tool loop sent 42 requests to the model and about 1.1 million input
 
 It helps little when the model must reason over each result before the next call. And independent calls save clock time as well as tokens: the loop answers every call in one message, as From Prototype to Production described, and runs the read-only ones at once. In another demo, a job-site check with three independent lookups went from 19.9 seconds to 10.8, measured from question to answer.
 
+### Cut the wait the user sees, not only the total
+
+Cost is one half of the budget, and waiting is the other. **Measure two numbers: the time to the first token, which is when the user sees something start, and the total time to the full answer.** They have different fixes, as the table shows.
+
+| To cut | Levers |
+| --- | --- |
+| Time to the first token | Stream the response. Cache the long fixed prefix, so the model starts sooner. Send less context |
+| Total time | Run independent tool calls at once, as above. Use a lower effort or a smaller model on steps that need no more. Ask for shorter output |
+
+Set the latency target at the 95th percentile, the time that 95 of every 100 requests beat, not the average, because the slow tail is what users remember. From Request to Running System made the same point when modeling cost and latency before the build.
+
 ### Change the defaults before you raise a cap
 
-The last default is the one nobody changes. From Request to Running System set the spend posture before rollout: the default model, effort guidance, and caps. At fleet scale, the default is the lever, because most people never touch the model picker. If the default is the most capable model at a high effort, that expensive setup is what most usage runs on.
+Back to cost: the last default is the one nobody changes. From Request to Running System set the spend posture before rollout: the default model, effort guidance, and caps. At fleet scale, the default is the lever, because most people never touch the model picker. If the default is the most capable model at a high effort, that expensive setup is what most usage runs on.
 
 That makes a request to raise a spend cap a reason to look, not an automatic yes. In a worked case from the course's admin lessons, a platform team hit its monthly cap in the second month and asked for more. The review showed most of that spend was the most capable model writing routine pull-request summaries.
 
 The default model was lowered for the role the team's members hold, and the cap was left alone. The next month the team ran under its cap, with the same volume of work. So the review asks one question before a cap moves: is a setting wasting the spend, or was the cap set below what the work needs? Change the setting in the first case, and re-base the cap only in the second.
 
-**Lesson: at scale, the person stops working inside the loop and writes its checks.** Parallel streams are bounded by review, runs check themselves, evals test the configuration, hooks hold the rules, the pipeline stops at production, monitoring starts the next loop, and defaults keep the bill flat. The person writes those checks and reads what they send back.
+A cap is easier to set from a forecast. Cost per task, taken from the traces, times the tasks expected next month gives the bill before it arrives, and the gap between forecast and actual is itself a signal. In a shared system, each tenant also gets its own budget, enforced where its requests pass, so one customer's spike stops at its own limit.
+
+**Lesson: at scale, the person stops working inside the loop and writes its checks.** Parallel streams are bounded by review, runs check themselves, evals test the configuration, hooks hold the rules, the pipeline stops at production, the service tells its failures apart under load, monitoring starts the next loop, and defaults keep the bill flat. The person writes those checks and reads what they send back.
 
 So what can you do this week? Write down every check you did by hand on agent output in the last five days. Take the one you did most often, and turn it into a hook or an eval that runs without you.
 
 ## Appendix with the files behind each check
 
-Whichever check you pick, it ends up as a file. The argument above says which checks to build and why. This appendix shows what each one looks like on disk, in the same order as the seven steps. The snippets are shortened from the course's examples and use Claude Code's formats. File names, flags, and setting keys change, so check the current documentation before you copy one.
+Whichever check you pick, it ends up as a file. The argument above says which checks to build and why. This appendix shows what each one looks like on disk, in the same order as the eight steps. The snippets are shortened from the course's examples and use Claude Code's formats. File names, flags, and setting keys change, so check the current documentation before you copy one.
 
 The table maps each step of the post to the file that carries it.
 
@@ -405,6 +653,7 @@ The table maps each step of the post to the file that carries it.
 | Test the configuration | `evals/*.json` and a CI workflow |
 | Turn rules into gates | Hooks in `settings.json`, and managed settings |
 | Ship up to the production gate | Pipeline jobs, `.mcp.json`, and `REVIEW.md` |
+| Hold up under real traffic | The code around each model call that branches on why it stopped |
 | Let monitoring start the loop | `bands.yaml` and `intent.md` |
 | Keep cost flat | Effort and cache settings on each request |
 
@@ -682,6 +931,31 @@ Generated files under src/gen/ and anything CI already enforces.
 
 The cap on nits matters more than it looks: a review that buries two real findings under thirty style notes gets skimmed.
 
+### A call that branches on why it stopped
+
+The table in "Branch on why a call stopped" becomes a few lines of code around every model call. Note that a success status still goes through the stop reason.
+
+```python
+RETRY_STATUS = {429, 500, 502, 503, 504, 529}
+
+def next_action(status, resp):
+    if status in RETRY_STATUS:
+        return "wait as told, retry with backoff, then fall back"
+    if status >= 400:
+        return "fix the request: a retry fails the same way"
+    return {
+        "end_turn": "done",
+        "stop_sequence": "done",
+        "tool_use": "run the tools and send the results back",
+        "pause_turn": "send the response back so it continues",
+        "max_tokens": "raise the limit or continue, never a plain retry",
+        "model_context_window_exceeded": "treat as cut off, compact the input",
+        "refusal": "safety path or an allowed fallback, never the same request",
+    }.get(resp.stop_reason, "log it and alert")
+```
+
+The last line matters as much as the others: a stop reason the code does not know is logged and sent as an alert, not treated as success.
+
 ### Alert levels and the finding they produce
 
 The alert levels from "Let rarer readings unlock more action" are a short config file, kept in version control beside the detection script.
@@ -786,10 +1060,16 @@ The terms used in this post, in alphabetical order.
 | Term | Meaning |
 | --- | --- |
 | Auto mode | A permission mode in which a classifier, a second model, stops actions that go beyond the request. It judges intent, not correctness |
+| Backpressure | Slowing or refusing new work at the door when a queue grows too long, so the system does not fail all at once |
 | Branch protection | Repository rules that require review and passing checks before a change can merge |
+| Cascade | Sending a request to a small model first, and escalating to a larger one only when a check fails |
+| Checkpoint | A saved record of what a run has done and what is next, so it can resume after an interruption |
 | CI | Continuous integration: the pipeline that builds and tests every change |
+| Circuit breaker | A control that stops calling a failing dependency for a while, so the system fails fast instead of piling up retries |
 | CLAUDE.md | The instruction file every Claude Code session reads at the start |
 | Code owner | A person named as responsible for part of the code, whose approval a merge needs |
+| Cohort | A group of runs that share something, such as a model version or a tenant, compared with the rest to find a common cause |
+| Context editing | An API feature that clears old tool results from the context window once it passes a set size |
 | Control band | A range around a metric's normal level, measured in σ from its recent mean. A reading far outside it suggests a real change, not chance |
 | Do-not-ask mode | A permission mode for unattended runs: reads and pre-approved tools run, and anything that would prompt is denied |
 | Effort | A request setting for how hard a model works on a task: how many tokens, tool calls, and checks it spends. It does not change what the model knows |
@@ -800,30 +1080,47 @@ The terms used in this post, in alphabetical order.
 | Headless run | A run started from a script, such as `claude -p`, with nobody at the terminal |
 | Hook | Your own script that runs at a fixed point in the agent's loop, every time it fires, and can block, rewrite, or report an action |
 | intent.md | A short problem statement an agent writes instead of pushing a fix: anomaly and evidence, proposed outcome, systems affected, open questions |
+| Lethal trifecta | An agent that reads private data, reads content an attacker can write, and can send data out. With all three, one injection can leak the data |
 | Loop | The cycle of giving an agent a task, letting it run, checking the result, and deciding the next step |
 | Managed agent | An agent loop run on the provider's infrastructure: you define the agent and its environment, start a run, and exchange events |
 | MCP | Model Context Protocol: a standard way for a server to offer tools to any client |
 | Parallel session | A separate full coding-agent instance working its own task at the same time as others |
+| Position bias | A model judge preferring an answer because of where it was shown, such as first, not because it is better |
 | Programmatic tool calling | The model writes a script that calls your tools in a container, so only the script's printout reaches the model |
 | Runbook | A written procedure approved in advance, such as a rollback, that an agent may run |
+| Service level indicator | A number taken from traces that shows how well a service works, such as a task success rate or a latency |
+| Service level objective | The line a service level indicator must hold, such as a task success rate or a latency at the 95th percentile |
+| Shadow mode | Running a new check or reviewer on real work while nobody acts on its output, to measure it before it can block anything |
 | σ (sigma) | Standard deviation: how far readings usually stray from their mean |
 | Skill | An instruction file a session loads when a task needs it |
 | Stop hook | A hook that runs when the agent tries to end its turn, and can refuse until a condition holds, such as passing tests |
+| Stop reason | The field in a model response that says why it ended: done, a tool call, the output limit, a refusal, and others |
 | Subagent | A helper inside one session that works in its own context window and returns only a summary |
+| Time to first token | The time until the first part of a response appears, which is what a user waits for before seeing anything |
+| Tool search | An API feature that keeps tool definitions out of the context window until the agent searches for the one it needs |
 | Verifier | A subagent that checks finished work once, in a fresh context, so the author's assumptions do not shape the verdict |
 | Western Electric rules | Rules from a 1956 quality-control handbook that flag patterns, such as a slow drift, a single limit would miss |
+| Workload identity federation | A way for a job, such as a CI run, to prove its identity with a short-lived token from its platform, without a stored API key |
 | Worktree | A separate checkout of a repository on its own branch, so parallel sessions cannot overwrite each other's files |
 
 ## References
 
 **Anthropic partner training** (sign-in required)
 
-- Anthropic, [Claude Certified Developer – Professional](https://anthropic-partners.skilljar.com/path/claude-certified-developer-professional) prep courses: production integration, agent architecture and orchestration, observability, evaluation engineering, runtime guardrails and security, debugging and incident response, agent fleet operations, and cost and latency at scale. The source of most examples here, including the demo measurements and the worked cases; this post reorders the material into the order a running system grows.
+- Anthropic, [Claude Certified Developer – Professional](https://anthropic-partners.skilljar.com/path/claude-certified-developer-professional) prep courses: production integration, agent architecture and orchestration, observability, evaluation engineering, runtime guardrails and security, debugging and incident response, agent fleet operations, and cost and latency at scale. The source of most examples here, including the demo measurements and the worked cases; this post reorders the material into the order a running system grows. The course's exam guide lists eight skill areas (not the same as this post's eight steps), from agent architecture to fleet operations, and this post covers each of them.
 
 **Documentation**
 
 - [Claude Code documentation](https://code.claude.com/docs). How worktrees, subagents, hooks and their exit codes, permission modes, managed settings, sandboxing, and non-interactive runs work.
 - [Claude platform documentation](https://platform.claude.com/docs). The reference for managed agents, prompt caching, programmatic tool calling, parallel tool use, and the effort setting.
+- [Stop reasons and fallback](https://platform.claude.com/docs/en/api/handling-stop-reasons). What each stop reason means, and how to handle a refusal, a cut-off answer, and a paused turn.
+- [Context editing](https://platform.claude.com/docs/en/build-with-claude/context-editing) and [tool search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool). How old tool results are cleared from the context window, and how tool definitions stay out of it until needed.
+
+**Security**
+
+- Simon Willison, [The lethal trifecta for AI agents](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/) (2025). Private data, untrusted content, and a way to send data out: an agent with all three can be made to leak, and the fix is to remove one of them.
+- [OWASP Top 10 for LLM Applications](https://genai.owasp.org/llm-top-10/). A public list of the main risks for systems built on language models, with prompt injection first.
+- NIST, [AI Risk Management Framework: Generative AI Profile](https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence) (2024). The risks that generative AI adds or makes worse, and actions to manage each one.
 
 **Older ideas this post leans on**
 
