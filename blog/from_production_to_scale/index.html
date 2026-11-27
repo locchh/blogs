@@ -18,13 +18,14 @@
 <p>The trouble sits in the <strong>loop</strong>: give an agent a task, let it run, check the result, decide the next step. Today a person does the checking and the deciding, by hand, every time. So scale is not mainly a question of servers. <strong>At scale, a person stops working inside the loop and writes its checks instead.</strong> The checks run every time. The person reads only what they send back.</p>
 <p>This post follows that move from the developer’s side. It starts where <a href="/blogs/blog/from_prototype_to_production/">From Prototype to Production</a> ends, with one feature that runs and passed review, and it points back to that post instead of repeating it. The architect’s side of running a system after launch is in <a href="/blogs/blog/from_request_to_running_system/">From Request to Running System</a>.</p>
 <p>I write it around Claude and Claude Code, Anthropic’s command-line coding agent, because Anthropic’s developer training documents these patterns in detail. Most examples come from that training. Its companies are fictional: the numbers from its recorded demos are measured runs, and its stories are worked cases, not reports of real events. Product names and limits change often, so check current documentation before you build.</p>
-<p>The diagram shows the seven steps, in the order a running system grows into a <strong>fleet</strong>: every session, pipeline job, and triggered agent running at once.</p>
+<p>The diagram shows the eight steps, in the order a running system grows into a <strong>fleet</strong>: every session, pipeline job, and triggered agent running at once.</p>
 <pre><code class="language-mermaid">graph LR
     A["Run more work&#x3C;br/>than one person&#x3C;br/>can watch"] --> B["Let each run&#x3C;br/>check itself"]
     B --> C["Test the&#x3C;br/>configuration&#x3C;br/>like code"]
     C --> D["Turn rules&#x3C;br/>into gates"]
     D --> E["Ship up to the&#x3C;br/>production gate"]
-    E --> F["Let monitoring&#x3C;br/>start the next loop"]
+    E --> H["Hold up under&#x3C;br/>real traffic"]
+    H --> F["Let monitoring&#x3C;br/>start the next loop"]
     F --> G["Keep cost flat&#x3C;br/>as the fleet grows"]
 </code></pre>
 <p>Each step begins where the one before it hit a limit, and the first limit is attention.</p>
@@ -47,6 +48,7 @@
 </code></pre>
 <p>Every arrow ends at the same review queue. So the ceiling is how many streams one person can review properly, not how many the machine can run. <a href="/blogs/blog/when_code_is_cheap/">When Code Is Cheap</a> makes the same point about who checks the output: review hours must be planned like any other capacity.</p>
 <p>So split the work so tasks touch different files. Tasks that share files run in one session, one after another. Start with two or three sessions, and add one only while review keeps up.</p>
+<p>When the branches come back, merge them one at a time onto the main branch, and run the tests after each merge. Two branches that pass alone can still fail together, and merging one at a time shows which pair it was.</p>
 <h3 id="delegate-to-a-subagent-only-when-the-result-is-all-you-need">Delegate to a subagent only when the result is all you need</h3>
 <p>Inside one session, a <strong>subagent</strong> runs a scoped job in its own context window and returns only a summary. So one question decides when to use it: does the in-between work matter to you?</p>
 <p>If you only need the result, delegate. Research is the classic case. “Where is the token validated?” may take dozens of file reads, and the main session needs one line back. Code review is another. A reviewer in a fresh context has not watched the code being written, so it does not share the author’s assumptions.</p>
@@ -61,6 +63,57 @@
 <p>Some loops outgrow a session altogether, and once they run unattended for hours, nobody watches them at all. They work across many tools, write files, keep state, and must survive a dropped connection. Running that loop on your own server means owning its sandbox, its state, and its recovery.</p>
 <p>A <strong>managed agent</strong> hands that loop to the provider. You define the agent once (model, system prompt, tools), give it an environment (a sandbox with the packages and network rules it needs), and start a run, which the API calls a session. Then you send events in and read events out.</p>
 <p>The provider stores each run’s history, so a client that drops can fetch what it missed and carry on. From Prototype to Production compared this option with writing the loop yourself.</p>
+<p>Long loops also start without a person. A run can work toward a goal until a check passes, run on a schedule, or start on an event such as a failed build. Each of these needs the same three things: a saved checkpoint so it can resume, a notification when it finishes or stalls, and a named person it hands over to when it cannot go on.</p>
+<h3 id="make-a-long-run-resumable-after-any-interruption">Make a long run resumable after any interruption</h3>
+<p>A run that lasts hours will be interrupted: by a crash, a rate limit, a deploy, or a new model version. <strong>A long run is only as durable as the state it keeps outside the model.</strong> So the state is saved at every step, not held in the model’s context.</p>
+<p>Three habits make a run resumable:</p>
+<ul>
+<li><strong>Save a checkpoint after each step.</strong> Write what is done, what is next, and the key results to a file or a database. A restarted run reads the checkpoint and continues from there.</li>
+<li><strong>Make each step safe to run twice.</strong> A step retried after a crash must not send the email twice or charge the card twice. Give each action an ID, and skip any action whose ID is already recorded.</li>
+<li><strong>Treat a person’s approval as a pause, not a wait.</strong> When a step needs approval, save the state and stop. The approval restarts the run from the checkpoint, so nobody holds a session open for hours.</li>
+</ul>
+<p>The diagram shows how the three fit together. Note that after a crash and after an approval, the run restarts the same way: from the last checkpoint.</p>
+<pre><code class="language-mermaid">flowchart LR
+    S["Run the&#x3C;br/>next step"] --> C["Save a checkpoint&#x3C;br/>done, next, results"]
+    C --> Q{"Needs a&#x3C;br/>person's approval?"}
+    Q -->|"No"| S
+    Q -->|"Yes"| P["Pause and&#x3C;br/>release the session"]
+    P -->|"Approved"| R["Restart from&#x3C;br/>the checkpoint"]
+    X["A crash, a limit,&#x3C;br/>or a deploy"] -.-> R
+    R --> S
+    class Q check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p>A new model version is an interruption too. A run that resumes on a different model may read its own checkpoint differently. So pin the model for the length of a run, and test a model change on saved checkpoints before it picks up runs already in flight.</p>
+<h3 id="keep-a-long-runs-context-small-enough-to-stay-sharp">Keep a long run’s context small enough to stay sharp</h3>
+<p>A resumable run can still drown in its own context. Every tool result stays in the window, and every tool definition is sent with every request. From Prototype to Production covered pruning, compaction, and memory in one session. At scale, three features of the API do that work on the server, as the table shows.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>What it takes out of the window</th>
+<th>Watch out for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Context editing</td>
+<td>Old tool results, replaced by a short note that they were cleared, once the context passes a size you set</td>
+<td>A result the agent needs later must be saved somewhere else first</td>
+</tr>
+<tr>
+<td>Compaction</td>
+<td>Old turns, replaced by a summary</td>
+<td>The summary can drop a detail that was mentioned once</td>
+</tr>
+<tr>
+<td>Tool search</td>
+<td>Tool definitions, which stay out of the window until the agent searches for one</td>
+<td>Keep the few tools used most always loaded</td>
+</tr>
+</tbody>
+</table>
+<p>What must survive between sessions goes into a <strong>memory</strong> store instead: decisions, notes, and what the agent learned. The agent reads it at the start and writes to it at the end.</p>
 <p>So more sessions, more subagents, and longer loops all raise output, and none of them raises review. What can each run check before a person sees it?</p>
 <h2 id="letting-each-run-check-its-own-work">Letting each run check its own work</h2>
 <p>A run that cannot check itself sends every mistake to a person. A run that can check itself sends only the ones its check could not fix. <strong>Give every run a way to verify its own work, and the reviewer stops being the first test.</strong></p>
@@ -118,6 +171,43 @@
 <h3 id="turn-every-incident-into-an-eval">Turn every incident into an eval</h3>
 <p>A suite built once goes stale. As models improve, every setup passes the old cases, so they stop showing a difference. The suite needs new cases, and the best source is production.</p>
 <p>The rule is simple: every production incident leaves an eval behind, written by the team that owned the incident. The eval replays the request that caused the incident, from the commit before it, and fails if the mistake comes back. Then the same class of incident should stop repeating, and a falling repeat rate is the sign the suite is working.</p>
+<p>A suite also goes stale in two quieter ways. A case can leak into a prompt or an example, and then it passes because it is known, not because the work is right. So keep the cases out of prompts and rotate fresh ones in. And the cases can miss whole kinds of input. So compare the mix of the suite with the mix of production traffic, and add cases where production has inputs the suite does not.</p>
+<h3 id="trust-a-model-judge-only-after-it-agrees-with-people">Trust a model judge only after it agrees with people</h3>
+<p>Some checks need judgment, so a second model grades the output. <strong>A model judge may gate a release only after it agrees with people, and only while it keeps agreeing.</strong> From Prototype to Production showed how to make a judge explain its reasoning before it scores, and how to check it once against human labels. At scale the judge becomes a release gate, and two more failures matter.</p>
+<p>The first is bias. A judge that compares two answers often prefers the one shown first, which is called <strong>position bias</strong>, or the longer one. So show each pair in both orders. If the verdict flips with the order, the judge is guessing.</p>
+<p>The second is drift. A judge is a model too, and a new version can grade differently. So keep a fixed set of cases that people have labeled, and measure agreement on it after every change to the judge, the same way you would compare two human graders.</p>
+<p>The exam guide for Anthropic’s developer course has a practice question about this trap. Like the course’s stories, its team is made up. A team gated prompt releases with a judge that picked the better of two answers. Every new prompt passed, yet users saw no gain. Checked against people, the judge agreed on only slightly more than half of the pairs, barely better than a coin toss. And it picked the first answer far more often than people did.</p>
+<p>The right first move was not a bigger judge model. It was to randomize the order, measure agreement again, and take away the judge’s power to gate until agreement was good enough. So a judge that gates releases is itself under test.</p>
+<h3 id="measure-quality-on-live-traffic-too">Measure quality on live traffic too</h3>
+<p>An offline suite only knows the inputs someone collected, and live traffic brings inputs nobody thought of. So a small sample of real requests is graded too, with the same checks and the same judge you checked against people, and the score is watched over time. From Request to Running System covered experiments that compare two versions on live traffic. Here the point is steady measurement, not a one-off test.</p>
+<p>The measure has to fit the task, as the table shows.</p>
+<table>
+<thead>
+<tr>
+<th>Kind of task</th>
+<th>A measure that fits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Extraction</td>
+<td>An exact match on each field</td>
+</tr>
+<tr>
+<td>Writing</td>
+<td>The score of a judge checked against people, using a rubric</td>
+</tr>
+<tr>
+<td>An agent’s task</td>
+<td>Whether it finished, and how many steps and how much cost it took</td>
+</tr>
+<tr>
+<td>An answer from retrieved sources</td>
+<td>Whether every claim is backed by a cited source</td>
+</tr>
+</tbody>
+</table>
+<p>User feedback, such as a thumbs-down or a correction, is a signal too, but a lopsided one, because unhappy users click more. Use it to find cases worth adding to the suite, not to score the system.</p>
 <p>So the configuration is now under test. But an eval only samples 20 to 50 tasks, and it sees a broken rule only after a session has broken it. What stops a live session from breaking the rule in the first place?</p>
 <h2 id="turning-rules-from-advice-into-gates">Turning rules from advice into gates</h2>
 <p>An eval sees a broken rule after the fact, because to a session an instruction is only a request. It follows the request most of the time, and at scale “most of the time” means a steady trickle of violations. <strong>A rule that must hold every time needs a gate: a check that runs every time and can stop the action.</strong></p>
@@ -153,6 +243,31 @@
 </ul>
 <p>Each deny removes some capability, so treat such a setup as a starting point, tuned to the data the repository holds.</p>
 <p>Managed settings can also fix the permission mode, which sets what the agent may do without asking. Of the six modes in From Prototype to Production, two fit unattended work. Do-not-ask runs reads and pre-approved tools and denies anything that would prompt, so a pipeline never hangs on a question. Auto judges intent, not correctness, so pair it with the stop hook from “Back every must-hold rule with a hook.”</p>
+<h3 id="break-the-mix-of-private-data-untrusted-input-and-a-way-out">Break the mix of private data, untrusted input, and a way out</h3>
+<p>Gates stop what someone foresaw. An attacker works through what nobody foresaw: the content an agent reads. From Prototype to Production explained prompt injection, an instruction hidden in a web page, a document, or a tool result that the model takes as a command. At scale, the question is not whether one gets through, but what it can do when it does.</p>
+<p>Simon Willison named the dangerous case the <a href="https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/">lethal trifecta</a>: an agent that can read private data, reads content an attacker can write, and can send data out. With all three, one hidden instruction can copy the private data to the attacker. <strong>So give an agent at most two of the three. If it needs all three, put the sending step behind a check in code or a person’s approval, which a hidden instruction cannot talk its way past.</strong></p>
+<p>The diagram shows where that gate sits.</p>
+<pre><code class="language-mermaid">flowchart LR
+    U["Untrusted input&#x3C;br/>a ticket, a page,&#x3C;br/>a tool result"] --> A["Agent"]
+    D["Private data&#x3C;br/>records, files,&#x3C;br/>other customers"] --> A
+    A --> O{"An outbound action&#x3C;br/>an email, a web request,&#x3C;br/>a public post"}
+    O -->|"To an allowed&#x3C;br/>recipient"| S["Sent"]
+    O -->|"Anywhere else"| H["Blocked, or&#x3C;br/>a person approves"]
+    class O check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p>The exam guide has a practice question with exactly this shape. A support agent read tickets, could look up any customer’s record, and could send email. A hidden instruction in one ticket made it email another customer’s record to an outside address. A stronger line in the prompt did not close the path. A recipient allowlist or human approval on the email tool did, together with limiting the lookup to the ticket’s own account.</p>
+<p>Two more routes open once agents keep state. In <strong>tool poisoning</strong>, the instruction arrives in a tool’s description or result, so a tool from an outside server is untrusted input too. In <strong>memory poisoning</strong>, an injected note is written into the agent’s memory and comes back in every later session. So a memory write from a run that read untrusted content is untrusted too, and what the memory holds gets reviewed.</p>
+<p>The layers around the model then catch what gets through. Each has its own job: screening input and output, removing personal data before anything is logged or sent, blocking destructive actions in code, and a fixed path for a request the model refuses. From Request to Running System covered these layers and the risk register behind them.</p>
+<p>Every filter fails both ways. It blocks good requests, which are false positives, and it lets bad ones through, which are false negatives. So tune each filter on labeled examples, and measure both rates.</p>
+<p>Filters only catch the attacks someone thought of. So the new work at scale is a <strong>red-team exercise</strong>: your own team attacks the system on purpose. Start with the agents that have two of the three, and draw the attacks from public lists of risks such as the <a href="https://genai.owasp.org/llm-top-10/">OWASP Top 10 for LLM Applications</a> and NIST’s <a href="https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence">Generative AI Profile</a>.</p>
+<h3 id="give-each-agent-its-own-identity-never-a-shared-key">Give each agent its own identity, never a shared key</h3>
+<p>A gate can only check what it can see, and what it sees is an identity. When every agent and every pipeline job uses one shared API key, nothing tells them apart. A log cannot say which agent did what, and a leaked key opens everything. <strong>So each agent gets its own identity, with the narrowest access its job needs.</strong> Three practices follow:</p>
+<ul>
+<li><strong>No long-lived keys in pipelines.</strong> With workload identity federation, a CI job proves who it is with a short-lived token from its own platform, so no API key is stored in the pipeline at all.</li>
+<li><strong>Least privilege per tool.</strong> Each agent’s tools and data match its job, as the deploy servers in the next section show.</li>
+<li><strong>An audit log of security-relevant actions.</strong> Every write, send, and permission change is logged with the identity that did it, so an incident can be traced to one agent.</li>
+</ul>
 <p>So the gates now hold inside every session, for everyone. But a session on a laptop is not where most work ships. How far can the pipeline itself be trusted?</p>
 <h2 id="shipping-through-the-pipeline-up-to-the-production-gate">Shipping through the pipeline up to the production gate</h2>
 <p>A laptop session is watched at least once. A pipeline job starts on an event, with nobody watching at all. That raises the stakes of every earlier step. <strong>The agent may act up to the production gate and cannot pass it.</strong> The one thing it may do in production on its own is roll back, because a person approved that procedure in advance.</p>
@@ -182,11 +297,116 @@
 <p>A pass that reads the plan catches what a diff alone cannot. In one course case, a pull request added a status panel to a customer portal that fetched new data on every render. Nothing in the diff looked wrong. But the plan file committed with the task said the panel must cache, because the system behind it allows 50 requests a second. The compliance pass read the plan and flagged it.</p>
 <p>So the review earned its place by reading what the reviewer of a diff would not have open. One gap remains when an agent opens pull requests under an app’s name, as Anthropic’s Slack agent does. Branch protection stops a pull request’s author from approving it, and the author is now the app. So the person who asked for the change could approve their own request.</p>
 <p>The fix is two required approvals, so at least one approver is someone other than the requester. Also dismiss approvals when new commits arrive, or the agent can push after a person has approved.</p>
-<p>So the pipeline now ships up to production and stops there. After the release, the system is live with nobody watching. Who notices when it breaks?</p>
+<p>An automated reviewer earns its place the same way a judge does. Start it in shadow mode: it reviews every pull request, but its findings go to a log, not to the author, and nothing waits on it. Compare its findings with what human reviewers found on the same pull requests. Only when it catches real problems without burying them in noise does it post comments, and only after that may it block a merge.</p>
+<h3 id="roll-a-prompt-or-model-change-out-to-a-slice-of-traffic-first">Roll a prompt or model change out to a slice of traffic first</h3>
+<p>Code passes through review and the gate. A prompt or a model change can skip both, because it is not code, and yet it changes every run. <strong>So a prompt or model change ships like code: versioned, tested, and released to a slice of traffic at a time.</strong> From Prototype to Production covered pinning the model and promoting through the eval. At scale the release itself becomes a process, as the diagram shows.</p>
+<pre><code class="language-mermaid">flowchart LR
+    V["A new prompt or model,&#x3C;br/>with a version number"] --> E{"Passes the eval&#x3C;br/>and the migration tests?"}
+    E -->|"No"| X["Stays on the&#x3C;br/>current version"]
+    E -->|"Yes"| C["A small slice&#x3C;br/>of live traffic"]
+    C --> W{"Quality, cost, and&#x3C;br/>errors hold?"}
+    W -->|"No"| R["Roll back to the&#x3C;br/>pinned version"]
+    W -->|"Yes"| F["Widen the slice,&#x3C;br/>then all traffic"]
+    class E,W check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p>Migration tests look for what a new model changes on purpose: a different default length, stricter refusals, a changed output format. Each known change gets a case before the switch.</p>
+<p>The same discipline covers the tools agents call. An MCP server is a dependency like any other. So version its tool schemas, keep the old version working while clients move, and test the agents against the new schema before the switch. A remote MCP server checks who is calling, using the agent’s own identity from “Give each agent its own identity, never a shared key.”</p>
+<p>Large teams send every model call through one gateway, which holds the keys, picks the model and the platform, and applies the rollout. A gateway that can send a request to the vendor’s API or to a cloud platform must also check that every feature the request uses exists where it sends it, because cloud platforms can get new features later than the vendor’s API.</p>
+<p>So the pipeline now ships up to production and stops there. After the release, the system meets real traffic. What keeps it up when that traffic hits the limits?</p>
+<h2 id="holding-up-under-real-traffic">Holding up under real traffic</h2>
+<p>Real traffic does what tests do not. It arrives in bursts, hits rate limits, and asks about things nobody indexed. <strong>At scale, reliability is mostly about telling one kind of failure from another, because each kind needs a different answer.</strong></p>
+<h3 id="branch-on-why-a-call-stopped-not-only-on-whether-it-failed">Branch on why a call stopped, not only on whether it failed</h3>
+<p>From Prototype to Production sorted errors into those a retry can clear and those it cannot. A model call has a second signal: the <strong>stop reason</strong>, which says why a response ended, even when the HTTP status says success. A retry path that ignores it treats very different problems the same way. The table pairs each signal with its answer.</p>
+<table>
+<thead>
+<tr>
+<th>What happened</th>
+<th>The signal</th>
+<th>The right answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rate limited, overloaded, or a passing server fault</td>
+<td>HTTP 429, 529, or a 500-range error</td>
+<td>Wait as long as the response’s retry-after header says, retry with backoff, then fall back</td>
+</tr>
+<tr>
+<td>The request itself is wrong</td>
+<td>Another 400-range error</td>
+<td>Fix the request. A retry fails the same way</td>
+</tr>
+<tr>
+<td>The output hit its limit</td>
+<td>Stop reason <code>max_tokens</code></td>
+<td>Raise the limit or continue the answer. A plain retry stops at the same place</td>
+</tr>
+<tr>
+<td>The context window ran out</td>
+<td>Stop reason <code>model_context_window_exceeded</code></td>
+<td>Treat the answer as cut off, and shorten or compact the input</td>
+</tr>
+<tr>
+<td>The model declined</td>
+<td>Stop reason <code>refusal</code>, with a success status</td>
+<td>Never the same request again. Send it to a safety path, or to a fallback model where policy allows</td>
+</tr>
+<tr>
+<td>A tool that runs on the provider’s side paused a long loop</td>
+<td>Stop reason <code>pause_turn</code></td>
+<td>Send the response back so it continues</td>
+</tr>
+</tbody>
+</table>
+<p>Another practice question from the exam guide shows the cost of skipping this. A team’s fallback path sent every unwanted result to a second model, with backoff: errors, cut-off answers, and refusals alike.</p>
+<p>After a model update its cost jumped, and the traces showed three causes mixed in that one path: rate limits, answers cut off at the output limit, and refusals. Retrying the cut-off answers repeated the cut and wasted tokens, and retrying the refusals repeated the refusal at extra cost.</p>
+<p>More retries would have made the cost spike worse. The fix was to branch on the stop condition, as in the table.</p>
+<p>Retries handle one call. When a whole dependency is failing, a <strong>circuit breaker</strong> stops calling it for a while, so the system fails fast instead of piling up retries. A fallback then takes over: another model, another region, or another platform. From Request to Running System put each control in its own layer.</p>
+<p>The new risk at scale is a fallback that cannot do what the main model does. A fallback that lacks a feature the main model uses, such as a tool type or a beta option, fails on exactly the requests it was meant to save. So test each fallback with real request shapes, not with a simple hello-world call.</p>
+<h3 id="shape-the-load-before-it-reaches-the-limit">Shape the load before it reaches the limit</h3>
+<p>Retries answer a limit after it is hit. Shaping the load keeps it from being hit. <strong>First find the limit you will hit first: requests per minute, tokens per minute, or the budget.</strong> Many short calls hit the request limit. A few long documents hit the token limit. A large nightly job hits the budget.</p>
+<p>Then four tools, each for its own case:</p>
+<ul>
+<li><strong>A queue with backpressure.</strong> Requests wait in a queue, and when the queue grows past a set length, new work is slowed or refused at the door, instead of everything failing at the API.</li>
+<li><strong>Priority classes.</strong> A user waiting for an answer goes ahead of a background job, so a nightly burst cannot starve the interactive path.</li>
+<li><strong>Batch for work nobody is waiting for.</strong> From Prototype to Production introduced the batch API. At scale, moving deferrable work there frees the live limits for live traffic, at a lower price per token.</li>
+<li><strong>A quota per tenant.</strong> In a shared system, each customer or team gets its own share of the limits and its own key, so one heavy tenant cannot use up everyone’s capacity, and spend can be traced to whoever caused it.</li>
+</ul>
+<p>The diagram shows the four together, as one path a request takes.</p>
+<pre><code class="language-mermaid">flowchart LR
+    R["A request&#x3C;br/>arrives"] --> T{"Tenant within&#x3C;br/>its quota?"}
+    T -->|"No"| L["Slowed or refused&#x3C;br/>at the door"]
+    T -->|"Yes"| P{"Is someone&#x3C;br/>waiting for it?"}
+    P -->|"No"| B["Batch queue&#x3C;br/>or the batch API"]
+    P -->|"Yes"| Q{"Live queue&#x3C;br/>past its limit?"}
+    Q -->|"Yes"| L
+    Q -->|"No"| A["Model API"]
+    B --> A
+    class T,P,Q check
+    classDef check fill:#fff4d6,stroke:#d9480f,stroke-width:2px
+</code></pre>
+<p>Size capacity from the peak, not the average. Take the busiest minute of the busiest hour, count its requests and tokens, and compare them with your account’s per-minute rate limits.</p>
+<h3 id="keep-answers-grounded-as-the-knowledge-grows">Keep answers grounded as the knowledge grows</h3>
+<p>The last kind of failure gives no error at all: an answer that sounds right and is not backed by anything. From Request to Running System built the retrieval pipeline: chunking, and hybrid search that combines keyword and meaning. From Prototype to Production compared a prepared index with agentic search, where the model searches as it goes. At scale, three practices keep answers grounded:</p>
+<ul>
+<li><strong>Rerank before the model reads.</strong> Retrieve more candidates than you need, let a reranking model order them by how well each answers the question, and pass only the best few.</li>
+<li><strong>Make the answer show its sources and its doubt.</strong> Ask for a citation on every claim, and allow the answer “not found in the sources”. A model that is allowed to say so is less pushed to fill the gap.</li>
+<li><strong>Diagnose a bad answer stage by stage.</strong> Ask in order: was the document in the index, did search find it, did ranking keep it near the top, and did the model use it? Each “no” points to a different fix.</li>
+</ul>
+<p>So the service now tells its failures apart, shapes its load, and grounds what it says. But when it breaks anyway, at night, nobody is watching. Who notices?</p>
 <h2 id="letting-monitoring-start-the-next-loop">Letting monitoring start the next loop</h2>
 <p>So far every loop starts from a person or a code event. Nothing yet starts one from what production does: an alert still wakes someone, and a ticket still waits for someone to pick it up. <strong>The last step is to let a signal from production start the agent, while a person triages what it finds.</strong> This is the feedback loop from From Request to Running System, with the agent doing the first diagnosis.</p>
+<h3 id="trace-every-run-and-set-the-line-it-must-hold">Trace every run and set the line it must hold</h3>
+<p>A signal needs something to measure first. <strong>Every run leaves a trace, and every service states the level it must hold.</strong> A trace records each step of a run as a <strong>span</strong>, one timed entry: each model call with its tokens, cost, cache reads, and time, and each tool call with its result. One trace ID runs through the agent and all its subagents, so a run that crosses several agents can be followed end to end.</p>
+<p>From the traces come the numbers the team watches, called <strong>service level indicators</strong>: the task success rate, the share of answers that pass the live checks, latency at the 95th percentile, and cost per task. A <strong>service level objective</strong> sets the line each one must hold, such as “95 percent of tasks finish without a person”. Alerts and dashboards follow from those lines, cost lines included, so a cost jump arrives as an alert, not as an invoice.</p>
+<p>Traces can hold sensitive content, and some customers require that none is kept. Under such a rule, keep the shape of the trace and drop the content: timings, token counts, tool names, and stop reasons stay, and prompts and outputs are left out or redacted. Most diagnosis needs only the shape.</p>
+<h3 id="find-the-pattern-no-single-trace-shows">Find the pattern no single trace shows</h3>
+<p>One trace shows one run. Some failures only show across many runs: a tool that fails one time in fifty, or a model version that does worse on one kind of input. So keep every failed trace and a random sample of the rest.</p>
+<p>Then group the failures by what they share: model version, prompt version, tool, tenant, and kind of input. A <strong>cohort</strong> that fails far more often than the rest points to a cause no single trace reveals. Compare the same groups before and after a model update, and a drop in quality caused by the update shows up.</p>
+<p>Traces of many runs also answer an architecture question. From Request to Running System told of a team that chose an agent, then found in its traces that the real paths fell into four shapes. If most runs follow a few fixed paths, turn those paths into a fixed workflow and keep the agent for the rest. If a workflow keeps meeting cases its steps never planned for, replace that part with an agent.</p>
 <h3 id="let-rarer-readings-unlock-more-action">Let rarer readings unlock more action</h3>
-<p>A trigger that fires on every blip buries the team in noise. A trigger that waits for disaster fires too late. That problem is a century old.</p>
+<p>Cohorts and service levels say what to watch. The next question is how far a reading must move before it starts the agent. A trigger that fires on every blip buries the team in noise. A trigger that waits for disaster fires too late. That problem is a century old.</p>
 <p>In a 1924 memo at Western Electric, a year before its engineers became Bell Telephone Laboratories, <a href="https://en.wikipedia.org/wiki/Walter_A._Shewhart">Walter Shewhart</a> drew the first control chart. His point was that a process always varies by chance, and only variation outside its normal range has a cause worth chasing.</p>
 <p>A <strong>control band</strong> applies that idea to a metric. Take the mean of the last 30 days of hourly readings, and measure how far readings usually stray from it: the standard deviation, or <strong>σ</strong>. The 1σ line is the mean plus one σ, the 2σ line the mean plus two, and so on.</p>
 <p>Chance alone crosses each line now and then. If a steady metric’s readings follow a bell curve, then at 720 hourly readings a month (30 days of 24), about four a day land more than 1σ above the mean, about 16 a month more than 2σ above, and about one a month more than 3σ above.</p>
@@ -219,11 +439,47 @@
 </div>
 <p>So the agent acted only through a rehearsed route, and the real decision, what “live” should mean, went back to a person.</p>
 <p>The same work can also arrive in a chat channel instead of from a script. An agent with its own identity in the on-call channel picks up each alert, posts what broke and a proposed fix in the alert’s thread, and drafts the postmortem once the incident closes. Where no rollback runbook has been approved in advance, it waits for the on-call engineer to approve the rollback in that thread.</p>
+<h3 id="find-which-layer-failed-before-fixing-anything">Find which layer failed before fixing anything</h3>
+<p>Whoever picks up a finding, agent or person, checks its diagnosis before acting on it, because the first guess is often wrong. <strong>Before fixing anything, find which layer the failure came from: the model, the harness, a tool, or the data.</strong> Each layer needs a different fix, and a fix in the wrong layer only moves the problem. The table says where to look for each.</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>What it looks like</th>
+<th>Where to look</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The model</td>
+<td>A wrong or made-up answer from correct inputs</td>
+<td>The same inputs on the pinned model version, and the eval cases</td>
+</tr>
+<tr>
+<td>The harness</td>
+<td>Lost context, a skipped step, steps in the wrong order</td>
+<td>The trace: what the model was actually sent</td>
+</tr>
+<tr>
+<td>A tool</td>
+<td>An error, an empty result, or a wrong value</td>
+<td>The tool’s own logs, and its result in the trace</td>
+</tr>
+<tr>
+<td>The data</td>
+<td>A stale or missing document, or a bad record</td>
+<td>The index, or the source system</td>
+</tr>
+</tbody>
+</table>
+<p>Two kinds of failure hide from normal error counts, so track each on its own. A refusal arrives with a success status. A grounding failure is an answer that ignored or misread the source it was given, and nothing errors at all. From Request to Running System gave a table from symptom to cause, and finding the layer first tells you which row of it to read.</p>
+<p>When the failure is live, the order is assess, mitigate, communicate, then learn. Assessing decides how many users are hit, and how badly. Mitigation stops the harm before the cause is known: roll back the release, switch to the fallback, or turn the feature off. Communication tells users and stakeholders what happened and when it will be fixed. Learning comes last: the incident leaves an eval, an alert where monitoring missed it, and a postmortem.</p>
 <p>Now the loop starts itself. But a loop that runs without anyone starting it also spends money without anyone noticing.</p>
 <h2 id="keeping-cost-flat-as-the-fleet-grows">Keeping cost flat as the fleet grows</h2>
 <p>Every earlier step adds runs: parallel sessions, evals on every configuration change, agents in CI, agents woken by monitoring. While one team uses a feature, the bill is small. Across a fleet, a small waste per run multiplies by every run. <strong>At scale, cost is set by what every run does by default: the model it starts on, what it resends each turn, and the settings nobody changes.</strong></p>
 <h3 id="start-on-the-smallest-model-and-tune-effort-before-moving-up">Start on the smallest model and tune effort before moving up</h3>
 <p>From Prototype to Production starts on the balanced tier and steps down for high-volume work. For a fleet, make the bottom the starting point of the search. The course’s rule is to run 20 to 30 real examples through the smallest tier first, and stop at the cheapest model whose output you would ship. At volume, every step up is multiplied by every run.</p>
+<p>Routing can go further. A <strong>cascade</strong> sends each request to the small model first, and escalates to a larger one only when a check fails or the small model reports low confidence. If most requests pass the small model’s check, most pay the small price.</p>
 <p><strong>Effort</strong>, the request setting From Prototype to Production introduced, is the second dial. It sets how hard the model works on a task, not what it knows. Too low, and it stops early with unfinished work, which costs a second request. Too high, and it overthinks, finds tasks you never assigned, and takes longer. The diagram shows which dial to turn.</p>
 <pre><code class="language-mermaid">flowchart TD
     S["Start at the default effort"] --> Q{"What went wrong?"}
@@ -240,18 +496,41 @@
 <h3 id="stop-paying-for-the-same-tokens-on-every-turn">Stop paying for the same tokens on every turn</h3>
 <p>The second default is what each request resends. An agent that uses tools sends everything again on every request: the tool definitions, the system prompt, the question, and every tool result so far. So its cost grows with each call. In one recorded demo, an agent’s first request carried 606 input tokens, and its 37th carried 47,905, almost all of it the 36 earlier tool calls and their results.</p>
 <p>Prompt caching cuts the part that never changes. From Prototype to Production gave the prices and the conditions for a cache hit. One trap matters once you track spend across a fleet: with caching on, the input-token count leaves out the cached part, so the true total adds the cache reads and writes to it. Watch all three counts, or a cache that silently stopped working looks like a cheaper month.</p>
+<p>A long run needs one more rule to keep its cache. Changing the system prompt halfway through a conversation changes the cached prefix, so the next request pays full price for all of it again. Add a new instruction as a message at the end instead, and the cached part stays the same.</p>
 <p><strong>Programmatic tool calling</strong> cuts the part that grows. The model writes a short script that calls your tools, the script runs in a code-execution container, and only what the script prints reaches the model. The tool results stay with the script.</p>
 <p>The difference is large when lookups do not depend on each other. One demo asked which of 40 engineers were under 70 percent utilization in a month. That took 41 tool calls: one to list the engineers and one per engineer.</p>
 <p>The ordinary tool loop sent 42 requests to the model and about 1.1 million input tokens in total, for $2.29. The scripted run sent 3 requests and about 28,000 input tokens, for under 7 cents, plus separately billed execution time.</p>
 <p>It helps little when the model must reason over each result before the next call. And independent calls save clock time as well as tokens: the loop answers every call in one message, as From Prototype to Production described, and runs the read-only ones at once. In another demo, a job-site check with three independent lookups went from 19.9 seconds to 10.8, measured from question to answer.</p>
+<h3 id="cut-the-wait-the-user-sees-not-only-the-total">Cut the wait the user sees, not only the total</h3>
+<p>Cost is one half of the budget, and waiting is the other. <strong>Measure two numbers: the time to the first token, which is when the user sees something start, and the total time to the full answer.</strong> They have different fixes, as the table shows.</p>
+<table>
+<thead>
+<tr>
+<th>To cut</th>
+<th>Levers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Time to the first token</td>
+<td>Stream the response. Cache the long fixed prefix, so the model starts sooner. Send less context</td>
+</tr>
+<tr>
+<td>Total time</td>
+<td>Run independent tool calls at once, as above. Use a lower effort or a smaller model on steps that need no more. Ask for shorter output</td>
+</tr>
+</tbody>
+</table>
+<p>Set the latency target at the 95th percentile, the time that 95 of every 100 requests beat, not the average, because the slow tail is what users remember. From Request to Running System made the same point when modeling cost and latency before the build.</p>
 <h3 id="change-the-defaults-before-you-raise-a-cap">Change the defaults before you raise a cap</h3>
-<p>The last default is the one nobody changes. From Request to Running System set the spend posture before rollout: the default model, effort guidance, and caps. At fleet scale, the default is the lever, because most people never touch the model picker. If the default is the most capable model at a high effort, that expensive setup is what most usage runs on.</p>
+<p>Back to cost: the last default is the one nobody changes. From Request to Running System set the spend posture before rollout: the default model, effort guidance, and caps. At fleet scale, the default is the lever, because most people never touch the model picker. If the default is the most capable model at a high effort, that expensive setup is what most usage runs on.</p>
 <p>That makes a request to raise a spend cap a reason to look, not an automatic yes. In a worked case from the course’s admin lessons, a platform team hit its monthly cap in the second month and asked for more. The review showed most of that spend was the most capable model writing routine pull-request summaries.</p>
 <p>The default model was lowered for the role the team’s members hold, and the cap was left alone. The next month the team ran under its cap, with the same volume of work. So the review asks one question before a cap moves: is a setting wasting the spend, or was the cap set below what the work needs? Change the setting in the first case, and re-base the cap only in the second.</p>
-<p><strong>Lesson: at scale, the person stops working inside the loop and writes its checks.</strong> Parallel streams are bounded by review, runs check themselves, evals test the configuration, hooks hold the rules, the pipeline stops at production, monitoring starts the next loop, and defaults keep the bill flat. The person writes those checks and reads what they send back.</p>
+<p>A cap is easier to set from a forecast. Cost per task, taken from the traces, times the tasks expected next month gives the bill before it arrives, and the gap between forecast and actual is itself a signal. In a shared system, each tenant also gets its own budget, enforced where its requests pass, so one customer’s spike stops at its own limit.</p>
+<p><strong>Lesson: at scale, the person stops working inside the loop and writes its checks.</strong> Parallel streams are bounded by review, runs check themselves, evals test the configuration, hooks hold the rules, the pipeline stops at production, the service tells its failures apart under load, monitoring starts the next loop, and defaults keep the bill flat. The person writes those checks and reads what they send back.</p>
 <p>So what can you do this week? Write down every check you did by hand on agent output in the last five days. Take the one you did most often, and turn it into a hook or an eval that runs without you.</p>
 <h2 id="appendix-with-the-files-behind-each-check">Appendix with the files behind each check</h2>
-<p>Whichever check you pick, it ends up as a file. The argument above says which checks to build and why. This appendix shows what each one looks like on disk, in the same order as the seven steps. The snippets are shortened from the course’s examples and use Claude Code’s formats. File names, flags, and setting keys change, so check the current documentation before you copy one.</p>
+<p>Whichever check you pick, it ends up as a file. The argument above says which checks to build and why. This appendix shows what each one looks like on disk, in the same order as the eight steps. The snippets are shortened from the course’s examples and use Claude Code’s formats. File names, flags, and setting keys change, so check the current documentation before you copy one.</p>
 <p>The table maps each step of the post to the file that carries it.</p>
 <table>
 <thead>
@@ -280,6 +559,10 @@
 <tr>
 <td>Ship up to the production gate</td>
 <td>Pipeline jobs, <code>.mcp.json</code>, and <code>REVIEW.md</code></td>
+</tr>
+<tr>
+<td>Hold up under real traffic</td>
+<td>The code around each model call that branches on why it stopped</td>
 </tr>
 <tr>
 <td>Let monitoring start the loop</td>
@@ -630,6 +913,25 @@
 <span class="line"><span style="color:#79B8FF;font-weight:bold">## Do not report</span></span>
 <span class="line"><span style="color:#E1E4E8">Generated files under src/gen/ and anything CI already enforces.</span></span></code></pre>
 <p>The cap on nits matters more than it looks: a review that buries two real findings under thirty style notes gets skimmed.</p>
+<h3 id="a-call-that-branches-on-why-it-stopped">A call that branches on why it stopped</h3>
+<p>The table in “Branch on why a call stopped” becomes a few lines of code around every model call. Note that a success status still goes through the stop reason.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#79B8FF">RETRY_STATUS</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span><span style="color:#79B8FF">429</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">500</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">502</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">503</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">504</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">529</span><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> next_action</span><span style="color:#E1E4E8">(status, resp):</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> status </span><span style="color:#F97583">in</span><span style="color:#79B8FF"> RETRY_STATUS</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#9ECBFF"> "wait as told, retry with backoff, then fall back"</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> status </span><span style="color:#F97583">>=</span><span style="color:#79B8FF"> 400</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#9ECBFF"> "fix the request: a retry fails the same way"</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "end_turn"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"done"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "stop_sequence"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"done"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "tool_use"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"run the tools and send the results back"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "pause_turn"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"send the response back so it continues"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "max_tokens"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"raise the limit or continue, never a plain retry"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "model_context_window_exceeded"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"treat as cut off, compact the input"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "refusal"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"safety path or an allowed fallback, never the same request"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    }.get(resp.stop_reason, </span><span style="color:#9ECBFF">"log it and alert"</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>The last line matters as much as the others: a stop reason the code does not know is logged and sent as an alert, not treated as success.</p>
 <h3 id="alert-levels-and-the-finding-they-produce">Alert levels and the finding they produce</h3>
 <p>The alert levels from “Let rarer readings unlock more action” are a short config file, kept in version control beside the detection script.</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">metric</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">status_5xx_rate</span></span>
@@ -733,12 +1035,28 @@
 <td>A permission mode in which a classifier, a second model, stops actions that go beyond the request. It judges intent, not correctness</td>
 </tr>
 <tr>
+<td>Backpressure</td>
+<td>Slowing or refusing new work at the door when a queue grows too long, so the system does not fail all at once</td>
+</tr>
+<tr>
 <td>Branch protection</td>
 <td>Repository rules that require review and passing checks before a change can merge</td>
 </tr>
 <tr>
+<td>Cascade</td>
+<td>Sending a request to a small model first, and escalating to a larger one only when a check fails</td>
+</tr>
+<tr>
+<td>Checkpoint</td>
+<td>A saved record of what a run has done and what is next, so it can resume after an interruption</td>
+</tr>
+<tr>
 <td>CI</td>
 <td>Continuous integration: the pipeline that builds and tests every change</td>
+</tr>
+<tr>
+<td>Circuit breaker</td>
+<td>A control that stops calling a failing dependency for a while, so the system fails fast instead of piling up retries</td>
 </tr>
 <tr>
 <td>CLAUDE.md</td>
@@ -747,6 +1065,14 @@
 <tr>
 <td>Code owner</td>
 <td>A person named as responsible for part of the code, whose approval a merge needs</td>
+</tr>
+<tr>
+<td>Cohort</td>
+<td>A group of runs that share something, such as a model version or a tenant, compared with the rest to find a common cause</td>
+</tr>
+<tr>
+<td>Context editing</td>
+<td>An API feature that clears old tool results from the context window once it passes a set size</td>
 </tr>
 <tr>
 <td>Control band</td>
@@ -789,6 +1115,10 @@
 <td>A short problem statement an agent writes instead of pushing a fix: anomaly and evidence, proposed outcome, systems affected, open questions</td>
 </tr>
 <tr>
+<td>Lethal trifecta</td>
+<td>An agent that reads private data, reads content an attacker can write, and can send data out. With all three, one injection can leak the data</td>
+</tr>
+<tr>
 <td>Loop</td>
 <td>The cycle of giving an agent a task, letting it run, checking the result, and deciding the next step</td>
 </tr>
@@ -805,12 +1135,28 @@
 <td>A separate full coding-agent instance working its own task at the same time as others</td>
 </tr>
 <tr>
+<td>Position bias</td>
+<td>A model judge preferring an answer because of where it was shown, such as first, not because it is better</td>
+</tr>
+<tr>
 <td>Programmatic tool calling</td>
 <td>The model writes a script that calls your tools in a container, so only the script’s printout reaches the model</td>
 </tr>
 <tr>
 <td>Runbook</td>
 <td>A written procedure approved in advance, such as a rollback, that an agent may run</td>
+</tr>
+<tr>
+<td>Service level indicator</td>
+<td>A number taken from traces that shows how well a service works, such as a task success rate or a latency</td>
+</tr>
+<tr>
+<td>Service level objective</td>
+<td>The line a service level indicator must hold, such as a task success rate or a latency at the 95th percentile</td>
+</tr>
+<tr>
+<td>Shadow mode</td>
+<td>Running a new check or reviewer on real work while nobody acts on its output, to measure it before it can block anything</td>
 </tr>
 <tr>
 <td>σ (sigma)</td>
@@ -825,8 +1171,20 @@
 <td>A hook that runs when the agent tries to end its turn, and can refuse until a condition holds, such as passing tests</td>
 </tr>
 <tr>
+<td>Stop reason</td>
+<td>The field in a model response that says why it ended: done, a tool call, the output limit, a refusal, and others</td>
+</tr>
+<tr>
 <td>Subagent</td>
 <td>A helper inside one session that works in its own context window and returns only a summary</td>
+</tr>
+<tr>
+<td>Time to first token</td>
+<td>The time until the first part of a response appears, which is what a user waits for before seeing anything</td>
+</tr>
+<tr>
+<td>Tool search</td>
+<td>An API feature that keeps tool definitions out of the context window until the agent searches for the one it needs</td>
 </tr>
 <tr>
 <td>Verifier</td>
@@ -837,6 +1195,10 @@
 <td>Rules from a 1956 quality-control handbook that flag patterns, such as a slow drift, a single limit would miss</td>
 </tr>
 <tr>
+<td>Workload identity federation</td>
+<td>A way for a job, such as a CI run, to prove its identity with a short-lived token from its platform, without a stored API key</td>
+</tr>
+<tr>
 <td>Worktree</td>
 <td>A separate checkout of a repository on its own branch, so parallel sessions cannot overwrite each other’s files</td>
 </tr>
@@ -845,12 +1207,20 @@
 <h2 id="references">References</h2>
 <p><strong>Anthropic partner training</strong> (sign-in required)</p>
 <ul>
-<li>Anthropic, <a href="https://anthropic-partners.skilljar.com/path/claude-certified-developer-professional">Claude Certified Developer – Professional</a> prep courses: production integration, agent architecture and orchestration, observability, evaluation engineering, runtime guardrails and security, debugging and incident response, agent fleet operations, and cost and latency at scale. The source of most examples here, including the demo measurements and the worked cases; this post reorders the material into the order a running system grows.</li>
+<li>Anthropic, <a href="https://anthropic-partners.skilljar.com/path/claude-certified-developer-professional">Claude Certified Developer – Professional</a> prep courses: production integration, agent architecture and orchestration, observability, evaluation engineering, runtime guardrails and security, debugging and incident response, agent fleet operations, and cost and latency at scale. The source of most examples here, including the demo measurements and the worked cases; this post reorders the material into the order a running system grows. The course’s exam guide lists eight skill areas (not the same as this post’s eight steps), from agent architecture to fleet operations, and this post covers each of them.</li>
 </ul>
 <p><strong>Documentation</strong></p>
 <ul>
 <li><a href="https://code.claude.com/docs">Claude Code documentation</a>. How worktrees, subagents, hooks and their exit codes, permission modes, managed settings, sandboxing, and non-interactive runs work.</li>
 <li><a href="https://platform.claude.com/docs">Claude platform documentation</a>. The reference for managed agents, prompt caching, programmatic tool calling, parallel tool use, and the effort setting.</li>
+<li><a href="https://platform.claude.com/docs/en/api/handling-stop-reasons">Stop reasons and fallback</a>. What each stop reason means, and how to handle a refusal, a cut-off answer, and a paused turn.</li>
+<li><a href="https://platform.claude.com/docs/en/build-with-claude/context-editing">Context editing</a> and <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool">tool search</a>. How old tool results are cleared from the context window, and how tool definitions stay out of it until needed.</li>
+</ul>
+<p><strong>Security</strong></p>
+<ul>
+<li>Simon Willison, <a href="https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/">The lethal trifecta for AI agents</a> (2025). Private data, untrusted content, and a way to send data out: an agent with all three can be made to leak, and the fix is to remove one of them.</li>
+<li><a href="https://genai.owasp.org/llm-top-10/">OWASP Top 10 for LLM Applications</a>. A public list of the main risks for systems built on language models, with prompt injection first.</li>
+<li>NIST, <a href="https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence">AI Risk Management Framework: Generative AI Profile</a> (2024). The risks that generative AI adds or makes worse, and actions to manage each one.</li>
 </ul>
 <p><strong>Older ideas this post leans on</strong></p>
 <ul>
@@ -864,4 +1234,4 @@
 <li><a href="/blogs/blog/when_code_is_cheap/">When Code Is Cheap</a>. Its question 10 argues that review capacity, not generation, sets how much work a team can take on, and that review hours must be planned.</li>
 </ul>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
 &copy; 2026 Locch. All rights reserved.
-<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.9GFZ96Qh.js"></script> </body> </html>
+<div class="social-links" data-astro-cid-sz7xmlte> <a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Mastodon</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-sz7xmlte><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Follow Astro on Twitter</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-sz7xmlte><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-sz7xmlte></path></svg> </a> <a href="https://github.com/locchh" target="_blank" data-astro-cid-sz7xmlte> <span class="sr-only" data-astro-cid-sz7xmlte>Go to Astro's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-sz7xmlte><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-sz7xmlte></path></svg> </a> </div> </footer>  <script type="module" src="/blogs/_astro/BlogPost.astro_astro_type_script_index_0_lang.D6FgcjAp.js"></script> </body> </html>
